@@ -1,0 +1,80 @@
+<div class="section account hi-20">
+    <i class="icon-cog nav"></i>
+    <a>
+        <div class="img"><i class="icon-user-1"></i></div>
+        <div class="name">Kev Burns</div>
+    </a>
+</div>
+<div class="workload scrollable">
+    <div class="section">
+        <i class="icon-minus nav"></i>
+        <a href="#!/release">
+            <div class="img"><i class="icon-flag-filled"></i></div>
+            <div class="name">1.0 Release</div>
+        </a>
+        <ul class="tasks">
+            <li class="task-1234"><a href="#!/task" data-target="main"><i class="icon-ok-squared"></i>Create login system</a></li>
+            <li><a><i class="icon-check-empty"></i>Incomplete Task</a></li>
+            <li><a><i class="icon-attention"></i>Blocked Task</a></li>
+            <li><a><i class="icon-sliders"></i>Under QA</a></li>
+            <li><a><i class="icon-minus-squared-alt"></i>Changes Required</a></li>
+            <li><a><i class="icon-ok-squared"></i>Save identity to server</a></li>
+            <li><a><i class="icon-check-empty"></i>Create a long task name that is much longer than one simple line</a></li>
+        </ul>
+    </div>
+    <div class="section">
+        <i class="icon-plus nav"></i>
+        <a>
+            <div class="img"><i class="icon-flag-filled"></i></div>
+            <div class="name">1.1 Release</div>
+        </a>
+    </div>
+    <div class="section">
+        <i class="icon-plus nav"></i>
+        <a>
+            <div class="img"><i class="icon-flag-filled"></i></div>
+            <div class="name">1.2 Release</div>
+        </a>
+    </div>
+    <div class="section">
+        <i class="icon-plus nav"></i>
+        <a>
+            <div class="img"><i class="icon-flag-filled"></i></div>
+            <div class="name">1.3 Release</div>
+        </a>
+    </div>
+    <div class="section">
+        <i class="icon-plus nav"></i>
+        <a>
+            <div class="img"><i class="icon-folder"></i></div>
+            <div class="name">Unassigned</div>
+        </a>
+    </div>
+    <div class="section">
+        <i class="icon-minus nav"></i>
+        <a href="#!/release">
+            <div class="img"><i class="icon-folder-open"></i></div>
+            <div class="name">Backburner</div>
+        </a>
+        <ul class="tasks">
+            <li><a><i class="icon-attention"></i>Blocked Task</a></li>
+            <li><a><i class="icon-sliders"></i>Under QA</a></li>
+            <li><a><i class="icon-check-empty"></i>Create a long task name that is much longer than one simple line</a></li>
+        </ul>
+    </div>
+</div>
+<div class="call">
+</div>
+<style>
+#dashboard .right ul.tasks { font-size: 0.8em; margin: 0; padding: 0.6em 0; }
+#dashboard .right ul.tasks li { list-style: none; padding: 0.2em 0.6em; position: relative; padding-left: 2.2em; line-height: 1.1em; }
+#dashboard .right ul.tasks li i { position: absolute; top: 0.2em; left: 0.6em; }
+#dashboard .right ul.tasks li.active {  }
+
+#dashboard .right .account { height: 2em; }
+#dashboard .right .account a { display: block; }
+#dashboard .right .account a:hover .icon-cog { opacity: 0.8; }
+
+#dashboard .right .workload { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 0; }
+#dashboard .right .workload i.nav { opacity: 0.2; }
+</style>

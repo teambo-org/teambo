@@ -1,0 +1,6 @@
+env            dev
+debug          true
+static.cache   false
+static.min     false
+ssl.crt        ssl/generic.crt
+ssl.key        ssl/generic.key

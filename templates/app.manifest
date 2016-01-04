@@ -1,0 +1,15 @@
+CACHE MANIFEST
+
+CACHE:
+{{range .JS}}{{.}}
+{{end}}
+{{range .JSINIT}}{{.}}
+{{end}}
+{{range .CSS}}{{.}}
+{{end}}
+{{range .AUDIO}}/audio/{{.}}.mp3
+{{end}}
+/favicon.ico
+
+NETWORK:
+*

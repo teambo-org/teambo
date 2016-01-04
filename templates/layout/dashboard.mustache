@@ -1,0 +1,39 @@
+<div id="dashboard" class="c">
+    <div class="right" id="right">
+        {{>dashboard/right}}
+    </div>
+    <div class="main" id="main">
+        {{>dashboard/main}}
+    </div>
+    <div class="chat" id="chat">
+        {{>dashboard/chat}}
+    </div>
+    <div class="theme" id="theme">
+        {{>dashboard/theme}}
+    </div>
+</div>
+<style>
+#dashboard { overflow: hidden; }
+
+#dashboard .right { width: 16em; position: fixed; top: 0; right: 0; bottom: 0; }
+#dashboard .main { position: fixed; left: 0; top: 0; right: 16em; bottom: 40%; }
+#dashboard .chat { position: fixed; left: 0; bottom: 0; right: 16em; height: 40%; }
+#dashboard .theme { display: none; }
+#dashboard .audio { display: none; }
+
+#dashboard.chat-collapsed .main { bottom: 2em; }
+#dashboard.chat-collapsed .chat { height: 2em; }
+
+#dashboard #loader { position: fixed; top: 1em; right: 17em; display: none; height: 2.1em; line-height: 2em; }
+#dashboard #loader i { font-size: 2.09em; opacity: 0.3; padding-bottom: 10px; }
+#dashboard #loader i:before { margin: 0; }
+#dashboard.loading #loader { display: block; }
+
+#dashboard .section { clear: both; }
+#dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
+#dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; }
+#dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; }
+#dashboard .section > a { display: block; }
+
+i.icon-emo-coffee:before { width: 1.5em; }
+</style>

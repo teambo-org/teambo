@@ -1,0 +1,24 @@
+<!doctype html>
+<html{{range .MANIFEST}} manifest="{{.}}"{{end}}>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>Teambo</title>
+    <meta name="description" content="Open Source Encrypted Collaboration" />
+<style>
+body { font-size: 13px; padding: 0; margin: 0; }
+.logo { background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjU4MHB4IiBoZWlnaHQ9IjU4MHB4IiB2aWV3Qm94PSIwIDAgNTgwIDU4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTgwIDU4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZDsiIGQ9Ik0yOTAsNTgwQzEyOS44MzcsNTgwLDAsNDUwLjE2MywwLDI5MFMxMjkuODM3LDAsMjkwLDBzMjkwLDEyOS44MzcsMjkwLDI5MFM0NTAuMTYzLDU4MCwyOTAsNTgweiBNMjkwLDQwQzE1MS45MjksNDAsNDAsMTUxLjkyOSw0MCwyOTBjMCwxMzYuMjUsMTEyLDI1MCwyNDYuNzQ2LDI0OS45NThjMS4wODIsMC4wMTMsMi4xNjYsMC4wNDIsMy4yNTQsMC4wNDJjLTEuMDg4LDAtMi4xNjktMC4wMjctMy4yNTQtMC4wNDJDMjE5LjI0OCw1MzguMjUxLDE2NSw0ODMuNTYzLDE2NSw0MTQuNjY3YzAtNjkuMzMzLDU1Ljk0NS0xMjEuMzIzLDEyNC44NTctMTI0LjgxQzM1OS41LDI4Ni4zMzMsNDE1LDIzMy42NjcsNDE1LDE2NC42NjdTMzU5LjUsNDAsMjkwLDQweiIvPjwvc3ZnPg==); }
+#init { opacity: 0.2; width: 135px; height: 135px; margin: 2em auto; background-size: 100%; font-size: 1.3em; }
+</style>
+</head>
+<body>
+<div id="init" class="logo"></div>
+<div id="page"></div>
+{{range .CSS}}<link href="{{.}}" type="text/css" rel="stylesheet" media="all" />
+{{end}}{{range .JS}}<script src="{{.}}" type="text/javascript"></script>
+{{end}}{{range .JSINIT}}<script src="{{.}}" type="text/javascript"></script>
+{{end}}</body>
+</html>

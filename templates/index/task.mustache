@@ -1,0 +1,71 @@
+<div class="task">
+    <h1><i class="icon-ok-squared"></i> Create login system</h1>
+    <section class="tags">
+        <ul>
+            <li class="milestone section">
+                <a>
+                    <div class="img"><i class="icon-flag-filled"></i></div>
+                    <div class="name">1.0 Release</div>
+                </a>
+            </li>
+            <li class="state section">
+                <a>
+                    <i class="icon-down-open-1 nav"></i>
+                    <div class="img"><i class="icon-check-empty"></i></div>
+                    <div class="name">Ready</div>
+                </a>
+            </li>
+            <li class="user section">
+                <a>
+                    <div class="img"><i class="icon-user-1"></i></div>
+                    <div class="name">Kev</div>
+                </a>
+            </li>
+            <li class="section">
+                <a>
+                    <div class="img"><i class="icon-tag-1"></i></div>
+                    <div class="name">UI</div>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <section class="description">
+        <p>Identities should be encrypted and posted to the server for storage</p>
+        <ul>
+            <li>Capture authentication details</li>
+            <li>Encrypt identity</li>
+            <li>POST binary data</li>
+            <li>Broadcast identity change event</li>
+            <li>Update local identity on event</li>
+        </ul>
+    </section>
+    <section class="comments">
+        <h3><a><i class="icon-comment"></i> Comments</h3>
+        <div class="comment hi-10" id="comments">
+            <div class="author section">
+                <div class="control section">
+                    <a>
+                        <div class="img"><i class="icon-pencil"></i></div>
+                    </a>
+                </div>
+                <a>
+                    <div class="img"><i class="icon-user-1"></i></div>
+                    <div class="name">Kev</div>
+                </a>
+            </div>
+            <div class="message">Sounds good.</div>
+        </div>
+        <form id="comment" method="POST" class="std">
+            <h3>Reply</h3>
+            <div class="field">
+                <textarea class="text" name="message"></textarea>
+            </div>
+            <div class="field submit">
+                <input type="submit" class="submit" value="Submit" />
+            </div>
+        </form>
+    </section>
+</div>
+<style>
+#dashboard .right .task-1234 a { color: rgba({{right.color}},1); }
+</style>
