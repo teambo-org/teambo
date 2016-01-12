@@ -1,38 +1,9 @@
 (function(){
     "use strict";
 
-    var e = 65537,
-        acct = {
-            uuid     : null, // Client assigned UUID
-            pbk      : null, // Password
-            key      : null, // RSA key
-            options  : {},
-            teams    : {}
-        },
-        team = {
-            uuid     : null, // Client assigned UUID
-            pbk      : null, // Password
-            key      : null, // RSA key
-            options  : {},
-            milestones : {}
-        };
+    var e = 65537;
 
     t.crypto = {};
-
-    if(t.debug()) {
-        t.crypto.debug = function() {
-            return auth;
-        };
-    }
-
-    t.crypto.clear = function() {
-        auth.uuid = null;
-        auth.pbk = null;
-        auth.key = null;
-        auth.options = {};
-        auth.teams = {};
-        amplify.store.localStorage('creds', null);
-    };
 
     t.crypto.test = function() {
         return auth.key.decrypt(auth.key.encrypt('test')) === 'test';
@@ -98,5 +69,10 @@
     var strtohex = function(input) {
         return sjcl.codec.hex.fromBits(sjcl.codec.utf8String.toBits(input));
     };
+    
+    // The following comment line is responsible for a server side include. This include creates
+    // sjcl as a local variable to protect it from being overriden in the global namespace
+    
+    // include sjcl.js
 
 })();

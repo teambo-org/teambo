@@ -1,43 +1,26 @@
-<div class="c">
+<div class="external require-no-auth c">
     <div id="logo" class="logo"></div>
-    <form id="verification" name="verification" method="POST" class="std ext">
-        <div class="field">
-            <p>In order to create a new account<br/>you will need to verify your email address</p>
-            <p id="email">{{email}}</p>
+    <form name="verification" method="POST" class="std ext verification" 
+        data-reset="{{reset}}" data-email="{{email}}" data-pass="{{pass}}">
+        <div class="field first">
+            {{#reset}}
+            <p class="warning">
+                The only way to reset your password is to create a new account. You can have multiple
+                accounts per email address but they must have different passwords. Your new account 
+                will be empty. Someone from each of your teams will need to reinvite you to the team. 
+                If you remember your password, your old account will still be available.
+            </p>
+            {{/reset}}
+            {{^reset}}
+            <p id="msg">In order to create a new account<br/>you will need to verify your email address</p>
+            {{/reset}}
+            <p class="email">{{email}}</p>
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Send Verification Email" />
             <br/><br/>
-            <a class="cancel force" href="#!/login">cancel</a>
+            <a class="cancel force" href="#/login">cancel</a>
         </div>
-        <div id="error"></div>
+        <div class="error"></div>
     </form>
 </div>
-<style>
-#verification { padding-top: 1em; }
-#email { margin: 1.3em 1.3em 0; font-size: 1.1em; background: rgba(255,255,255,0.5); line-height: 2em; }
-</style>
-<script>
-(function(){
-    var error = t.id('error');
-    var error_msg = function(msg, ex) {
-        error.innerHTML = '<div class="msg">'+msg+'</div>'+(ex ? '<div class="ex">'+ex+'</div>' : '');
-        error.style.display = 'block';
-    }
-    document.verification.onsubmit = function(e){
-        e.preventDefault();
-        var email = '{{email}}',
-            pass  = '{{pass}}';
-        t.acct.verification.send(email, pass).then(function(xhr) {
-            if(xhr.status == 201) {
-                t.replace('/verification-sent', {email: email});
-            } else {
-                error_msg('Verification could not be sent.');
-            }
-        }).catch(function(e){
-            console.log(e);
-            error_msg('Verification could not be sent', 'please try again');
-        });
-    };
-})();
-</script>

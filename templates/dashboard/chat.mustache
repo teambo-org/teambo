@@ -1,4 +1,4 @@
-<div class="inner">
+<div class="inner" data-tpljs="dashboard/chat">
 <div class="nav">
     <ul class="channels scrollable">
         <li class="active hi-05-a"><a><i class="icon-megaphone"></i> Activity</a></li>
@@ -40,7 +40,7 @@
         <div class="l"><span class="ts hi-10">00:03</span> <div class="t"><span class="n hi-05">Kev</span> Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. 
         Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. 
         Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello. Hello.</div></div>
-        <div class="l"><span class="ts hi-10">00:02</span> <div class="t"><span class="n hi-05"><i class="icon-comment"></i> Kev</span><a href="#!/task..comments" class="force"> Can we try a different shade of blue?</a></div></div>
+        <div class="l"><span class="ts hi-10">00:02</span> <div class="t"><span class="n hi-05"><i class="icon-comment"></i> Kev</span><a href="#/task..comments" class="force"> Can we try a different shade of blue?</a></div></div>
     </div>
     <div class="input">
         <form method="POST" class="std" autocomplete="off">
@@ -92,8 +92,3 @@
 
 #dashboard.chat-collapsed .chat .area .toggle { display: none; }
 </style>
-<script>
-t.chat.init({
-    autoclose: {{chat.autoclose}}
-});
-</script>

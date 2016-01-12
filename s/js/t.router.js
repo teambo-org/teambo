@@ -21,7 +21,6 @@
                 vars: m
             });
         }
-        
         for(i in templates) {
             if(i.indexOf('index/') === 0) {
                 routes.push({

@@ -1,10 +1,22 @@
-<div class="index-index c">
+<div class="external account require-auth c">
     <div id="logo" class="logo"></div>
-    <div class="onboarding">
-        <p>Logged in as<br>{{acct.email}}</p>
+    <div class="nav">
+        <a class="logout"><i class="icon-power" title="Log Out"></i></a>
+        <p>Logged in as {{acct.email}}</p>
+    </div>
+    <div class="main">
+        <ul class="teams">
+        {{#acct.teams}}
+            <li></li>
+        {{/acct.teams}}
+        {{^acct.teams}}
+            <li class="placeholder">
+                <h3>Welcome to your new account</h3>
+                You can create a new team by clicking the link below or you can contact a member 
+                of an existing team and ask them to invite you
+            </li>
+        {{/acct.teams}}
+            <li class="create-team"><a href="#/team-new">Create Team</a></li>
+        </ul>
     </div>
 </div>
-<script>
-(function(){
-})();
-</script>

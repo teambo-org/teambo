@@ -9,6 +9,10 @@ CACHE:
 {{end}}
 {{range .AUDIO}}/audio/{{.}}.mp3
 {{end}}
+{{range .IMAGE}}/i/{{.}}
+{{end}}
+{{range .FONT}}/font/{{.}}
+{{end}}
 /favicon.ico
 
 NETWORK:

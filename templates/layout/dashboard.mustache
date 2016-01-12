@@ -5,7 +5,7 @@
     <div class="main" id="main">
         {{>dashboard/main}}
     </div>
-    <div class="chat" id="chat">
+    <div class="chat" id="chat" data-autoclose="{{chat.autoclose}}">
         {{>dashboard/chat}}
     </div>
     <div class="theme" id="theme">
@@ -34,6 +34,4 @@
 #dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; }
 #dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; }
 #dashboard .section > a { display: block; }
-
-i.icon-emo-coffee:before { width: 1.5em; }
 </style>

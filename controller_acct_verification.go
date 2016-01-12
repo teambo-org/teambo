@@ -1,21 +1,21 @@
 package main
 
 import (
-    "encoding/json"
 	"crypto/sha256"
 	"encoding/base64"
-    "net/http"
+	"encoding/json"
+	"net/http"
 	// "fmt"
 )
 
 func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
-    email := r.FormValue("email")
-    hash  := r.FormValue("hash")
-    akey  := r.FormValue("akey")
-    vkey  := r.FormValue("vkey")
-	
-    w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	
+	email := r.FormValue("email")
+	hash := r.FormValue("hash")
+	akey := r.FormValue("akey")
+	vkey := r.FormValue("vkey")
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
 	if (hash == "" && email == "") || akey == "" {
 		msg, _ := json.Marshal(map[string]string{
 			"error": "Email and password required",
@@ -23,17 +23,17 @@ func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, string(msg), 400)
 		return
 	}
-	
+
 	if vkey != "" {
 		_, err := acct_verification_find(hash, akey, vkey)
 		if err != nil {
 			msg, _ := json.Marshal(map[string]string{
-				"error": err.Error(), //"Verification has expired",
+				"error": err.Error(),
 			})
 			http.Error(w, string(msg), 409)
 			return
 		}
-		_, err = acct_create(hash, akey, "")
+		_, err = acct_create(hash, akey, "new")
 		if err != nil {
 			msg, _ := json.Marshal(map[string]string{
 				"error": "Account could not be created",
@@ -64,7 +64,7 @@ func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
 			scheme = scheme + "s"
 		}
 		subject := "Teambo Account Verification"
-		body := "Click the link below to verify your account:\r\n\r\n"+scheme+"://"+config["app.host"]+"/#!/login?vkey="+vkey
+		body := "Click the link below to verify your account:\r\n\r\n" + scheme + "://" + config["app.host"] + "/#/login?vkey=" + vkey
 		err = sendMail(email, subject, body)
 		if err != nil {
 			msg, _ := json.Marshal(map[string]string{

@@ -2,7 +2,7 @@
     "use strict";
     
     t.xhr = function(method, url, opts) {
-        return new Promise(function(fulfill, reject) {
+        return t.promise(function(fulfill, reject) {
             var x = new(window.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
             x.open(method, url, 1);
             x.timeout = 'timeout' in opts ? opts.timeout : 5000;
@@ -29,16 +29,6 @@
             opts = opts ? opts : {};
             opts = encode_data(opts);
             return t.xhr('POST', url, opts);
-        },
-        put: function(url, opts) {
-            opts = opts ? opts : {};
-            opts = encode_data(opts);
-            return t.xhr('PUT', url, opts);
-        },        
-        delete: function(url, opts) {
-            opts = opts ? opts : {};
-            opts.data = null;
-            return t.xhr('DELETE', url, opts);
         }
     });
     

@@ -1,103 +1,18 @@
-<div class="index-index c">
+<div class="external require-no-auth c" data-tpljs="external/login">
     <div id="logo" class="logo"></div>
-    <form id="auth" name="auth" method="POST" class="std ext">
+    <form id="auth" name="auth" method="POST" class="std ext" data-vkey="{{vkey}}">
         <div class="field">
-            <input type="email"  class="text" name="email" placeholder="Email Address" />
+            <input type="email" class="text required" name="email" placeholder="Email Address" />
         </div>
         <div class="field">
-            <input type="password" class="text pass" name="pass" placeholder="Password" />
+            <input type="password" class="text pass required min-len-8" name="pass" placeholder="Password" />
         </div>
         <div class="field submit">
             <input id="submit" type="submit" class="submit" value="Submit" />
         </div>
-        <div id="error"></div>
+        <div class="error"></div>
     </form>
-    <div class="onboarding" id="onboarding">
+    <div class="subtext" id="onboarding">
         <p>Enter your email address and choose a password<br/>or log in using an existing password</p>
     </div>
 </div>
-<script>
-(function(){
-    var vkey = '{{vkey}}',
-        error = t.id('error');
-    var error_msg = function(msg, ex) {
-        error.innerHTML = (msg ? '<div class="msg">'+msg+'</div>' : '')+(ex ? '<div class="ex">'+ex+'</div>' : '');
-        error.style.display = 'block';
-    }
-    var error_hide = function() {
-        error.style.display = 'none';
-    }
-    var form_disable = function() {
-        t.id('submit').setAttribute('disabled', 'disabled');
-    }
-    var form_enable = function() {
-        t.id('submit').removeAttribute('disabled');
-    }
-    var email,
-        pass;
-    var form_submit_login = function(email, pass) {
-        t.acct.auth(email, pass).then(function(xhr){
-            if(xhr.status === 200) {
-                // success
-            } else if(xhr.status === 404) {
-                t.replace('/verification', {
-                    email: email,
-                    pass: pass
-                });
-            } else if(xhr.status === 403) {
-                form_enable();
-                error_msg('Incorrect password', 'If you forgot your password, you may request a <a href="#!/reset">Password Reset</a>');
-            }
-        }).catch(function(e){
-            form_enable();
-            error_msg('Error', 'You cannot log in while you are offline.');
-        });
-    };
-    var form_submit_verification = function(email, pass) {
-        t.acct.verification.confirm(vkey, email, pass).then(function(xhr) {
-            t.gotoUrl('/account');
-        }).catch(function(e){
-            form_enable();
-            if(e.status == 409) {
-                error_msg('Verification has expired', 'Please ensure your password is correct or refresh the page to start the process over.');
-            } else if(e.status == 500) {
-                error_msg('Verification failed', 'Please refresh the page and try again');
-            } else {
-                error_msg('Error', 'Verification failed');
-            }
-        });
-    };
-    var form_init = function(form_submit) {
-        document.auth.style.display = 'block';
-        document.auth.onsubmit = function(e){
-            e.preventDefault();
-            error_hide();
-            var form = document.auth;
-            email = form.email.value;
-            pass  = form.pass.value;
-            if(!email || !pass) {
-                return error_msg('Email address and password are required');
-            }
-            if(pass.length < 6) {
-                return error_msg('Password must be at least 6 characters');
-            }
-            form_disable();
-            form_submit(email, pass);
-        };
-        document.auth.email.focus();
-        document.auth.email.oninput = error_hide;
-        document.auth.pass.oninput = error_hide;
-    }
-    if(vkey != '') {
-        t.acct.verification.confirm(vkey).then(function(xhr) {
-            t.gotoUrl('/account');
-        }).catch(function(e){
-            error_msg('', '<br/>Enter your email address and password<br/>to complete verification');
-            t.id('onboarding').innerHTML = '';
-            form_init(form_submit_verification);
-        });
-    } else {
-        form_init(form_submit_login);
-    }
-})();
-</script>

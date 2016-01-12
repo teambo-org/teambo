@@ -1,16 +1,11 @@
-<div class="c">
+<div class="external require-no-auth c">
     <div id="logo" class="logo"></div>
-    <form id="verification" name="verification" method="POST" class="std ext">
+    <form name="verification" class="verification std ext" method="POST">
         <div class="field">
             <p>Verification has been sent to</p>
-            <p id="email">{{email}}</p>
+            <p class="email">{{email}}</p>
         </div>
-        <div id="error"><div class="ex">Please check your email and click the link<br/>
+        <div class="error"><div class="ex">Please check your email and click the link<br/>
         to complete the verification process</div></div>
     </form>
 </div>
-<style>
-#verification { padding-top: 1em; }
-#email { margin: 1.3em 1.3em 0; font-size: 1.1em; background: rgba(255,255,255,0.5); line-height: 2em; }
-#error .ex { margin: 1em 0; }
-</style>
