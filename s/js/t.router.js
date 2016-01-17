@@ -3,24 +3,14 @@
     
     var routes = [],
         plain_routes = {
-            '' : 'external/index'
+            '' : 'external/index',
+            '/:tid' : 'index/dashboard',
+            '/:tid/:iid' : 'index/task'
         };
     
     t.router = {};
     
     t.router.init = function(templates) {
-        for(var i in plain_routes) {
-            var m = i.match(/\:([a-z]+)/g);
-            m = m ? m : []
-            for (var j in m) {
-                m[j] = m[j].substr(1);
-            }
-            routes.push({
-                route: new RegExp('^'+i.replace(/\:([a-z]+)/g, '([^/]+)')+'$'),
-                tpl: plain_routes[i],
-                vars: m
-            });
-        }
         for(i in templates) {
             if(i.indexOf('index/') === 0) {
                 routes.push({
@@ -35,6 +25,18 @@
                     vars: []
                 });
             }
+        }
+        for(var i in plain_routes) {
+            var m = i.match(/\:([a-z]+)/g);
+            m = m ? m : []
+            m.forEach(function(v, j) {
+                m[j] = m[j].substr(1);
+            });
+            routes.push({
+                route: new RegExp('^'+i.replace(/\:([a-z]+)/g, '([^/]+)')+'$'),
+                tpl: plain_routes[i],
+                vars: m
+            });
         }
     }
     

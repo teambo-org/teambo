@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'teambo';
-  src: url('../font/teambo.eot?50995990');
-  src: url('../font/teambo.eot?50995990#iefix') format('embedded-opentype'),
-       url('../font/teambo.woff?50995990') format('woff'),
-       url('../font/teambo.ttf?50995990') format('truetype'),
-       url('../font/teambo.svg?50995990#teambo') format('svg');
+  src: url('../font/teambo.eot');
+  src: url('../font/teambo.eot#iefix') format('embedded-opentype'),
+       url('../font/teambo.woff') format('woff'),
+       url('../font/teambo.ttf') format('truetype'),
+       url('../font/teambo.svg#teambo') format('svg');
   font-weight: normal;
   font-style: normal;
 }

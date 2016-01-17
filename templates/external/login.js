@@ -17,11 +17,11 @@ var form_submit_login = function(email, pass) {
     }
     t.acct.auth(email, pass).then(function(xhr){
         if(xhr.status === 200) {
-            t.gotoUrl('/account');
+            t.gotoUrl(t.afterAuth());
         } else if(xhr.status === 404) {
             t.replace('/verification', {
                 email: email,
-                pass: pass
+                pass:  pass
             });
         } else if(xhr.status === 403) {
             password_reset();
@@ -40,7 +40,7 @@ var form_submit_verification = function(email, pass) {
         t.gotoUrl('/account');
     }).catch(function(e){
         form.enable();
-        if(e.status == 409) {
+        if(e.status == 404) {
             form.error.msg('Verification has expired', 'Please ensure your password is correct or refresh the page to start the process over.');
         } else if(e.status == 500) {
             form.error.msg('Verification failed', 'Please refresh the page and try again');

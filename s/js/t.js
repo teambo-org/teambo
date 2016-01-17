@@ -1,18 +1,22 @@
-t = typeof t != 'undefined' ? t : {};
+var t = typeof t != 'undefined' ? t : {};
 (function(){
     "use strict";
 
     var loaded = false,
         moved = false,
+        manifest = false,
+        updateready = false,
         target = "page",
         templates = {},
         template_js = {},
         debug = false,
-        last_hash = '';
+        last_hash = '',
+        salt = null,
+        after_auth = null;
     
     t.debug = function(){
         return debug;
-    }
+    };
     
     t.linkify = function (text) {
         var r = ' ' +  text + ' ',
@@ -26,7 +30,7 @@ t = typeof t != 'undefined' ? t : {};
         return r.slice(1,-1);
     };
     
-    var extra_view_data = {
+    var view = {
         linkify : function() {
             return function(text, render) {
                 return t.linkify(render(text));
@@ -41,11 +45,11 @@ t = typeof t != 'undefined' ? t : {};
         chat: {
             autoclose: true
         }
-    }
+    };
     
     t.render = function(tplname, data) {
         data = data ? data : {};
-        t.extend(data, extra_view_data);
+        t.extend(data, view);
         var html = Mustache.to_html(
             templates[tplname],
             data,
@@ -64,35 +68,59 @@ t = typeof t != 'undefined' ? t : {};
             path = uri.path().split('..')[0],
             data = t.extend(data, uri.getQueryParams()),
             route = t.router.find(path);
-        if(route && route.tpl.indexOf('external') !== 0 && !t.id('dash-main')) {
-            t.id('page').innerHTML = t.render("layout/dashboard", data);
-            exec_body_scripts(t.id('page'));
-            target = "dash-main";
-        } else if (route && route.tpl.indexOf('external') === 0 && loaded && target != "page") {
-            target = "page";
+        if(updateready) {
+            window.location.reload();
         }
         if(route) {
-            var tar = t.id(target);
             t.extend(data, route.data);
-            tar.innerHTML = t.render(route.tpl, data);
-            run_template_js(tar);
-            if(tar.firstChild.classList.contains('require-auth') && !t.acct.isAuthed()) {
-                t.gotoUrl('/login');
+            var p = [];
+            if('tid' in data && (!('team' in view) || view.team.id != data.tid)) {
+                if(t.acct.isAuthed()) {
+                    p.push(t.acct.team.find(data.tid).then(function(team){
+                        view.team = team;
+                    }));
+                } else {
+                    after_auth = hash;
+                    t.gotoUrl('/login');
+                    return;
+                }
             }
-            if(tar.firstChild.classList.contains('require-no-auth') && t.acct.isAuthed()) {
-                t.gotoUrl('/account');
-            }
-            
-            if(loaded) {
-                t.id(target).scrollTop = 0;
-            }
-            setTimeout(function(loaded){
-                scrollToSub(hash, loaded);
-            }, 0, loaded);
-            if(loaded) {
-                t.audio.play('click', 1);
-            }
-            last_hash = hash;
+            Promise.all(p).then(function(){
+                if(route.tpl.indexOf('external') !== 0 && !t.id('dash-main')) {
+                    t.id('page').innerHTML = t.render("layout/dashboard", data);
+                    run_template_js(t.id('page'));
+                    target = "dash-main";
+                } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
+                    delete view['team'];
+                    target = "page";
+                }
+                var tar = t.id(target);
+                tar.innerHTML = t.render(route.tpl, data);
+                run_template_js(tar);
+                if(tar.firstChild.classList.contains('require-auth') && !t.acct.isAuthed()) {
+                    t.gotoUrl('/login');
+                }
+                if(tar.firstChild.classList.contains('require-no-auth') && t.acct.isAuthed()) {
+                    t.gotoUrl('/account');
+                }
+                if(tar.firstChild.classList.contains('require-team') && !view.team) {
+                    t.gotoUrl('/account');
+                }
+                
+                if(loaded) {
+                    t.id(target).scrollTop = 0;
+                }
+                setTimeout(function(loaded){
+                    scrollToSub(hash, loaded);
+                }, 0, loaded);
+                if(loaded) {
+                    t.audio.play('click', 1);
+                }
+                last_hash = hash;
+                loaded = true;
+            }).catch(function(){
+                t.gotoUrl("");
+            });
         } else {
             t.log('route not found ' + hash);
         }
@@ -117,6 +145,12 @@ t = typeof t != 'undefined' ? t : {};
         hashChange(url, data);
     };
     
+    t.afterAuth = function() {
+        var val = after_auth;
+        after_auth = null;
+        return val ? val : '/account';
+    };
+    
     var scrollToSub = function(hash, isLoaded) {
         var parts = hash.split('..');
         if(parts.length > 1 && t.id(parts[1])) {
@@ -134,37 +168,39 @@ t = typeof t != 'undefined' ? t : {};
             return;
         }
         debug = opts.debug;
+        manifest = opts.manifest;
         templates   = opts.templates;
         template_js = opts.template_js;
         
         t.router.init(templates);
-        t.extend(extra_view_data, {
-            theme: t.themes[extra_view_data.theme],
+        t.extend(view, {
+            theme: t.themes[view.theme],
             acct: t.acct
         });
         
         t.acct.init().then(function(){
             hashChange(window.location.hash.substr(1));
-            loaded = true;
             
             window.onhashchange = t.refresh;
             
+            var anchorClass = function(el, classname) {
+                return (el.nodeName == 'A' && el.classList.contains(classname))
+                  || (el.parentNode.nodeName == 'A' && el.parentNode.classList.contains(classname));
+            };
+            
             document.body.addEventListener('click', function(e) {
-                if((e.target.nodeName == 'A' && e.target.classList.contains('replace'))
-                || (e.target.nodeName == 'I' && e.target.parentNode.classList.contains('replace'))) {
+                if(anchorClass(e.target, 'replace')) {
                     e.preventDefault();
                     t.gotoUrl(e.target.getAttribute('href').substr(1), true);
                     return;
-                } 
-                if((e.target.nodeName == 'A' && e.target.classList.contains('logout'))
-                || (e.target.nodeName == 'I' && e.target.parentNode.classList.contains('logout'))) {
+                }
+                if(anchorClass(e.target, 'logout')) {
                     e.preventDefault();
                     t.acct.deAuth();
                     t.gotoUrl('/login');
                     return;
                 }
-                if((e.target.nodeName == 'A' && e.target.classList.contains('force'))
-                || (e.target.nodeName == 'I' && e.target.parentNode.classList.contains('force'))) {
+                if(anchorClass(e.target, 'force')) {
                     e.preventDefault();
                     hashChange(e.target.getAttribute('href').substr(1));
                     return;
@@ -174,7 +210,14 @@ t = typeof t != 'undefined' ? t : {};
             FastClick.attach(document.body);
             
             t.audio.loadAll(opts.audio);
+        }).catch(function() {
+            t.acct.deAuth();
+            window.location.reload();
         });
+        
+        if(manifest) {
+            startCacheCheck();
+        }
     };
     
     t.extend = function(target, obj) {
@@ -194,8 +237,7 @@ t = typeof t != 'undefined' ? t : {};
         var p = new Promise(f);
         if(t.debug()) {
             p.catch(function(e){
-                console.log(e);
-                console.trace(e);
+                t.trace(e);
             });
         }
         return p;
@@ -203,11 +245,17 @@ t = typeof t != 'undefined' ? t : {};
     
     t.id = function(id) {
         return document.getElementById(id);
-    }
+    };
 
     t.log = function(msg) {
         if('console' in window && t.debug()) {
             window.console.log(msg);
+        }
+    };
+    
+    t.trace = function(e) {
+        if('console' in window && t.debug()) {
+            window.console.trace(e);
         }
     };
     
@@ -216,11 +264,38 @@ t = typeof t != 'undefined' ? t : {};
         window.alert(msg);
     };
     
+    t.salt = function() {
+        if(salt) {
+            return Promise.resolve(salt);
+        } else {
+            return t.promise(function(fulfill, reject) {
+                localforage.getItem('salt').then(function(salt){
+                    if(!salt) {
+                        salt = t.crypto.randomKey();
+                        localforage.setItem('salt', salt);
+                    }
+                    fulfill(salt);
+                });
+            });
+        }
+    };
+    
     window.applicationCache.addEventListener('updateready', function(e) {
         if (window.applicationCache.status == window.applicationCache.UPDATEREADY && !moved) {
             window.location.reload();
+        } else {
+            updateready = true;
         }
     }, false);
+    
+    var startCacheCheck = function() {
+        if(!updateready) {
+            setTimeout(function(){
+                window.applicationCache.update();
+                startCacheCheck();
+            }, 30000);
+        }
+    };
     
     var run_template_js = function(tar) {
         var els = tar.querySelectorAll('[data-tpljs]'),
@@ -231,6 +306,26 @@ t = typeof t != 'undefined' ? t : {};
                 template_js[tplname]();
             }
         }
-    }
+    };
+    
+    Array.prototype.findByProperty = function(k, v) {
+        var self = this,
+            ret = null;
+        this.forEach(function(o) {
+            if(typeof o === 'object' && o[k] === v) {
+                ret = o;
+            }
+        });
+        return ret;
+    };
+    Array.prototype.deleteByProperty = function(k, v) {
+        var self = this;
+        this.forEach(function(o, i) {
+            if(typeof o === 'object' && o[k] === v) {
+                self.splice(i, 1);
+            }
+        });
+        return this;
+    };
     
 })();

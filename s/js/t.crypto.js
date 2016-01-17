@@ -5,21 +5,14 @@
 
     t.crypto = {};
 
-    t.crypto.test = function() {
-        return auth.key.decrypt(auth.key.encrypt('test')) === 'test';
-    };
-
     t.crypto.sha = function(str) {
         return sjcl.codec.base64.fromBits(sjcl.hash.sha256.hash(str));
     };
-    
+
     t.crypto.pbk = function(str, salt, iter) {
         iter = typeof iter === 'undefined' ? 10000 : iter;
         var key = sjcl.misc.cachedPbkdf2(str, {salt:salt, iter:iter}).key;
         return sjcl.codec.base64.fromBits(key);
-    };
-    t.crypto.akey = function(str, salt, iter) {
-        return t.crypto.sha(t.crypto.pbk(str, salt + salt));
     };
 
     t.crypto.randomKey = function() {
@@ -41,21 +34,25 @@
 
     t.decrypt = function(data, key, iter) {
         iter = typeof iter === 'undefined' ? 10000 : iter;
-        var iv = data.split(" ")[0],
-            ct = data.split(" ")[1];
-        var passBitArray = sjcl.codec.base64.toBits(key);
-        var json = sjcl.decrypt(passBitArray, sjcl.json.encode({
-            iv: iv,
-            v:1,
-            iter:iter,
-            ks:256,
-            ts:64,
-            mode: "ccm",
-            adata: "",
-            cipher: "aes",
-            ct: ct
-        }));
-        return JSON.parse(json);
+        try {
+            var iv = data.split(" ")[0],
+                ct = data.split(" ")[1],
+                passBitArray = sjcl.codec.base64.toBits(key);
+            var json = sjcl.decrypt(passBitArray, sjcl.json.encode({
+                iv: iv,
+                v:1,
+                iter:iter,
+                ks:256,
+                ts:64,
+                mode: "ccm",
+                adata: "",
+                cipher: "aes",
+                ct: ct
+            }));
+            return JSON.parse(json);
+        } catch(e) {
+            return null;
+        }
     };
 
     var b64tohex = function(input) {
@@ -69,10 +66,5 @@
     var strtohex = function(input) {
         return sjcl.codec.hex.fromBits(sjcl.codec.utf8String.toBits(input));
     };
-    
-    // The following comment line is responsible for a server side include. This include creates
-    // sjcl as a local variable to protect it from being overriden in the global namespace
-    
-    // include sjcl.js
 
 })();

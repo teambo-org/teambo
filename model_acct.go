@@ -9,16 +9,16 @@ import (
 )
 
 type Acct struct {
-	Hash       string `json:"hash"`
+	Id         string `json:"id"`
 	Akey       string `json:"akey"`
 	Ciphertext string `json:"ct"`
 }
 
-func acct_create(hash string, akey string, ct string) (item Acct, err error) {
+func acct_create(id string, akey string, ct string) (item Acct, err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
 
-		err := b.Put([]byte(hash+akey), []byte(ct))
+		err := b.Put([]byte(id + akey), []byte(ct))
 		if err != nil {
 			return err
 		}
@@ -30,16 +30,16 @@ func acct_create(hash string, akey string, ct string) (item Acct, err error) {
 		return item, err
 	}
 
-	item = Acct{hash, akey, ct}
+	item = Acct{id, akey, ct}
 	return item, nil
 }
 
-func acct_find(hash string, akey string) (item Acct, err error) {
+func acct_find(id string, akey string) (item Acct, err error) {
 	ct := ""
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
 
-		v := b.Get([]byte(hash + akey))
+		v := b.Get([]byte(id + akey))
 		if err != nil {
 			return err
 		}
@@ -54,18 +54,18 @@ func acct_find(hash string, akey string) (item Acct, err error) {
 	}
 
 	if ct != "" {
-		item = Acct{hash, akey, ct}
+		item = Acct{id, akey, ct}
 		return item, nil
 	}
 	return item, nil
 }
 
-func acct_exists(hash string) (exists bool, err error) {
+func acct_exists(id string) (exists bool, err error) {
 	exists = false
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct")).Cursor()
 
-		prefix := []byte(hash)
+		prefix := []byte(id)
 		for k, v := b.Seek(prefix); bytes.HasPrefix(k, prefix); k, v = b.Next() {
 			exists = string(v) != "new"
 		}

@@ -1,37 +1,80 @@
 (function(){
     "use strict";
     
+    var salt = null;
+    
     t.team = function(data) {
-        var pbk = data.pbk;
+        var self = this,
+            key = data.key;
         t.extend(this, {
-            hash:       data.hash,
-            akey:       data.akey,
-            name:       data.name,
-            opts:       data.opts       ? data.opts : {},
-            milestones: data.milestones ? data.opts : {}
+            id:   data.id,
+            akey: data.akey,
+            name: data.name,
+            opts: data.opts ? data.opts : {}
+        });
+        this.save = function() {
+            return t.promise(function(fulfill, reject) {
+                t.xhr.post('/team', {
+                    data: {
+                        id:   self.id,
+                        akey: self.akey,
+                        ct:   self.encrypt()
+                    }
+                }).then(function(xhr){
+                    if(xhr.status == 200) {
+                        self.cache();
+                        fulfill(xhr);
+                    } else {
+                        reject(xhr);
+                    }
+                }).catch(function(e){
+                    reject(e);
+                });
+            });
+        };
+        this.cache = function() {
+            var hash = t.crypto.sha(self.id+salt);
+            localforage.setItem(hash, self.encrypt());
+        };
+        this.encrypt = function() {
+            return t.encrypt({
+                id:    self.id,
+                akey:  self.akey,
+                name:  self.name,
+                opts:  self.opts,
+                key:   key
+            }, key);
+        };
+    };
+    
+    t.team.init = function() {
+        return t.salt().then(function(s){
+            salt = s;
         });
     };
     
     t.team.create = function(name) {
-        if(!t.acct.isAuthed()) {
-            return Promise.reject('Not authed');
-        }
         return t.promise(function(fulfill, reject) {
             t.xhr.post('/team').then(function(xhr){
                 if(xhr.status == 200) {
-                    var data = JSON.parse(xhr.responseText);
+                    var data = JSON.parse(xhr.responseText),
+                        key = t.crypto.randomKey();
                     var team = new t.team({
-                        name: name,
-                        hash: data.hash,
+                        id:   data.id,
                         akey: data.akey,
-                        pbk:  t.crypto.randomKey()
+                        name: name,
+                        key:  key
                     });
-                    t.acct.team.add(team);
-                    t.acct.save().then(function(xhr){
-                        fulfill(team);
+                    team.save().then(function(xhr){
+                        t.acct.team.add(data.id, key);
+                        t.acct.save().then(function(xhr){
+                            fulfill(team);
+                        }).catch(function(e){
+                            reject(e);
+                        });
                     }).catch(function(e){
                         t.acct.team.remove(team);
-                        reject(xhr);
+                        reject(e);
                     });
                 } else {
                     reject(xhr);

@@ -1,9 +1,10 @@
 CACHE MANIFEST
 
 CACHE:
+
 {{range .JS}}{{.}}
-{{end}}
-{{range .JSINIT}}{{.}}
+{{end}}{{range .JSINIT}}
+{{.}}
 {{end}}
 {{range .CSS}}{{.}}
 {{end}}

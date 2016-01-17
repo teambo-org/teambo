@@ -19,16 +19,14 @@
     };
     
     t.audio.loadAll = function(sources) {
-        for(var i in sources) {
-            if(!sources[i]) {
-                continue;
-            }
+        sources.forEach(function(v) {
             var audio = document.createElement('audio');
-            audio.src = "/audio/"+sources[i]+".mp3";
+            audio.src = "/audio/"+v+".mp3";
             audio.autobuffer = true;
+            audio.preload = 'none';
             audio.load();
-            sounds[sources[i]] = audio;
-        }
+            sounds[v] = audio;
+        })
     };
 
 })();

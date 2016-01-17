@@ -2,25 +2,24 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"github.com/boltdb/bolt"
 	"time"
 )
 
 type AcctVerification struct {
-	Hash string `json:"hash"`
+	Id   string `json:"id"`
 	Akey string `json:"akey"`
 	Vkey string `json:"vkey"`
 	Date string `json:"date"`
 }
 
-func acct_verification_create(hash string, akey string, vkey string) (item AcctVerification, err error) {
+func acct_verification_create(id string, akey string, vkey string) (item AcctVerification, err error) {
 	date := time.Now().UTC().Format(time.RFC3339)
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
 
-		err := b.Put([]byte(hash+akey+vkey), []byte(date))
+		err := b.Put([]byte(id + akey + vkey), []byte(date))
 		if err != nil {
 			return err
 		}
@@ -32,18 +31,18 @@ func acct_verification_create(hash string, akey string, vkey string) (item AcctV
 		return item, err
 	}
 
-	item = AcctVerification{hash, akey, vkey, date}
+	item = AcctVerification{id, akey, vkey, date}
 	return item, nil
 }
 
-func acct_verification_find(hash string, akey string, vkey string) (item AcctVerification, err error) {
-	date := ""
+func acct_verification_find(id string, akey string, vkey string) (item AcctVerification, err error) {
+	item = AcctVerification{}
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
 
-		v := b.Get([]byte(hash + akey + vkey))
+		v := b.Get([]byte(id + akey + vkey))
 
-		date = string(v)
+		item = AcctVerification{id, akey, vkey, string(v)}
 
 		return nil
 	})
@@ -52,20 +51,15 @@ func acct_verification_find(hash string, akey string, vkey string) (item AcctVer
 		return item, err
 	}
 
-	if date != "" {
-		item = AcctVerification{hash, akey, vkey, date}
-		return item, nil
-	} else {
-		return item, errors.New("Not Found")
-	}
+	return item, nil
 }
 
-func acct_verification_delete(hash string, akey string) (err error) {
+func acct_verification_delete(id string, akey string) (err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
 		c := b.Cursor()
 
-		prefix := []byte(hash + akey)
+		prefix := []byte(id + akey)
 		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
 			b.Delete(k)
 		}
@@ -77,4 +71,23 @@ func acct_verification_delete(hash string, akey string) (err error) {
 	}
 
 	return nil
+}
+
+func acct_verification_count(id string) (count int, err error) {
+	count = 0
+	db_view(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("verification")).Cursor()
+
+		prefix := []byte(id)
+		for k, _ := b.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = b.Next() {
+			count = count + 1
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+
+	return count, nil
 }

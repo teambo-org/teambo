@@ -7,35 +7,26 @@ import (
 )
 
 func handle_acct(w http.ResponseWriter, r *http.Request) {
-	hash := r.FormValue("hash")
+	id   := r.FormValue("id")
 	akey := r.FormValue("akey")
-	ct := r.FormValue("ct")
+	ct   := r.FormValue("ct")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	if hash == "" || akey == "" {
-		msg, _ := json.Marshal(map[string]string{
-			"error": "Email and password required",
-		})
-		http.Error(w, string(msg), 400)
+	if id == "" || akey == "" {
+		error_out(w, "Email and password required", 400)
 		return
 	}
 
-	acct, _ := acct_find(hash, akey)
-	if acct.Hash == "" {
-		msg, _ := json.Marshal(map[string]string{
-			"error": "Account not found",
-		})
-		http.Error(w, string(msg), 404)
+	acct, _ := acct_find(id, akey)
+	if acct.Id == "" {
+		error_out(w, "Account not found", 404)
 		return
 	}
 
-	acct, err := acct_create(hash, akey, ct)
+	acct, err := acct_create(id, akey, ct)
 	if err != nil {
-		msg, _ := json.Marshal(map[string]string{
-			"error": "Account could not be saved",
-		})
-		http.Error(w, string(msg), 500)
+		error_out(w, "Account could not be saved", 500)
 		return
 	}
 
@@ -44,39 +35,29 @@ func handle_acct(w http.ResponseWriter, r *http.Request) {
 }
 
 func handle_acct_auth(w http.ResponseWriter, r *http.Request) {
-	hash := r.FormValue("hash")
+	id   := r.FormValue("id")
 	akey := r.FormValue("akey")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	if hash == "" || akey == "" {
-		msg, _ := json.Marshal(map[string]string{
-			"error": "Email and password required",
-		})
-		http.Error(w, string(msg), 400)
+	if id == "" || akey == "" {
+		error_out(w, "Email and password required", 400)
 		return
 	}
 
-	acct, err := acct_find(hash, akey)
+	acct, err := acct_find(id, akey)
 	if err != nil {
-		msg, _ := json.Marshal(map[string]string{
-			"error": "Account could not be retrieved",
-		})
-		http.Error(w, string(msg), 500)
+		error_out(w, "Account could not be retrieved", 500)
 		return
 	}
-	if acct.Hash == "" || acct.Ciphertext == "new" {
-		exists, _ := acct_exists(hash)
+	if acct.Id == "" || acct.Ciphertext == "new" {
+		exists, _ := acct_exists(id)
 		if exists {
-			msg, _ := json.Marshal(map[string]string{
-				"error": "Incorrect Password",
-			})
-			http.Error(w, string(msg), 403)
+			// Check authentication failure limit
+			// Log failed authentication
+			error_out(w, "Incorrect Password", 403)
 		} else {
-			msg, _ := json.Marshal(map[string]string{
-				"error": "Account not found",
-			})
-			http.Error(w, string(msg), 404)
+			error_out(w, "Account not found", 404)
 		}
 		return
 	}

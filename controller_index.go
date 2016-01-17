@@ -16,8 +16,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	// "fmt"
 	"sort"
+	// "fmt"
 )
 
 type Page struct {
@@ -32,7 +32,7 @@ type Page struct {
 }
 
 var js = []string{
-	"/js/lib/json2.js",
+	// "/js/lib/json2.js",
 	"/js/lib/sjcl.js",
 	"/js/lib/jsuri-1.1.1.js",
 	"/js/lib/fastclick.js",
@@ -81,7 +81,6 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 			JS:       []string{"/min.js?v=" + js_min_version()},
 			JSINIT:   []string{},
 			CSS:      []string{"/min.css?v=" + css_min_version()},
-			AUDIO:    find_audio(),
 			DEBUG:    config["debug"] == "true",
 			MANIFEST: manifest,
 		}
@@ -90,7 +89,6 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 			JS:       hash_version(js),
 			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
 			CSS:      hash_version(css),
-			AUDIO:    find_audio(),
 			DEBUG:    config["debug"] == "true",
 			MANIFEST: manifest,
 		}
@@ -99,7 +97,7 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-Frame-Options", "DENY")
 	w.Header().Set("X-XSS-Protection", "1; mode=block")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
-	w.Header().Set("X-Permitted-Cross-Domain-Policies", "master-only")
+	w.Header().Set("X-Permitted-Cross-Domain-Policies", "none")
 	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob:")
 	if config["ssl.active"] == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
@@ -118,7 +116,6 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 }
 
 func handle_init(w http.ResponseWriter, r *http.Request) {
-
 	if config["static.cache"] == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
@@ -150,8 +147,22 @@ func append_js_init(w io.Writer) {
 	if config["debug"] == "true" {
 		debug = "true"
 	}
-	// fmt.Println("t.init({'templates': " + string(templates) + ", 'template_js': { " + template_scripts + " }, 'debug': " + debug + ", 'audio': " + string(audio) + "});")
-	w.Write([]byte("t.init({'templates': " + string(templates) + ", 'template_js': { " + template_scripts + " }, 'debug': " + debug + ", 'audio': " + string(audio) + "});"))
+	manifest := "false"
+	if config["app.manifest"] == "true" {
+		manifest = "true"
+	}
+	js := "t.init({" +
+		"'templates': " + string(templates) + ", " +
+		"'template_js': { " + template_scripts + " }, " + 
+		"'audio': " + string(audio) + ", " +
+		"'debug': " + debug + ", " +
+		"'manifest': " + manifest +
+	"});"
+	if config["static.min"] == "true" {
+		jsmin.Run(strings.NewReader(js), w)
+	} else {
+		w.Write([]byte(js))
+	}
 }
 
 func hash_version(sources []string) []string {
@@ -176,11 +187,13 @@ func css_min_version() string {
 
 func js_min_version() string {
 	hasher := md5.New()
+	hasher.Write([]byte("(function(){"))
 	for _, v := range js {
 		src, _ := os.Open("s" + v)
 		jsmin.Run(src, hasher)
 	}
 	append_js_init(hasher)
+	hasher.Write([]byte("})();"))
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
@@ -257,8 +270,8 @@ func handle_slow(w http.ResponseWriter, r *http.Request) {
 	time.Sleep(time.Second * 4)
 	content := "hi"
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	json, _ := json.Marshal(content)
-	w.Write([]byte(string(json)))
+	data, _ := json.Marshal(content)
+	w.Write([]byte(string(data)))
 }
 
 func handle_manifest(w http.ResponseWriter, r *http.Request) {

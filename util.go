@@ -12,6 +12,8 @@ import (
 	"net/smtp"
 	"strings"
 	"time"
+	"encoding/json"
+	"net/http"
 )
 
 func parseConfig(path string) map[string]string {
@@ -95,4 +97,12 @@ func db_view(fn func(*bolt.Tx) error) error {
 	}
 	defer db.Close()
 	return db.View(fn)
+}
+
+func error_out(w http.ResponseWriter, msg string, status int) {
+	res, _ := json.Marshal(map[string]string{
+		"error": msg,
+	})
+	http.Error(w, string(res), status)
+	return
 }
