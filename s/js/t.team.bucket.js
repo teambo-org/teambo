@@ -81,7 +81,7 @@ Teambo.team.bucket = (function(t){
             t.xhr.post('/team/bucket/remove', {
                 data: {
                     team_id: t.team.current.id,
-                    akey:    t.team.current.akey,
+                    mkey:    t.team.current.mkey,
                     bucket_id: bucket_id
                 }
             }).then(function(xhr){

@@ -132,6 +132,7 @@ func handle_team_bucket_remove(w http.ResponseWriter, r *http.Request) {
 			}
 
 			w.WriteHeader(204)
+            return
 		} else {
 			error_out(w, "Invalid Request", 400)
 			return
