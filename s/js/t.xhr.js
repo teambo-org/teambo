@@ -1,7 +1,7 @@
-(function(){
+Teambo.xhr = (function(t){
     "use strict";
     
-    t.xhr = function(method, url, opts) {
+    var xhr = function(method, url, opts) {
         return t.promise(function(fulfill, reject) {
             var x = new(window.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
             x.open(method, url, 1);
@@ -12,6 +12,11 @@
             }
             x.onreadystatechange = function(){
                 if(x.readyState > 3) {
+                    if(x.status === 0) {
+                        t.online(true);
+                    } else {
+                        t.online(false);
+                    }
                     x.status > 0 ? fulfill(x) : reject(x);
                 }
             };
@@ -19,16 +24,16 @@
         });
     }
     
-    t.extend(t.xhr, {
+    t.extend(xhr, {
         get: function(url, opts) {
             opts = opts ? opts : {};
             opts.data = null;
-            return t.xhr('GET', url, opts);
+            return xhr('GET', url, opts);
         },
         post: function(url, opts) {
             opts = opts ? opts : {};
             opts = encode_data(opts);
-            return t.xhr('POST', url, opts);
+            return xhr('POST', url, opts);
         }
     });
     
@@ -44,5 +49,7 @@
         }
         return opts;
     }
+    
+    return xhr;
 
-})();
+})(Teambo);

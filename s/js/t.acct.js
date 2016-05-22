@@ -1,50 +1,138 @@
-(function(){
+Teambo.acct = (function (t) {
     "use strict";
-    
-    var authed = null,
-        salt = null;
-    
-    t.acct = function(data) {
-        t.extend(this, data);
+
+    var acct = function (data, akey, key) {
+        var self = this;
+        if (typeof data === 'string') {
+            data = t.crypto.decrypt(data, key);
+        }
+        t.extend(this, {
+            id:    data.id,
+            email: data.email,
+            opts:  data.opts  || {},
+            hist:  data.hist  || [],
+            teams: data.teams || [],
+            save: function () {
+                if (!akey) {
+                    return Promise.reject('No akey');
+                }
+                return t.promise(function (fulfill, reject) {
+                    t.xhr.post('/acct', {
+                        data: {
+                            id:   self.id,
+                            akey: akey,
+                            ct:   self.encrypted()
+                        }
+                    }).then(function (xhr) {
+                        if (xhr.status === 200) {
+                            self.cache();
+                            fulfill(xhr);
+                        } else {
+                            reject(xhr);
+                        }
+                    }).catch(function (e) {
+                        reject(e);
+                    });
+                });
+            },
+            cache: function () {
+                var hash = t.crypto.sha(self.email + t.salt);
+                sessionStorage.setItem('auth', JSON.stringify({hash: hash, akey: akey, key: key}));
+                localforage.setItem(hash, self.encrypted());
+            },
+            encrypted: function () {
+                return self.encrypt({
+                    email: self.email,
+                    id:    self.id,
+                    key:   key,
+                    akey:  akey,
+                    teams: self.teams,
+                    opts:  self.opts
+                });
+            },
+            encrypt: function (data) {
+                return t.crypto.encrypt(data, key);
+            },
+            decrypt: function (ct) {
+                return t.crypto.decrypt(ct, key);
+            },
+            team_list: function () {
+                var k,
+                    ret = [];
+                for (k in self.teams) {
+                    ret.push(self.teans[k]);
+                }
+                return ret;
+            },
+            team: {
+                add: function (id, mkey, key) {
+                    return id && self.teams.push({id: id, mkey: mkey, key: key});
+                },
+                remove: function (id) {
+                    return id && t.deleteByProperty(self.teams, 'id', id);
+                },
+                all: function () {
+                    return t.promise(function (fulfill, reject) {
+                        var ret = [],
+                            p = [];
+                        self.teams.forEach(function (v) {
+                            var hash = t.crypto.sha(v.id + t.salt);
+                            p.push(localforage.getItem(hash).then(function (ct) {
+                                if (ct) {
+                                    ret.push(new t.team(ct, v.mkey, v.key));
+                                } else {
+                                    reject("Failed to decrypt team " + v.id);
+                                }
+                            }));
+                        });
+                        Promise.all(p).then(function () {
+                            fulfill(ret);
+                        });
+                    });
+                },
+                reset: function () {
+                    if (!t.debug()) {
+                        return;
+                    }
+                    self.teams = [];
+                    self.save();
+                },
+                find: function (id) {
+                    return t.promise(function (fulfill, reject) {
+                        var d = t.findByProperty(self.teams, 'id', id);
+                        if (!d) {
+                            reject();
+                            return;
+                        }
+                        localforage.getItem(t.crypto.sha(id + t.salt)).then(function (ct) {
+                            fulfill(new t.team(ct, d.mkey, d.key));
+                        });
+                    });
+                }
+            }
+        });
     };
-    
-    t.acct.email = function() {
-        return authed ? authed.email : null;
-    };
-    t.acct.teams = function() {
-        return authed ? authed.teams : null;
-    };
-    
-    t.acct.init = function() {
-        var p = [];
-        p.push(t.acct.wake());
-        p.push(t.team.init());
-        p.push(t.salt().then(function(s){
-            salt = s;
-        }));
-        if(t.debug()) {
-            t.acct.debug = function() {
-                return authed;
+
+    acct.current = null;
+
+    acct.init = function () {
+        if (t.debug()) {
+            acct.debug = function () {
+                return acct.current;
             };
         }
-        return Promise.all(p);
+        return acct.wake();
     };
-    
-    t.acct.cache = function() {
-        var hash = t.crypto.sha(authed.email+salt);
-        sessionStorage.setItem('auth', JSON.stringify({hash: hash, key: authed.key}));
-        localforage.setItem(hash, t.acct.encrypt());
-    };
-    
-    t.acct.wake = function() {
+
+    acct.wake = function () {
         var auth = sessionStorage.getItem('auth');
-        if(auth) {
+        if (auth) {
             auth = JSON.parse(auth);
-            return t.promise(function(fulfill, reject){
-                localforage.getItem(auth.hash).then(function(acct){
-                    var data = t.decrypt(acct, auth.key);
-                    if(data) {
-                        authed = new t.acct();
+            return t.promise(function (fulfill, reject) {
+                localforage.getItem(auth.hash).then(function (ct) {
+                    var data = t.crypto.decrypt(ct, auth.key);
+                    if (data) {
+                        acct.current = new acct(data, auth.akey, auth.key);
                         fulfill();
                     } else {
                         reject();
@@ -54,97 +142,83 @@
         } else {
             return Promise.resolve();
         }
-    }
-    
-    t.acct.isAuthed = function() {
-        return authed !== null;
     };
-    
-    t.acct.deAuth = function() {
-        authed = null;
+
+    acct.isAuthed = function () {
+        return acct.current !== null;
+    };
+
+    acct.deAuth = function () {
+        t.view.set('acct', null);
+        acct.current = null;
         sessionStorage.removeItem('auth');
     };
-    
-    t.acct.save = function() {
-        if(!authed) {
-            return Promise.reject('Not authed');
-        }
-        return t.promise(function(fulfill, reject) {
-            t.xhr.post('/acct', {
-                data: {
-                    id:   authed.id,
-                    akey: authed.akey,
-                    ct:   t.acct.encrypt()
-                }
-            }).then(function(xhr){
-                if(xhr.status == 200) {
-                    t.acct.cache();
-                    fulfill(xhr);
-                } else {
-                    reject(xhr);
-                }
-            }).catch(function(e){
-                reject(e);
-            });
-        });
-    };
-    
-    t.acct.encrypt = function() {
-        if(!authed) {
-            return;
-        }
-        return t.encrypt({
-            email: authed.email,
-            id:    authed.id,
-            key:   authed.key,
-            akey:  authed.akey,
-            name:  authed.name,
-            teams: authed.teams,
-            opts:  authed.opts
-        }, authed.key);
-    };
-    
-    t.acct.auth = function(email, pass) {
+
+    acct.auth = function (email, pass) {
         var id   = t.crypto.sha(email),
             key  = t.crypto.pbk(pass, email),
             akey = t.crypto.pbk(pass, id + key);
-        return t.promise(function(fulfill, reject){
+        return t.promise(function (fulfill, reject) {
             t.xhr.post('/acct/auth', {
                 data: {
                     id:   id,
                     akey: akey
                 }
-            }).then(function(xhr){
-                if(xhr.status == 200) {
+            }).then(function (xhr) {
+                if (xhr.status === 200) {
                     var data = JSON.parse(xhr.responseText);
-                    if(!data || !data.ct) {
+                    if (!data || !data.ct) {
                         reject(xhr);
                     }
-                    authed = new t.acct(t.decrypt(data.ct, key));
-                    t.acct.cache();
+                    acct.current = new acct(data.ct, akey, key);
+                    acct.current.cache();
+                    t.view.set('acct', acct.current);
                 }
                 fulfill(xhr);
-            }).catch(function(e){
-                reject(e);
+            }).catch(function (xhr) {
+                acct.auth.offline(email, pass).then(function () {
+                    fulfill(true);
+                }).catch(function () {
+                    reject(xhr);
+                });
             });
         });
     };
-    
-    t.acct.verification = {
-        send : function(email, pass) {
+
+    acct.auth.offline = function (email, pass) {
+        var id   = t.crypto.sha(email),
+            hash = t.crypto.sha(email + t.salt),
+            key  = t.crypto.pbk(pass, email),
+            akey = t.crypto.pbk(pass, id + key);
+        return t.promise(function (fulfill, reject) {
+            localforage.getItem(hash).then(function (item) {
+                var data = t.crypto.decrypt(item, key);
+                if (data) {
+                    acct.current = new acct(data, akey, key);
+                    acct.current.cache();
+                    fulfill();
+                } else {
+                    reject();
+                }
+            });
+        });
+    };
+
+    acct.verification = {
+        send : function (email, pass) {
             if(!email || !pass) {
                 return Promise.reject();
             }
             var id   = t.crypto.sha(email),
                 key  = t.crypto.pbk(pass, email),
                 akey = t.crypto.pbk(pass, id + key);
-            return t.promise(function(fulfill, reject) {
+            return t.promise(function (fulfill, reject) {
                 t.xhr.post('/acct/verification', {
                     data: {
                         email: email,
-                        akey:  akey,
+                        akey:  akey
                     }
-                }).then(function(xhr){
+                }).then(function (xhr){
                     if(xhr.status == 201) {
                         localforage.setItem('verification', {
                             email: email,
@@ -153,48 +227,47 @@
                             akey: akey
                         });
                         fulfill(xhr);
+                    } else {
+                        reject(xhr);
                     }
-                }).catch(function(e){
+                }).catch(function (e) {
                     reject(e);
                 });
             });
         },
         confirm : function(vkey, email, pass) {
             var id, key, akey;
-            return t.promise(function(fulfill, reject) {
-                var send_confirmation = function() {
+            return t.promise(function (fulfill, reject) {
+                var send_confirmation = function () {
                     t.xhr.post('/acct/verification', {
                         data: {
                             id:   id,
                             akey: akey,
                             vkey: vkey
                         }
-                    }).then(function(xhr){
+                    }).then(function (xhr){
                         if(xhr.status == 200) {
-                            var data = JSON.parse(xhr.responseText);
                             localforage.removeItem('verification');
-                            authed = new t.acct({
+                            acct.current = new acct({
                                 email: email,
                                 id:    id,
-                                key:   key,
-                                akey:  akey,
                                 teams: [],
                                 opts:  {}
-                            });
-                            t.acct.save().then(function(xhr){
+                            }, akey, key);
+                            acct.current.save().then(function (xhr){
                                 fulfill(xhr);
-                            }).catch(function(e){
+                            }).catch(function (e) {
                                 reject(e);
                             });
                         } else {
                             reject(xhr);
                         }
-                    }).catch(function(e){
+                    }).catch(function (e) {
                         reject(e);
                     });
-                }
-                if(!email || !pass) {
-                    localforage.getItem('verification').then(function(v){
+                };
+                if (!email || !pass) {
+                    localforage.getItem('verification').then(function (v) {
                         if(v) {
                             email = v.email;
                             id    = v.id;
@@ -214,50 +287,7 @@
             });
         }
     };
-    
-    t.acct.team = {
-        add: function(id, key) {
-            return authed && id && authed.teams.push({id: id, key: key});
-        },
-        remove: function(id) {
-            return authed && id && authed.teams.deleteByProperty('id', id);
-        },
-        all: function() {
-            return t.promise(function(fulfill, reject) {
-                var ret = [],
-                    p = [];
-                authed.teams.forEach(function(v) {
-                    var hash = t.crypto.sha(v.id+salt);
-                    p.push(localforage.getItem(hash).then(function(ct){
-                        if(ct) {
-                            ret.push(new t.team(t.decrypt(ct, v.key)));
-                        }
-                    }));
-                });
-                Promise.all(p).then(function() {
-                    fulfill(ret);
-                });
-            });
-        },
-        reset: function() {
-            if(!t.debug()) {
-                return;
-            }
-            authed.teams = [];
-            t.acct.save();
-        },
-        find: function(id) {
-            return t.promise(function(fulfill, reject){
-                var d = authed.teams.findByProperty('id', id);
-                if(!d) {
-                    reject();
-                    return;
-                }
-                localforage.getItem(t.crypto.sha(id+salt)).then(function(ct){
-                    fulfill(new t.team(t.decrypt(ct, d.key)));
-                });
-            });
-        }
-    };
 
-})();
+    return acct;
+
+})(Teambo);

@@ -32,7 +32,6 @@ type Page struct {
 }
 
 var js = []string{
-	// "/js/lib/json2.js",
 	"/js/lib/sjcl.js",
 	"/js/lib/jsuri-1.1.1.js",
 	"/js/lib/fastclick.js",
@@ -41,9 +40,11 @@ var js = []string{
 	"/js/lib/promise-7.0.4.min.js",
 	"/js/lib/classList.js",
 	"/js/lib/polyfills.js",
+	// "/js/lib/zxcvbn.js",
 	"/js/t.js",
 	"/js/t.xhr.js",
 	"/js/t.router.js",
+	"/js/t.view.js",
 	"/js/t.crypto.js",
 	"/js/t.acct.js",
 	"/js/t.audio.js",
@@ -51,14 +52,16 @@ var js = []string{
 	"/js/t.form.js",
 	"/js/t.chat.js",
 	"/js/t.team.js",
+	"/js/t.team.bucket.js",
 }
 var jsinit = []string{
 	"/init.js",
 }
 var css = []string{
 	"/css/font.css",
-	"/css/default.css",
 	"/css/teambo.css",
+	"/css/default.css",
+	"/css/dashboard.css",
 }
 
 func handle_index(w http.ResponseWriter, r *http.Request) {
@@ -98,7 +101,7 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-XSS-Protection", "1; mode=block")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("X-Permitted-Cross-Domain-Policies", "none")
-	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob:")
+	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' data:; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob:")
 	if config["ssl.active"] == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 	}
@@ -151,7 +154,7 @@ func append_js_init(w io.Writer) {
 	if config["app.manifest"] == "true" {
 		manifest = "true"
 	}
-	js := "t.init({" +
+	js := "Teambo.init({" +
 		"'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " + 
 		"'audio': " + string(audio) + ", " +

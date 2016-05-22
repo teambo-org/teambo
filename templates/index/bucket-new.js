@@ -1,16 +1,16 @@
 (function(t){
     "use strict";
 
-    var form = new t.form(document.team_new);
+    var form = new t.form(document.bucket_new);
     form.name.focus();
     form.addEventListener("submit", function(e) {
         form.disable();
         var name = form.name.value;
-        t.team.create(name).then(function(team){
-            t.gotoUrl('/'+team.id);
+        t.team.bucket.create(name).then(function(bucket){
+            t.gotoUrl('/'+t.team.current.id+'/'+bucket.id);
         }).catch(function(e){
             form.enable();
-            form.error.msg("Team could not be created", "Please try again");
+            form.error.msg("Bucket could not be created", "Please try again");
         });
     });
 

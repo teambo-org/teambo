@@ -1,9 +1,8 @@
 <div class="nav hi-05">
     <div class="section team hi-10">
-        <i class="icon-down-open-1 nav"></i>
-        <a href="#/{{team.id}}">
-            <div class="img"><i class="icon-users"></i></div>
-            <div class="name">{{team.name}}</div>
+        <a href="#/account">
+            <div class="img"><i class="icon-user-1"></i></div>
+            <div class="name">{{acct.email}}</div>
         </a>
     </div>
     <div class="section contacts scrollable">
@@ -43,44 +42,7 @@
             <div class="name">Kev</div>
         </a>
     </div>
+    <div id="status"></div>
 </div>
 <div class="area scrollable"><div class="content" id="dash-main"></div></div>
 <span class="spinner c-20" id="loader"><i class="icon-logo"></i></span>
-<style>
-#dashboard .main div.nav { float: left; width: 12em; height: 100%; position: relative; }
-#dashboard .main .area { margin-left: 12em; height: 100%; position: relative; overflow-y: scroll; padding: 0; }
-#dashboard .main .area .content { padding: 1em; }
-
-#dashboard .main .task p { margin: 0; }
-#dashboard .main section { padding: 1em; margin: 1em 0; }
-#dashboard .main section.description { margin-right: 13em; }
-#dashboard .main section.tags { float: right; margin-left: 1em; width: 12em; padding: 0; }
-#dashboard .main section.tags ul { margin: 0; padding: 0; }
-#dashboard .main section.tags ul li { list-style: none; margin: 0; padding: 0; }
-#dashboard .main section.tags ul li > a { background: none; text-decoration: none; }
-#dashboard .main section.tags ul li i.nav { background: none; }
-#dashboard .main section.comments { clear: both; }
-#dashboard .main section.comments .comment { margin: 1em 0; }
-#dashboard .main section.comments .message { padding: 1em; }
-#dashboard .main section.comments .author {  }
-#dashboard .main section.comments .author .name {  }
-#dashboard .main section.comments .comment .control { display: none; float: right; }
-#dashboard .main section.comments .comment .control a { float: left; }
-#dashboard .main section.comments .comment:hover .control { display: block; }
-#dashboard .main section.comments form .field { padding: 0.5em 0 0; }
-#dashboard .main section.comments form textarea.text { border: none; width: 100%; padding: 0.5em;
-    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
-
-#dashboard .main .contacts { position: absolute; bottom: 0; left: 0; width: 12em; top: 2em; overflow-y: auto; }
-#dashboard .main .contacts a { clear: both; font-size: 0.8em; }
-#dashboard .main .contacts a .img { background: none; }
-#dashboard .main .contacts a .icon-phone-1 { float: right; width: 2em; height: 2em; line-height: 2em; text-align: center; display: none; opacity: 0.5; }
-#dashboard .main .contacts a:hover .icon-phone-1 { display: block; }
-#dashboard .main .contacts a .icon-phone-1:hover { opacity: 1; }
-#dashboard .main .contacts a.offline { opacity: 0.5; }
-#dashboard .main .contacts a.offline:hover { opacity: 1; }
-
-#dashboard .main .team { height: 2em; }
-#dashboard .main .team a { display: block; }
-#dashboard .main .team a:hover .icon-down-open-1 { opacity: 0.8; background: none; }
-</style>

@@ -1,11 +1,23 @@
 <div class="section account hi-20">
+    <!--
     <i class="icon-cog nav"></i>
-    <a href="#/account">
-        <div class="img"><i class="icon-user-1"></i></div>
-        <div class="name">Kev Burns</div>
+    -->
+    <a href="#/{{team.id}}">
+        <div class="img"><i class="icon-users"></i></div>
+        <div class="name">{{team.opts.name}}</div>
     </a>
 </div>
 <div class="workload scrollable">
+    {{#team.bucket_list}}
+    <div class="section">
+        <i class="icon-minus nav"></i>
+        <a href="#/{{team.id}}/{{id}}">
+            <div class="img"><i class="icon-flag-filled"></i></div>
+            <div class="name">{{opts.name}}</div>
+        </a>
+    </div>
+    {{/team.bucket_list}}
+<!--
     <div class="section">
         <i class="icon-minus nav"></i>
         <a href="#/release">
@@ -62,18 +74,6 @@
             <li><a><i class="icon-check-empty"></i>Create a long task name that is much longer than one simple line</a></li>
         </ul>
     </div>
+-->
 </div>
 <div class="call"></div>
-<style>
-#dashboard .right ul.tasks { font-size: 0.8em; margin: 0; padding: 0.6em 0; }
-#dashboard .right ul.tasks li { list-style: none; padding: 0.2em 0.6em; position: relative; padding-left: 2.2em; line-height: 1.1em; }
-#dashboard .right ul.tasks li i { position: absolute; top: 0.2em; left: 0.6em; }
-#dashboard .right ul.tasks li.active {  }
-
-#dashboard .right .account { height: 2em; }
-#dashboard .right .account a { display: block; }
-#dashboard .right .account a:hover .icon-cog { opacity: 0.8; }
-
-#dashboard .right .workload { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 0; }
-#dashboard .right .workload i.nav { opacity: 0.2; }
-</style>

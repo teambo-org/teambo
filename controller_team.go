@@ -21,23 +21,29 @@ func handle_team(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	
 	id   := r.FormValue("id")
-	akey := r.FormValue("akey")
+	mkey := r.FormValue("mkey")
 	ct   := r.FormValue("ct")
 	
 	team := Team{}
 	err  := errors.New("")
 
 	if r.Method == "POST" {
-		if id == "" && akey == "" {
-			id   = team_newId()
-			akey = randStr(8)
-			team, err = team_save(id, akey, "new")
+		if id == "" {
+			id = team_newId()
+			team, err = team_save(id, "new")
 			if err != nil {
 				error_out(w, "Team could not be created", 500)
 				return
 			}
-		} else if len(id) > 0 && len(akey) > 0 && len(ct) > 0 {
-			team, err = team_find(id, akey)
+			mkey = randStr(8)
+			_, err := team_member_save(id, mkey, "new")
+			if err != nil {
+				team_remove(id)
+				error_out(w, "Team member could not be saved", 500)
+				return
+			}
+		} else if len(id) > 0 && len(mkey) > 0 && len(ct) > 0 {
+			team, err = team_find(id)
 			if err != nil {
 				error_out(w, "Team could not be found", 500)
 				return
@@ -46,7 +52,13 @@ func handle_team(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Team does not exist", 404)
 				return
 			}
-			team, err = team_save(id, akey, ct)
+			exists, err := team_member_exists(id, mkey)
+			if err != nil || !exists {
+				// failed authentication
+				error_out(w, "Team member not found", 403)
+				return
+			}
+			team, err = team_save(id, ct)
 			if err != nil {
 				error_out(w, "Team could not be saved", 500)
 				return
@@ -56,17 +68,27 @@ func handle_team(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		team, err = team_find(id, akey)
+		team, err = team_find(id)
 		if err != nil {
 			error_out(w, "Team could not be found", 500)
 			return
 		}
 		if team.Id != id {
+			// failed authentication
 			error_out(w, "Team does not exist", 404)
+			return
+		}
+		exists, err := team_member_exists(id, mkey)
+		if err != nil || !exists {
+			// failed authentication
+			error_out(w, "Team member not found", 403)
 			return
 		}
 	}
 
-	res, _ := json.Marshal(team)
+	res, _ := json.Marshal(map[string]interface{}{
+		"team": team,
+		"mkey": mkey,
+	})
 	w.Write([]byte(string(res)))
 }

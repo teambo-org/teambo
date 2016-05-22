@@ -1,0 +1,114 @@
+#dashboard { overflow: hidden; }
+
+#dashboard .right { width: 16em; position: fixed; top: 0; right: 0; bottom: 0; }
+#dashboard .main { position: fixed; left: 0; top: 0; right: 16em; bottom: 40%; }
+#dashboard .chat { position: fixed; left: 0; bottom: 0; right: 16em; height: 40%; }
+#dashboard .theme { display: none; }
+#dashboard .audio { display: none; }
+
+#dashboard.chat-collapsed .main { bottom: 2em; }
+#dashboard.chat-collapsed .chat { height: 2em; }
+
+#dashboard #loader { position: fixed; top: 1em; right: 17em; display: none; height: 2.1em; line-height: 2em; }
+#dashboard #loader i { font-size: 2.09em; opacity: 0.3; padding-bottom: 10px; }
+#dashboard #loader i:before { margin: 0; }
+#dashboard.loading #loader { display: block; }
+
+#dashboard .section { clear: both; }
+#dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
+#dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; }
+#dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; }
+#dashboard .section > a { display: block; }
+
+#dashboard .chat:before { content: ""; position: absolute; left: -2em; top: 0; right: 0; height: 200%; }
+#dashboard .chat .inner { position: relative; height: 100%; width: 100%; }
+#dashboard .chat .nav { float: left; width: 12em; position: absolute; top: 0; left: 0; bottom: 0; }
+#dashboard .chat .nav ul.channels { position: absolute; left: 0; right: 0; top: 0; bottom: 2em; overflow: auto; padding: 0; margin: 0; }
+#dashboard .chat .nav ul.channels li { font-size: 1em;  opacity: 0.5; }
+#dashboard .chat .nav ul.channels li.active { opacity: 1; }
+#dashboard .chat .nav ul.channels li a { display: block; line-height: 2em; padding: 0 0.4em; text-decoration: none; }
+#dashboard .chat .nav .ctrl { height: 2em; position: absolute; bottom: 0; left: 0; right: 0; }
+#dashboard .chat .nav .ctrl a.toggle { float: left; line-height: 2.3em; padding: 0 0.5em; font-size: 0.9em; text-decoration: none; }
+#dashboard .chat a.emo { height: 2em; width: 2.2em; position: absolute; right: 2.2em; top: 0; bottom: 0; 
+    line-height: 2.1em; text-align: center; font-family: "teambo"; padding: 0; }
+
+#dashboard .chat .area { position: absolute; left: 12em; top: 0; bottom: 0; right: 0; }
+#dashboard .chat .area .history { position: absolute; top: 0; left: 0; right: 0; bottom: 2em; overflow-y: auto; }
+#dashboard .chat .area .history .l { position: relative; font-size: 0.8em; display: table-row; }
+#dashboard .chat .area .history .ts { width: 3em; text-align: center; display: table-cell; }
+#dashboard .chat .area .history .n { padding: 0 0.4em; display: inline-block; margin-left: -0.3em; }
+#dashboard .chat .area .history .t { margin-left: 3em; padding-left: 0.3em; display: table-cell; }
+#dashboard .chat .area .history .d { font-size: 0.7em; text-align: center; line-height: 1.5em; }
+
+#dashboard .chat .area .input { height: 2em; position: absolute; bottom: 0; left: 0; right: 0; height: 2em; }
+#dashboard .chat .area .input form { padding-right: 2.2em; position: relative; }
+#dashboard .chat .area .input input.text { height: 2em; width: 100%; padding: 0 0.4em; font-size: 1em; padding-right: 2.2em;
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+#dashboard .chat .area .input .submit { height: 2em; width: 2.2em; position: absolute; right: 0; top: 0; bottom: 0; line-height: 2em; text-align: center; font-family: "teambo"; padding: 0; }
+#dashboard .chat .area .toggle { position: absolute; top: 0; right: 6px; width: 3em; height: 3em; text-align: center; line-height: 3em; opacity: 0; }
+#dashboard .chat .area .toggle:hover { opacity: 1; }
+
+#dashboard .chat audio { display: none; }
+#dashboard .chat input.text::-webkit-input-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.85em; }
+#dashboard .chat input.text:-moz-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.9em; }
+#dashboard .chat input.text::-moz-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.9em; }
+#dashboard .chat input.text:-ms-input-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.9em; }
+
+#dashboard .chat .msg-alert { position: absolute; bottom: 2.55em; right: 6px; font-size: 0.8em; line-height: 3em; padding: 0 1em 0 0.5em; display: none; }
+
+#dashboard.chat-collapsed .chat .area .toggle { display: none; }
+
+#dashboard .right ul.tasks { font-size: 0.8em; margin: 0; padding: 0.6em 0; }
+#dashboard .right ul.tasks li { list-style: none; padding: 0.2em 0.6em; position: relative; padding-left: 2.2em; line-height: 1.1em; }
+#dashboard .right ul.tasks li i { position: absolute; top: 0.2em; left: 0.6em; }
+#dashboard .right ul.tasks li.active {  }
+
+#dashboard .right .account { height: 2em; }
+#dashboard .right .account a { display: block; }
+#dashboard .right .account a:hover .icon-cog { opacity: 0.8; }
+
+#dashboard .right .workload { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 0; }
+#dashboard .right .workload i.nav { opacity: 0.2; }
+
+#dashboard .main div.nav { float: left; width: 12em; height: 100%; position: relative; }
+#dashboard .main .area { margin-left: 12em; height: 100%; position: relative; overflow-y: scroll; padding: 0; }
+#dashboard .main .area .content { padding: 1em; }
+
+#dashboard .main .task p { margin: 0; }
+#dashboard .main section { padding: 1em; margin: 1em 0; }
+#dashboard .main section.description { margin-right: 13em; }
+#dashboard .main section.tags { float: right; margin-left: 1em; width: 12em; padding: 0; }
+#dashboard .main section.tags ul { margin: 0; padding: 0; }
+#dashboard .main section.tags ul li { list-style: none; margin: 0; padding: 0; }
+#dashboard .main section.tags ul li > a { background: none; text-decoration: none; }
+#dashboard .main section.tags ul li i.nav { background: none; }
+#dashboard .main section.comments { clear: both; }
+#dashboard .main section.comments .comment { margin: 1em 0; }
+#dashboard .main section.comments .message { padding: 1em; }
+#dashboard .main section.comments .author {  }
+#dashboard .main section.comments .author .name {  }
+#dashboard .main section.comments .comment .control { display: none; float: right; }
+#dashboard .main section.comments .comment .control a { float: left; }
+#dashboard .main section.comments .comment:hover .control { display: block; }
+#dashboard .main section.comments form .field { padding: 0.5em 0 0; }
+#dashboard .main section.comments form textarea.text { border: none; width: 100%; padding: 0.5em;
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+#dashboard .main .contacts { position: absolute; bottom: 0; left: 0; width: 12em; top: 2em; overflow-y: auto; }
+#dashboard .main .contacts a { clear: both; font-size: 0.8em; }
+#dashboard .main .contacts a .img { background: none; }
+#dashboard .main .contacts a .icon-phone-1 { float: right; width: 2em; height: 2em; line-height: 2em; text-align: center; display: none; opacity: 0.5; }
+#dashboard .main .contacts a:hover .icon-phone-1 { display: none; }
+#dashboard .main .contacts a .icon-phone-1:hover { opacity: 1; }
+#dashboard .main .contacts a.offline { opacity: 0.5; }
+#dashboard .main .contacts a.offline:hover { opacity: 1; }
+
+#dashboard .main .nav #status { position: absolute; bottom: 0; width: 100%; text-align: center; line-height: 2em; text-transform: uppercase; }
+
+#dashboard .main .team { height: 2em; }
+#dashboard .main .team a { display: block; }
+#dashboard .main .team a:hover .icon-down-open-1 { opacity: 0.8; background: none; }
+
+#dashboard .main .dash ul.buckets ul.tasks li { list-style: none; }
+#dashboard .main nav { float: right; }
+#dashboard .main nav a { float: left; padding: 0 1em; line-height: 2em; }

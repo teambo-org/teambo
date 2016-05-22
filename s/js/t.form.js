@@ -1,7 +1,7 @@
-(function(){
+Teambo.form = (function(t){
     "use strict";
 
-    t.form = function(el) {
+    return function(el) {
         var form = el,
             error = form.querySelector('.error'),
             submit = form.querySelector('input[type=submit]');
@@ -55,4 +55,4 @@
         });
     };
 
-})();
+})(Teambo);

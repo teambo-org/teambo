@@ -65,6 +65,7 @@ func sendMail(recipient string, subject string, body string) error {
 	)
 }
 
+// Base 62
 func randStr(strlen int) string {
 	rand.Seed(time.Now().UTC().UnixNano())
 	const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -99,7 +100,26 @@ func db_view(fn func(*bolt.Tx) error) error {
 	return db.View(fn)
 }
 
+func db_team_update(team_id string, fn func(*bolt.Tx) error) error {
+	db, err := bolt.Open(config["app.data"]+"/teams/"+team_id+".db", 0644, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	return db.Update(fn)
+}
+
+func db_team_view(team_id string, fn func(*bolt.Tx) error) error {
+	db, err := bolt.Open(config["app.data"]+"/teams/"+team_id+".db", 0644, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	return db.View(fn)
+}
+
 func error_out(w http.ResponseWriter, msg string, status int) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	res, _ := json.Marshal(map[string]string{
 		"error": msg,
 	})

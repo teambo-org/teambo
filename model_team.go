@@ -10,42 +10,32 @@ import (
 
 type Team struct {
 	Id         string `json:"id"`
-	Akey       string `json:"akey"`
 	Ciphertext string `json:"ct"`
 }
 
-func team_save(id string, akey string, ct string) (item Team, err error) {
+func team_save(id string, ct string) (item Team, err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("team"))
-
-		err := b.Put([]byte(id+akey), []byte(ct))
-		if err != nil {
-			return err
-		}
-
-		return nil
+		err = b.Put([]byte(id), []byte(ct))
+		return err
 	})
 	if err != nil {
 		fmt.Println(err)
 		return item, err
 	}
-
-	item = Team{id, akey, ct}
+	item = Team{id, ct}
 	return item, nil
 }
 
-func team_find(id string, akey string) (item Team, err error) {
+func team_find(id string) (item Team, err error) {
 	ct := ""
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("team"))
-
-		v := b.Get([]byte(id + akey))
+		v := b.Get([]byte(id))
 		if err != nil {
 			return err
 		}
-
 		ct = string(v)
-
 		return nil
 	})
 	if err != nil {
@@ -54,7 +44,7 @@ func team_find(id string, akey string) (item Team, err error) {
 	}
 
 	if ct != "" {
-		item = Team{id, akey, ct}
+		item = Team{id, ct}
 		return item, nil
 	}
 	return item, nil
@@ -64,7 +54,6 @@ func team_exists(id string) (exists bool, err error) {
 	exists = false
 	db_view(func(tx *bolt.Tx) error {
 		c := tx.Bucket([]byte("team")).Cursor()
-
 		prefix := []byte(id)
 		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
 			exists = true
@@ -77,4 +66,17 @@ func team_exists(id string) (exists bool, err error) {
 	}
 
 	return exists, nil
+}
+
+func team_remove(team_id string) (err error) {
+	db_update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("team"))
+		err = b.Delete([]byte(team_id))
+		return err
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
 }

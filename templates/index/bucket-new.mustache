@@ -1,0 +1,14 @@
+<div class="bucket-new" data-tpljs="index/bucket-new">
+    <h1>New Bucket</h1>
+    <form id="bucket-new" name="bucket_new" method="POST" class="std ext">
+        <div class="field">
+            <input type="text" class="text required min-len-2" name="name" placeholder="Bucket Name" />
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Create Bucket" />
+            <br/>
+            <a class="cancel" href="#/{{team.id}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>

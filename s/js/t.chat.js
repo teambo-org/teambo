@@ -1,6 +1,4 @@
-(function(){
-    
-	t.chat = {};
+Teambo.chat = (function(t){
     
     var toggle_chat = function(state) {
         var dash = t.id('dashboard'),
@@ -24,23 +22,25 @@
         }
     };
     
-	t.chat.init = function(opts){
-        t.id('chat').addEventListener('click', function(e){
-            if(e.target.classList.contains('toggle') 
-            || e.target.parentNode.classList.contains('toggle')) {
-                e.preventDefault();
-                toggle_chat();
-            } else if(e.target.classList.contains('open')) {
-                toggle_chat(1);
+	return {
+        init: function(opts){
+            t.id('chat').addEventListener('click', function(e){
+                if(e.target.classList.contains('toggle') 
+                || e.target.parentNode.classList.contains('toggle')) {
+                    e.preventDefault();
+                    toggle_chat();
+                } else if(e.target.classList.contains('open')) {
+                    toggle_chat(1);
+                }
+            });
+            var autoclose = function(e) {
+                if(opts.autoclose) {
+                    toggle_chat(0);
+                }
             }
-        });
-        var autoclose = function(e) {
-            if(opts.autoclose) {
-                toggle_chat(0);
-            }
+            t.id('main').addEventListener('click', autoclose);
+            t.id('right').addEventListener('click', autoclose);
         }
-        t.id('main').addEventListener('click', autoclose);
-        t.id('right').addEventListener('click', autoclose);
-	};
+    };
     
-})();
+})(Teambo);

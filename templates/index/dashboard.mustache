@@ -1,1 +1,19 @@
-<h1>Dashboard</h1>
+<div class="dash" data-tpljs="index/dashboard">
+    <nav>
+        <a href="#/{{team.id}}/new">New Bucket</a>
+    </nav>
+    <h1>Dashboard</h1>
+    <ul class="buckets" id="buckets">
+    {{#team.bucket_list}}
+    <li class="bucket" id="bucket-li-{{id}}">
+        <a href="#/{{team.id}}/{{id}}">
+            <i class="icon-flag-filled"></i>
+            <span class="name">{{opts.name}}</span>
+        </a>
+    </li>
+    {{/team.bucket_list}}
+    {{^team.bucket_list}}
+    <p>You have no buckets.</p>
+    {{/team.bucket_list}}
+    </ul>
+</div>

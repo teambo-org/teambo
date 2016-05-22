@@ -2,12 +2,10 @@ package main
 
 import (
 	"net/http"
-	// "fmt"
 	"flag"
 	"fmt"
 	"golang.org/x/net/http2"
 	"log"
-	// "errors"
 	"github.com/boltdb/bolt"
 )
 
@@ -35,9 +33,12 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		handle_acct_verification(w, r)
 	case "/team":
 		handle_team(w, r)
-	// case "/team/invite":       handle_team_invite(w, r)
-	// case "/team/milestone":    handle_team_milestone(w, r)
-	// case "/team/item":         handle_team_item(w, r)
+	case "/team/bucket":  
+		handle_team_bucket(w, r)
+	case "/team/bucket/remove":  
+		handle_team_bucket_remove(w, r)
+	// case "/team/invite":  handle_team_invite(w, r)
+	// case "/team/item":    handle_team_item(w, r)
 	case "/slow":
 		handle_slow(w, r)
 	case "/app.manifest":

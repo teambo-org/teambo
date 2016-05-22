@@ -3,10 +3,12 @@
     <ul class="channels scrollable">
         <li class="active hi-05-a"><a><i class="icon-megaphone"></i> Activity</a></li>
         <li class="active hi-05-a"><a><i class="icon-comment"></i> Comments</a></li>
-        <li><a class="hi-05-a"><i class="icon-chat-1"></i> Chat</a></li>
+        <li class="active hi-05-a"><a><i class="icon-chat-1"></i> Chat</a></li>
     </ul>
     <div class="ctrl hi-10">
+    <!--
         <a class="toggle"><i class="icon-megaphone"></i>99 &nbsp;<i class="icon-comment"></i>99 &nbsp;<i class="icon-chat-1"></i>99</a>
+    -->
     </div>
 </div>
 <div class="area">
@@ -55,42 +57,3 @@
     <a class="toggle hi-10"><i class="icon-down-open-1"></i></a>
 </div>
 </div>
-<style>
-#dashboard .chat:before { content: ""; position: absolute; left: -2em; top: 0; right: 0; height: 200%; }
-#dashboard .chat .inner { position: relative; height: 100%; width: 100%; }
-#dashboard .chat .nav { float: left; width: 12em; position: absolute; top: 0; left: 0; bottom: 0; }
-#dashboard .chat .nav ul.channels { position: absolute; left: 0; right: 0; top: 0; bottom: 2em; overflow: auto; padding: 0; margin: 0; }
-#dashboard .chat .nav ul.channels li { font-size: 1em;  opacity: 0.5; }
-#dashboard .chat .nav ul.channels li.active { opacity: 1; }
-#dashboard .chat .nav ul.channels li a { display: block; line-height: 2em; padding: 0 0.4em; text-decoration: none; }
-#dashboard .chat .nav .ctrl { height: 2em; position: absolute; bottom: 0; left: 0; right: 0; }
-#dashboard .chat .nav .ctrl a.toggle { float: left; line-height: 2.3em; padding: 0 0.5em; font-size: 0.9em; text-decoration: none; }
-#dashboard .chat a.emo { height: 2em; width: 2.2em; position: absolute; right: 2.2em; top: 0; bottom: 0; 
-    line-height: 2.1em; text-align: center; font-family: "teambo"; padding: 0; }
-
-#dashboard .chat .area { position: absolute; left: 12em; top: 0; bottom: 0; right: 0; }
-#dashboard .chat .area .history { position: absolute; top: 0; left: 0; right: 0; bottom: 2em; overflow-y: auto; }
-#dashboard .chat .area .history .l { position: relative; font-size: 0.8em; display: table-row; }
-#dashboard .chat .area .history .ts { width: 3em; text-align: center; display: table-cell; }
-#dashboard .chat .area .history .n { padding: 0 0.4em; display: inline-block; margin-left: -0.3em; }
-#dashboard .chat .area .history .t { margin-left: 3em; padding-left: 0.3em; display: table-cell; }
-#dashboard .chat .area .history .d { font-size: 0.7em; text-align: center; line-height: 1.5em; }
-
-#dashboard .chat .area .input { height: 2em; position: absolute; bottom: 0; left: 0; right: 0; height: 2em; }
-#dashboard .chat .area .input form { padding-right: 2.2em; position: relative; }
-#dashboard .chat .area .input input.text { height: 2em; width: 100%; padding: 0 0.4em; font-size: 1em; padding-right: 2.2em;
-    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
-#dashboard .chat .area .input .submit { height: 2em; width: 2.2em; position: absolute; right: 0; top: 0; bottom: 0; line-height: 2em; text-align: center; font-family: "teambo"; padding: 0; }
-#dashboard .chat .area .toggle { position: absolute; top: 0; right: 6px; width: 3em; height: 3em; text-align: center; line-height: 3em; opacity: 0; }
-#dashboard .chat .area .toggle:hover { opacity: 1; }
-
-#dashboard .chat audio { display: none; }
-#dashboard .chat input.text::-webkit-input-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.85em; }
-#dashboard .chat input.text:-moz-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.9em; }
-#dashboard .chat input.text::-moz-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.9em; }
-#dashboard .chat input.text:-ms-input-placeholder { font-family: "teambo"; font-size: 1.5em; line-height: 0.9em; }
-
-#dashboard .chat .msg-alert { position: absolute; bottom: 2.55em; right: 6px; font-size: 0.8em; line-height: 3em; padding: 0 1em 0 0.5em; display: none; }
-
-#dashboard.chat-collapsed .chat .area .toggle { display: none; }
-</style>
