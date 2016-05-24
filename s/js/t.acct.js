@@ -76,16 +76,16 @@ Teambo.acct = (function (t) {
                         var ret = [],
                             p = [];
                         self.teams.forEach(function (v) {
-                            var hash = t.crypto.sha(v.id + t.salt);
-                            p.push(localforage.getItem(hash).then(function (ct) {
-                                if (ct) {
-                                    ret.push(new t.team(ct, v.mkey, v.key));
-                                } else {
-                                    reject("Failed to decrypt team " + v.id);
-                                }
+                            p.push(t.promise(function(fulfill, reject) {
+                                self.team.find(v.id).then(function(found_team) {
+                                    ret.push(found_team);
+                                    fulfill();
+                                }).catch(function(e) {
+                                    reject(e);
+                                });
                             }));
                         });
-                        Promise.all(p).then(function () {
+                        Promise.all(p).then(function() {
                             fulfill(ret);
                         });
                     });
@@ -105,7 +105,34 @@ Teambo.acct = (function (t) {
                             return;
                         }
                         localforage.getItem(t.crypto.sha(id + t.salt)).then(function (ct) {
-                            fulfill(new t.team(ct, d.mkey, d.key));
+                            if (ct) {
+                                fulfill(new t.team(ct, d.mkey, d.key));
+                            } else {
+                                self.team.fetch(id, d.mkey).then(function(ct) {
+                                    var fetched_team = new t.team(ct, d.mkey, d.key);
+                                    fetched_team.cache();
+                                    fulfill(fetched_team);
+                                }).catch(function(e) {
+                                    reject(e);
+                                });
+                            }
+                        });
+                    });
+                },
+                fetch: function(id, mkey) {
+                    return t.promise(function(fulfill, reject) {
+                        t.xhr.get('/team', {
+                            data: {
+                                id: id,
+                                mkey: mkey
+                            }
+                        }).then(function(xhr) {
+                            if (xhr.status === 200) {
+                                var data = JSON.parse(xhr.responseText);
+                                fulfill(data.team.ct);
+                            } else {
+                                reject("Failed to retrieve team " + id);
+                            }
                         });
                     });
                 }

@@ -110,8 +110,35 @@ Teambo.team.bucket = (function(t){
                 return;
             }
             localforage.getItem(t.crypto.sha(team.id+id+t.salt)).then(function(ct){
-                fulfill(new t.team.bucket(t.team.bucket.decrypt(ct)));
+                if(ct) {
+                    fulfill(new t.team.bucket(t.team.bucket.decrypt(ct)));
+                } else {
+                    bucket.fetch(id, team.id, team.mkey).then(function(ct) {
+                        fulfill(new t.team.bucket(t.team.bucket.decrypt(ct)));
+                    }).catch(function(e) {
+                        reject(e);
+                    });
+                }
             });
+        });
+    };
+    bucket.fetch = function(id, team_id, mkey) {
+        return t.promise(function(fulfill, reject) {
+            t.xhr.get('/team/bucket', {
+                data: {
+                    id: id,
+                    team_id: team_id,
+                    mkey: mkey
+                }
+            }).then(function(xhr) {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    fulfill(data.ct);
+                } else {
+                    reject("Failed to retrieve team " + id);
+                }
+            });
+            
         });
     };
     bucket.encrypt = function(data) {

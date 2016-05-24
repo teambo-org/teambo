@@ -27,6 +27,10 @@ Teambo.xhr = (function(t){
     t.extend(xhr, {
         get: function(url, opts) {
             opts = opts ? opts : {};
+            var alt = encode_data(opts);
+            if(alt.data) {
+                url = url + (url.indexOf('?') < 0 ? '?' : '&') + alt.data;
+            }
             opts.data = null;
             return xhr('GET', url, opts);
         },
