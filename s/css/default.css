@@ -13,7 +13,7 @@ body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; fo
 a { color:rgba(0,0,0,0.7); cursor: pointer; }
 a:visited { color: rgba(0,0,0,0.9); }
 a:hover, .active a { color: rgba(0,0,0,0.8); }
-/* a:focus { outline: thin dotted rgba(255,255,255,0.2); } */
+*:focus { outline: none; } 
 
 a:link, a:visited { text-decoration: none; }
 a:hover, a:active { text-decoration: underline; }
@@ -21,6 +21,13 @@ a:hover, a:active { text-decoration: underline; }
 .scrollable::-webkit-scrollbar { width: 6px; }
 .scrollable::-webkit-scrollbar-track { }
 .scrollable::-webkit-scrollbar-thumb { -webkit-border-radius: 3px; border-radius: 3px; }
+
+#bgcanvas { position: fixed; z-index: 1; width: 100%; height: 100%; top: 0; left: 0; }
+#page { z-index: 1; position: relative; }
+.bg { z-index: 0; }
+.container { z-index: 100; }
+.internal, 
+.external { z-index: 100; position: relative; }
 
 a img { border: 0; }
 

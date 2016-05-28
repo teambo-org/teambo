@@ -63,6 +63,9 @@ var Teambo = (function(t){
                 }
                 var tar = t.id(target);
                 tar.innerHTML = t.view.render(route.tpl, data);
+                if(target === 'page') {
+                    t.id('page').innerHTML = t.id('page').innerHTML + '<canvas id="bgcanvas"></canvas>';
+                }
                 run_template_js(tar);
                 if(tar.firstChild.classList.contains('require-auth') && !t.acct.isAuthed()) {
                     t.gotoUrl('/login');
@@ -340,3 +343,86 @@ var Teambo = (function(t){
     return t;
     
 })(Teambo || {});
+
+
+function draw_squares(ctx, t, r, b, l) {
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    var stroke = function(o) {
+        ctx.moveTo(l - o, t - o);
+        ctx.lineTo(r + o, t - o);
+        ctx.lineTo(r + o, b + o);
+        ctx.lineTo(l - o, b + o);
+        ctx.lineTo(l - o, t - o);
+    };
+    ctx.strokeStyle = "rgba(0,0,0,0.2)";
+    stroke(2);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(0,0,0,0.15)";
+    stroke(4);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(0,0,0,0.1)";
+    stroke(6);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(0,0,0,0.05)";
+    stroke(8);
+    ctx.closePath();
+    ctx.stroke();
+}
+
+document.addEventListener("keydown", function(e) {
+    if(e.keyIdentifier == "Down" || e.keyIdentifier == "Right") {
+        var targets = document.querySelectorAll('a[href], input, button, select, textarea');
+        console.log(targets);
+        for(var i in targets) { 
+            if(targets[i] === e.target) {
+                i = parseInt(i);
+                var new_i = i+1 < targets.length ? i+1 : 0;
+                targets[new_i].focus();
+                return;
+            } 
+        }
+        targets[0].focus();
+    } else if (e.keyIdentifier == "Up" || e.keyIdentifier == "Left") {
+        var targets = document.querySelectorAll('a[href], input, button, select, textarea');
+        for(var i in targets) { 
+            if(targets[i] === e.target) {
+                i = parseInt(i);
+                var new_i = i-1 >= 0 ? i-1 : targets.length - 1;
+                targets[new_i].focus();
+                return;
+            } 
+        }
+        targets[0].focus();
+    }
+}, false);
+
+document.body.addEventListener('focusin', function(e) {
+    var a = e.target.getBoundingClientRect(),
+        canvas = Teambo.id('bgcanvas');
+    if(canvas && a) {
+        var ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var t = Math.round(a.top)    + 0.5,
+            r = Math.round(a.right)  - 0.5,
+            b = Math.round(a.bottom) - 0.5,
+            l = Math.round(a.left)   + 0.5;
+        draw_squares(ctx, t, r, b, l);
+    }
+});
+document.body.addEventListener('focusout', function(e) {
+    var a = e.target.getBoundingClientRect(),
+        canvas = Teambo.id('bgcanvas');
+    if(canvas && a) {
+        var ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+});

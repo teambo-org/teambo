@@ -1,12 +1,16 @@
 <div id="dashboard" class="c require-auth require-team chat-collapsed" data-hash="{{thash}}" data-tpljs="layout/dashboard">
-    <div class="right" id="right">
-        {{>dashboard/right}}
-    </div>
-    <div class="main" id="main">
+    <div class="main container" id="main">
         {{>dashboard/main}}
     </div>
-    <div class="chat" id="chat" data-autoclose="{{chat.autoclose}}">
+    <div class="right container" id="right">
+        {{>dashboard/right}}
+    </div>
+    <div class="chat container" id="chat" data-autoclose="{{chat.autoclose}}">
         {{>dashboard/chat}}
     </div>
     <link id="theme" type='text/css' rel='stylesheet'/>
+    <canvas id="bgcanvas"></canvas>
+    <div class="main bg"></div>
+    <div class="right bg"></div>
+    <div class="chat bg"></div>
 </div>
