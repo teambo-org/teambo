@@ -404,17 +404,22 @@ document.addEventListener("keydown", function(e) {
 }, false);
 
 document.body.addEventListener('focusin', function(e) {
-    var a = e.target.getBoundingClientRect(),
-        canvas = Teambo.id('bgcanvas');
-    if(canvas && a) {
-        var ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        var t = Math.round(a.top)    + 0.5,
-            r = Math.round(a.right)  - 0.5,
-            b = Math.round(a.bottom) - 0.5,
-            l = Math.round(a.left)   + 0.5;
-        draw_squares(ctx, t, r, b, l);
+    var canvas = document.getElementById('bgcanvas');
+    if(canvas) {
+        var redraw = function() {
+            var a = e.target.getBoundingClientRect();
+            var ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            var t = Math.round(a.top)    + 0.5,
+                r = Math.round(a.right)  - 0.5,
+                b = Math.round(a.bottom) - 0.5,
+                l = Math.round(a.left)   + 0.5;
+            draw_squares(ctx, t, r, b, l);
+        };
+        redraw();
+        window.onresize = redraw;
+        window.onscroll = redraw;
     }
 });
 document.body.addEventListener('focusout', function(e) {

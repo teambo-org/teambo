@@ -22,7 +22,7 @@ a:hover, a:active { text-decoration: underline; }
 .scrollable::-webkit-scrollbar-track { }
 .scrollable::-webkit-scrollbar-thumb { -webkit-border-radius: 3px; border-radius: 3px; }
 
-#bgcanvas { position: fixed; z-index: 1; width: 100%; height: 100%; top: 0; left: 0; }
+#bgcanvas { position: fixed; z-index: 1; top: 0; left: 0; }
 #page { z-index: 1; position: relative; }
 .bg { z-index: 0; }
 .container { z-index: 100; }
