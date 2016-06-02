@@ -50,21 +50,21 @@ var Teambo = (function(t){
                         data.bucket = t.view.get('team').buckets[data.bucket_id];
                     }
                 }
-                if(route.tpl.indexOf('external') !== 0 && !t.id('dash-main')) {
+                if(route.tpl.indexOf('external') !== 0 && !document.getElementById('dash-main')) {
                     if(!t.view.isset('team')) {
                         t.gotoUrl('/account');
                     }
-                    t.id('page').innerHTML = t.view.render("layout/dashboard", data, true);
-                    run_template_js(t.id('page'));
+                    document.getElementById('page').innerHTML = t.view.render("layout/dashboard", data, true);
+                    run_template_js(document.getElementById('page'));
                     target = "dash-main";
                 } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
                     t.view.unset('team');
                     target = "page";
                 }
-                var tar = t.id(target);
+                var tar = document.getElementById(target);
                 tar.innerHTML = t.view.render(route.tpl, data);
                 if(target === 'page') {
-                    t.id('page').innerHTML = t.id('page').innerHTML + '<canvas id="bgcanvas"></canvas>';
+                    tar.innerHTML = tar.innerHTML + '<canvas id="bgcanvas"></canvas>';
                 }
                 run_template_js(tar);
                 if(tar.firstChild.classList.contains('require-auth') && !t.acct.isAuthed()) {
@@ -80,7 +80,7 @@ var Teambo = (function(t){
                     t.gotoUrl('/dashboard');
                 }
                 if(loaded) {
-                    t.id(target).scrollTop = 0;
+                    tar.scrollTop = 0;
                 }
                 setTimeout(function(loaded){
                     scrollToSub(hash, loaded);
@@ -119,14 +119,15 @@ var Teambo = (function(t){
     };
     
     var scrollToSub = function(hash, isLoaded) {
-        var parts = hash.split('..');
-        if(parts.length > 1 && t.id(parts[1])) {
-            var el = t.id(parts[1]),
-                add = t.id(target).offsetHeight - el.offsetHeight;
+        var parts = hash.split('..'),
+            el = document.getElementById(parts[1]),
+            tar = document.getElementById(target);
+        if(parts.length > 1 && el) {
+            var add = tar.offsetHeight - el.offsetHeight;
             el.classList.add('hi');
-            t.id(target).parentNode.scrollTop = Math.max(add/4, 10);
+            tar.parentNode.scrollTop = Math.max(add/4, 10);
         } else if (isLoaded){
-            t.id(target).parentNode.scrollTop = 0;
+            tar.parentNode.scrollTop = 0;
         }
     };
 
@@ -236,10 +237,6 @@ var Teambo = (function(t){
         }
         return p;
     };
-    
-    t.id = function(id) {
-        return document.getElementById(id);
-    };
 
     t.log = function(msg) {
         if('console' in window && t.debug()) {
@@ -277,7 +274,7 @@ var Teambo = (function(t){
     };
     
     t.updateStatus = function() {
-        var status = t.id('status');
+        var status = document.getElementById('status');
         if (status) {
             status.className = online ? 'online' : 'offline';
             status.innerHTML = online ? 'online' : 'offline';
@@ -379,7 +376,6 @@ function draw_squares(ctx, t, r, b, l) {
 document.addEventListener("keydown", function(e) {
     if(e.keyIdentifier == "Down" || e.keyIdentifier == "Right") {
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
-        console.log(targets);
         for(var i in targets) { 
             if(targets[i] === e.target) {
                 i = parseInt(i);
@@ -422,9 +418,10 @@ document.body.addEventListener('focusin', function(e) {
         window.onscroll = redraw;
     }
 });
+
 document.body.addEventListener('focusout', function(e) {
     var a = e.target.getBoundingClientRect(),
-        canvas = Teambo.id('bgcanvas');
+        canvas = document.getElementById('bgcanvas');
     if(canvas && a) {
         var ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;

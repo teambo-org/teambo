@@ -10,7 +10,7 @@
         var password_reset = function() {
             form.enable();
             form.error.msg('Incorrect password', 'If you forgot your password, you may request a <a href="#/reset" id="reset">Password Reset</a>');
-            t.id('reset').onclick = function(e) {
+            document.getElementById('reset').onclick = function(e) {
                 e.preventDefault();
                 t.replace('/verification', {
                     reset: true,
@@ -76,7 +76,7 @@
             t.gotoUrl('/account');
         }).catch(function(e){
             form.error.msg('', '<br/>Enter your email address and password<br/>to complete verification');
-            t.id('onboarding').innerHTML = '';
+            document.getElementById('onboarding').innerHTML = '';
             form_init(form_submit_verification);
         });
     } else {

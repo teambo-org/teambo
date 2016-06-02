@@ -58,7 +58,7 @@ Teambo.team.bucket = (function(t){
                     bucket.save().then(function(xhr){
                         t.team.current.bucket_ids.push(bucket.id);
                         t.team.current.buckets[bucket.id] = bucket;
-                        t.id('right').innerHTML = t.view.render('dashboard/right');
+                        document.getElementById('right').innerHTML = t.view.render('dashboard/right');
                         t.team.current.save().then(function(xhr){
                             fulfill(bucket);
                         }).catch(function(e){

@@ -1,7 +1,7 @@
 (function(t){
     "use strict";
     
-    var el = t.id('teams');
+    var el = document.getElementById('teams');
     t.acct.current.team.all().then(function(teams) {
         if(!teams.length) {
             return;
@@ -13,7 +13,7 @@
         el.innerHTML = html + el.innerHTML;
         var theme_styles = t.view.render('external/account-themes', {teams: teams}),
             url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
-        t.id('account-themes').href = "data:text/css;base64,"+url;
+        document.getElementById('account-themes').href = "data:text/css;base64,"+url;
         
         var anchors = el.querySelectorAll('a');
         var i = 0;

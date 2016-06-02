@@ -1,7 +1,7 @@
 (function(t){
     "use strict";
 /*
-    var el = t.id('buckets');
+    var el = document.getElementById('buckets');
     t.team.bucket.all().then(function(buckets) {
         if(!buckets.length) {
             return;

@@ -1,7 +1,7 @@
 Teambo.chat = (function(t){
     
     var toggle_chat = function(state) {
-        var dash = t.id('dashboard'),
+        var dash = document.getElementById('dashboard'),
             collapsed = dash.classList.contains('chat-collapsed');
         if(state === 1) {
             if(collapsed) {
@@ -24,7 +24,7 @@ Teambo.chat = (function(t){
     
 	return {
         init: function(opts){
-            t.id('chat').addEventListener('click', function(e){
+            document.getElementById('chat').addEventListener('click', function(e){
                 if(e.target.classList.contains('toggle') 
                 || e.target.parentNode.classList.contains('toggle')) {
                     e.preventDefault();
@@ -38,8 +38,8 @@ Teambo.chat = (function(t){
                     toggle_chat(0);
                 }
             }
-            t.id('main').addEventListener('click', autoclose);
-            t.id('right').addEventListener('click', autoclose);
+            document.getElementById('main').addEventListener('click', autoclose);
+            document.getElementById('right').addEventListener('click', autoclose);
         }
     };
     
