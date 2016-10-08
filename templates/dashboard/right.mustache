@@ -15,6 +15,11 @@
             <div class="img"><i class="icon-flag-filled"></i></div>
             <div class="name">{{opts.name}}</div>
         </a>
+        <ul class="tasks">
+        {{#item_list}}
+            <li><a href="#/{{team.id}}/{{bucket_id}}/{{id}}"><i class="icon-check-empty"></i>{{opts.name}}</a></li>
+        {{/item_list}}
+        </ul>
     </div>
     {{/team.bucket_list}}
 <!--

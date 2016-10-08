@@ -38,7 +38,10 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "/team/bucket/remove":  
 		handle_team_bucket_remove(w, r)
 	// case "/team/invite":  handle_team_invite(w, r)
-	// case "/team/item":    handle_team_item(w, r)
+	case "/team/item":    
+		handle_team_item(w, r)
+	case "/team/item/remove":  
+		handle_team_item_remove(w, r)
 	case "/slow":
 		handle_slow(w, r)
 	case "/app.manifest":
@@ -54,13 +57,16 @@ func main() {
 	flag.Parse()
 	config = parseConfig(*config_path)
 
-	db_update(func(tx *bolt.Tx) error {
+	err := db_update(func(tx *bolt.Tx) error {
 		tx.CreateBucketIfNotExists([]byte("acct"))
 		tx.CreateBucketIfNotExists([]byte("verification"))
 		tx.CreateBucketIfNotExists([]byte("team"))
 		// tx.CreateBucketIfNotExists([]byte("invite"))
 		return nil
 	})
+	if err != nil {
+		log.Fatal("Could not open Bolt DB for writing")
+	}
 
 	http.Handle("/", StaticHandler{})
 

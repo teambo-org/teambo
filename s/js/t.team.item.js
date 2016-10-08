@@ -1,22 +1,21 @@
-Teambo.team.bucket = (function(t){
+Teambo.team.item = (function(t){
     "use strict";
     
-    var bucket = function(data) {
+    var item = function(data) {
         var self = this;
         t.extend(this, {
-            id:       data.id,
-            opts:     data.opts ? data.opts : {},
-            item_ids: data.item_ids ? data.item_ids : [],
-            items:    {}
+            id:   data.id,
+            opts: data.opts ? data.opts : {}
         });
-        this.save = function() {
+        this.save = function(bucket_id) {
             return t.promise(function(fulfill, reject) {
-                t.xhr.post('/team/bucket', {
+                t.xhr.post('/team/item', {
                     data: {
-                        team_id: t.team.current.id,
-                        mkey:    t.team.current.mkey,
-                        id:      self.id,
-                        ct:      self.encrypted()
+                        team_id:   t.team.current.id,
+                        mkey:      t.team.current.mkey,
+                        bucket_id: bucket_id,
+                        id:        self.id,
+                        ct:        self.encrypted()
                     }
                 }).then(function(xhr){
                     if(xhr.status == 200) {
@@ -35,41 +34,34 @@ Teambo.team.bucket = (function(t){
             localforage.setItem(hash, self.encrypted());
         };
         this.encrypted = function() {
-            return t.team.bucket.encrypt({
-                id:       self.id,
-                opts:     self.opts,
-                item_ids: self.item_ids
+            return t.team.item.encrypt({
+                id:   self.id,
+                opts: self.opts
             });
-        };
-        this.item_list = function() {
-            var ret = [];
-            for(var k in self.items) {
-                ret.push(self.items[k]);
-            }
-            return ret;
-        };
+        }
     };
     
-    bucket.create = function(name) {
+    item.create = function(bucket_id, name) {
         return t.promise(function(fulfill, reject) {
-            t.xhr.post('/team/bucket', {
+            t.xhr.post('/team/item', {
                 data: {
-                    acct_id: t.acct.id,
-                    team_id: t.team.current.id,
-                    mkey:    t.team.current.mkey
+                    acct_id:   t.acct.id,
+                    team_id:   t.team.current.id,
+                    bucket_id: bucket_id,
+                    mkey:      t.team.current.mkey
                 }
             }).then(function(xhr){
                 if(xhr.status == 200) {
                     var data = JSON.parse(xhr.responseText);
-                    var bucket = new t.team.bucket({
+                    var item = new t.team.item({
                         id:   data.id,
                         opts: { name: name }
                     });
-                    bucket.save().then(function(xhr){
-                        t.team.current.bucket_ids.push(bucket.id);
-                        t.team.current.buckets[bucket.id] = bucket;
-                        t.team.current.save().then(function(xhr){
-                            fulfill(bucket);
+                    item.save(bucket_id).then(function(xhr){
+                        t.team.current.buckets[bucket_id].item_ids.push(item.id);
+                        t.team.current.buckets[bucket_id].items[item.id] = item;
+                        t.team.current.buckets[bucket_id].save().then(function(xhr){
+                            fulfill(item);
                         }).catch(function(e){
                             reject(e);
                         });
@@ -80,18 +72,20 @@ Teambo.team.bucket = (function(t){
                     var temp_id = t.crypto.randomKey();
                     // Create Event
                     var event = {
-                        type: 'bucket.create',
+                        type: 'item.create',
                         data: {
-                            acct_id: t.acct.id,
-                            team_id: t.team.current.id,
-                            mkey:    t.team.current.mkey
+                            acct_id:   t.acct.id,
+                            team_id:   t.team.current.id,
+                            bucket_id: bucket_id,
+                            mkey:      t.team.current.mkey
                         },
                         temp_id: temp_id
                     };
                     var event2 = {
-                        type: 'bucket.save',
+                        type: 'item.save',
                         data: {
                             id:   temp_id,
+                            bucket_id: bucket_id,
                             opts: { name: name }
                         }
                     };
@@ -105,19 +99,20 @@ Teambo.team.bucket = (function(t){
         });
     };
     
-    bucket.remove = function(bucket_id) {
+    item.remove = function(bucket_id, item_id) {
         return t.promise(function(fulfill, reject) {
-            t.xhr.post('/team/bucket/remove', {
+            t.xhr.post('/team/item/remove', {
                 data: {
-                    team_id: t.team.current.id,
-                    mkey:    t.team.current.mkey,
-                    bucket_id: bucket_id
+                    team_id:   t.team.current.id,
+                    mkey:      t.team.current.mkey,
+                    bucket_id: bucket_id,
+                    item_id:   item_id
                 }
             }).then(function(xhr){
                 if(xhr.status == 204) {
-                    delete(t.team.current.buckets[bucket_id]);
-                    t.team.current.bucket_ids.splice(bucket_id, 1);
-                    t.team.current.save().then(function(xhr){
+                    delete(t.team.current.buckets[bucket_id].items[item_id]);
+                    t.team.current.buckets[bucket_id].item_ids.splice(item_id, 1);
+                    t.team.current.buckets[bucket_id].save().then(function(xhr){
                         fulfill();
                     }).catch(function(e){
                         reject(e);
@@ -131,19 +126,20 @@ Teambo.team.bucket = (function(t){
         });
     };
     
-    bucket.find = function(id) {
+    item.find = function(bucket_id, id) {
         return t.promise(function(fulfill, reject){
             var team = t.team.current;
-            if(team.bucket_ids.indexOf(id) < 0) {
+            var bucket = team.buckets[bucket_id];
+            if(bucket.item_ids.indexOf(id) < 0) {
                 reject();
                 return;
             }
-            localforage.getItem(t.crypto.sha(team.id+id+t.salt)).then(function(ct){
+            localforage.getItem(t.crypto.sha(team.id+bucket.id+id+t.salt)).then(function(ct){
                 if(ct) {
-                    fulfill(new t.team.bucket(t.team.bucket.decrypt(ct)));
+                    fulfill(new t.team.item(t.team.item.decrypt(ct)));
                 } else {
-                    bucket.fetch(id, team.id, team.mkey).then(function(ct) {
-                        fulfill(new t.team.bucket(t.team.bucket.decrypt(ct)));
+                    item.fetch(id, bucket.id, team.id, team.mkey).then(function(ct) {
+                        fulfill(new t.team.item(t.team.item.decrypt(ct)));
                     }).catch(function(e) {
                         reject(e);
                     });
@@ -151,12 +147,13 @@ Teambo.team.bucket = (function(t){
             });
         });
     };
-    bucket.fetch = function(id, team_id, mkey) {
+    item.fetch = function(id, bucket_id, team_id, mkey) {
         return t.promise(function(fulfill, reject) {
-            t.xhr.get('/team/bucket', {
+            t.xhr.get('/team/item', {
                 data: {
                     id: id,
                     team_id: team_id,
+                    bucket_id: bucket_id,
                     mkey: mkey
                 }
             }).then(function(xhr) {
@@ -164,28 +161,29 @@ Teambo.team.bucket = (function(t){
                     var data = JSON.parse(xhr.responseText);
                     fulfill(data.ct);
                 } else {
-                    reject("Failed to retrieve bucket " + id);
+                    reject("Failed to retrieve item " + id);
                 }
             });
             
         });
     };
-    bucket.encrypt = function(data) {
+    item.encrypt = function(data) {
         return t.team.current.encrypt(data);
     };
-    bucket.decrypt = function(ct) {
+    item.decrypt = function(ct) {
         return t.team.current.decrypt(ct);
     };
-    bucket.all = function() {
+    item.all = function(bucket_id) {
         return t.promise(function(fulfill, reject) {
             var ret = [],
                 p = [],
-                team = t.team.current;
-            team.bucket_ids.forEach(function(bucket_id) {
-                var hash = t.crypto.sha(team.id+bucket_id+t.salt);
+                team = t.team.current,
+                bucket = team.buckets[bucket_id];
+            bucket.item_ids.forEach(function(item_id) {
+                var hash = t.crypto.sha(team.id+bucket_id+item_id+t.salt);
                 p.push(localforage.getItem(hash).then(function(ct){
                     if(ct) {
-                        ret.push(new t.team.bucket(t.team.bucket.decrypt(ct)));
+                        ret.push(new t.team.item(t.team.item.decrypt(ct)));
                     }
                 }));
             });
@@ -195,18 +193,18 @@ Teambo.team.bucket = (function(t){
         });
     };
     
-    return bucket;
+    return item;
     
-    // t.event.register('bucket-create', {
+    // t.event.register('item-create', {
         // apply: function(events, obj) {
             // if(events.length > 0) {
                 // return Promise.reject();
             // }
-            // t.team.buckets.find(obj.id).then(function(bucket){
-                // if(!bucket) {
-                    // var b = new t.bucket(obj);
+            // t.team.items.find(obj.id).then(function(item){
+                // if(!item) {
+                    // var b = new t.item(obj);
                     // b.cache();
-                    // t.team.buckets.add({id: obj.id});
+                    // t.team.items.add({id: obj.id});
                     // return Promise.resolve();
                 // }
             // });

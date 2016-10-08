@@ -102,6 +102,7 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .external a.team-new { display: block; text-align: center; margin-bottom: 1em; }
 
 #bucket-remove p { text-align: center; }
+#item-remove p { text-align: center; }
 
 .logo { background-image: url('/i/logo.svg'); background-repeat: no-repeat; background-size: 100%; }
 #logo { opacity: 0.2; width: 11em; height: 11em; margin: 2em auto; }

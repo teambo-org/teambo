@@ -49,6 +49,9 @@ var Teambo = (function(t){
                     if('bucket_id' in data && data.bucket_id in t.view.get('team').buckets) {
                         data.bucket = t.view.get('team').buckets[data.bucket_id];
                     }
+                    if('item_id' in data && data.item_id in t.view.get('team').buckets[data.bucket_id].items) {
+                        data.item = t.view.get('team').buckets[data.bucket_id].items[data.item_id];
+                    }
                 }
                 if(route.tpl.indexOf('external') !== 0 && !document.getElementById('dash-main')) {
                     if(!t.view.isset('team')) {

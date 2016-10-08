@@ -68,16 +68,28 @@ Teambo.team = (function(t){
     
     team.init = function(id) {
         return t.promise(function(fulfill, reject){
-            t.acct.current.team.find(id).then(function(item){
-                team.current = item;
+            t.acct.current.team.find(id).then(function(o){
+                team.current = o;
                 var p = [];
-                item.bucket_ids.forEach(function(id){
-                    p.push(team.bucket.find(id).then(function(bucket){
+                o.bucket_ids.forEach(function(bucket_id){
+                    p.push(team.bucket.find(bucket_id).then(function(bucket){
                         team.current.buckets[bucket.id] = bucket;
                     }));
                 });
                 Promise.all(p).then(function() {
-                    fulfill(item);
+                    var p = [];
+                    team.current.bucket_ids.forEach(function(bucket_id){
+                        t.team.current.buckets[bucket_id].item_ids.forEach(function(item_id){
+                            p.push(team.item.find(bucket_id, item_id).then(function(item){
+                                team.current.buckets[bucket_id].items[item.id] = item;
+                            }));
+                        });
+                    });
+                    Promise.all(p).then(function() {
+                        fulfill(o);
+                    }).catch(function(e){
+                        reject(e);
+                    });
                 }).catch(function(e){
                     reject(e);
                 });

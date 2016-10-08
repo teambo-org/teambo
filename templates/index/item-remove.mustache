@@ -1,0 +1,14 @@
+<div class="item-remove" data-tpljs="index/item-remove">
+    <h1>Delete Item</h1>
+    <form id="item-remove" name="item_remove" method="POST" class="std ext">
+        <input type="hidden" class="hidden" name="id" value="{{id}}"/>
+        <input type="hidden" class="hidden" name="bucket_id" value="{{bucket.id}}"/>
+        <p>Are you sure you want to delete this item?</p>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Delete Item" />
+            <br/>
+            <a class="cancel" href="#/{{team.id}}/{{bucket.id}}/{{item.id}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>

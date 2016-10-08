@@ -4,13 +4,14 @@ Teambo.router = (function(t){
     var routes = [],
         plain_routes = {
             '' : 'external/index',
-            '/:team_id'                     : 'index/dashboard',
-            '/:team_id/members'             : 'index/members',
-            '/:team_id/new'                 : 'index/bucket-new',
-            '/:team_id/:bucket_id'          : 'index/bucket',
-            '/:team_id/:bucket_id/remove'   : 'index/bucket-remove',
-            '/:team_id/:bucket_id/new'      : 'index/item-new',
-            '/:team_id/:bucket_id/:item_id' : 'index/item'
+            '/:team_id'                            : 'index/dashboard',
+            '/:team_id/members'                    : 'index/members',
+            '/:team_id/new'                        : 'index/bucket-new',
+            '/:team_id/:bucket_id'                 : 'index/bucket',
+            '/:team_id/:bucket_id/remove'          : 'index/bucket-remove',
+            '/:team_id/:bucket_id/new'             : 'index/item-new',
+            '/:team_id/:bucket_id/:item_id'        : 'index/item',
+            '/:team_id/:bucket_id/:item_id/remove' : 'index/item-remove'
         };
     
     return {

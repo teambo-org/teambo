@@ -1,0 +1,14 @@
+<div class="item-new" data-tpljs="index/item-new">
+    <h1>New Item</h1>
+    <form id="item-new" name="item_new" method="POST" class="std ext" data-bucket_id="{{bucket_id}}">
+        <div class="field">
+            <input type="text" class="text required min-len-2" name="name" placeholder="Item Name" />
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Create Item" />
+            <br/>
+            <a class="cancel" href="#/{{team.id}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>

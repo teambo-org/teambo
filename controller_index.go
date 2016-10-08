@@ -53,6 +53,7 @@ var js = []string{
 	"/js/t.chat.js",
 	"/js/t.team.js",
 	"/js/t.team.bucket.js",
+	"/js/t.team.item.js",
 }
 var jsinit = []string{
 	"/init.js",

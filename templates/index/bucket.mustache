@@ -1,6 +1,21 @@
 <div class="bucket require-auth require-team">
     <nav>
         <a href="#/{{team.id}}/{{bucket.id}}/remove">Delete Bucket</a>
+        <a href="#/{{team.id}}/{{bucket.id}}/new">New Item</a>
+        <a href="#/{{team.id}}">Back</a>
     </nav>
     <h1><i class="icon-flag-filled"></i> {{bucket.opts.name}}</h1>
+    <ul class="items" id="items">
+    {{#bucket.item_list}}
+    <li class="item" id="item-li-{{id}}">
+        <a href="#/{{team.id}}/{{bucket.id}}/{{id}}">
+            <i class="icon-ok-squared"></i>
+            <span class="name">{{opts.name}}</span>
+        </a>
+    </li>
+    {{/bucket.item_list}}
+    {{^bucket.item_list}}
+    <p>This bucket has no items.</p>
+    {{/bucket.item_list}}
+    </ul>
 </div>
