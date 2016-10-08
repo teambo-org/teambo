@@ -159,6 +159,9 @@ var Teambo = (function(t){
             window.onhashchange = refresh;
             
             document.body.addEventListener('mousedown', function(e) {
+                if(e.which !== 1) {
+                    return;
+                }
                 if(e.target.nodeName == 'A') {
                     e.target.click();
                 }
