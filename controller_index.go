@@ -40,6 +40,8 @@ var js = []string{
 	"/js/lib/promise-7.0.4.min.js",
 	"/js/lib/classList.js",
 	"/js/lib/polyfills.js",
+	//"/js/lib/micromarkdown.js",
+	"/js/lib/micromarkdown.min.js",
 	// "/js/lib/zxcvbn.js",
 	"/js/t.js",
 	"/js/t.xhr.js",

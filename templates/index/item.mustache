@@ -2,6 +2,7 @@
 
     <nav>
         <a href="#/{{team.id}}/{{bucket.id}}/{{item.id}}/remove">Delete Item</a>
+        <a href="#/{{team.id}}/{{bucket.id}}/{{item.id}}/edit">Edit Item</a>
         <a href="#/{{team.id}}/{{bucket.id}}">Back</a>
     </nav>
     
@@ -36,14 +37,7 @@
         </ul>
     </section>
     <section class="description">
-        <p>Identities should be encrypted and posted to the server for storage</p>
-        <ul>
-            <li>Capture authentication details</li>
-            <li>Encrypt identity</li>
-            <li>POST binary data</li>
-            <li>Broadcast identity change event</li>
-            <li>Update local identity on event</li>
-        </ul>
+        {{#markdown}}{{item.opts.description}}{{/markdown}}
     </section>
     <section class="comments">
         <h3><a><i class="icon-comment"></i> Comments</h3>

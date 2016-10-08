@@ -14,6 +14,11 @@ Teambo.view = (function(t){
                     return encodeURIComponent(render(text));
                 };
             },
+            markdown : function() {
+                return function(text, render) {
+                    return micromarkdown.parse(render(text));
+                };
+            },
             theme: "webdam",
             chat: {
                 autoclose: true
