@@ -12,7 +12,7 @@
             t.gotoUrl('/'+t.team.current.id+'/'+bucket_id+'/'+item.id);
         }).catch(function(e){
             form.enable();
-            form.error.msg("Bucket could not be created", "Please try again");
+            form.error.msg("Item could not be created", "Please try again");
         });
     });
 

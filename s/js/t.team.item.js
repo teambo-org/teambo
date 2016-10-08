@@ -4,16 +4,18 @@ Teambo.team.item = (function(t){
     var item = function(data) {
         var self = this;
         t.extend(this, {
-            id:   data.id,
-            opts: data.opts ? data.opts : {}
+            id:        data.id,
+            bucket_id: data.bucket_id,
+            opts:      data.opts ? data.opts : {},
+            hist:      data.hist ? data.hist : []
         });
-        this.save = function(bucket_id) {
+        this.save = function() {
             return t.promise(function(fulfill, reject) {
                 t.xhr.post('/team/item', {
                     data: {
                         team_id:   t.team.current.id,
                         mkey:      t.team.current.mkey,
-                        bucket_id: bucket_id,
+                        bucket_id: self.bucket_id,
                         id:        self.id,
                         ct:        self.encrypted()
                     }
@@ -30,13 +32,14 @@ Teambo.team.item = (function(t){
             });
         };
         this.cache = function() {
-            var hash = t.crypto.sha(t.team.current.id+self.id+t.salt);
+            var hash = t.crypto.sha(t.team.current.id+self.bucket_id+self.id+t.salt);
             localforage.setItem(hash, self.encrypted());
         };
         this.encrypted = function() {
             return t.team.item.encrypt({
-                id:   self.id,
-                opts: self.opts
+                id:        self.id,
+                bucket_id: self.bucket_id,
+                opts:      self.opts
             });
         }
     };
@@ -54,8 +57,9 @@ Teambo.team.item = (function(t){
                 if(xhr.status == 200) {
                     var data = JSON.parse(xhr.responseText);
                     var item = new t.team.item({
-                        id:   data.id,
-                        opts: { name: name }
+                        id:        data.id,
+                        bucket_id: bucket_id,
+                        opts:      { name: name }
                     });
                     item.save(bucket_id).then(function(xhr){
                         t.team.current.buckets[bucket_id].item_ids.push(item.id);
@@ -84,9 +88,9 @@ Teambo.team.item = (function(t){
                     var event2 = {
                         type: 'item.save',
                         data: {
-                            id:   temp_id,
+                            id:        temp_id,
                             bucket_id: bucket_id,
-                            opts: { name: name }
+                            opts:      { name: name }
                         }
                     };
                     t.team.current.queue([event, event2]);
