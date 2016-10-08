@@ -36,3 +36,17 @@ considerations:
 	history may be stored client side depending on real world storage usage scenarios
 	history storage may be adjusted dynamically to store history for certain objects
 		such as those which the client owns or those which have been recently viewed or altered
+
+		
+offline write:
+
+	temporary id system for new objects
+	events are queued
+	events are cached
+	events are applied to client side models
+	client side models are not cached with event changes
+	events are scoped to parent objects 
+
+	new accounts cannot be created
+	accounts may be modified
+	new teams can be created and modified
