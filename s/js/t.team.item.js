@@ -11,6 +11,9 @@ Teambo.team.item = (function(t){
         });
         this.save = function() {
             return t.promise(function(fulfill, reject) {
+                if(!self.id) {
+                    reject('must supply item id to save');
+                }
                 t.xhr.post('/team/item', {
                     data: {
                         team_id:   t.team.current.id,
@@ -44,7 +47,7 @@ Teambo.team.item = (function(t){
         }
     };
     
-    item.create = function(bucket_id, name) {
+    item.create = function(bucket_id, opts) {
         return t.promise(function(fulfill, reject) {
             t.xhr.post('/team/item', {
                 data: {
@@ -59,7 +62,7 @@ Teambo.team.item = (function(t){
                     var item = new t.team.item({
                         id:        data.id,
                         bucket_id: bucket_id,
-                        opts:      { name: name }
+                        opts:      opts
                     });
                     item.save(bucket_id).then(function(xhr){
                         t.team.current.buckets[bucket_id].item_ids.push(item.id);
@@ -90,7 +93,7 @@ Teambo.team.item = (function(t){
                         data: {
                             id:        temp_id,
                             bucket_id: bucket_id,
-                            opts:      { name: name }
+                            opts:      opts
                         }
                     };
                     t.team.current.queue([event, event2]);
@@ -98,6 +101,41 @@ Teambo.team.item = (function(t){
                     reject(xhr);
                 }
             }).catch(function(e){
+                // Save item create event
+                // Apply item create event
+                reject(e);
+            });
+        });
+    };
+    
+    item.update = function(bucket_id, item_id, opts) {
+        return t.promise(function(fulfill, reject) {
+            t.xhr.get('/team/item', {
+                data: {
+                    acct_id:   t.acct.id,
+                    team_id:   t.team.current.id,
+                    bucket_id: bucket_id,
+                    id:        item_id,
+                    mkey:      t.team.current.mkey
+                }
+            }).then(function(xhr){
+                if(xhr.status == 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    var item = new t.team.item({
+                        id:        data.id,
+                        bucket_id: bucket_id,
+                        opts:      opts
+                    });
+                    item.save(bucket_id).then(function(xhr){
+                        t.team.current.buckets[bucket_id].items[item.id] = item;
+                        fulfill(item);
+                    }).catch(function(e){
+                        reject(e);
+                    });
+                }
+            }).catch(function(e){
+                // Save item update event
+                // Apply item update event
                 reject(e);
             });
         });

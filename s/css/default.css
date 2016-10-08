@@ -72,7 +72,10 @@ form.ext.std .field.submit { text-align: center; }
 form.std .field { padding: 0.5em 0.5em; }
 form.std .field.submit { padding-top: 1em; }
 form.std .field.first { padding-top: 0; }
-form.std input.text { border: none; padding: 0.4em 0.5em; width: 20em; }
+form.std input.text,
+form.std textarea.text { border: none; padding: 0.4em 0.5em; width: 20em; }
+form.std input.large { width: 28em; }
+form.std textarea.large { width: 28em; height: 8em; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; opacity: 0.5; }
 form.std a.cancel:hover { opacity: 1; }

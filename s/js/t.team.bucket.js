@@ -100,6 +100,8 @@ Teambo.team.bucket = (function(t){
                     reject(xhr);
                 }
             }).catch(function(e){
+                // Add create bucket event
+                // Evaluate create bucket event
                 reject(e);
             });
         });

@@ -16,7 +16,7 @@
 
 #dashboard .section { clear: both; }
 #dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
-#dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; }
+#dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; overflow: hidden; }
 #dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; }
 #dashboard .section > a { display: block; }
 
