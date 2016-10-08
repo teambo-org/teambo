@@ -40,7 +40,7 @@ Teambo.view = (function(t){
     
             window.applicationCache.addEventListener('updateready', function(e) {
                 if(window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                    if(!moved) {
+                    if(false || !moved) {
                         window.location.reload(); 
                     } else {
                         updateready = true;
