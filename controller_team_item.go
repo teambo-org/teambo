@@ -57,7 +57,7 @@ func handle_team_item(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		if id == "" {
-			id   = team_item_newId(team_id, bucket_id)
+			id = team_item_newId(team_id, bucket_id)
 			item, err = team_item_save(team_id, bucket_id, id, "new")
 			if err != nil {
 				error_out(w, "Item could not be created", 500)
@@ -102,8 +102,8 @@ func handle_team_item_remove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	
 	team_id   := r.FormValue("team_id")
-	bucket_id := r.FormValue("bucket_id")
 	mkey      := r.FormValue("mkey")
+	bucket_id := r.FormValue("bucket_id")
 	item_id   := r.FormValue("item_id")
 	
 	item := TeamItem{}
