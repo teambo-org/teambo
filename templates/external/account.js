@@ -18,19 +18,6 @@
         var anchors = el.querySelectorAll('a');
         var i = 0;
         anchors[i].focus();
-        el.addEventListener("keydown", function(e) {
-            if(event.keyIdentifier == "Down") {
-                i++;
-                i = i >= anchors.length ? 0 : i;
-                anchors[i].focus();
-                e.preventDefault();
-            } else if (event.keyIdentifier == "Up") {
-                i--;
-                i = i < 0 ? anchors.length-1 : i;
-                anchors[i].focus();
-                e.preventDefault();
-            }
-        }, false);
 
     });
 
