@@ -27,6 +27,9 @@ Teambo.crypto = (function(t, sjcl){
         randomKey: function() {
             return sjcl.codec.base64.fromBits(sjcl.random.randomWords(8,0)).slice(0,-2);
         },
+        tempKey: function() {
+            return this.randomKey().replace(/[^0-9a-zA-Z]/, '').substr(0,8);
+        },
         encrypt: function(data, key, iter) {
             iter = typeof iter === 'undefined' ? 10000 : iter;
             var passBitArray = sjcl.codec.base64.toBits(key);
