@@ -157,13 +157,14 @@ func append_js_init(w io.Writer) {
 	if config["app.manifest"] == "true" {
 		manifest = "true"
 	}
-	js := "Teambo.init({" +
-		"'templates': " + string(templates) + ", " +
+	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " + 
 		"'audio': " + string(audio) + ", " +
-		"'debug': " + debug + ", " +
-		"'manifest': " + manifest +
-	"});"
+		"'debug': " + debug
+	if config["tests.enabled"] == "true" {
+		js_data = js_data + ", " + "'testing': true"
+	}
+	js := "Teambo.init({" + js_data + "});"
 	if config["static.min"] == "true" {
 		jsmin.Run(strings.NewReader(js), w)
 	} else {

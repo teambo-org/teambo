@@ -18,7 +18,6 @@
         var anchors = el.querySelectorAll('a');
         var i = 0;
         anchors[i].focus();
-
     });
 
 })(Teambo);
