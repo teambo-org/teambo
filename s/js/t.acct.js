@@ -253,7 +253,6 @@ Teambo.acct = (function (t) {
                     var data = JSON.parse(xhr.responseText);
                     if(xhr.status == 201) {
                         if(bypass && 'vkey' in data) {
-                            console.log(data);
                             acct.verification.confirm(data.vkey, email, pass).then(function(){
                                 fulfill(xhr);
                             });
