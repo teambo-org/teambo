@@ -41,36 +41,35 @@ Teambo.view = (function(t){
         init: function(opts) {
             templates = opts.templates;
             template_js = opts.template_js;
-            var manifest = opts.manifest;
             this.setTheme(obj.theme);
 
-            window.applicationCache.addEventListener('updateready', function(e) {
-                if(window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                    if(!t.moved()) {
-                        window.location.reload();
-                    } else {
-                        t.updateReady(true);
+            if(window.applicationCache.status !== 0) {
+                window.applicationCache.addEventListener('updateready', function(e) {
+                    if(window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                        if(!t.moved()) {
+                            window.location.reload();
+                        } else {
+                            t.updateReady(true);
+                        }
+                        t.online(true);
                     }
+                }, false);
+                window.applicationCache.addEventListener('noupdate', function(e) {
                     t.online(true);
-                }
-            }, false);
-            window.applicationCache.addEventListener('noupdate', function(e) {
-                t.online(true);
-            }, false);
-            window.applicationCache.addEventListener('error', function(e) {
-                t.online(false);
-            }, false);
+                }, false);
+                window.applicationCache.addEventListener('error', function(e) {
+                    t.online(false);
+                }, false);
 
-            var startCacheCheck = function() {
-                if(!t.updateReady()) {
-                    setTimeout(function(){
-                        window.applicationCache.update();
-                        startCacheCheck();
-                    }, 30000);
-                }
-            };
+                var startCacheCheck = function() {
+                    if(!t.updateReady()) {
+                        setTimeout(function(){
+                            window.applicationCache.update();
+                            startCacheCheck();
+                        }, 30000);
+                    }
+                };
 
-            if(manifest) {
                 window.applicationCache.update();
                 startCacheCheck();
             }
