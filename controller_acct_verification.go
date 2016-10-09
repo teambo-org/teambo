@@ -13,6 +13,7 @@ func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
 	id    := r.FormValue("id")
 	akey  := r.FormValue("akey")
 	vkey  := r.FormValue("vkey")
+	bypass := r.FormValue("bypass")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -46,17 +47,20 @@ func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
 		hash.Write([]byte(email))
 		id = base64.StdEncoding.EncodeToString(hash.Sum(nil))
 		
-		// Protect against brute force
-		count, err := acct_verification_count(id)
-		if count > 0 || err != nil {
-			error_out(w, "Account verification limit reached", 403)
-			return
-		}
 		// Don't issue verification for existing accounts
-		acct, _ := acct_find(id, akey)
+		acct, err := acct_find(id, akey)
 		if acct.Id != "" {
 			error_out(w, "Account already exists", 409)
 			return
+		}
+		
+		if bypass != "true" || config["tests.enabled"] != "true" {
+			// Protect against brute force
+			count, err := acct_verification_count(id)
+			if count > 0 || err != nil {
+				error_out(w, "Account verification limit reached", 403)
+				return
+			}
 		}
 		vkey = randStr(16)
 		_, err = acct_verification_create(id, akey, vkey)
@@ -68,16 +72,25 @@ func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
 		if config["ssl.active"] == "true" {
 			scheme = scheme + "s"
 		}
-		subject := "Teambo Account Verification"
-		body := "Click the link below to verify your account:\r\n\r\n" + scheme + "://" + config["app.host"] + "/#/login?vkey=" + vkey
-		err = sendMail(email, subject, body)
-		if err != nil {
-			error_out(w, err.Error(), 500)
-			return
+		msg := []byte("")
+		if bypass == "true" && config["tests.enabled"] == "true" {
+			msg, _ = json.Marshal(map[string]interface{}{
+				"success": true,
+				"vkey": vkey,
+			})
+		} else {
+			subject := "Teambo Account Verification"
+			url := scheme + "://" + config["app.host"] + "/#/login?vkey=" + vkey
+			body := "Click the link below to verify your account:\r\n\r\n<a href='" + url + "'>"+url+"</a>"
+			err = sendMail(email, subject, body)
+			if err != nil {
+				error_out(w, err.Error(), 500)
+				return
+			}
+			msg, _ = json.Marshal(map[string]bool{
+				"success": true,
+			})
 		}
-		msg, _ := json.Marshal(map[string]bool{
-			"success": true,
-		})
 		http.Error(w, string(msg), 201)
 	}
 }

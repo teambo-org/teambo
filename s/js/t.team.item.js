@@ -1,6 +1,6 @@
 Teambo.team.item = (function(t){
     "use strict";
-    
+
     var item = function(data) {
         var self = this;
         t.extend(this, {
@@ -46,7 +46,7 @@ Teambo.team.item = (function(t){
             });
         }
     };
-    
+
     item.create = function(bucket_id, opts) {
         return t.promise(function(fulfill, reject) {
             t.xhr.post('/team/item', {
@@ -107,7 +107,7 @@ Teambo.team.item = (function(t){
             });
         });
     };
-    
+
     item.update = function(bucket_id, item_id, opts) {
         return t.promise(function(fulfill, reject) {
             t.xhr.get('/team/item', {
@@ -140,7 +140,7 @@ Teambo.team.item = (function(t){
             });
         });
     };
-    
+
     item.remove = function(bucket_id, item_id) {
         return t.promise(function(fulfill, reject) {
             t.xhr.post('/team/item/remove', {
@@ -153,7 +153,7 @@ Teambo.team.item = (function(t){
             }).then(function(xhr){
                 if(xhr.status == 204) {
                     delete(t.team.current.buckets[bucket_id].items[item_id]);
-                    t.team.current.buckets[bucket_id].item_ids.splice(item_id, 1);
+                    t.array.remove(t.team.current.buckets[bucket_id].item_ids, item_id);
                     t.team.current.buckets[bucket_id].save().then(function(xhr){
                         fulfill();
                     }).catch(function(e){
@@ -167,7 +167,7 @@ Teambo.team.item = (function(t){
             });
         });
     };
-    
+
     item.find = function(bucket_id, id) {
         return t.promise(function(fulfill, reject){
             var team = t.team.current;
@@ -206,7 +206,7 @@ Teambo.team.item = (function(t){
                     reject("Failed to retrieve item " + id);
                 }
             });
-            
+
         });
     };
     item.encrypt = function(data) {
@@ -234,9 +234,9 @@ Teambo.team.item = (function(t){
             });
         });
     };
-    
+
     return item;
-    
+
     // t.event.register('item-create', {
         // apply: function(events, obj) {
             // if(events.length > 0) {
@@ -252,7 +252,7 @@ Teambo.team.item = (function(t){
             // });
         // }
     // });
-    
+
     // Create event
     // Apply event
     // Persist event

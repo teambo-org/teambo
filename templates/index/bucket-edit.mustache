@@ -1,0 +1,14 @@
+<div class="bucket-edit" data-tpljs="index/bucket-edit">
+    <h1>Edit Bucket</h1>
+    <form id="bucket-edit" name="bucket_edit" method="POST" class="std ext" data-bucket_id="{{bucket.id}}">
+        <div class="field">
+            <input type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Bucket Name" value="{{bucket.opts.name}}" />
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Save" />
+            <br/>
+            <a class="cancel" href="#/{{team.id}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>

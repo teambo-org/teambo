@@ -3,23 +3,38 @@ var Teambo = (function(t){
 
     var loaded      = false,
         moved       = false,
-        manifest    = false,
         updateready = false,
         online      = false,
         target      = "page",
         debug       = false,
         last_hash   = '',
         after_auth  = null,
-        template_js = {};
-    
+        template_js = {},
+        testing     = false;
+
     t.salt = null;
-    
+
     t.debug = function(){
         return debug;
     };
-    
+
+    t.testing = function(){
+        return testing;
+    };
+
     t.setTarget = function(id) {
         target = id;
+    };
+
+    t.updateReady = function(ready) {
+        if(typeof ready !== 'undefined') {
+            updateready = ready;
+        }
+        return updateready;
+    };
+
+    t.moved = function() {
+        return moved;
     };
 
     var hashChange = function(hash, data){
@@ -108,16 +123,16 @@ var Teambo = (function(t){
             window.location.hash = "#"+href;
         }
     };
-    
+
     var refresh = function() {
         moved = true;
         hashChange(window.location.hash.substr(1));
     };
-    
+
     t.replace = function(url, data) {
         hashChange(url, data);
     };
-    
+
     var scrollToSub = function(hash, isLoaded) {
         var parts = hash.split('..'),
             el = document.getElementById(parts[1]),
@@ -136,28 +151,28 @@ var Teambo = (function(t){
             return;
         }
         debug = opts.debug;
-        manifest = opts.manifest;
-        
+        testing = opts.testing;
+
         template_js = opts.template_js;
         t.view.init(opts);
-        
+
         t.router.init(opts.templates);
 
         var anchorClass = function(el, classname) {
-            return (el.nodeName == 'A' && el.classList.contains(classname)) || 
+            return (el.nodeName == 'A' && el.classList.contains(classname)) ||
                 (el.parentNode.nodeName == 'A' && el.parentNode.classList.contains(classname));
         };
-        
+
         Promise.all([
             t.getSalt(),
             t.acct.init()
         ]).then(function(){
             t.view.set('acct', t.acct.current);
-            
+
             hashChange(window.location.hash.substr(1));
-            
+
             window.onhashchange = refresh;
-            
+
             document.body.addEventListener('mousedown', function(e) {
                 if(e.which !== 1) {
                     return;
@@ -187,37 +202,16 @@ var Teambo = (function(t){
                     return;
                 }
             });
-            
+
             FastClick.attach(document.body);
-            
+
             t.audio.loadAll(opts.audio);
         }).catch(function() {
             t.acct.deAuth();
             window.location.reload();
         });
-    
-        window.applicationCache.addEventListener('updateready', function(e) {
-            if(window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                if(!moved) {
-                    window.location.reload(); 
-                } else {
-                    updateready = true;
-                }
-                t.online(true);
-            }
-        }, false);
-        window.applicationCache.addEventListener('noupdate', function(e) {
-            t.online(true);
-        }, false);
-        window.applicationCache.addEventListener('error', function(e) {
-            t.online(false);
-        }, false);
-        
-        if(manifest) {
-            startCacheCheck();
-        }
     };
-    
+
     t.extend = function(target, obj) {
         for (var i in obj) {
             if (obj.hasOwnProperty(i)) {
@@ -226,11 +220,11 @@ var Teambo = (function(t){
         }
         return target;
     };
-    
+
     t.clone = function(obj) {
         return t.extend({}, obj);
     };
-    
+
     t.promise = function(f) {
         var p = new Promise(f);
         if(t.debug()) {
@@ -250,18 +244,18 @@ var Teambo = (function(t){
             }
         }
     };
-    
+
     t.trace = function(e) {
         if('console' in window && t.debug()) {
             window.console.trace(e);
         }
     };
-    
+
     t.alert = function(msg) {
         delete window.alert;
         window.alert(msg);
     };
-    
+
     t.online = function(status) {
         if(typeof status === 'boolean' && online != status) {
             online = status;
@@ -269,13 +263,13 @@ var Teambo = (function(t){
         }
         return online;
     };
-    
+
     t.afterAuth = function() {
         var val = after_auth;
         after_auth = null;
         return val ? val : '/account';
     };
-    
+
     t.updateStatus = function() {
         var status = document.getElementById('status');
         if (status) {
@@ -283,7 +277,7 @@ var Teambo = (function(t){
             status.innerHTML = online ? 'online' : 'offline';
         }
     };
-    
+
     t.getSalt = function() {
         if(t.salt) {
             return Promise.resolve(t.salt);
@@ -300,16 +294,7 @@ var Teambo = (function(t){
             });
         }
     };
-    
-    var startCacheCheck = function() {
-        if(!updateready) {
-            setTimeout(function(){
-                window.applicationCache.update();
-                startCacheCheck();
-            }, 30000);
-        }
-    };
-    
+
     var run_template_js = function(tar) {
         var els = tar.querySelectorAll('[data-tpljs]');
         for(var i = 0; els[i]; i++) {
@@ -320,7 +305,7 @@ var Teambo = (function(t){
             }
         }
     };
-    
+
     t.findByProperty = function(a, k, v) {
         var ret = null;
         a.forEach(function(o) {
@@ -339,34 +324,44 @@ var Teambo = (function(t){
         });
         return a;
     };
-    
+
+    t.array = {
+        remove : function(a, v) {
+            for(var i = a.length - 1; i >= 0; i--) {
+                if(a[i] === v) {
+                   a.splice(i, 1);
+                }
+            }
+            return a;
+        }
+    };
+
     return t;
-    
+
 })(Teambo || {});
-/* 
+
 document.addEventListener("keydown", function(e) {
     if(e.keyIdentifier == "Down" || e.keyIdentifier == "Right") {
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
-        for(var i in targets) { 
+        for(var i in targets) {
             if(targets[i] === e.target) {
                 i = parseInt(i);
                 var new_i = i+1 < targets.length ? i+1 : 0;
                 targets[new_i].focus();
                 return;
-            } 
+            }
         }
         targets[0].focus();
     } else if (e.keyIdentifier == "Up" || e.keyIdentifier == "Left") {
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
-        for(var i in targets) { 
+        for(var i in targets) {
             if(targets[i] === e.target) {
                 i = parseInt(i);
                 var new_i = i-1 >= 0 ? i-1 : targets.length - 1;
                 targets[new_i].focus();
                 return;
-            } 
+            }
         }
         targets[0].focus();
     }
 }, false);
- */

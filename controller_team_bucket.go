@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"errors"
+	// "log"
 )
 
 func team_bucket_newId(team_id string) (string) {
@@ -18,15 +19,15 @@ func team_bucket_newId(team_id string) (string) {
 
 func handle_team_bucket(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	
+
 	team_id := r.FormValue("team_id")
 	mkey    := r.FormValue("mkey")
 	id      := r.FormValue("id")
 	ct      := r.FormValue("ct")
-	
+
 	bucket := TeamBucket{}
 	err  := errors.New("")
-	
+
 	team, err := team_find(team_id)
 	if err != nil {
 		error_out(w, "Team could not be found", 500)
@@ -36,7 +37,7 @@ func handle_team_bucket(w http.ResponseWriter, r *http.Request) {
 		error_out(w, "Team does not exist", 404)
 		return
 	}
-	
+
 	exists, err := team_member_exists(team_id, mkey)
 	if err != nil || !exists {
 		// failed authentication
@@ -89,14 +90,14 @@ func handle_team_bucket(w http.ResponseWriter, r *http.Request) {
 
 func handle_team_bucket_remove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	
+
 	team_id   := r.FormValue("team_id")
 	mkey      := r.FormValue("mkey")
 	bucket_id := r.FormValue("bucket_id")
-	
+
 	bucket := TeamBucket{}
 	err  := errors.New("")
-	
+
 	team, err := team_find(team_id)
 	if err != nil {
 		error_out(w, "Team could not be found", 500)
@@ -106,7 +107,7 @@ func handle_team_bucket_remove(w http.ResponseWriter, r *http.Request) {
 		error_out(w, "Team does not exist", 404)
 		return
 	}
-	
+
 	exists, err := team_member_exists(team_id, mkey)
 	if err != nil || !exists {
 		// failed authentication

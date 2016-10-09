@@ -232,7 +232,7 @@ Teambo.acct = (function (t) {
     };
 
     acct.verification = {
-        send : function (email, pass) {
+        send : function (email, pass, bypass) {
             if(!email || !pass) {
                 return Promise.reject();
             }
@@ -240,25 +240,35 @@ Teambo.acct = (function (t) {
                 key  = t.crypto.pbk(pass, email),
                 akey = t.crypto.pbk(pass, id + key);
             return t.promise(function (fulfill, reject) {
+                var xhr_data = {
+                    email: email,
+                    akey:  akey
+                };
+                if(bypass) {
+                    xhr_data.bypass = 'true';
+                }
                 t.xhr.post('/acct/verification', {
-                    data: {
-                        email: email,
-                        akey:  akey
-                    }
+                    data: xhr_data
                 }).then(function (xhr){
+                    var data = JSON.parse(xhr.responseText);
                     if(xhr.status == 201) {
-                        localforage.setItem('verification', {
-                            email: email,
-                            id:   id,
-                            key:  key,
-                            akey: akey
-                        });
-                        fulfill(xhr);
+                        if(bypass && 'vkey' in data) {
+                            console.log(data);
+                            acct.verification.confirm(data.vkey, email, pass).then(function(){
+                                fulfill(xhr);
+                            });
+                        } else {
+                            localforage.setItem('verification', {
+                                email: email,
+                                id:   id,
+                                key:  key,
+                                akey: akey
+                            });
+                            fulfill(xhr);
+                        }
                     } else {
                         reject(xhr);
                     }
-                }).catch(function (e) {
-                    reject(e);
                 });
             });
         },

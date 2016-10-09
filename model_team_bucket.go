@@ -87,6 +87,8 @@ func team_bucket_remove(team_id string, id string) (err error) {
 			return err
 		}
 
+		err = tx.DeleteBucket([]byte(id))
+
 		return nil
 	})
 	if err != nil {

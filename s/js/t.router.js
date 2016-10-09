@@ -9,6 +9,7 @@ Teambo.router = (function(t){
             '/:team_id/new'                        : 'index/bucket-new',
             '/:team_id/:bucket_id'                 : 'index/bucket',
             '/:team_id/:bucket_id/remove'          : 'index/bucket-remove',
+            '/:team_id/:bucket_id/edit'            : 'index/bucket-edit',
             '/:team_id/:bucket_id/new'             : 'index/item-new',
             '/:team_id/:bucket_id/:item_id'        : 'index/item',
             '/:team_id/:bucket_id/:item_id/edit'   : 'index/item-edit',

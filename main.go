@@ -37,7 +37,8 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		handle_team_bucket(w, r)
 	case "/team/bucket/remove":  
 		handle_team_bucket_remove(w, r)
-	// case "/team/invite":  handle_team_invite(w, r)
+	// case "/team/invite":  
+		// handle_team_invite(w, r)
 	case "/team/item":    
 		handle_team_item(w, r)
 	case "/team/item/remove":  
@@ -48,6 +49,10 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		handle_manifest(w, r)
 	case "/init.js":
 		handle_init(w, r)
+	case "/test":
+		handle_test(w, r)
+	case "/test.manifest":
+		handle_manifest(w, r)
 	default:
 		handle_static(w, r)
 	}

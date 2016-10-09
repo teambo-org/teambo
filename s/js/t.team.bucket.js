@@ -1,6 +1,6 @@
 Teambo.team.bucket = (function(t){
     "use strict";
-    
+
     var bucket = function(data) {
         var self = this;
         t.extend(this, {
@@ -11,6 +11,10 @@ Teambo.team.bucket = (function(t){
         });
         this.save = function() {
             return t.promise(function(fulfill, reject) {
+                if(!self.id) {
+                    reject('must supply bucket id to save');
+                    return;
+                }
                 t.xhr.post('/team/bucket', {
                     data: {
                         team_id: t.team.current.id,
@@ -49,7 +53,7 @@ Teambo.team.bucket = (function(t){
             return ret;
         };
     };
-    
+
     bucket.create = function(name) {
         return t.promise(function(fulfill, reject) {
             t.xhr.post('/team/bucket', {
@@ -77,7 +81,7 @@ Teambo.team.bucket = (function(t){
                         reject(e);
                     });
                 } else if(xhr.status == 0) {
-                    var temp_id = t.crypto.randomKey();
+                    var temp_id = t.crypto.tempKey();
                     // Create Event
                     var event = {
                         type: 'bucket.create',
@@ -101,12 +105,41 @@ Teambo.team.bucket = (function(t){
                 }
             }).catch(function(e){
                 // Add create bucket event
-                // Evaluate create bucket event
+                // Apply create bucket event
                 reject(e);
             });
         });
     };
-    
+
+    bucket.update = function(bucket_id, opts) {
+        return t.promise(function(fulfill, reject) {
+            bucket.fetch(bucket_id, t.team.current.id, t.team.current.mkey).then(function(ct){
+                var b = new t.team.bucket(t.team.bucket.decrypt(ct));
+                b.opts = t.extend(b.opts, opts);
+                b.save().then(function(xhr){
+                    var p = [];
+                    b.item_ids.forEach(function(item_id){
+                        p.push(team.item.find(bucket_id, item_id).then(function(item){
+                            b.items[item.id] = item;
+                        }));
+                    });
+                    Promise.all(p).then(function() {
+                        t.team.current.buckets[bucket_id] = b;
+                        fulfill(b);
+                    }).catch(function(e){
+                        reject(e);
+                    });
+                }).catch(function(e){
+                    reject(e);
+                });
+            }).catch(function(e){
+                // Save bucket update event
+                // Apply bucket update event
+                reject(e);
+            });
+        });
+    };
+
     bucket.remove = function(bucket_id) {
         return t.promise(function(fulfill, reject) {
             t.xhr.post('/team/bucket/remove', {
@@ -118,7 +151,7 @@ Teambo.team.bucket = (function(t){
             }).then(function(xhr){
                 if(xhr.status == 204) {
                     delete(t.team.current.buckets[bucket_id]);
-                    t.team.current.bucket_ids.splice(bucket_id, 1);
+                    t.array.remove(t.team.current.bucket_ids, bucket_id);
                     t.team.current.save().then(function(xhr){
                         fulfill();
                     }).catch(function(e){
@@ -128,11 +161,13 @@ Teambo.team.bucket = (function(t){
                     reject(xhr);
                 }
             }).catch(function(e){
+                // Save bucket delete event
+                // Apply bucket delete event
                 reject(e);
             });
         });
     };
-    
+
     bucket.find = function(id) {
         return t.promise(function(fulfill, reject){
             var team = t.team.current;
@@ -169,7 +204,7 @@ Teambo.team.bucket = (function(t){
                     reject("Failed to retrieve bucket " + id);
                 }
             });
-            
+
         });
     };
     bucket.encrypt = function(data) {
@@ -196,9 +231,9 @@ Teambo.team.bucket = (function(t){
             });
         });
     };
-    
+
     return bucket;
-    
+
     // t.event.register('bucket-create', {
         // apply: function(events, obj) {
             // if(events.length > 0) {
@@ -214,7 +249,7 @@ Teambo.team.bucket = (function(t){
             // });
         // }
     // });
-    
+
     // Create event
     // Apply event
     // Persist event

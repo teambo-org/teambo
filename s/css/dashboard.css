@@ -109,6 +109,9 @@
 #dashboard .main .team a { display: block; }
 #dashboard .main .team a:hover .icon-down-open-1 { opacity: 0.8; background: none; }
 
+#dashboard .main ul.buckets li { list-style: none; }
+#dashboard .main ul.items li { list-style: none; }
+
 #dashboard .main .dash ul.buckets ul.tasks li { list-style: none; }
 #dashboard .main nav { float: right; }
 #dashboard .main nav a { float: left; padding: 0 1em; line-height: 2em; }

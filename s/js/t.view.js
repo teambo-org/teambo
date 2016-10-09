@@ -1,6 +1,6 @@
 Teambo.view = (function(t){
     "use strict";
-    
+
     var templates   = {},
         template_js = {},
         obj = {
@@ -19,12 +19,12 @@ Teambo.view = (function(t){
                     return micromarkdown.parse(render(text));
                 };
             },
-            theme: "webdam",
+            theme: "dark",
             chat: {
                 autoclose: true
             }
         };
-    
+
     var linkify = function (text) {
         var r = ' ' +  text + ' ',
             domainRegEx = "([\\w]+\\.)+(com|org|net|gov|edu|mil|biz|cat|int|pro|tel|xxx|jobs|arpa|coop|asia|info|mobi|name|aero|jobs|museum|travel|[a-z]{2})",
@@ -36,19 +36,20 @@ Teambo.view = (function(t){
         r = r.replace(new RegExp("(^|\\n| )(("+domainRegEx+"|"+ipRegEx+")(\\:[0-9]+)?"+pathRegEx+")([^\\w]{1})", "ig"),                              "$1<a target=\"_blank\" rel=\"nofollow\" href=\"http:&#x2F;&#x2F;$2\">$2</a>"+chr+"$1");
         return r.slice(1,-1);
     };
-    
+
     return {
         init: function(opts) {
             templates = opts.templates;
             template_js = opts.template_js;
+            var manifest = opts.manifest;
             this.setTheme(obj.theme);
-    
+
             window.applicationCache.addEventListener('updateready', function(e) {
                 if(window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                    if(false || !moved) {
-                        window.location.reload(); 
+                    if(!t.moved()) {
+                        window.location.reload();
                     } else {
-                        updateready = true;
+                        t.updateReady(true);
                     }
                     t.online(true);
                 }
@@ -59,6 +60,20 @@ Teambo.view = (function(t){
             window.applicationCache.addEventListener('error', function(e) {
                 t.online(false);
             }, false);
+
+            var startCacheCheck = function() {
+                if(!t.updateReady()) {
+                    setTimeout(function(){
+                        window.applicationCache.update();
+                        startCacheCheck();
+                    }, 30000);
+                }
+            };
+
+            if(manifest) {
+                window.applicationCache.update();
+                startCacheCheck();
+            }
         },
         render: function(tplname, data) {
             data = data ? data : {};
@@ -83,7 +98,7 @@ Teambo.view = (function(t){
             delete obj[k];
         },
         setTheme: function(theme) {
-            obj.theme = t.themes[theme];
+            obj.theme = theme in t.themes ? t.themes[theme] : t.themes['light'];
         },
         obj: obj
     };
