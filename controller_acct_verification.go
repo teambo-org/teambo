@@ -57,7 +57,7 @@ func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
 		if bypass != "true" || config["tests.enabled"] != "true" {
 			// Protect against brute force
 			count, err := acct_verification_count(id)
-			if count > 0 || err != nil {
+			if count > 3 || err != nil {
 				error_out(w, "Account verification limit reached", 403)
 				return
 			}
@@ -81,7 +81,7 @@ func handle_acct_verification(w http.ResponseWriter, r *http.Request) {
 		} else {
 			subject := "Teambo Account Verification"
 			url := scheme + "://" + config["app.host"] + "/#/login?vkey=" + vkey
-			body := "Click the link below to verify your account:\r\n\r\n<a href='" + url + "'>"+url+"</a>"
+			body := "Click the link below to verify your new Teambo account:<br/><br/><a href='" + url + "'>"+url+"</a>"
 			err = sendMail(email, subject, body)
 			if err != nil {
 				error_out(w, err.Error(), 500)
