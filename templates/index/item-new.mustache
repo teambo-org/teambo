@@ -1,4 +1,9 @@
 <div class="item-new" data-tpljs="index/item-new">
+    <nav class="breadcrumbs">
+        <a href="#/{{team.id}}">Team</a>
+        <a href="#/{{team.id}}/{{bucket.id}}">Bucket</a>
+        <span>New Item</span>
+    </nav>
     <h1>New Item</h1>
     <form id="item-new" name="item_new" method="POST" class="std ext" data-bucket_id="{{bucket_id}}">
         {{>index/_item-form}}

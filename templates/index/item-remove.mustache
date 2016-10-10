@@ -1,4 +1,10 @@
 <div class="item-remove" data-tpljs="index/item-remove">
+    <nav class="breadcrumbs">
+        <a href="#/{{team.id}}">Team</a>
+        <a href="#/{{team.id}}/{{bucket.id}}">Bucket</a>
+        <a href="#/{{team.id}}/{{bucket.id}}/{{item.id}}">Item</a>
+        <span>Delete</span>
+    </nav>
     <h1>Delete Item</h1>
     <form id="item-remove" name="item_remove" method="POST" class="std ext">
         <input type="hidden" class="hidden" name="item_id" value="{{item.id}}"/>

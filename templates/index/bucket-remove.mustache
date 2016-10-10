@@ -1,4 +1,9 @@
 <div class="bucket-remove" data-tpljs="index/bucket-remove">
+    <nav class="breadcrumbs">
+        <a href="#/{{team.id}}">Team</a>
+        <a href="#/{{team.id}}/{{bucket.id}}">Bucket</a>
+        <span>Delete</span>
+    </nav>
     <h1>Delete Bucket</h1>
     <form id="bucket-remove" name="bucket_remove" method="POST" class="std ext">
         <input type="hidden" class="hidden" name="id" value="{{bucket.id}}"/>

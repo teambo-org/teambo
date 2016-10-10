@@ -5,6 +5,10 @@
         <a href="#/{{team.id}}/{{bucket.id}}/new">New Item</a>
         <a href="#/{{team.id}}">Back</a>
     </nav>
+    <nav class="breadcrumbs">
+        <a href="#/{{team.id}}" class="active">Team</a>
+        <span class="active">Bucket</span>
+    </nav>
     <h1><i class="icon-flag-filled"></i> {{bucket.opts.name}}</h1>
     <ul class="items" id="items">
     {{#bucket.item_list}}

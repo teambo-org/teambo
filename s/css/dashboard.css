@@ -117,5 +117,8 @@
 #dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; font-size: 1.2em; }
 
 #dashboard .main .dash ul.buckets ul.tasks li { list-style: none; }
-#dashboard .main nav { float: right; }
+#dashboard .main nav { float: right; margin-top: 0.5em; }
 #dashboard .main nav a { float: left; padding: 0 1em; line-height: 2em; }
+#dashboard .main nav.breadcrumbs { float: none; margin: -1em 0 1em -1em; height: 2em; }
+#dashboard .main nav.breadcrumbs a,
+#dashboard .main nav.breadcrumbs span { float: none; display: inline-block; padding: 0 1em; line-height: 2em; font-size: 1.02em; float: left; }

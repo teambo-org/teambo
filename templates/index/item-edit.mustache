@@ -1,4 +1,10 @@
 <div class="item-edit" data-tpljs="index/item-edit">
+    <nav class="breadcrumbs">
+        <a href="#/{{team.id}}">Team</a>
+        <a href="#/{{team.id}}/{{bucket.id}}">Bucket</a>
+        <a href="#/{{team.id}}/{{bucket.id}}/{{item.id}}">Item</a>
+        <span>Edit</span>
+    </nav>
     <h1>Edit Item</h1>
     <form id="item-edit" name="item_edit" method="POST" class="std ext" data-bucket_id="{{bucket_id}}" data-item_id="{{item.id}}">
         {{>index/_item-form}}
