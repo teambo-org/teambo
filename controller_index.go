@@ -153,10 +153,6 @@ func append_js_init(w io.Writer) {
 	if config["debug"] == "true" {
 		debug = "true"
 	}
-	manifest := "false"
-	if config["app.manifest"] == "true" {
-		manifest = "true"
-	}
 	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " + 
 		"'audio': " + string(audio) + ", " +

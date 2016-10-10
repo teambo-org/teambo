@@ -20,6 +20,8 @@ var tests = []string{
 	"/js/test/t.test.js",
 	"/js/test/t.acct.test.js",
 	"/js/test/t.team.test.js",
+	"/js/test/t.team.bucket.test.js",
+	"/js/test/t.team.item.test.js",
 }
 
 func handle_test(w http.ResponseWriter, r *http.Request) {
