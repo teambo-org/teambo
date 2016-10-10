@@ -14,6 +14,7 @@
             t.gotoUrl('/'+t.team.current.id+'/'+bucket.id);
         }).catch(function(e){
             form.enable();
+            t.trace(e);
             form.error.msg("Bucket changes could not be saved", "Please try again");
         });
     });
