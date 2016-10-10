@@ -341,7 +341,7 @@ var Teambo = (function(t){
 })(Teambo || {});
 
 document.addEventListener("keydown", function(e) {
-    if(e.keyIdentifier == "Down" || e.keyIdentifier == "Right") {
+    if(e.key == "Down" || e.key == "Right") {
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
         for(var i in targets) {
             if(targets[i] === e.target) {
@@ -352,7 +352,7 @@ document.addEventListener("keydown", function(e) {
             }
         }
         targets[0].focus();
-    } else if (e.keyIdentifier == "Up" || e.keyIdentifier == "Left") {
+    } else if (e.key == "Up" || e.key == "Left") {
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
         for(var i in targets) {
             if(targets[i] === e.target) {
