@@ -23,9 +23,18 @@ describe("t.team.js", function() {
     });
 
     it("Edits team name", function(done) {
-        console.log(Teambo.team.current);
         Teambo.team.current.update({name: "Test Team"}).then(function(team){
             expect(team.opts.name).toBe("Test Team");
+            done();
+        }).catch(function(e){
+            fail("Team not found");
+            done();
+        });
+    });
+
+    it("Edits team theme", function(done) {
+        Teambo.team.current.update({theme: "webdam"}).then(function(team){
+            expect(team.opts.theme).toBe("webdam");
             done();
         }).catch(function(e){
             fail("Team not found");

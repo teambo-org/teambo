@@ -26,7 +26,7 @@ var tests = []string{
 
 func handle_test(w http.ResponseWriter, r *http.Request) {
 	min := r.FormValue("min")
-	t, err := template.ParseFiles("templates/test.html")
+	t, err := template.ParseFiles("templates/layout.html")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
 		http.Error(w, string(res), 500)

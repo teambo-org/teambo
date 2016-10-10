@@ -1,4 +1,4 @@
 {{#teams}}
-#team-li-{{id}} .name { background-color: rgba({{theme.right.bg}}, 0.9); color: rgba({{theme.right.color}}, 0.7); }
-#team-li-{{id}} i { background-color: rgba({{theme.chat.bg}}, 0.9); color: rgba({{theme.chat.color}}, 0.7); }
+#team-li-{{id}} .name { background-color: rgba({{#theme}}{{right.bg}}{{/theme}}, 0.9); color: rgba({{#theme}}{{right.color}}{{/theme}}, 0.7); }
+#team-li-{{id}} i { background-color: rgba({{#theme}}{{chat.bg}}{{/theme}}, 0.9); color: rgba({{#theme}}{{chat.color}}{{/theme}}, 0.7); }
 {{/teams}}

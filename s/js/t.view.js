@@ -19,7 +19,6 @@ Teambo.view = (function(t){
                     return micromarkdown.parse(render(text));
                 };
             },
-            theme: "dark",
             chat: {
                 autoclose: true
             }
@@ -41,7 +40,6 @@ Teambo.view = (function(t){
         init: function(opts) {
             templates = opts.templates;
             template_js = opts.template_js;
-            this.setTheme(obj.theme);
 
             if(window.applicationCache.status !== 0) {
                 window.applicationCache.addEventListener('updateready', function(e) {
@@ -95,9 +93,6 @@ Teambo.view = (function(t){
         },
         unset: function(k, v) {
             delete obj[k];
-        },
-        setTheme: function(theme) {
-            obj.theme = theme in t.themes ? t.themes[theme] : t.themes['light'];
         },
         obj: obj
     };

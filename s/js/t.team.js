@@ -41,7 +41,7 @@ Teambo.team = (function(t){
                 return t.promise(function(fulfill, reject) {
                     self.save().then(function(xhr) {
                         fulfill(self)
-                    }).catch(function(e){
+                    }).catch(function(e) {
                         reject(e);
                     });
                 });
@@ -70,6 +70,15 @@ Teambo.team = (function(t){
                     ret.push(self.buckets[k]);
                 }
                 return ret;
+            },
+            theme: function() {
+                if(typeof(self.opts.theme) === "object") {
+                    return self.opts.theme;
+                } else if(typeof(self.opts.theme) === "string" && self.opts.theme in t.themes) {
+                    return t.themes[self.opts.theme];
+                } else {
+                    return t.themes['dark'];
+                }
             }
         });
     };

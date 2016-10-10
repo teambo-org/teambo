@@ -1,71 +1,71 @@
-#dashboard .right { color: rgba({{theme.right.color}}, 0.7); }
-#dashboard .right .scrollable::-webkit-scrollbar-track { background: rgba({{theme.right.hi}}, 0.1); }
-#dashboard .right .scrollable::-webkit-scrollbar-thumb { background: rgba({{theme.right.hi}}, 0.2); }
-#dashboard .right ::-moz-selection { background: rgba({{theme.right.hi}}, 0.2); }
-#dashboard .right ::selection { background: rgba({{theme.right.hi}}, 0.2); }
-#dashboard .right a { color: rgba({{theme.right.color}}, 0.7); }
+#dashboard .right { color: rgba({{#team.theme}}{{right.color}}{{/team.theme}}, 0.7); }
+#dashboard .right .scrollable::-webkit-scrollbar-track { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.1); }
+#dashboard .right .scrollable::-webkit-scrollbar-thumb { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.2); }
+#dashboard .right ::-moz-selection { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.2); }
+#dashboard .right ::selection { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.2); }
+#dashboard .right a { color: rgba({{#team.theme}}{{right.color}}{{/team.theme}}, 0.7); }
 #dashboard .right a:hover,
-#dashboard .right .active a { color: rgba({{theme.right.color}}, 0.9); }
-#dashboard .right .hi-05 { background: rgba({{theme.right.hi}}, 0.05); }
-#dashboard .right .hi-10 { background: rgba({{theme.right.hi}}, 0.10); }
-#dashboard .right .hi-20 { background: rgba({{theme.right.hi}}, 0.20); }
+#dashboard .right .active a { color: rgba({{#team.theme}}{{right.color}}{{/team.theme}}, 0.9); }
+#dashboard .right .hi-05 { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.05); }
+#dashboard .right .hi-10 { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.10); }
+#dashboard .right .hi-20 { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.20); }
 
-#dashboard .right .section .img { background: rgba({{theme.right.hi}},0.1); }
-#dashboard .right .section > a { display: block; background: rgba({{theme.right.hi}},0.05); }
+#dashboard .right .section .img { background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}},0.1); }
+#dashboard .right .section > a { display: block; background: rgba({{#team.theme}}{{right.hi}}{{/team.theme}},0.05); }
 
-#dashboard .right.bg { background: rgba({{theme.right.bg}},1); }
+#dashboard .right.bg { background: rgba({{#team.theme}}{{right.bg}}{{/team.theme}},1); }
 
-#dashboard .main { color: rgba({{theme.main.color}}, 0.7); }
-#dashboard .main .scrollable::-webkit-scrollbar-track { background: rgba({{theme.main.hi}}, 0.05); }
-#dashboard .main .scrollable::-webkit-scrollbar-thumb { background: rgba({{theme.main.hi}}, 0.15); }
-#dashboard .main ::-moz-selection { background: rgba({{theme.main.hi}}, 0.2); }
-#dashboard .main ::selection { background: rgba({{theme.main.hi}}, 0.2); }
-#dashboard .main a { color: rgba({{theme.main.color}}, 0.7); }
+#dashboard .main { color: rgba({{#team.theme}}{{main.color}}{{/team.theme}}, 0.7); }
+#dashboard .main .scrollable::-webkit-scrollbar-track { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.05); }
+#dashboard .main .scrollable::-webkit-scrollbar-thumb { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.15); }
+#dashboard .main ::-moz-selection { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.2); }
+#dashboard .main ::selection { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.2); }
+#dashboard .main a { color: rgba({{#team.theme}}{{main.color}}{{/team.theme}}, 0.7); }
 #dashboard .main a:hover,
-#dashboard .main .active a { color: rgba({{theme.main.color}}, 0.9); }
-#dashboard .main h1 { color: rgba({{theme.main.color}},0.9); }
-#dashboard .main .hi { box-shadow: 0 0 2em rgba({{theme.main.hi}}, 0.1); }
-#dashboard .main .hi-05 { background: rgba({{theme.main.hi}}, 0.05); }
-#dashboard .main .hi-10 { background: rgba({{theme.main.hi}}, 0.10); }
-#dashboard .main .hi-20 { background: rgba({{theme.main.hi}}, 0.20); }
+#dashboard .main .active a { color: rgba({{#team.theme}}{{main.color}}{{/team.theme}}, 0.9); }
+#dashboard .main h1 { color: rgba({{#team.theme}}{{main.color}}{{/team.theme}},0.9); }
+#dashboard .main .hi { box-shadow: 0 0 2em rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.1); }
+#dashboard .main .hi-05 { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.05); }
+#dashboard .main .hi-10 { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.10); }
+#dashboard .main .hi-20 { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.20); }
 
-#dashboard .main section { background: rgba({{theme.main.hi}},0.1); }
-#dashboard .main section.tags ul li.milestone > a { background: rgba({{theme.main.hi}}, 0.1); }
-#dashboard .main .comments form.std textarea.text { background: rgba({{theme.main.hi}}, 0.1); color: rgba({{theme.main.color}}, 0.7); }
-#dashboard .main form.std input.submit { background: rgba({{theme.main.hi}}, 0.1); color: rgba({{theme.main.color}}, 0.7); }
-#dashboard .main form.std input.submit:hover { background: rgba({{theme.main.hi}},0.2); outline: none; }
-#dashboard .main .section .img { background: rgba({{theme.main.hi}},0.1); }
-#dashboard .main .section > a { display: block; background: rgba({{theme.main.hi}},0.05); }
-#dashboard .main .nav #status.offline { background: rgba({{theme.main.hi}}, 1); color: rgba({{theme.main.bg}}, 1); }
+#dashboard .main section { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}},0.1); }
+#dashboard .main section.tags ul li.milestone > a { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.1); }
+#dashboard .main .comments form.std textarea.text { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.1); color: rgba({{#team.theme}}{{main.color}}{{/team.theme}}, 0.7); }
+#dashboard .main form.std input.submit { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.1); color: rgba({{#team.theme}}{{main.color}}{{/team.theme}}, 0.7); }
+#dashboard .main form.std input.submit:hover { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}},0.2); outline: none; }
+#dashboard .main .section .img { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}},0.1); }
+#dashboard .main .section > a { display: block; background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}},0.05); }
+#dashboard .main .nav #status.offline { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 1); color: rgba({{#team.theme}}{{main.bg}}{{/team.theme}}, 1); }
 
-#dashboard .main.bg { background: rgba({{theme.main.bg}}, 1); }
+#dashboard .main.bg { background: rgba({{#team.theme}}{{main.bg}}{{/team.theme}}, 1); }
 
-#dashboard .chat { color: rgba({{theme.chat.color}}, 0.7); }
-#dashboard .chat:before { box-shadow: inset 1em 1em 2em rgba({{theme.chat.hi}}, 0.05); }
-#dashboard .chat .scrollable::-webkit-scrollbar-track { background: rgba({{theme.chat.hi}}, 0); }
-#dashboard .chat .scrollable::-webkit-scrollbar-thumb { background: rgba({{theme.chat.hi}}, 0.15); }
-#dashboard .chat a { color: rgba({{theme.chat.color}}, 0.7); }
+#dashboard .chat { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.7); }
+#dashboard .chat:before { box-shadow: inset 1em 1em 2em rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.05); }
+#dashboard .chat .scrollable::-webkit-scrollbar-track { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0); }
+#dashboard .chat .scrollable::-webkit-scrollbar-thumb { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.15); }
+#dashboard .chat a { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.7); }
 #dashboard .chat a:hover,
-#dashboard .chat .active a { color: rgba({{theme.chat.color}}, 0.9); }
-#dashboard .chat ::-moz-selection { background: rgba({{theme.chat.hi}}, 0.2); }
-#dashboard .chat ::selection { background: rgba({{theme.chat.hi}},0.2); }
-#dashboard .chat input.text::-webkit-input-placeholder { color: rgba({{theme.chat.color}}, 0.2); }
-#dashboard .chat input.text:-moz-placeholder { color: rgba({{theme.chat.color}}, 0.2); }
-#dashboard .chat input.text::-moz-placeholder { color: rgba({{theme.chat.color}}, 0.2); }
-#dashboard .chat input.text:-ms-input-placeholder { color: rgba({{theme.chat.color}}, 0.2); }
-#dashboard .chat .msg-alert { background: rgba({{theme.chat.bg}}, 0.9); }
-#dashboard .chat .active.hi-05-a { background: rgba({{theme.chat.hi}}, 0.05); }
-#dashboard .chat .hi-05 { background: rgba({{theme.chat.hi}}, 0.05); }
-#dashboard .chat .hi-10 { background: rgba({{theme.chat.hi}}, 0.10); }
-#dashboard .chat .hi-20 { background: rgba({{theme.chat.hi}}, 0.20); }
-#dashboard .chat .c-70 { color: rgba({{theme.chat.color}}, 0.70); }
+#dashboard .chat .active a { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.9); }
+#dashboard .chat ::-moz-selection { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.2); }
+#dashboard .chat ::selection { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}},0.2); }
+#dashboard .chat input.text::-webkit-input-placeholder { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.2); }
+#dashboard .chat input.text:-moz-placeholder { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.2); }
+#dashboard .chat input.text::-moz-placeholder { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.2); }
+#dashboard .chat input.text:-ms-input-placeholder { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.2); }
+#dashboard .chat .msg-alert { background: rgba({{#team.theme}}{{chat.bg}}{{/team.theme}}, 0.9); }
+#dashboard .chat .active.hi-05-a { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.05); }
+#dashboard .chat .hi-05 { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.05); }
+#dashboard .chat .hi-10 { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.10); }
+#dashboard .chat .hi-20 { background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.20); }
+#dashboard .chat .c-70 { color: rgba({{#team.theme}}{{chat.color}}{{/team.theme}}, 0.70); }
 
-#dashboard .chat.bg { background: rgba({{theme.chat.bg}},1); }
+#dashboard .chat.bg { background: rgba({{#team.theme}}{{chat.bg}}{{/team.theme}},1); }
 
 #dashboard .right a:focus,
-#dashboard .right textarea:focus { outline: 2px solid rgba({{theme.right.hi}}, 0.15); } 
+#dashboard .right textarea:focus { outline: 2px solid rgba({{#team.theme}}{{right.hi}}{{/team.theme}}, 0.15); } 
 #dashboard .main a:focus,
 #dashboard .main input:focus,
-#dashboard .main textarea:focus { outline: 2px solid rgba({{theme.main.hi}}, 0.15); } 
-#dashboard .main form.std input.submit:focus { background: rgba({{theme.main.hi}},0.2); outline: none; }
-#dashboard .chat input.text:focus { outline: none; background: rgba({{theme.chat.hi}}, 0.15); }
+#dashboard .main textarea:focus { outline: 2px solid rgba({{#team.theme}}{{main.hi}}{{/team.theme}}, 0.15); } 
+#dashboard .main form.std input.submit:focus { background: rgba({{#team.theme}}{{main.hi}}{{/team.theme}},0.2); outline: none; }
+#dashboard .chat input.text:focus { outline: none; background: rgba({{#team.theme}}{{chat.hi}}{{/team.theme}}, 0.15); }
