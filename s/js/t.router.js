@@ -6,6 +6,7 @@ Teambo.router = (function(t){
             '' : 'external/index',
             '/:team_id'                            : 'index/dashboard',
             '/:team_id/members'                    : 'index/members',
+            '/:team_id/edit'                       : 'index/team-edit',
             '/:team_id/new'                        : 'index/bucket-new',
             '/:team_id/:bucket_id'                 : 'index/bucket',
             '/:team_id/:bucket_id/remove'          : 'index/bucket-remove',
