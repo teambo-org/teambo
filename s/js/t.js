@@ -349,7 +349,7 @@ var Teambo = (function(t){
 })(Teambo || {});
 
 document.addEventListener("keydown", function(e) {
-    if(e.key == "Down" || e.key == "Right") {
+    if(e.key == "ArrowDown" || e.key == "ArrowRight") {
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
         for(var i in targets) {
             if(targets[i] === e.target) {
@@ -360,7 +360,7 @@ document.addEventListener("keydown", function(e) {
             }
         }
         targets[0].focus();
-    } else if (e.key == "Up" || e.key == "Left") {
+    } else if (e.key == "ArrowUp" || e.key == "ArrowLeft") {
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
         for(var i in targets) {
             if(targets[i] === e.target) {

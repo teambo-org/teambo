@@ -5,7 +5,7 @@ audio:not([controls]) { display: none; }
 
 html { font-size: 100%; /* -webkit-text-size-adjust: auto; -ms-text-size-adjust: auto; */ }
 body { background: #fff; padding: 0; margin: 0; font-size: 13px; line-height: 1.231; vertical-align: top; overflow-x: hidden; }
-body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; font-weight: 400; color: rgba(0,0,0,0.7); }
+body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; font-weight: 400; color: rgba(0,0,0,0.7); outline-offset: 0; }
 
 ::-moz-selection { background: rgba(0,0,0,0.2); text-shadow: none; }
 ::selection { background: rgba(0,0,0,0.2); text-shadow: none; }
@@ -13,7 +13,7 @@ body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; fo
 a { color:rgba(0,0,0,0.7); cursor: pointer; }
 a:visited { color: rgba(0,0,0,0.9); }
 a:hover, .active a { color: rgba(0,0,0,0.8); }
-*:focus { outline: none; } 
+*:focus { outline: none; }
 
 a:link, a:visited { text-decoration: none; }
 a:hover, a:active { text-decoration: underline; }
@@ -74,8 +74,8 @@ form.std .field.submit { padding-top: 1em; }
 form.std .field.first { padding-top: 0; }
 form.std input.text,
 form.std select.text,
-form.std textarea.text { border: none; padding: 0.4em 0.5em; width: 20em; }
-form.std input.large { width: 28em; }
+form.std textarea.text { border: none; padding: 0.4em 0.5em; width: 20em; font-size: 1em; line-height: 1.2em; }
+form.std input.large { width: 24em; }
 form.std textarea.large { width: 28em; height: 8em; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; opacity: 0.5; }

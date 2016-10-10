@@ -35,6 +35,28 @@ Teambo.view = (function(t){
         r = r.replace(new RegExp("(^|\\n| )(("+domainRegEx+"|"+ipRegEx+")(\\:[0-9]+)?"+pathRegEx+")([^\\w]{1})", "ig"),                              "$1<a target=\"_blank\" rel=\"nofollow\" href=\"http:&#x2F;&#x2F;$2\">$2</a>"+chr+"$1");
         return r.slice(1,-1);
     };
+    
+    var update_theme = function(theme) {
+        var data = {};
+        if(theme) {
+            var res_theme;
+            if(typeof(theme) === "object") {
+                res_theme = theme;
+            } else if(typeof(theme) === "string" && theme in t.themes) {
+                res_theme = t.themes[theme];
+            }
+            if(res_theme) {
+                data = {
+                    team: {
+                        theme: function(){ return res_theme; }
+                    }
+                };
+            }
+        }
+        var theme_styles = t.view.render('dashboard/theme', {}, data);
+        var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
+        document.getElementById('theme').href = "data:text/css;base64,"+url;
+    };
 
     return {
         init: function(opts) {
@@ -96,7 +118,8 @@ Teambo.view = (function(t){
         unset: function(k, v) {
             delete obj[k];
         },
-        obj: obj
+        obj: obj,
+        updateTheme: update_theme
     };
 
 })(Teambo);

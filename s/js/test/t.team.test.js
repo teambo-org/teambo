@@ -33,8 +33,8 @@ describe("t.team.js", function() {
     });
 
     it("Edits team theme", function(done) {
-        Teambo.team.current.update({theme: "webdam"}).then(function(team){
-            expect(team.opts.theme).toBe("webdam");
+        Teambo.team.current.update({theme: "Webdam"}).then(function(team){
+            expect(team.opts.theme).toBe("Webdam");
             done();
         }).catch(function(e){
             fail("Team not found");

@@ -25,19 +25,10 @@
     }
     form.theme.innerHTML = html + form.theme.innerHTML;
     form.theme.addEventListener("change", function(e) {
-        var data = {
-            team: {
-                theme: function(){ return t.themes[form.theme.value]; }
-            }
-        };
-        var theme_styles = t.view.render('dashboard/theme', {}, data);
-        var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
-        document.getElementById('theme').href = "data:text/css;base64,"+url;
+        t.view.updateTheme(form.theme.value);
     });
     t.nextNav(function() {
-        var theme_styles = t.view.render('dashboard/theme');
-        var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
-        document.getElementById('theme').href = "data:text/css;base64,"+url;
+        t.view.updateTheme();
     });
 
 })(Teambo);
