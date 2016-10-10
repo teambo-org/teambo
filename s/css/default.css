@@ -73,6 +73,7 @@ form.std .field { padding: 0.5em 0.5em; }
 form.std .field.submit { padding-top: 1em; }
 form.std .field.first { padding-top: 0; }
 form.std input.text,
+form.std select.text,
 form.std textarea.text { border: none; padding: 0.4em 0.5em; width: 20em; }
 form.std input.large { width: 28em; }
 form.std textarea.large { width: 28em; height: 8em; }

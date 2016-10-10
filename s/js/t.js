@@ -10,7 +10,8 @@ var Teambo = (function(t){
         last_hash   = '',
         after_auth  = null,
         template_js = {},
-        testing     = false;
+        testing     = false,
+        nav_queue   = [];
 
     t.salt = null;
 
@@ -79,6 +80,10 @@ var Teambo = (function(t){
                     t.view.unset('team');
                     target = "page";
                 }
+                for (var i in nav_queue) {
+                    nav_queue[i]();
+                };
+                nav_queue = [];
                 var tar = document.getElementById(target);
                 tar.innerHTML = t.view.render(route.tpl, data);
                 run_template_js(tar);
@@ -107,7 +112,6 @@ var Teambo = (function(t){
                 loaded = true;
             }).catch(function(e){
                 t.trace(e);
-                t.gotoUrl("");
             });
         } else {
             t.log('route not found ' + hash);
@@ -304,6 +308,10 @@ var Teambo = (function(t){
                 template_js[tplname]();
             }
         }
+    };
+
+    t.nextNav = function(fn) {
+        nav_queue.push(fn);
     };
 
     t.findByProperty = function(a, k, v) {

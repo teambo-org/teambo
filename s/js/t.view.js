@@ -72,9 +72,11 @@ Teambo.view = (function(t){
                 startCacheCheck();
             }
         },
-        render: function(tplname, data) {
+        render: function(tplname, data, override) {
             data = data ? data : {};
+            override = override ? override : {};
             t.extend(data, obj);
+            t.extend(data, override);
             var html = Mustache.to_html(
                 templates[tplname],
                 data,
