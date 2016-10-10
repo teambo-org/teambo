@@ -36,6 +36,16 @@ Teambo.team = (function(t){
                     });
                 });
             },
+            update: function(opts) {
+                self.opts = t.extend(self.opts, opts);
+                return t.promise(function(fulfill, reject) {
+                    self.save().then(function(xhr) {
+                        fulfill(self)
+                    }).catch(function(e){
+                        reject(e);
+                    });
+                });
+            },
             cache: function() {
                 var hash = t.crypto.sha(self.id+t.salt);
                 localforage.setItem(hash, self.encrypted());

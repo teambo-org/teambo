@@ -1,0 +1,14 @@
+<div class="team-edit" data-tpljs="index/team-edit">
+    <h1>Edit Team</h1>
+    <form id="team-edit" name="team_edit" method="POST" class="std ext" data-team_id="{{team.id}}">
+        <div class="field">
+            <input type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Team Name" value="{{team.opts.name}}" />
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Save" />
+            <br/>
+            <a class="cancel" href="#/{{team.id}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>
