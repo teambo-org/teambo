@@ -38,6 +38,10 @@ Teambo.team.item = (function(t){
             var hash = t.crypto.sha(t.team.current.id+self.bucket_id+self.id+t.salt);
             localforage.setItem(hash, self.encrypted());
         };
+        this.uncache = function() {
+            var hash = t.crypto.sha(t.team.current.id+self.bucket_id+self.id+t.salt);
+            localforage.removeItem(hash);
+        };
         this.encrypted = function() {
             return t.team.item.encrypt({
                 id:        self.id,
@@ -152,11 +156,14 @@ Teambo.team.item = (function(t){
                 }
             }).then(function(xhr){
                 if(xhr.status == 204) {
-                    delete(t.team.current.buckets[bucket_id].items[item_id]);
+                    var item_ids = t.team.current.buckets[bucket_id].item_ids;
                     t.array.remove(t.team.current.buckets[bucket_id].item_ids, item_id);
                     t.team.current.buckets[bucket_id].save().then(function(xhr){
+                        t.team.current.buckets[bucket_id].items[item_id].uncache();
+                        delete(t.team.current.buckets[bucket_id].items[item_id]);
                         fulfill();
                     }).catch(function(e){
+                        t.team.current.buckets[bucket_id].item_ids = item_ids;
                         reject(e);
                     });
                 } else {

@@ -28,7 +28,12 @@ describe("t.team.item.js", function() {
         Teambo.team.item.create(bucket_id, {name: 'Test Item For Deletion'}).then(function(item){
             Teambo.team.item.remove(bucket_id, item.id).then(function(b){
                 expect(Teambo.team.current.buckets[bucket_id].item_ids.length).toBe(1);
-                done();
+                // Item uncaches on delete
+                var hash = Teambo.crypto.sha(Teambo.team.current.id+bucket_id+item.id+Teambo.salt);
+                localforage.getItem(hash).then(function(val){
+                    expect(val).toBe(null);
+                    done();
+                });
             }).catch(function(e){
                 fail("Item could not be deleted");
                 done();
