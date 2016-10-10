@@ -119,7 +119,7 @@ Teambo.team.bucket = (function(t){
                 b.save().then(function(xhr){
                     var p = [];
                     b.item_ids.forEach(function(item_id){
-                        p.push(team.item.find(bucket_id, item_id).then(function(item){
+                        p.push(t.team.item.find(bucket_id, item_id).then(function(item){
                             b.items[item.id] = item;
                         }));
                     });
