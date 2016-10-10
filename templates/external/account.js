@@ -19,5 +19,10 @@
         var i = 0;
         anchors[i].focus();
     });
+    el.addEventListener('click', function(e) {
+        if(e.target.nodeName == 'A' || e.target.parentNode.nodeName == 'A') {
+            document.getElementById('logo').classList.add('spinner');
+        }
+    });
 
 })(Teambo);
