@@ -13,7 +13,9 @@
     {{#bucket.item_list}}
     <li class="item" id="item-li-{{id}}">
         <a href="#/{{team.id}}/{{bucket.id}}/{{id}}">
-            <i class="icon-ok-squared"></i>
+            {{#status}}
+            <i class="icon-{{icon}}"></i>
+            {{/status}}
             <span class="name">{{opts.name}}</span>
         </a>
     </li>

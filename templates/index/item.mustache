@@ -10,7 +10,7 @@
         <span>Item</span>
     </nav>
     
-    <h1><i class="icon-ok-squared"></i> {{item.opts.name}}</h1>
+    <h1>{{#item.status}}<i class="icon-{{icon}}"></i>{{/item.status}} {{item.opts.name}}</h1>
     <section class="tags">
         <ul>
             <li class="milestone section">

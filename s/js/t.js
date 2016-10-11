@@ -110,8 +110,6 @@ var Teambo = (function(t){
                 }
                 last_hash = hash;
                 loaded = true;
-            }).catch(function(e){
-                t.trace(e);
             });
         } else {
             t.log('route not found ' + hash);
@@ -350,7 +348,7 @@ var Teambo = (function(t){
 
 document.addEventListener("keydown", function(e) {
     if(e.key == "ArrowDown" || e.key == "ArrowRight") {
-        if(e.target.nodeName === 'SELECT' || e.target.nodeName === 'TEXTAREA') {
+        if(['SELECT', 'TEXTAREA', 'INPUT'].indexOf(e.target.nodeName) !== false) {
             return;
         }
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
@@ -364,7 +362,7 @@ document.addEventListener("keydown", function(e) {
         }
         targets[0].focus();
     } else if (e.key == "ArrowUp" || e.key == "ArrowLeft") {
-        if(e.target.nodeName === 'SELECT' || e.target.nodeName === 'TEXTAREA') {
+        if(['SELECT', 'TEXTAREA', 'INPUT'].indexOf(e.target.nodeName) !== false) {
             return;
         }
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');

@@ -60,7 +60,7 @@ Teambo.acct = (function (t) {
                 var k,
                     ret = [];
                 for (k in self.teams) {
-                    ret.push(self.teans[k]);
+                    ret.push(self.teams[k]);
                 }
                 return ret;
             },
@@ -203,7 +203,10 @@ Teambo.acct = (function (t) {
                 }
                 fulfill(xhr);
             }).catch(function (xhr) {
-                acct.auth.offline(email, pass).then(function () {
+                acct.auth.offline(email, pass).then(function (a) {
+                    acct.current = a;
+                    acct.current.cache();
+                    t.view.set('acct', acct.current);
                     fulfill(true);
                 }).catch(function () {
                     reject(xhr);
@@ -221,9 +224,7 @@ Teambo.acct = (function (t) {
             localforage.getItem(hash).then(function (item) {
                 var data = t.crypto.decrypt(item, key);
                 if (data) {
-                    acct.current = new acct(data, akey, key);
-                    acct.current.cache();
-                    fulfill();
+                    fulfill(new acct(data, akey, key));
                 } else {
                     reject();
                 }

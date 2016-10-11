@@ -4,7 +4,7 @@ audio:not([controls]) { display: none; }
 [hidden] { display: none; }
 
 html { font-size: 100%; /* -webkit-text-size-adjust: auto; -ms-text-size-adjust: auto; */ }
-body { background: #fff; padding: 0; margin: 0; font-size: 13px; line-height: 1.231; vertical-align: top; overflow-x: hidden; }
+body { background: #fff; padding: 0; margin: 0; font-size: 14px; line-height: 1.231; vertical-align: top; overflow-x: hidden; }
 body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; font-weight: 400; color: rgba(0,0,0,0.7); outline-offset: 0; }
 
 ::-moz-selection { background: rgba(0,0,0,0.2); text-shadow: none; }
