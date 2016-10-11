@@ -41,8 +41,8 @@
 #dashboard .chat .area .history .d { font-size: 0.7em; text-align: center; line-height: 1.5em; }
 
 #dashboard .chat .area .input { height: 2em; position: absolute; bottom: 0; left: 0; right: 0; height: 2em; }
-#dashboard .chat .area .input form { padding-right: 2.2em; position: relative; }
-#dashboard .chat .area .input input.text { height: 2em; width: 100%; padding: 0 0.4em; font-size: 1em; padding-right: 2.2em;
+#dashboard .chat .area .input form { padding-right: 2.2em; position: relative; padding: 0; }
+#dashboard .chat .area .input input.text { height: 2em; width: 100%; padding: 0.3em 0.4em 0.1em; font-size: 1em; padding-right: 2.2em;
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 #dashboard .chat .area .input .submit { height: 2em; width: 2.2em; position: absolute; right: 0; top: 0; bottom: 0; line-height: 2em; text-align: center; font-family: "teambo"; padding: 0; }
 #dashboard .chat .area .toggle { position: absolute; top: 0; right: 6px; width: 3em; height: 3em; text-align: center; line-height: 3em; opacity: 0; }
@@ -74,8 +74,10 @@
 #dashboard .main .area { margin-left: 12em; height: 100%; position: relative; overflow-y: scroll; padding: 0; }
 #dashboard .main .area .content { padding: 1em; }
 
+#dashboard .main h1 { margin-bottom: 0.5em; }
+
 #dashboard .main .task p { margin: 0; }
-#dashboard .main section { padding: 1em; margin: 1em 0; }
+#dashboard .main section { padding: 1em; margin: 0 0 1em; }
 #dashboard .main section.description { margin-right: 13em; }
 #dashboard .main section.tags { float: right; margin-left: 1em; width: 12em; padding: 0; }
 #dashboard .main section.tags ul { margin: 0; padding: 0; }

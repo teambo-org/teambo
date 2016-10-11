@@ -1,11 +1,25 @@
 <div class="nav hi-05">
     <div class="section team hi-10">
-        <a href="#/account">
-            <div class="img"><i class="icon-user-1"></i></div>
-            <div class="name">{{acct.email}}</div>
+        <a href="#/{{team.id}}">
+            <div class="img"><i class="icon-users"></i></div>
+            <div class="name">{{team.opts.name}}</div>
         </a>
     </div>
     <div class="section contacts scrollable">
+        <a href="#/{{team.id}}/members">
+            <div class="name">Members</div>
+        </a>
+        <a href="#/{{team.id}}/edit">
+            <div class="name">Settings</div>
+        </a>
+    </div>
+    <!--
+    <div class="section contacts scrollable">
+        <a>
+            <i class="icon-phone-1"></i>
+            <div class="img"><i class="icon-user-1"></i></div>
+            <div class="name">Members</div>
+        </a>
         <a>
             <i class="icon-phone-1"></i>
             <div class="img"><i class="icon-user-1"></i></div>
@@ -42,6 +56,7 @@
             <div class="name">Kev</div>
         </a>
     </div>
+    -->
     <div id="status"></div>
 </div>
 <div class="area scrollable">
