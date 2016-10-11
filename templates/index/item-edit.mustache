@@ -6,11 +6,10 @@
         <span>Edit</span>
     </nav>
     <h1>Edit Item</h1>
-    <form id="item-edit" name="item_edit" method="POST" class="std ext" data-bucket_id="{{bucket_id}}" data-item_id="{{item.id}}">
+    <form id="item-edit" name="item_edit" method="POST" class="std" data-bucket_id="{{bucket_id}}" data-item_id="{{item.id}}">
         {{>index/_item-form}}
         <div class="field submit">
             <input type="submit" class="submit" value="Save Changes" />
-            <br/>
             <a class="cancel" href="#/{{team.id}}/{{bucket.id}}/{{item.id}}">cancel</a>
         </div>
         <div class="error"></div>

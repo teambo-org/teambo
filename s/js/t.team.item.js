@@ -1,6 +1,29 @@
 Teambo.team.item = (function(t){
     "use strict";
 
+    var statuses = {
+        ready : {
+            label: 'Ready',
+            icon: 'check-empty'
+        },
+        blocked : {
+            label: 'Blocked',
+            icon: 'attention'
+        },
+        inprogress : {
+            label: 'In Progress',
+            icon: 'child'
+        },
+        qa: {
+            label: 'Under QA',
+            icon: 'sliders'
+        },
+        complete : {
+            label: 'Complete',
+            icon: 'ok-squared'
+        }
+    };
+
     var item = function(data) {
         var self = this;
         t.extend(this, {
@@ -48,8 +71,13 @@ Teambo.team.item = (function(t){
                 bucket_id: self.bucket_id,
                 opts:      self.opts
             });
-        }
+        };
+        this.status = function() {
+            return statuses[self.opts.status];
+        };
     };
+
+    item.statuses = statuses;
 
     item.create = function(bucket_id, opts) {
         return t.promise(function(fulfill, reject) {

@@ -7,7 +7,9 @@
     form.addEventListener("submit", function(e) {
         form.disable();
         var data = {
-            name: form.name.value
+            name: form.name.value,
+            description: form.description.value,
+            status: form.status.value
         };
         t.team.item.create(bucket_id, data).then(function(item){
             document.getElementById('right').innerHTML = t.view.render('dashboard/right');
@@ -17,5 +19,11 @@
             form.error.msg("Item could not be created", "Please try again");
         });
     });
+    var html = '';
+    for(var status in t.team.item.statuses) {
+        var opt = t.team.item.statuses[status];
+        html +=  "<option value='"+status+"'>"+opt.label+"</option>";
+    }
+    form.status.innerHTML = html + form.status.innerHTML;
 
 })(Teambo);

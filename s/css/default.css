@@ -77,8 +77,10 @@ form.std .field label { display: block; line-height: 1.2em; padding-bottom: 0.25
 form.std input.text,
 form.std select.text,
 form.std textarea.text { border: none; padding: 0.4em 0.5em; width: 20em; font-size: 1em; line-height: 1.2em; box-sizing: content-box; }
-form.std input.large { width: 24em; }
-form.std textarea.large { width: 28em; height: 8em; }
+form.std input.large,
+form.std textarea.large,
+form.std select.large { width: 24em; }
+form.std textarea.large { height: 8em; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; opacity: 0.5; }
 form.std a.cancel:hover { opacity: 1; }

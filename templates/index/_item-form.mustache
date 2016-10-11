@@ -1,3 +1,12 @@
 <div class="field">
-    <input type="text" class="text large required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{item.opts.name}}" />
+    <label for="item_name">Item Name</label>
+    <input id="item_name"type="text" class="text large required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{item.opts.name}}" />
+</div>
+<div class="field">
+    <label for="item_description">Description</label>
+    <textarea id="item_description" class="text large" name="description">{{item.opts.description}}</textarea>
+</div>
+<div class="field">
+    <label for="team_status">Status</label>
+    <select id="team_status" name="status" class="text large"></select>
 </div>

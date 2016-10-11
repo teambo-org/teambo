@@ -21,9 +21,13 @@
             </li>
             <li class="state section">
                 <a>
+                {{#item.status}}
+                <!--
                     <i class="icon-down-open-1 nav"></i>
-                    <div class="img"><i class="icon-check-empty"></i></div>
-                    <div class="name">Ready</div>
+                -->
+                    <div class="img"><i class="icon-{{icon}}"></i></div>
+                    <div class="name">{{label}}</div>
+                {{/item.status}}
                 </a>
             </li>
             <li class="user section">
