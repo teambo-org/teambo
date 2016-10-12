@@ -11,13 +11,18 @@
     {{#team.bucket_list}}
     <div class="section">
         <i class="icon-minus nav"></i>
-        <a href="#/{{team.id}}/{{id}}">
+        <div class="totals">
+            {{item_ids.length}}
+        </div>
+        <a href="#/{{team.id}}/{{id}}" class="hi-10">
             <div class="img"><i class="icon-flag-filled"></i></div>
             <div class="name">{{opts.name}}</div>
         </a>
         <ul class="tasks">
         {{#item_list}}
-            <li><a href="#/{{team.id}}/{{bucket_id}}/{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a></li>
+            <li class="item-{{opts.status}}">
+                <a href="#/{{team.id}}/{{bucket_id}}/{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
+            </li>
         {{/item_list}}
         </ul>
     </div>

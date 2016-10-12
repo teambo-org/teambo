@@ -17,7 +17,11 @@
 #dashboard .section { clear: both; }
 #dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
 #dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; overflow: hidden; }
-#dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; }
+#dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; display: none; }
+#dashboard .section div.totals { float: right; opacity: 0.5; font-size: 0.7em; line-height: 2.9em; padding: 0 1em; text-align: center; }
+#dashboard .section div.totals .sep { opacity: 0.5; }
+#dashboard .section:hover i.nav { display: block; }
+#dashboard .section:hover div.totals { display: none; }
 #dashboard .section > a { display: block; }
 
 #dashboard .chat:before { content: ""; position: absolute; left: -2em; top: 0; right: 0; height: 200%; }
@@ -62,6 +66,7 @@
 #dashboard .right ul.tasks li { list-style: none; padding: 0.2em 0.6em; position: relative; padding-left: 2.2em; line-height: 1.1em; }
 #dashboard .right ul.tasks li i { position: absolute; top: 0.2em; left: 0.6em; }
 #dashboard .right ul.tasks li.active {  }
+#dashboard .right ul.tasks li.item-complete { display: none; }
 
 #dashboard .right .account { height: 2em; }
 #dashboard .right .account a { display: block; }
@@ -114,9 +119,9 @@
 #dashboard .main ul.buckets li { list-style: none; }
 #dashboard .main ul.buckets li span.name { }
 #dashboard .main ul.buckets li a { display: block; padding: 0.5em; text-decoration: none; font-size: 1.2em; }
-#dashboard .main ul.buckets li .info { padding: 0.5em 2.3em; font-size: 0.75em; opacity: 0.7; }
+#dashboard .main ul.buckets li .info { padding: 0.25em 2.3em 0; font-size: 0.75em; opacity: 0.7; }
 #dashboard .main ul.items li { list-style: none; }
-#dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; font-size: 1.2em; }
+#dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; }
 
 #dashboard .main .dash ul.buckets ul.tasks li { list-style: none; }
 #dashboard .main nav { float: right; margin-top: 0.5em; }
