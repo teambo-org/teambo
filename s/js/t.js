@@ -28,7 +28,7 @@ var Teambo = (function(t){
     };
 
     t.updateReady = function(ready) {
-        if(typeof ready !== 'undefined') {
+        if(typeof ready === 'boolean') {
             updateready = ready;
         }
         return updateready;
@@ -259,7 +259,7 @@ var Teambo = (function(t){
     };
 
     t.online = function(status) {
-        if(typeof status === 'boolean' && online != status) {
+        if(typeof status === 'boolean') {
             online = status;
             t.updateStatus();
         }
@@ -273,10 +273,10 @@ var Teambo = (function(t){
     };
 
     t.updateStatus = function() {
-        var status = document.getElementById('status');
-        if (status) {
-            status.className = online ? 'online' : 'offline';
-            status.innerHTML = online ? 'online' : 'offline';
+        var el = document.getElementById('status');
+        if (el) {
+            el.className = online ? 'online' : 'offline';
+            el.innerHTML = online ? (updateready ? 'update ready' : 'online') : 'offline';
         }
     };
 

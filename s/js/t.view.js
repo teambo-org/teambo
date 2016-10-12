@@ -35,7 +35,7 @@ Teambo.view = (function(t){
         r = r.replace(new RegExp("(^|\\n| )(("+domainRegEx+"|"+ipRegEx+")(\\:[0-9]+)?"+pathRegEx+")([^\\w]{1})", "ig"),                              "$1<a target=\"_blank\" rel=\"nofollow\" href=\"http:&#x2F;&#x2F;$2\">$2</a>"+chr+"$1");
         return r.slice(1,-1);
     };
-    
+
     var update_theme = function(theme) {
         var data = {};
         if(theme) {
@@ -65,14 +65,15 @@ Teambo.view = (function(t){
 
             if(window.applicationCache.status !== 0) {
                 window.applicationCache.addEventListener('updateready', function(e) {
-                    if(window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                        if(!t.moved()) {
+                    if(window.applicationCache.status === window.applicationCache.UPDATEREADY
+                    || window.applicationCache.status === window.applicationCache.CHECKING) {
+                        if(!t.moved() && !t.editing()) {
                             window.location.reload();
                         } else {
                             t.updateReady(true);
                         }
-                        t.online(true);
                     }
+                    t.online(true);
                 }, false);
                 window.applicationCache.addEventListener('noupdate', function(e) {
                     t.online(true);
