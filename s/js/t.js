@@ -347,33 +347,44 @@ var Teambo = (function(t){
 })(Teambo || {});
 
 document.addEventListener("keydown", function(e) {
+    if(['SELECT', 'TEXTAREA', 'INPUT'].indexOf(e.target.nodeName) >= 0 && e.key != "Escape") {
+        return;
+    }
     if(e.key == "ArrowDown" || e.key == "ArrowRight") {
-        if(['SELECT', 'TEXTAREA', 'INPUT'].indexOf(e.target.nodeName) !== false) {
-            return;
-        }
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
         for(var i in targets) {
             if(targets[i] === e.target) {
                 i = parseInt(i);
-                var new_i = i+1 < targets.length ? i+1 : 0;
-                targets[new_i].focus();
-                return;
+                for(var j = 0; j < targets.length; j++) {
+                    var new_i = i+j+1 < targets.length ? i+j+1 : 0;
+                    if(targets[new_i].offsetParent === null || targets[new_i].classList.contains('skip-nav')) {
+                        continue;
+                    }
+                    targets[new_i].focus();
+                    return;
+                }
             }
         }
         targets[0].focus();
     } else if (e.key == "ArrowUp" || e.key == "ArrowLeft") {
-        if(['SELECT', 'TEXTAREA', 'INPUT'].indexOf(e.target.nodeName) !== false) {
-            return;
-        }
         var targets = document.querySelectorAll('a[href], input, button, select, textarea');
         for(var i in targets) {
             if(targets[i] === e.target) {
                 i = parseInt(i);
-                var new_i = i-1 >= 0 ? i-1 : targets.length - 1;
-                targets[new_i].focus();
-                return;
+                for(var j = 0; j < targets.length; j++) {
+                    var new_i = i-j-1 >= 0 ? i-j-1 : targets.length - i - j - 1;
+                    if(targets[new_i].offsetParent === null || targets[new_i].classList.contains('skip-nav')) {
+                        continue;
+                    }
+                    targets[new_i].focus();
+                    return;
+                }
             }
         }
         targets[0].focus();
+    }
+    var keybind = document.querySelectorAll('a[data-keybind~='+e.key.toLowerCase()+']');
+    if(keybind.length) {
+        keybind[0].click();
     }
 }, false);
