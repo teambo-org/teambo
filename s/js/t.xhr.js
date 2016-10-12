@@ -13,9 +13,9 @@ Teambo.xhr = (function(t){
             x.onreadystatechange = function(){
                 if(x.readyState > 3) {
                     if(x.status === 0) {
-                        t.online(true);
-                    } else {
                         t.online(false);
+                    } else {
+                        t.online(true);
                     }
                     x.status > 0 ? fulfill(x) : reject(x);
                 }
