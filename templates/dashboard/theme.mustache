@@ -5,7 +5,8 @@
 #dashboard .right .scrollable::-webkit-scrollbar-thumb { background: rgba({{right.hi}}, 0.2); }
 #dashboard .right ::-moz-selection { background: rgba({{right.hi}}, 0.2); }
 #dashboard .right ::selection { background: rgba({{right.hi}}, 0.2); }
-#dashboard .right a { color: rgba({{right.color}}, 0.7); }
+#dashboard .right a { color: rgba({{right.color}}, 0.9); }
+#dashboard .right ul a { color: rgba({{right.color}}, 0.8); }
 #dashboard .right a:hover,
 #dashboard .right .active a { color: rgba({{right.color}}, 0.9); }
 #dashboard .right .hi-05 { background: rgba({{right.hi}}, 0.05); }
@@ -13,7 +14,6 @@
 #dashboard .right .hi-20 { background: rgba({{right.hi}}, 0.20); }
 
 #dashboard .right .section .img { background: rgba({{right.hi}},0.1); }
-#dashboard .right .section > a { display: block; background: rgba({{right.hi}},0.05); }
 
 #dashboard .right.bg { background: rgba({{right.bg}},1); }
 
@@ -22,7 +22,7 @@
 #dashboard .main .scrollable::-webkit-scrollbar-thumb { background: rgba({{main.hi}}, 0.15); }
 #dashboard .main ::-moz-selection { background: rgba({{main.hi}}, 0.2); }
 #dashboard .main ::selection { background: rgba({{main.hi}}, 0.2); }
-#dashboard .main a { color: rgba({{main.color}}, 0.7); }
+#dashboard .main a { color: rgba({{main.color}}, 0.8); }
 #dashboard .main a:hover,
 #dashboard .main .active a { color: rgba({{main.color}}, 0.9); }
 #dashboard .main h1 { color: rgba({{main.color}},0.9); }
@@ -35,7 +35,7 @@
 #dashboard .main section.tags ul li.milestone > a { background: rgba({{main.hi}}, 0.1); }
 #dashboard .main .comments form.std textarea.text { background: rgba({{main.hi}}, 0.1); color: rgba({{main.color}}, 0.7); }
 #dashboard .main form.ext.std,
-#dashboard .main form.std { background: rgba({{main.hi}}, 0.1); }
+#dashboard .main form.std { background: rgba({{main.hi}}, 0.15); box-shadow: 0 0 1em rgba({{main.hi}},0.1); }
 #dashboard .main form.std input.text,
 #dashboard .main form.std select.text,
 #dashboard .main form.std textarea.text { background: rgba({{main.bg}}, 1); color: rgba({{main.color}}, 1); }
@@ -45,6 +45,7 @@
 #dashboard .main .section .img { background: rgba({{main.hi}},0.1); }
 #dashboard .main .section > a { display: block; background: rgba({{main.hi}},0.05); }
 #dashboard .main .nav #status.offline { background: rgba({{main.hi}}, 1); color: rgba({{main.bg}}, 1); }
+#dashboard .main .nav #status.update { background: rgba({{main.hi}}, 0.5); color: rgba({{main.bg}}, 1); }
 
 #dashboard .main ul.buckets li a:hover { background: rgba({{main.hi}}, 0.1); }
 #dashboard .main ul.items li a:hover { background: rgba({{main.hi}}, 0.1); }
@@ -73,6 +74,7 @@
 #dashboard .chat .hi-10 { background: rgba({{chat.hi}}, 0.10); }
 #dashboard .chat .hi-20 { background: rgba({{chat.hi}}, 0.20); }
 #dashboard .chat .c-70 { color: rgba({{chat.color}}, 0.70); }
+#dashboard .chat form.std { background: rgba({{chat.hi}}, 0.15); box-shadow: 0 0 1em rgba({{chat.hi}},0.1); }
 
 #dashboard .chat.bg { background: rgba({{chat.bg}},1); }
 

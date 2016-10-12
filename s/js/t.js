@@ -11,6 +11,7 @@ var Teambo = (function(t){
         after_auth  = null,
         template_js = {},
         testing     = false,
+        editing     = false,
         nav_queue   = [];
 
     t.salt = null;
@@ -36,6 +37,13 @@ var Teambo = (function(t){
 
     t.moved = function() {
         return moved;
+    };
+
+    t.editing = function(v) {
+        if(typeof v === 'boolean') {
+            editing = v;
+        }
+        return editing;
     };
 
     var hashChange = function(hash, data){
@@ -87,17 +95,19 @@ var Teambo = (function(t){
                 var tar = document.getElementById(target);
                 tar.innerHTML = t.view.render(route.tpl, data);
                 run_template_js(tar);
-                if(tar.firstChild.classList.contains('require-auth') && !t.acct.isAuthed()) {
-                    t.gotoUrl('/login');
-                }
-                if(tar.firstChild.classList.contains('require-no-auth') && t.acct.isAuthed()) {
-                    t.gotoUrl('/account');
-                }
-                if(tar.firstChild.classList.contains('require-team') && !t.view.isset('team')) {
-                    t.gotoUrl('/account');
-                }
-                if(tar.firstChild.classList.contains('require-bucket') && t.view.get('team').buckets.indexOf(data.bucket_id) < 0) {
-                    t.gotoUrl('/dashboard');
+                if(tar.firstChild) {
+                    if(tar.firstChild.classList.contains('require-auth') && !t.acct.isAuthed()) {
+                        t.gotoUrl('/login');
+                    }
+                    if(tar.firstChild.classList.contains('require-no-auth') && t.acct.isAuthed()) {
+                        t.gotoUrl('/account');
+                    }
+                    if(tar.firstChild.classList.contains('require-team') && !t.view.isset('team')) {
+                        t.gotoUrl('/account');
+                    }
+                    if(tar.firstChild.classList.contains('require-bucket') && t.view.get('team').buckets.indexOf(data.bucket_id) < 0) {
+                        t.gotoUrl('/dashboard');
+                    }
                 }
                 if(loaded) {
                     tar.scrollTop = 0;

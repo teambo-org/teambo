@@ -1,6 +1,8 @@
 (function(t){
     "use strict";
 
+    t.editing(true);
+
     var form = new t.form(document.team_new);
     form.name.focus();
     form.addEventListener("submit", function(e) {

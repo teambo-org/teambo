@@ -14,5 +14,6 @@
             form.error.msg("Item could not be removed.", "Please try again");
         });
     });
+    document.getElementById('delete_submit').focus();
 
 })(Teambo);

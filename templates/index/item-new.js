@@ -1,6 +1,8 @@
 (function(t){
     "use strict";
-    
+
+    t.editing(true);
+
     var form = new t.form(document.item_new),
         bucket_id = form.dataset.bucket_id;
     form.name.focus();

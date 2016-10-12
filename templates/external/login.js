@@ -1,11 +1,13 @@
 (function(t){
     "use strict";
-    
+
+    t.editing(true);
+
     var form = new t.form(document.auth),
         vkey = form.getAttribute("data-vkey"),
         email,
         pass;
-    
+
     var form_submit_login = function(email, pass) {
         var password_reset = function() {
             form.enable();
@@ -40,7 +42,7 @@
             }
         });
     };
-    
+
     var form_submit_verification = function(email, pass) {
         t.acct.verification.confirm(vkey, email, pass).then(function(xhr) {
             t.gotoUrl('/account');
@@ -55,7 +57,7 @@
             }
         });
     };
-    
+
     var form_init = function(form_submit_fn) {
         form.style.display = 'block';
         form.addEventListener('submit', function(e){
@@ -70,7 +72,7 @@
         form.email.oninput = form.error.hide;
         form.pass.oninput  = form.error.hide;
     }
-    
+
     if(vkey != '') {
         t.acct.verification.confirm(vkey).then(function(xhr) {
             t.gotoUrl('/account');
@@ -82,9 +84,9 @@
     } else {
         form_init(form_submit_login);
     }
-    
+
     if(t.acct.isAuthed()) {
         t.gotoUrl('/account');
     }
-    
+
 })(Teambo);

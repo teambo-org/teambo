@@ -1,6 +1,8 @@
 (function(t){
     "use strict";
 
+    t.editing(true);
+
     var form = new t.form(document.verification),
         reset = form.getAttribute('data-reset');
 

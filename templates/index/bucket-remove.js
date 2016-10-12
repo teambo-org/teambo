@@ -13,5 +13,6 @@
             form.error.msg("Bucket could not be removed.", "Please try again");
         });
     });
+    document.getElementById('delete_submit').focus();
 
 })(Teambo);

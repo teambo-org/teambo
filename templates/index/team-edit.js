@@ -1,6 +1,8 @@
 (function(t){
     "use strict";
 
+    t.editing(true);
+
     var form = new t.form(document.team_edit),
         team_id = form.dataset.team_id;
     form.name.focus();
