@@ -63,8 +63,9 @@
 #dashboard.chat-collapsed .chat .area .toggle { display: none; }
 
 #dashboard .right ul.tasks { font-size: 0.8em; margin: 0; padding: 0.6em 0; }
-#dashboard .right ul.tasks li { list-style: none; padding: 0.2em 0.6em; position: relative; padding-left: 2.2em; line-height: 1.1em; }
-#dashboard .right ul.tasks li i { position: absolute; top: 0.2em; left: 0.6em; }
+#dashboard .right ul.tasks li { list-style: none; padding: 0; line-height: 1.1em; }
+#dashboard .right ul.tasks li i { position: absolute; top: 0.25em; left: 0.4em; }
+#dashboard .right ul.tasks li a { display: block; padding: 0.25em 0.6em 0.2em 2.0em; position: relative; }
 #dashboard .right ul.tasks li.active {  }
 #dashboard .right ul.tasks li.item-complete { display: none; }
 

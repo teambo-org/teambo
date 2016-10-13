@@ -351,17 +351,34 @@ var Teambo = (function(t){
             return a;
         }
     };
+    
+    t.isChild = function(parent, child) {
+        if(child == null) {
+            return false;
+        }
+        var p = document.getElementById(parent);
+        var node = child.parentNode;
+        while (node != null) {
+            if (node == p) {
+                return true;
+            }
+            node = node.parentNode;
+        }
+        return false;
+    };
 
     return t;
 
 })(Teambo || {});
 
 document.addEventListener("keydown", function(e) {
-    if(['SELECT', 'TEXTAREA', 'INPUT'].indexOf(e.target.nodeName) >= 0 && e.key != "Escape") {
+    if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && e.key != "Escape") {
         return;
     }
-    if(e.key == "ArrowDown" || e.key == "ArrowRight") {
-        var targets = document.querySelectorAll('a[href], input, button, select, textarea');
+    var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
+    var sections = ['left', 'main', 'right'];
+    if (["arrowdown", "s"].indexOf(key) >= 0) {
+        var targets = document.querySelectorAll('a[href], input.submit');
         for(var i in targets) {
             if(targets[i] === e.target) {
                 i = parseInt(i);
@@ -376,8 +393,8 @@ document.addEventListener("keydown", function(e) {
             }
         }
         targets[0].focus();
-    } else if (e.key == "ArrowUp" || e.key == "ArrowLeft") {
-        var targets = document.querySelectorAll('a[href], input, button, select, textarea');
+    } else if (["arrowup", "w"].indexOf(key) >= 0) {
+        var targets = document.querySelectorAll('a[href], input.submit');
         for(var i in targets) {
             if(targets[i] === e.target) {
                 i = parseInt(i);
@@ -393,7 +410,10 @@ document.addEventListener("keydown", function(e) {
         }
         targets[0].focus();
     }
-    var keybind = document.querySelectorAll('a[data-keybind~='+e.key.toLowerCase()+']');
+    if(key === "spacebar" && document.activeElement !== null) {
+        document.activeElement.click();
+    }
+    var keybind = document.querySelectorAll('a[data-keybind~='+key+']');
     if(keybind.length) {
         keybind[0].click();
     }

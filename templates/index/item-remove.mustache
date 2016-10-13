@@ -2,16 +2,16 @@
     <nav class="breadcrumbs">
         <a href="#/{{team.id}}">Team</a>
         <a href="#/{{team.id}}/{{bucket.id}}">Bucket</a>
-        <a href="#/{{team.id}}/{{bucket.id}}/{{item.id}}" data-keybind="b escape">Item</a>
-        <span>Delete</span>
+        <a href="#/{{team.id}}/{{bucket.id}}/{{item.id}}" data-keybind="q escape">Item</a>
+        <span>Remove</span>
     </nav>
     <h1>{{#item.status}}<i class="icon-{{icon}}"></i>{{/item.status}} {{item.opts.name}}</h1>
     <form id="item-remove" name="item_remove" method="POST" class="std ext">
         <input type="hidden" class="hidden" name="item_id" value="{{item.id}}"/>
         <input type="hidden" class="hidden" name="bucket_id" value="{{bucket.id}}"/>
-        <p>Are you sure you want to delete this item?</p>
+        <p>Are you sure you want to remove this item?</p>
         <div class="field submit">
-            <input type="submit" class="submit" id="delete_submit" value="Delete Item" />
+            <input type="submit" class="submit" id="delete_submit" value="Remove Item" />
             <br/>
             <a class="cancel" href="#/{{team.id}}/{{bucket.id}}/{{item.id}}">cancel</a>
         </div>

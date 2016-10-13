@@ -1,14 +1,15 @@
-<div class="bucket require-auth require-team">
+<div class="bucket require-auth require-team" data-tpljs="index/bucket">
     <nav>
-        <a href="#/{{team.id}}/{{bucket.id}}/remove" data-keybind="d">Delete</a>
+        <a href="#/{{team.id}}/{{bucket.id}}/remove" data-keybind="r">Remove</a>
         <a href="#/{{team.id}}/{{bucket.id}}/edit" data-keybind="e">Edit</a>
-        <a href="#/{{team.id}}/{{bucket.id}}/new" data-keybind="n">New Item</a>
+        <a href="#/{{team.id}}/{{bucket.id}}/new" data-keybind="c">Create Item</a>
     </nav>
     <nav class="breadcrumbs">
-        <a href="#/{{team.id}}" class="active" data-keybind="b escape">Team</a>
+        <a href="#/{{team.id}}" class="active" data-keybind="q escape">Team</a>
         <span class="active">Bucket</span>
     </nav>
     <h1><i class="icon-flag-filled"></i> {{bucket.opts.name}}</h1>
+    <a name="skipnav" class="skip-nav" href="#/{{team.id}}/{{bucket.id}}"></a>
     <ul class="items" id="items">
     {{#bucket.item_list}}
     <li class="item" id="item-li-{{id}}">
