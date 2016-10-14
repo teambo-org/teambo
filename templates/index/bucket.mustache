@@ -10,19 +10,34 @@
     </nav>
     <h1><i class="icon-flag-filled"></i> {{bucket.opts.name}}</h1>
     <a name="skipnav" class="skip-nav" href="#/{{team.id}}/{{bucket.id}}"></a>
-    <ul class="items" id="items">
-    {{#bucket.item_list}}
-    <li class="item" id="item-li-{{id}}">
-        <a href="#/{{team.id}}/{{bucket.id}}/{{id}}">
-            {{#status}}
-            <i class="icon-{{icon}}"></i>
-            {{/status}}
-            <span class="name">{{opts.name}}</span>
-        </a>
-    </li>
-    {{/bucket.item_list}}
+    <div class="up2"><div class="up2l">
+        <ul class="items incomplete">
+        {{#bucket.item_list_incomplete}}
+            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+                <a href="#/{{team.id}}/{{bucket.id}}/{{id}}">
+                    {{#status}}
+                    <i class="icon-{{icon}}"></i>
+                    {{/status}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+            </li>
+        {{/bucket.item_list_incomplete}}
+        </ul>
+    </div><div class="up2r">
+        <ul class="items complete">
+        {{#bucket.item_list_complete}}
+            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+                <a href="#/{{team.id}}/{{bucket.id}}/{{id}}">
+                    {{#status}}
+                    <i class="icon-{{icon}}"></i>
+                    {{/status}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+            </li>
+        {{/bucket.item_list_complete}}
+        </ul>
+    </div></div>
     {{^bucket.item_list}}
     <p>This bucket has no items.</p>
     {{/bucket.item_list}}
-    </ul>
 </div>
