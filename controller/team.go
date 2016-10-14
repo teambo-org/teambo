@@ -1,49 +1,43 @@
-package main
+package controller
 
 import (
 	"encoding/json"
 	"net/http"
 	"errors"
+	"strings"
+    "../model"
 	// "fmt"
 )
 
-func team_newId() (string) {
-	id := randStr(8)
-
-	exists, _ := team_exists(id)
-	if exists {
-		id = team_newId()
-	}
-	return id
-}
-
-func handle_team(w http.ResponseWriter, r *http.Request) {
+func Team(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	
 	id   := r.FormValue("id")
+	iv   := r.FormValue("iv")
 	mkey := r.FormValue("mkey")
 	ct   := r.FormValue("ct")
 	
-	team := Team{}
+	team := model.Team{}
 	err  := errors.New("")
 
 	if r.Method == "POST" {
 		if id == "" {
-			id = team_newId()
-			team, err = team_save(id, "new")
+			team = model.NewTeam()
+			err = team.Save()
 			if err != nil {
 				error_out(w, "Team could not be created", 500)
 				return
 			}
-			mkey = randStr(8)
-			_, err := team_member_save(id, mkey, "new")
+			member := team.NewMember()
+			err = member.Save(team.Id)
 			if err != nil {
-				team_remove(id)
+				team.Remove()
 				error_out(w, "Team member could not be saved", 500)
 				return
 			}
-		} else if len(id) > 0 && len(mkey) > 0 && len(ct) > 0 {
-			team, err = team_find(id)
+			mkey = member.Mkey
+		} else if len(id) > 0 && len(mkey) > 0 && len(ct) > 0 && len(iv) > 0 {
+			team, err = model.FindTeam(id)
 			if err != nil {
 				error_out(w, "Team could not be found", 500)
 				return
@@ -52,13 +46,17 @@ func handle_team(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Team does not exist", 404)
 				return
 			}
-			exists, err := team_member_exists(id, mkey)
+			if !strings.HasPrefix(team.Ciphertext, iv) {
+				error_out(w, "Team version does not match", 409)
+				return
+			}
+			exists, err := model.TeamMemberExists(id, mkey)
 			if err != nil || !exists {
-				// failed authentication
 				error_out(w, "Team member not found", 403)
 				return
 			}
-			team, err = team_save(id, ct)
+			team.Ciphertext = ct
+			err = team.Save()
 			if err != nil {
 				error_out(w, "Team could not be saved", 500)
 				return
@@ -68,19 +66,17 @@ func handle_team(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		team, err = team_find(id)
+		team, err = model.FindTeam(id)
 		if err != nil {
 			error_out(w, "Team could not be found", 500)
 			return
 		}
 		if team.Id != id {
-			// failed authentication
 			error_out(w, "Team does not exist", 404)
 			return
 		}
-		exists, err := team_member_exists(id, mkey)
+		exists, err := model.TeamMemberExists(id, mkey)
 		if err != nil || !exists {
-			// failed authentication
 			error_out(w, "Team member not found", 403)
 			return
 		}

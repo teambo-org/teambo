@@ -4,6 +4,7 @@ Teambo.team = (function(t){
     var team = function(data, mkey, key) {
         var self = this;
         if(typeof data == 'string') {
+            this.ct = data;
             data = t.crypto.decrypt(data, key);
         }
         t.extend(this, {
@@ -18,14 +19,17 @@ Teambo.team = (function(t){
                     return Promise.reject('No mkey');
                 }
                 return t.promise(function(fulfill, reject) {
+                    var new_ct = self.encrypted();
                     t.xhr.post('/team', {
                         data: {
                             id:   self.id,
+                            iv:   self.ct ? self.ct.split(' ')[0] : 'new',
                             mkey: mkey,
-                            ct:   self.encrypted()
+                            ct:   new_ct
                         }
                     }).then(function(xhr){
                         if(xhr.status == 200) {
+                            self.ct = new_ct;
                             self.cache();
                             fulfill(xhr);
                         } else {
@@ -48,7 +52,7 @@ Teambo.team = (function(t){
             },
             cache: function() {
                 var hash = t.crypto.sha(self.id+t.salt);
-                localforage.setItem(hash, self.encrypted());
+                localforage.setItem(hash, self.ct);
             },
             encrypted: function() {
                 return self.encrypt({

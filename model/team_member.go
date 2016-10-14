@@ -1,9 +1,10 @@
-package main
+package model
 
 import (
 	"bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
+	"../util"
 	// "errors"
 )
 
@@ -12,10 +13,10 @@ type TeamMember struct {
 	Ciphertext string `json:"ct"`
 }
 
-func team_member_save(team_id string, mkey string, ct string) (item TeamMember, err error) {
+func (tm *TeamMember) Save (team_id string) (err error) {
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("member"))
-		err = b.Put([]byte(mkey), []byte(ct))
+		err = b.Put([]byte(tm.Mkey), []byte(tm.Ciphertext))
 		if err != nil {
 			return err
 		}
@@ -23,13 +24,41 @@ func team_member_save(team_id string, mkey string, ct string) (item TeamMember, 
 	})
 	if err != nil {
 		fmt.Println(err)
-		return item, err
+		return err
 	}
-	item = TeamMember{mkey, ct}
-	return item, nil
+	return nil
 }
 
-func team_member_find(team_id string, mkey string) (item TeamMember, err error) {
+func (tm *TeamMember) Remove (team_id string) (err error) {
+	db_team_update(team_id, func(tx *bolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists([]byte("member"))
+		err = b.Delete([]byte(tm.Mkey))
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
+}
+
+func NewTeamMember (team_id string) TeamMember {
+	mkey := util.RandStr(8)
+	for {
+		exists, _ := TeamMemberExists(team_id, mkey)
+		if exists {
+			mkey = util.RandStr(8)
+		} else {
+			break;
+		}
+	}
+	return TeamMember{mkey, "new"}
+}
+
+func FindTeamMember (team_id string, mkey string) (item TeamMember, err error) {
 	ct := ""
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("member"))
@@ -54,7 +83,7 @@ func team_member_find(team_id string, mkey string) (item TeamMember, err error) 
 	return item, nil
 }
 
-func team_member_exists(team_id string, mkey string) (exists bool, err error) {
+func TeamMemberExists (team_id string, mkey string) (exists bool, err error) {
 	exists = false
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, _ := tx.CreateBucketIfNotExists([]byte("member"))
@@ -71,20 +100,4 @@ func team_member_exists(team_id string, mkey string) (exists bool, err error) {
 		return false, err
 	}
 	return exists, nil
-}
-
-func team_member_remove(team_id string, mkey string) (err error) {
-	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("member"))
-		err = b.Delete([]byte(mkey))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	return nil
 }

@@ -1,22 +1,14 @@
-package main
+package controller
 
 import (
 	"encoding/json"
 	"net/http"
 	"errors"
+	"../model"
+	// "log"
 )
 
-func team_item_newId(team_id string, bucket_id string) (string) {
-	id := randStr(8)
-
-	exists, _ := team_item_exists(team_id, bucket_id, id)
-	if exists {
-		id = team_item_newId(team_id, bucket_id)
-	}
-	return id
-}
-
-func handle_team_item(w http.ResponseWriter, r *http.Request) {
+func TeamItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	
 	team_id   := r.FormValue("team_id")
@@ -25,10 +17,10 @@ func handle_team_item(w http.ResponseWriter, r *http.Request) {
 	id        := r.FormValue("id")
 	ct        := r.FormValue("ct")
 	
-	item := TeamItem{}
+	item := model.TeamItem{}
 	err  := errors.New("")
 	
-	team, err := team_find(team_id)
+	team, err := model.FindTeam(team_id)
 	if err != nil {
 		error_out(w, "Team could not be found", 500)
 		return
@@ -38,14 +30,14 @@ func handle_team_item(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	exists, err := team_member_exists(team_id, mkey)
+	exists, err := model.TeamMemberExists(team_id, mkey)
 	if err != nil || !exists {
 		// failed authentication
 		error_out(w, "Team member not found", 403)
 		return
 	}
 	
-	bucket, err := team_bucket_find(team_id, bucket_id)
+	bucket, err := model.FindTeamBucket(team_id, bucket_id)
 	if err != nil {
 		error_out(w, "Bucket could not be found", 500)
 		return
@@ -57,14 +49,14 @@ func handle_team_item(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		if id == "" {
-			id = team_item_newId(team_id, bucket_id)
-			item, err = team_item_save(team_id, bucket_id, id, "new")
+			item = model.NewTeamItem(team_id, bucket_id)
+			err = item.Save(team_id)
 			if err != nil {
 				error_out(w, "Item could not be created", 500)
 				return
 			}
 		} else if len(id) > 0 && len(ct) > 0 {
-			item, err = team_item_find(team_id, bucket_id, id)
+			item, err = model.FindTeamItem(team_id, bucket_id, id)
 			if err != nil {
 				error_out(w, "Item could not be found", 500)
 				return
@@ -73,7 +65,8 @@ func handle_team_item(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Item does not exist", 404)
 				return
 			}
-			item, err = team_item_save(team_id, bucket_id, id, ct)
+			item.Ciphertext = ct
+			err = item.Save(team_id)
 			if err != nil {
 				error_out(w, "Item could not be saved", 500)
 				return
@@ -83,7 +76,7 @@ func handle_team_item(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		item, err = team_item_find(team_id, bucket_id, id)
+		item, err = model.FindTeamItem(team_id, bucket_id, id)
 		if err != nil {
 			error_out(w, "Item could not be found", 500)
 			return
@@ -98,7 +91,7 @@ func handle_team_item(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(string(res)))
 }
 
-func handle_team_item_remove(w http.ResponseWriter, r *http.Request) {
+func TeamItemRemove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	
 	team_id   := r.FormValue("team_id")
@@ -106,10 +99,10 @@ func handle_team_item_remove(w http.ResponseWriter, r *http.Request) {
 	bucket_id := r.FormValue("bucket_id")
 	item_id   := r.FormValue("item_id")
 	
-	item := TeamItem{}
+	item := model.TeamItem{}
 	err  := errors.New("")
 	
-	team, err := team_find(team_id)
+	team, err := model.FindTeam(team_id)
 	if err != nil {
 		error_out(w, "Team could not be found", 500)
 		return
@@ -119,14 +112,14 @@ func handle_team_item_remove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	exists, err := team_member_exists(team_id, mkey)
+	exists, err := model.TeamMemberExists(team_id, mkey)
 	if err != nil || !exists {
 		// failed authentication
 		error_out(w, "Team member not found", 403)
 		return
 	}
 	
-	bucket, err := team_bucket_find(team_id, bucket_id)
+	bucket, err := model.FindTeamBucket(team_id, bucket_id)
 	if err != nil {
 		error_out(w, "Bucket could not be found", 500)
 		return
@@ -138,7 +131,7 @@ func handle_team_item_remove(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		if len(item_id) > 0  {
-			item, err = team_item_find(team_id, bucket_id, item_id)
+			item, err = model.FindTeamItem(team_id, bucket_id, item_id)
 			if err != nil {
 				error_out(w, "Item could not be found", 500)
 				return
@@ -147,7 +140,7 @@ func handle_team_item_remove(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Item does not exist", 404)
 				return
 			}
-			err = team_item_remove(team_id, bucket_id, item_id)
+			err = item.Remove(team_id)
 			if err != nil {
 				error_out(w, "Item could not be removed", 500)
 				return

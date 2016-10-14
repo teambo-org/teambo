@@ -1,4 +1,4 @@
-package main
+package controller
 
 import (
 	"bitbucket.org/maxhauser/jsmin"
@@ -9,11 +9,12 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
+	"../util"
 	// "encoding/json"
 	// "fmt"
 )
 
-func handle_static(w http.ResponseWriter, r *http.Request) {
+func Static(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/.perf" {
 		return
 	}
@@ -43,7 +44,7 @@ func handle_static(w http.ResponseWriter, r *http.Request) {
 	// Serve file
 	ext := filepath.Ext(path)
 	mimetype := mime.TypeByExtension(ext)
-	if config["static.cache"] == "true" {
+	if util.Config("static.cache") == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
@@ -54,7 +55,7 @@ func handle_static(w http.ResponseWriter, r *http.Request) {
 }
 
 func compile_js(w http.ResponseWriter, r *http.Request) {
-	if config["static.cache"] == "true" {
+	if util.Config("static.cache") == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
@@ -69,7 +70,7 @@ func compile_js(w http.ResponseWriter, r *http.Request) {
 }
 
 func compile_css(w http.ResponseWriter, r *http.Request) {
-	if config["static.cache"] == "true" {
+	if util.Config("static.cache") == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}

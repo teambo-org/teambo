@@ -83,7 +83,6 @@ Teambo.team.item = (function(t){
         return t.promise(function(fulfill, reject) {
             t.xhr.post('/team/item', {
                 data: {
-                    acct_id:   t.acct.id,
                     team_id:   t.team.current.id,
                     bucket_id: bucket_id,
                     mkey:      t.team.current.mkey

@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"bytes"
@@ -14,7 +14,26 @@ type AcctVerification struct {
 	Date string `json:"date"`
 }
 
-func acct_verification_create(id string, akey string, vkey string) (item AcctVerification, err error) {
+func (av *AcctVerification) Delete () (err error) {
+	db_update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("verification"))
+		c := b.Cursor()
+
+		prefix := []byte(av.Id + av.Akey)
+		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
+			b.Delete(k)
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func CreateAcctVerification (id string, akey string, vkey string) (item AcctVerification, err error) {
 	date := time.Now().UTC().Format(time.RFC3339)
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
@@ -35,7 +54,7 @@ func acct_verification_create(id string, akey string, vkey string) (item AcctVer
 	return item, nil
 }
 
-func acct_verification_find(id string, akey string, vkey string) (item AcctVerification, err error) {
+func FindAcctVerification (id string, akey string, vkey string) (item AcctVerification, err error) {
 	item = AcctVerification{}
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
@@ -54,26 +73,7 @@ func acct_verification_find(id string, akey string, vkey string) (item AcctVerif
 	return item, nil
 }
 
-func acct_verification_delete(id string, akey string) (err error) {
-	db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("verification"))
-		c := b.Cursor()
-
-		prefix := []byte(id + akey)
-		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			b.Delete(k)
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	return nil
-}
-
-func acct_verification_count(id string) (count int, err error) {
+func CountAcctVerification (id string) (count int, err error) {
 	count = 0
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification")).Cursor()

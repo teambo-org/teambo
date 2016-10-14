@@ -6,17 +6,12 @@ import (
 	"fmt"
 	"golang.org/x/net/http2"
 	"log"
-	"github.com/boltdb/bolt"
+    "./controller"
+    "./model"
+    "./util"
 )
 
 type Response map[string]interface{}
-
-var (
-	config map[string]string
-)
-
-var config_path *string = flag.String("conf", "app.conf", "Location of config file")
-var config_version *string = flag.String("v", "12345", "Version")
 
 type StaticHandler struct{}
 
@@ -24,51 +19,44 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=0, must-revalidate")
 	switch r.URL.Path {
 	case "/":
-		handle_index(w, r)
+		controller.Index(w, r)
 	case "/acct":
-		handle_acct(w, r)
+		controller.Acct(w, r)
 	case "/acct/auth":
-		handle_acct_auth(w, r)
+		controller.AcctAuth(w, r)
 	case "/acct/verification":
-		handle_acct_verification(w, r)
+		controller.AcctVerification(w, r)
 	case "/team":
-		handle_team(w, r)
+		controller.Team(w, r)
 	case "/team/bucket":  
-		handle_team_bucket(w, r)
+		controller.TeamBucket(w, r)
 	case "/team/bucket/remove":  
-		handle_team_bucket_remove(w, r)
-	// case "/team/invite":  
-		// handle_team_invite(w, r)
+		controller.TeamBucketRemove(w, r)
 	case "/team/item":    
-		handle_team_item(w, r)
+		controller.TeamItem(w, r)
 	case "/team/item/remove":  
-		handle_team_item_remove(w, r)
-	case "/slow":
-		handle_slow(w, r)
+		controller.TeamItemRemove(w, r)
+	// case "/team/invite":  
+		// controller.team_invite(w, r)
 	case "/app.manifest":
-		handle_manifest(w, r)
+		controller.Manifest(w, r)
 	case "/init.js":
-		handle_init(w, r)
+		controller.Initjs(w, r)
 	case "/test":
-		handle_test(w, r)
-	case "/test.manifest":
-		handle_manifest(w, r)
+		controller.Test(w, r)
 	default:
-		handle_static(w, r)
+		controller.Static(w, r)
 	}
 }
 
 func main() {
-	flag.Parse()
-	config = parseConfig(*config_path)
+    var config_path *string = flag.String("conf", "app.conf", "Location of config file")
 
-	err := db_update(func(tx *bolt.Tx) error {
-		tx.CreateBucketIfNotExists([]byte("acct"))
-		tx.CreateBucketIfNotExists([]byte("verification"))
-		tx.CreateBucketIfNotExists([]byte("team"))
-		// tx.CreateBucketIfNotExists([]byte("invite"))
-		return nil
-	})
+	flag.Parse()
+
+	config := util.ParseConfig(*config_path)
+	
+	err := model.GlobalInit()
 	if err != nil {
 		log.Fatal("Could not open Bolt DB for writing")
 	}

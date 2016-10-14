@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	// "time"
@@ -14,7 +14,7 @@ type Acct struct {
 	Ciphertext string `json:"ct"`
 }
 
-func acct_create(id string, akey string, ct string) (item Acct, err error) {
+func CreateAcct (id string, akey string, ct string) (item Acct, err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
 
@@ -34,7 +34,7 @@ func acct_create(id string, akey string, ct string) (item Acct, err error) {
 	return item, nil
 }
 
-func acct_find(id string, akey string) (item Acct, err error) {
+func FindAcct (id string, akey string) (item Acct, err error) {
 	ct := ""
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
@@ -60,7 +60,7 @@ func acct_find(id string, akey string) (item Acct, err error) {
 	return item, nil
 }
 
-func acct_exists(id string) (exists bool, err error) {
+func AcctExists (id string) (exists bool, err error) {
 	exists = false
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct")).Cursor()

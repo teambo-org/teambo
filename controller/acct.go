@@ -1,12 +1,13 @@
-package main
+package controller
 
 import (
 	"encoding/json"
 	"net/http"
+    "../model"
 	// "fmt"
 )
 
-func handle_acct(w http.ResponseWriter, r *http.Request) {
+func Acct(w http.ResponseWriter, r *http.Request) {
 	id   := r.FormValue("id")
 	akey := r.FormValue("akey")
 	ct   := r.FormValue("ct")
@@ -18,13 +19,13 @@ func handle_acct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	acct, _ := acct_find(id, akey)
+	acct, _ := model.FindAcct(id, akey)
 	if acct.Id == "" {
 		error_out(w, "Account not found", 404)
 		return
 	}
 
-	acct, err := acct_create(id, akey, ct)
+	acct, err := model.CreateAcct(id, akey, ct)
 	if err != nil {
 		error_out(w, "Account could not be saved", 500)
 		return
@@ -34,7 +35,7 @@ func handle_acct(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(string(res)))
 }
 
-func handle_acct_auth(w http.ResponseWriter, r *http.Request) {
+func AcctAuth(w http.ResponseWriter, r *http.Request) {
 	id   := r.FormValue("id")
 	akey := r.FormValue("akey")
 
@@ -45,13 +46,13 @@ func handle_acct_auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	acct, err := acct_find(id, akey)
+	acct, err := model.FindAcct(id, akey)
 	if err != nil {
 		error_out(w, "Account could not be retrieved", 500)
 		return
 	}
 	if acct.Id == "" || acct.Ciphertext == "new" {
-		exists, _ := acct_exists(id)
+		exists, _ := model.AcctExists(id)
 		if exists {
 			// Check authentication failure limit
 			// Log failed authentication

@@ -1,4 +1,4 @@
-package main
+package controller
 
 import (
 	"bitbucket.org/maxhauser/jsmin"
@@ -15,8 +15,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 	"sort"
+	"../util"
 	// "fmt"
 )
 
@@ -67,7 +67,7 @@ var css = []string{
 	"/css/dashboard.css",
 }
 
-func handle_index(w http.ResponseWriter, r *http.Request) {
+func Index(w http.ResponseWriter, r *http.Request) {
 	min := r.FormValue("min")
 	t, err := template.ParseFiles("templates/layout.html")
 	if err != nil {
@@ -76,18 +76,18 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	manifest := []string{}
-	if config["app.manifest"] == "true" {
+	if util.Config("app.manifest") == "true" {
 		manifest = []string{
 			"/app.manifest",
 		}
 	}
 	p := Page{}
-	if config["static.min"] == "true" && min != "0" {
+	if util.Config("static.min") == "true" && min != "0" {
 		p = Page{
 			JS:       []string{"/min.js?v=" + js_min_version()},
 			JSINIT:   []string{},
 			CSS:      []string{"/min.css?v=" + css_min_version()},
-			DEBUG:    config["debug"] == "true",
+			DEBUG:    util.Config("debug") == "true",
 			MANIFEST: manifest,
 		}
 	} else {
@@ -95,7 +95,7 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 			JS:       hash_version(js),
 			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
 			CSS:      hash_version(css),
-			DEBUG:    config["debug"] == "true",
+			DEBUG:    util.Config("debug") == "true",
 			MANIFEST: manifest,
 		}
 	}
@@ -105,11 +105,11 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("X-Permitted-Cross-Domain-Policies", "none")
 	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' data:; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob:")
-	if config["ssl.active"] == "true" {
+	if util.Config("ssl.active") == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 	}
 
-	if config["static.cache"] == "true" {
+	if util.Config("static.cache") == "true" {
 		// w.Header().Set("X-Cache-Edge", "0")
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
@@ -121,8 +121,8 @@ func handle_index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handle_init(w http.ResponseWriter, r *http.Request) {
-	if config["static.cache"] == "true" {
+func Initjs(w http.ResponseWriter, r *http.Request) {
+	if util.Config("static.cache") == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
@@ -150,18 +150,18 @@ func append_js_init(w io.Writer) {
 	template_scripts := strings.Join(tpljs, ", ")
 	audio, _ := json.Marshal(find_audio())
 	debug := "false"
-	if config["debug"] == "true" {
+	if util.Config("debug") == "true" {
 		debug = "true"
 	}
 	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " + 
 		"'audio': " + string(audio) + ", " +
 		"'debug': " + debug
-	if config["tests.enabled"] == "true" {
+	if util.Config("tests.enabled") == "true" {
 		js_data = js_data + ", " + "'testing': true"
 	}
 	js := "Teambo.init({" + js_data + "});"
-	if config["static.min"] == "true" {
+	if util.Config("static.min") == "true" {
 		jsmin.Run(strings.NewReader(js), w)
 	} else {
 		w.Write([]byte(js))
@@ -269,15 +269,7 @@ func find_fonts() []string {
 	return images
 }
 
-func handle_slow(w http.ResponseWriter, r *http.Request) {
-	time.Sleep(time.Second * 4)
-	content := "hi"
-	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	data, _ := json.Marshal(content)
-	w.Write([]byte(string(data)))
-}
-
-func handle_manifest(w http.ResponseWriter, r *http.Request) {
+func Manifest(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("templates/app.manifest")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
@@ -285,7 +277,7 @@ func handle_manifest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	p := Page{}
-	if config["static.min"] == "true" {
+	if util.Config("static.min") == "true" {
 		p = Page{
 			JS:     []string{"/min.js?v=" + js_min_version()},
 			JSINIT: []string{},

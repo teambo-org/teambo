@@ -54,4 +54,5 @@ func main() {
 	list_buckets()
 	list_keys("bucket")
 	list_keys("member")
+	list_keys("3WCstSow")
 }
