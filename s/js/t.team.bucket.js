@@ -53,22 +53,14 @@ Teambo.team.bucket = (function(t){
             return ret;
         };
         this.item_list_incomplete = function() {
-            var ret = [];
-            for(var k in self.items) {
-                if(self.items[k].opts.status !== "complete") {
-                    ret.push(self.items[k]);
-                }
-            }
-            return ret;
+            return self.item_list().filter(function(o) {
+                return o.opts.status !== 'complete';
+            });
         };
         this.item_list_complete = function() {
-            var ret = [];
-            for(var k in self.items) {
-                if(self.items[k].opts.status === "complete") {
-                    ret.push(self.items[k]);
-                }
-            }
-            return ret;
+            return self.item_list().filter(function(o) {
+                return o.opts.status === 'complete';
+            });
         };
     };
 
