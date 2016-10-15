@@ -6,7 +6,7 @@ Teambo.xhr = (function(t){
             var x = new(window.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
             x.open(method, url, 1);
             x.timeout = 'timeout' in opts ? opts.timeout : 5000;
-            x.setRequestHeader('teambo-auth', 'asdf');
+            // x.setRequestHeader('teambo-auth', 'asdf');
             for(var i in opts.headers) {
                 x.setRequestHeader(i, opts.headers[i]);
             }

@@ -4,11 +4,13 @@ Teambo.team = (function(t){
     var team = function(data, mkey, key) {
         var self = this;
         if(typeof data == 'string') {
-            this.ct = data;
+            var iv = data.split(' ')[0];
             data = t.crypto.decrypt(data, key);
+            data.iv = data.iv ? data.iv : iv;
         }
         t.extend(this, {
             id:         data.id,
+            iv:         data.iv,
             mkey:       mkey,
             opts:       data.opts       ? data.opts       : {},
             hist:       data.hist       ? data.hist       : [],
@@ -23,13 +25,13 @@ Teambo.team = (function(t){
                     t.xhr.post('/team', {
                         data: {
                             id:   self.id,
-                            iv:   self.ct ? self.ct.split(' ')[0] : 'new',
+                            iv:   self.iv,
                             mkey: mkey,
                             ct:   new_ct
                         }
                     }).then(function(xhr){
                         if(xhr.status == 200) {
-                            self.ct = new_ct;
+                            self.iv = new_ct.split(' ')[0];
                             self.cache();
                             fulfill(xhr);
                         } else {
@@ -52,15 +54,19 @@ Teambo.team = (function(t){
             },
             cache: function() {
                 var hash = t.crypto.sha(self.id+t.salt);
-                localforage.setItem(hash, self.ct);
+                localforage.setItem(hash, self.encrypted(self.iv));
             },
-            encrypted: function() {
-                return self.encrypt({
+            encrypted: function(iv) {
+                var data = {
                     id:   self.id,
                     opts: self.opts,
                     hist: self.hist,
                     bucket_ids: self.bucket_ids
-                });
+                };
+                if(iv) {
+                    data.iv = iv;
+                }
+                return self.encrypt(data);
             },
             encrypt: function(data) {
                 return t.crypto.encrypt(data, key);
@@ -128,7 +134,8 @@ Teambo.team = (function(t){
                         key = t.crypto.randomKey(),
                         acct = t.acct.current;
                     var new_team = new team({
-                        id:   data.team.id,
+                        id: data.team.id,
+                        iv: 'new',
                         opts: {
                             name: name
                         }
