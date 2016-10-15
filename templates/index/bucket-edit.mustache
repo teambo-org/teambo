@@ -4,7 +4,7 @@
         <a href="#/{{team.id}}/{{bucket.id}}" data-keybind="q escape">Bucket</a>
         <span>Edit</span>
     </nav>
-    <h1>Edit Bucket</h1>
+    <h1><i class="icon-flag-filled"></i> {{bucket.opts.name}}</h1>
     <form id="bucket-edit" name="bucket_edit" method="POST" class="std ext" data-bucket_id="{{bucket.id}}">
         <div class="field">
             <input type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Bucket Name" value="{{bucket.opts.name}}" />
