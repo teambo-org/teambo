@@ -46,6 +46,7 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check authentication failure limit and disallow authentication
 	acct, err := model.FindAcct(id, akey)
 	if err != nil {
 		error_out(w, "Account could not be retrieved", 500)
@@ -54,7 +55,6 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 	if acct.Id == "" || acct.Ciphertext == "new" {
 		exists, _ := model.AcctExists(id)
 		if exists {
-			// Check authentication failure limit
 			// Log failed authentication
 			error_out(w, "Incorrect Password", 403)
 		} else {
