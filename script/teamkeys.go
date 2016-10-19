@@ -1,15 +1,8 @@
 package main
 
 import (
-	// "net/http"
 	"fmt"
-	// "log"
-	// "flag"
-	// "golang.org/x/net/http2"
-	// "fmt"
-	// "errors"
 	"github.com/boltdb/bolt"
-	// "bytes"
 	"flag"
 )
 

@@ -40,6 +40,8 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// controller.team_invite(w, r)
 	case "/app.manifest":
 		controller.Manifest(w, r)
+	case "/app.manifestweb":
+		controller.WebManifest(w, r)
 	case "/init.js":
 		controller.Initjs(w, r)
 	case "/test":

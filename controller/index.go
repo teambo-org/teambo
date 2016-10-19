@@ -135,6 +135,64 @@ func Initjs(w http.ResponseWriter, r *http.Request) {
 	b.WriteTo(w)
 }
 
+func Manifest(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("templates/app.manifest")
+	if err != nil {
+		res, _ := json.Marshal(map[string]string{"error": err.Error()})
+		http.Error(w, string(res), 500)
+		return
+	}
+	p := Page{}
+	if util.Config("static.min") == "true" {
+		p = Page{
+			JS:     []string{"/min.js?v=" + js_min_version()},
+			JSINIT: []string{},
+			CSS:    []string{"/min.css?v=" + css_min_version()},
+			AUDIO:  find_audio(),
+			IMAGE:  find_images(),
+			FONT:   find_fonts(),
+		}
+	} else {
+		p = Page{
+			JS:     hash_version(js),
+			JSINIT: []string{"/init.js?v=" + jsinit_version()},
+			CSS:    hash_version(css),
+			AUDIO:  find_audio(),
+			IMAGE:  find_images(),
+			FONT:   find_fonts(),
+		}
+	}
+	err = t.Execute(w, p)
+	if err != nil {
+		log.Println("TEMPLATE ERROR - " + err.Error())
+	}
+}
+
+func WebManifest(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("templates/webapp.manifest")
+	if err != nil {
+		res, _ := json.Marshal(map[string]string{"error": err.Error()})
+		http.Error(w, string(res), 500)
+		return
+	}
+	scheme := "http"
+	if util.Config("ssl.active") == "true" {
+		scheme = scheme + "s"
+	}
+	url := scheme + "://" + util.Config("app.host")
+	p := map[string]string{
+		"url": url,
+		"name": "Teambo",
+		"short_name": "Teambo",
+		"description": "What are you doing today?",
+		"icon_path": "/i/icon/teambo",
+	}
+	err = t.Execute(w, p)
+	if err != nil {
+		log.Println("TEMPLATE ERROR - " + err.Error())
+	}
+}
+
 func append_js_init(w io.Writer) {
 	content, scripts := compile_templates()
 	templates, _ := json.Marshal(content)
@@ -267,37 +325,4 @@ func find_fonts() []string {
 	}
 	filepath.Walk(dir, scan)
 	return images
-}
-
-func Manifest(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("templates/app.manifest")
-	if err != nil {
-		res, _ := json.Marshal(map[string]string{"error": err.Error()})
-		http.Error(w, string(res), 500)
-		return
-	}
-	p := Page{}
-	if util.Config("static.min") == "true" {
-		p = Page{
-			JS:     []string{"/min.js?v=" + js_min_version()},
-			JSINIT: []string{},
-			CSS:    []string{"/min.css?v=" + css_min_version()},
-			AUDIO:  find_audio(),
-			IMAGE:  find_images(),
-			FONT:   find_fonts(),
-		}
-	} else {
-		p = Page{
-			JS:     hash_version(js),
-			JSINIT: []string{"/init.js?v=" + jsinit_version()},
-			CSS:    hash_version(css),
-			AUDIO:  find_audio(),
-			IMAGE:  find_images(),
-			FONT:   find_fonts(),
-		}
-	}
-	err = t.Execute(w, p)
-	if err != nil {
-		log.Println("TEMPLATE ERROR - " + err.Error())
-	}
 }
