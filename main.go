@@ -1,14 +1,14 @@
 package main
 
 import (
-	"net/http"
+	"./controller"
+	"./model"
+	"./util"
 	"flag"
 	"fmt"
 	"golang.org/x/net/http2"
 	"log"
-    "./controller"
-    "./model"
-    "./util"
+	"net/http"
 )
 
 type Response map[string]interface{}
@@ -28,16 +28,16 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		controller.AcctVerification(w, r)
 	case "/team":
 		controller.Team(w, r)
-	case "/team/bucket":  
+	case "/team/bucket":
 		controller.TeamBucket(w, r)
-	case "/team/bucket/remove":  
+	case "/team/bucket/remove":
 		controller.TeamBucketRemove(w, r)
-	case "/team/item":    
+	case "/team/item":
 		controller.TeamItem(w, r)
-	case "/team/item/remove":  
+	case "/team/item/remove":
 		controller.TeamItemRemove(w, r)
-	// case "/team/invite":  
-		// controller.team_invite(w, r)
+	// case "/team/invite":
+	// controller.team_invite(w, r)
 	case "/app.manifest":
 		controller.Manifest(w, r)
 	case "/init.js":
@@ -50,12 +50,12 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    var config_path *string = flag.String("conf", "app.conf", "Location of config file")
+	var config_path *string = flag.String("conf", "app.conf", "Location of config file")
 
 	flag.Parse()
 
 	config := util.ParseConfig(*config_path)
-	
+
 	err := model.GlobalInit()
 	if err != nil {
 		log.Fatal("Could not open Bolt DB for writing")

@@ -2,10 +2,10 @@ package model
 
 import (
 	// "time"
+	"../util"
 	"bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"../util"
 	// "errors"
 )
 
@@ -14,7 +14,7 @@ type Team struct {
 	Ciphertext string `json:"ct"`
 }
 
-func (t Team) Save () (err error) {
+func (t Team) Save() (err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("team"))
 		err = b.Put([]byte(t.Id), []byte(t.Ciphertext))
@@ -27,7 +27,7 @@ func (t Team) Save () (err error) {
 	return nil
 }
 
-func (t Team) Remove () (err error) {
+func (t Team) Remove() (err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("team"))
 		err = b.Delete([]byte(t.Id))
@@ -40,11 +40,11 @@ func (t Team) Remove () (err error) {
 	return nil
 }
 
-func (t Team) NewMember () (member TeamMember) {
+func (t Team) NewMember() (member TeamMember) {
 	return NewTeamMember(t.Id)
 }
 
-func (t Team) NewBucket () (bucket TeamBucket) {
+func (t Team) NewBucket() (bucket TeamBucket) {
 	return NewTeamBucket(t.Id)
 }
 
@@ -55,13 +55,13 @@ func NewTeam() Team {
 		if exists {
 			id = util.RandStr(8)
 		} else {
-			break;
+			break
 		}
 	}
 	return Team{id, "new"}
 }
 
-func FindTeam (id string) (item Team, err error) {
+func FindTeam(id string) (item Team, err error) {
 	ct := ""
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("team"))
@@ -84,7 +84,7 @@ func FindTeam (id string) (item Team, err error) {
 	return item, nil
 }
 
-func TeamExists (id string) (exists bool, err error) {
+func TeamExists(id string) (exists bool, err error) {
 	exists = false
 	db_view(func(tx *bolt.Tx) error {
 		c := tx.Bucket([]byte("team")).Cursor()
@@ -102,12 +102,12 @@ func TeamExists (id string) (exists bool, err error) {
 	return exists, nil
 }
 
-func TeamSave (id string, ct string) (item Team, err error) {
+func TeamSave(id string, ct string) (item Team, err error) {
 	item = Team{id, ct}
 	return item, item.Save()
 }
 
-func TeamRemove (team_id string) (err error) {
+func TeamRemove(team_id string) (err error) {
 	team := Team{team_id, ""}
 	return team.Remove()
 }

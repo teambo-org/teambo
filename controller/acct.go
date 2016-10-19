@@ -1,16 +1,16 @@
 package controller
 
 import (
+	"../model"
 	"encoding/json"
 	"net/http"
-    "../model"
 	// "fmt"
 )
 
 func Acct(w http.ResponseWriter, r *http.Request) {
-	id   := r.FormValue("id")
+	id := r.FormValue("id")
 	akey := r.FormValue("akey")
-	ct   := r.FormValue("ct")
+	ct := r.FormValue("ct")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -36,7 +36,7 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 }
 
 func AcctAuth(w http.ResponseWriter, r *http.Request) {
-	id   := r.FormValue("id")
+	id := r.FormValue("id")
 	akey := r.FormValue("akey")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")

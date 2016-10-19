@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"../util"
 	"bitbucket.org/maxhauser/jsmin"
 	"bytes"
 	"compress/gzip"
@@ -14,9 +15,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"sort"
-	"../util"
+	"strings"
 	// "fmt"
 )
 
@@ -41,7 +41,7 @@ var js = []string{
 	"/js/lib/classList.js",
 	"/js/lib/polyfills.js",
 	//"/js/lib/micromarkdown.js",
-	"/js/lib/micromarkdown.min.js",
+	// "/js/lib/micromarkdown.min.js",
 	// "/js/lib/zxcvbn.js",
 	"/js/t.js",
 	"/js/t.xhr.js",
@@ -154,7 +154,7 @@ func append_js_init(w io.Writer) {
 		debug = "true"
 	}
 	js_data := "'templates': " + string(templates) + ", " +
-		"'template_js': { " + template_scripts + " }, " + 
+		"'template_js': { " + template_scripts + " }, " +
 		"'audio': " + string(audio) + ", " +
 		"'debug': " + debug
 	if util.Config("tests.enabled") == "true" {
@@ -225,7 +225,7 @@ func compile_templates() (map[string]string, map[string]string) {
 		return nil
 	}
 	filepath.Walk("templates", scan)
-	
+
 	return templates, template_js
 }
 

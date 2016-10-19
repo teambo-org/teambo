@@ -1,24 +1,24 @@
 package controller
 
 import (
+	"../model"
 	"encoding/json"
-	"net/http"
 	"errors"
+	"net/http"
 	"strings"
-    "../model"
 	// "fmt"
 )
 
 func Team(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	
-	id   := r.FormValue("id")
-	iv   := r.FormValue("iv")
+
+	id := r.FormValue("id")
+	iv := r.FormValue("iv")
 	mkey := r.FormValue("mkey")
-	ct   := r.FormValue("ct")
-	
+	ct := r.FormValue("ct")
+
 	team := model.Team{}
-	err  := errors.New("")
+	err := errors.New("")
 
 	if r.Method == "POST" {
 		if id == "" {

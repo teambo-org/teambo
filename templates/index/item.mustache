@@ -44,8 +44,8 @@
             </li>
         </ul>
     </section>
-    <section class="description">
-        {{#markdown}}{{item.opts.description}}{{/markdown}}
+    <section class="description" role="main">
+        {{#nl2br}}{{#linkify}}{{item.opts.description}}{{/linkify}}{{/nl2br}}
     </section>
     <section class="comments">
         <h3><a><i class="icon-comment"></i> Comments</h3>

@@ -119,6 +119,22 @@ Teambo.acct = (function (t) {
                         });
                     });
                 },
+                refresh: function(id) {
+                    return t.promise(function (fulfill, reject) {
+                        var d = t.findByProperty(self.teams, 'id', id);
+                        if (!d) {
+                            reject();
+                            return;
+                        }
+                        self.team.fetch(id, d.mkey).then(function(ct) {
+                            var fetched_team = new t.team(ct, d.mkey, d.key);
+                            fetched_team.cache();
+                            fulfill(fetched_team);
+                        }).catch(function(e) {
+                            reject(e);
+                        });
+                    });
+                },
                 fetch: function(id, mkey) {
                     return t.promise(function(fulfill, reject) {
                         t.xhr.get('/team', {

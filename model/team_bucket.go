@@ -1,10 +1,10 @@
 package model
 
 import (
+	"../util"
 	"bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"../util"
 	// "errors"
 )
 
@@ -13,7 +13,7 @@ type TeamBucket struct {
 	Ciphertext string `json:"ct"`
 }
 
-func (tb TeamBucket) Save (team_id string) (err error) {
+func (tb TeamBucket) Save(team_id string) (err error) {
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("bucket"))
 
@@ -32,7 +32,7 @@ func (tb TeamBucket) Save (team_id string) (err error) {
 	return nil
 }
 
-func (tb TeamBucket) Remove (team_id string) (err error) {
+func (tb TeamBucket) Remove(team_id string) (err error) {
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("bucket"))
 
@@ -52,20 +52,20 @@ func (tb TeamBucket) Remove (team_id string) (err error) {
 	return nil
 }
 
-func NewTeamBucket (team_id string) TeamBucket {
+func NewTeamBucket(team_id string) TeamBucket {
 	id := util.RandStr(8)
 	for {
 		exists, _ := TeamBucketExists(team_id, id)
 		if exists {
 			id = util.RandStr(8)
 		} else {
-			break;
+			break
 		}
 	}
 	return TeamBucket{id, "new"}
 }
 
-func FindTeamBucket (team_id string, id string) (item TeamBucket, err error) {
+func FindTeamBucket(team_id string, id string) (item TeamBucket, err error) {
 	ct := ""
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("bucket"))
@@ -91,7 +91,7 @@ func FindTeamBucket (team_id string, id string) (item TeamBucket, err error) {
 	return item, nil
 }
 
-func TeamBucketExists (team_id string, id string) (exists bool, err error) {
+func TeamBucketExists(team_id string, id string) (exists bool, err error) {
 	exists = false
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, _ := tx.CreateBucketIfNotExists([]byte("bucket"))

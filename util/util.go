@@ -31,12 +31,12 @@ func ParseConfig(path string) map[string]string {
 			newConfig[fields[0]] = strings.Join(fields[1:], " ")
 		}
 	}
-    config = newConfig
+	config = newConfig
 	return newConfig
 }
 
 func Config(key string) string {
-    return config[key]
+	return config[key]
 }
 
 func SendMail(recipient string, subject string, body string) error {

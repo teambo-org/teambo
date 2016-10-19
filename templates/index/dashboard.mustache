@@ -6,19 +6,18 @@
         <span>Team</span>
     </nav>
     <h1>{{team.opts.name}}</h1>
-    <a name="skipnav" class="skip-nav" href="#/{{team.id}}"></a>
+    <a name="skipnav" class="skip-nav" href="#/{{team.id}}">Menu</a>
     <ul class="buckets" id="buckets">
     {{#team.bucket_list}}
     <li class="bucket" id="bucket-li-{{id}}">
-        <a href="#/{{team.id}}/{{id}}" title="{{opts.name}}">
+        <a href="#/{{team.id}}/{{id}}">
             <i class="icon-flag-filled"></i>
             <span class="name">{{opts.name}}</span>
-            <div class="info">{{item_ids.length}} Items</div>
+            <div class="info">{{item_ids.length}} Item{{#inf}}{{item_ids.length}}{{/inf}}</div>
         </a>
     </li>
     {{/team.bucket_list}}
     {{^team.bucket_list}}
-    <p>You have no buckets.</p>
     {{/team.bucket_list}}
     </ul>
 </div>

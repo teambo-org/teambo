@@ -43,11 +43,13 @@ Teambo.team = (function(t){
                 });
             },
             update: function(opts) {
+                var orig_opts = t.clone(self.opts);
                 self.opts = t.extend(self.opts, opts);
                 return t.promise(function(fulfill, reject) {
                     self.save().then(function(xhr) {
                         fulfill(self)
                     }).catch(function(e) {
+                        self.opts = orig_opts;
                         reject(e);
                     });
                 });

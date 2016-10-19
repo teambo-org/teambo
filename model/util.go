@@ -1,8 +1,8 @@
 package model
 
 import (
+	"../util"
 	"github.com/boltdb/bolt"
-    "../util"
 )
 
 func GlobalInit() error {

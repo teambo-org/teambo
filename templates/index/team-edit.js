@@ -12,13 +12,32 @@
             name: form.name.value,
             theme: form.theme.value
         };
-        t.team.current.update(data).then(function(team){
-            document.getElementById('right').innerHTML = t.view.render('dashboard/right');
-            t.gotoUrl('/'+t.team.current.id);
-        }).catch(function(e){
-            form.enable();
-            form.error.msg("Team changes could not be saved", "Please try again");
-        });
+        var submit = function() {
+            t.team.current.update(data).then(function(team){
+                document.getElementById('main').innerHTML = t.view.render('dashboard/main');
+                t.gotoUrl('/'+t.team.current.id);
+            }).catch(function(xhr){
+                if(xhr.status === 409) {
+                    form.enable();
+                    var opts = t.team.current.opts;
+                    t.acct.current.team.refresh(t.team.current.id).then(function(new_team){
+                        for(var i in opts) {
+                            if(data[i] == opts[i]) {
+                                data[i] = new_team.opts[i];
+                            }
+                        }
+                        t.team.init(new_team.id).then(function(o){
+                            t.view.set('team', t.team.current);
+                            submit();
+                        });
+                    });
+                } else {
+                    form.enable();
+                    form.error.msg("Team changes could not be saved", "Please try again");
+                }
+            });
+        };
+        submit();
     });
 
     var html = '';

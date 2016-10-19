@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"../util"
 	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
-	"../util"
 	// "fmt"
 )
 
@@ -35,18 +35,18 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	}
 	p := Page{}
 	if util.Config("static.min") == "true" && min != "0" {
-		p = Page{	
-			JS:       []string{"/min.js?v=" + js_min_version()},
-			JSINIT:   []string{},
-			CSS:      []string{"/min.css?v=" + css_min_version()},
-			DEBUG:    util.Config("debug") == "true",
+		p = Page{
+			JS:     []string{"/min.js?v=" + js_min_version()},
+			JSINIT: []string{},
+			CSS:    []string{"/min.css?v=" + css_min_version()},
+			DEBUG:  util.Config("debug") == "true",
 		}
 	} else {
 		p = Page{
-			JS:       hash_version(tjs),
-			JSINIT:   append([]string{"/init.js?v=" + jsinit_version()}, hash_version(tests)...),
-			CSS:      hash_version(tcss),
-			DEBUG:    util.Config("debug") == "true",
+			JS:     hash_version(tjs),
+			JSINIT: append([]string{"/init.js?v=" + jsinit_version()}, hash_version(tests)...),
+			CSS:    hash_version(tcss),
+			DEBUG:  util.Config("debug") == "true",
 		}
 	}
 
@@ -64,4 +64,3 @@ func Test(w http.ResponseWriter, r *http.Request) {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
 }
-

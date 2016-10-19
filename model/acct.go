@@ -14,11 +14,11 @@ type Acct struct {
 	Ciphertext string `json:"ct"`
 }
 
-func CreateAcct (id string, akey string, ct string) (item Acct, err error) {
+func CreateAcct(id string, akey string, ct string) (item Acct, err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
 
-		err := b.Put([]byte(id + akey), []byte(ct))
+		err := b.Put([]byte(id+akey), []byte(ct))
 		if err != nil {
 			return err
 		}
@@ -34,7 +34,7 @@ func CreateAcct (id string, akey string, ct string) (item Acct, err error) {
 	return item, nil
 }
 
-func FindAcct (id string, akey string) (item Acct, err error) {
+func FindAcct(id string, akey string) (item Acct, err error) {
 	ct := ""
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
@@ -60,7 +60,7 @@ func FindAcct (id string, akey string) (item Acct, err error) {
 	return item, nil
 }
 
-func AcctExists (id string) (exists bool, err error) {
+func AcctExists(id string) (exists bool, err error) {
 	exists = false
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct")).Cursor()

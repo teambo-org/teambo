@@ -14,7 +14,7 @@ type AcctVerification struct {
 	Date string `json:"date"`
 }
 
-func (av *AcctVerification) Delete () (err error) {
+func (av *AcctVerification) Delete() (err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
 		c := b.Cursor()
@@ -33,12 +33,12 @@ func (av *AcctVerification) Delete () (err error) {
 	return nil
 }
 
-func CreateAcctVerification (id string, akey string, vkey string) (item AcctVerification, err error) {
+func CreateAcctVerification(id string, akey string, vkey string) (item AcctVerification, err error) {
 	date := time.Now().UTC().Format(time.RFC3339)
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
 
-		err := b.Put([]byte(id + akey + vkey), []byte(date))
+		err := b.Put([]byte(id+akey+vkey), []byte(date))
 		if err != nil {
 			return err
 		}
@@ -54,7 +54,7 @@ func CreateAcctVerification (id string, akey string, vkey string) (item AcctVeri
 	return item, nil
 }
 
-func FindAcctVerification (id string, akey string, vkey string) (item AcctVerification, err error) {
+func FindAcctVerification(id string, akey string, vkey string) (item AcctVerification, err error) {
 	item = AcctVerification{}
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
@@ -73,7 +73,7 @@ func FindAcctVerification (id string, akey string, vkey string) (item AcctVerifi
 	return item, nil
 }
 
-func CountAcctVerification (id string) (count int, err error) {
+func CountAcctVerification(id string) (count int, err error) {
 	count = 0
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification")).Cursor()

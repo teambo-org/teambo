@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"../util"
 	"bitbucket.org/maxhauser/jsmin"
 	"io/ioutil"
 	"mime"
@@ -9,7 +10,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
-	"../util"
 	// "encoding/json"
 	// "fmt"
 )

@@ -375,6 +375,10 @@ document.addEventListener("keydown", function(e) {
     if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && e.key != "Escape") {
         return;
     }
+    console.log(e);
+    if(e.ctrlKey || e.altKey) {
+        return;
+    }
     var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
     var sections = ['left', 'main', 'right'];
     if (["arrowdown", "s"].indexOf(key) >= 0) {
@@ -413,7 +417,7 @@ document.addEventListener("keydown", function(e) {
     if(key === "spacebar" && document.activeElement !== null) {
         document.activeElement.click();
     }
-    var keybind = document.querySelectorAll('a[data-keybind~='+key+']');
+    var keybind = document.querySelectorAll('a[data-keybind~="'+key+'"]');
     if(keybind.length) {
         keybind[0].click();
     }
