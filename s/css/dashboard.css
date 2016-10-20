@@ -120,6 +120,8 @@
 #dashboard .main .team a { display: block; }
 #dashboard .main .team a:hover .icon-down-open-1 { opacity: 0.8; background: none; }
 
+#dashboard .main p.empty { padding: 3em 0; text-align: center; }
+
 #dashboard .main ul.buckets li { list-style: none; }
 #dashboard .main ul.buckets li i { float: left; }
 #dashboard .main ul.buckets li span.name { margin-left: 1.7em; display: block; }
