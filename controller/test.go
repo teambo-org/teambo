@@ -26,6 +26,11 @@ var tests = []string{
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
+	if util.Config("tests.enabled") != "true" {
+		res, _ := json.Marshal(map[string]string{"error": "Tests not enabled"})
+		http.Error(w, string(res), 403)
+		return
+	}
 	min := r.FormValue("min")
 	t, err := template.ParseFiles("templates/layout.html")
 	if err != nil {
