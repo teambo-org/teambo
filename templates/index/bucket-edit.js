@@ -8,9 +8,7 @@
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = {
-      name: form.name.value
-    };
+    var data = form.values(['name', 'description']);
     t.bucket.update(bucket_id, data).then(function(bucket){
       document.getElementById('right').innerHTML = t.view.render('dashboard/right');
       t.gotoUrl('/'+t.team.current.id+'/'+bucket.id);

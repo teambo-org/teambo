@@ -51,6 +51,13 @@ Teambo.form = (function(t){
       },
       enable: function() {
         submit.removeAttribute('disabled');
+      },
+      values: function(vals) {
+        var data = {};
+        for(var i in vals) {
+          data[vals[i]] = form[vals[i]].value;
+        }
+        return data;
       }
     });
   };

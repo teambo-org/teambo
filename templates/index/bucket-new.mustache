@@ -4,13 +4,17 @@
         <span class="active">Create Bucket</span>
     </nav>
     <h1>Create Bucket</h1>
-    <form id="bucket-new" name="bucket_new" method="POST" class="std ext">
+    <form id="bucket-new" name="bucket_new" method="POST" class="std">
         <div class="field">
-            <input type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Bucket Name" />
+            <label for="bucket_name">Name</label>
+            <input id="bucket_name" type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Bucket Name" />
+        </div>
+        <div class="field">
+            <label for="bucket_description">Description</label>
+            <textarea id="bucket_description" class="text large" name="description"></textarea>
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Create Bucket" />
-            <br/>
             <a class="cancel" href="#/{{team.id}}">cancel</a>
         </div>
         <div class="error"></div>
