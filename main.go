@@ -15,42 +15,30 @@ type Response map[string]interface{}
 
 type StaticHandler struct{}
 
+var routes = map[string]func(http.ResponseWriter, *http.Request){
+	"/":                  controller.Index,
+	"/acct":              controller.Acct,
+	"/acct/auth":         controller.AcctAuth,
+	"/acct/verification": controller.AcctVerification,
+	"/team":              controller.Team,
+	"/buckets":           controller.Buckets,
+	"/bucket":            controller.Bucket,
+	"/bucket/remove":     controller.BucketRemove,
+	"/items":             controller.Items,
+	"/item":              controller.Item,
+	"/item/remove":       controller.ItemRemove,
+	"/app.manifest":      controller.Manifest,
+	"/app.manifestweb":   controller.WebManifest,
+	"/init.js":           controller.Initjs,
+	"/test":              controller.Test,
+}
+
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=0, must-revalidate")
-	switch r.URL.Path {
-	case "/":
-		controller.Index(w, r)
-	case "/acct":
-		controller.Acct(w, r)
-	case "/acct/auth":
-		controller.AcctAuth(w, r)
-	case "/acct/verification":
-		controller.AcctVerification(w, r)
-	case "/team":
-		controller.Team(w, r)
-	case "/buckets":
-		controller.Buckets(w, r)
-	case "/bucket":
-		controller.Bucket(w, r)
-	case "/bucket/remove":
-		controller.BucketRemove(w, r)
-	case "/item":
-		controller.Item(w, r)
-	case "/item/all":
-		controller.ItemAll(w, r)
-	case "/item/remove":
-		controller.ItemRemove(w, r)
-	// case "/team/invite":
-	// controller.team_invite(w, r)
-	case "/app.manifest":
-		controller.Manifest(w, r)
-	case "/app.manifestweb":
-		controller.WebManifest(w, r)
-	case "/init.js":
-		controller.Initjs(w, r)
-	case "/test":
-		controller.Test(w, r)
-	default:
+
+	if handle, ok := routes[r.URL.Path]; ok {
+		handle(w, r)
+	} else {
 		controller.Static(w, r)
 	}
 }
