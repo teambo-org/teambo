@@ -6,7 +6,7 @@
         form.disable();
         var item_id = form.item_id.value;
         var bucket_id = form.bucket_id.value;
-        t.team.item.remove(bucket_id, item_id).then(function(){
+        t.item.remove(item_id).then(function(){
             document.getElementById('right').innerHTML = t.view.render('dashboard/right');
             t.gotoUrl('/'+t.team.current.id+'/'+bucket_id);
         }).catch(function(e){

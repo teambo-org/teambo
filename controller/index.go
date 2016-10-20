@@ -40,8 +40,6 @@ var js = []string{
 	"/js/lib/promise-7.0.4.min.js",
 	"/js/lib/classList.js",
 	"/js/lib/polyfills.js",
-	//"/js/lib/micromarkdown.js",
-	// "/js/lib/micromarkdown.min.js",
 	// "/js/lib/zxcvbn.js",
 	"/js/t.js",
 	"/js/t.xhr.js",
@@ -54,8 +52,8 @@ var js = []string{
 	"/js/t.form.js",
 	"/js/t.chat.js",
 	"/js/t.team.js",
-	"/js/t.team.bucket.js",
-	"/js/t.team.item.js",
+	"/js/t.bucket.js",
+	"/js/t.item.js",
 }
 var jsinit = []string{
 	"/init.js",
@@ -181,11 +179,11 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 	}
 	url := scheme + "://" + util.Config("app.host")
 	p := map[string]string{
-		"url": url,
-		"name": "Teambo",
-		"short_name": "Teambo",
+		"url":         url,
+		"name":        "Teambo",
+		"short_name":  "Teambo",
 		"description": "What are you doing today?",
-		"icon_path": "/i/icon/teambo",
+		"icon_path":   "/i/icon/teambo",
 	}
 	err = t.Execute(w, p)
 	if err != nil {

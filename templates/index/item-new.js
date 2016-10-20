@@ -11,9 +11,10 @@
         var data = {
             name: form.name.value,
             description: form.description.value,
-            status: form.status.value
+            status: form.status.value,
+            bucket_id: bucket_id
         };
-        t.team.item.create(bucket_id, data).then(function(item){
+        t.item.create(data).then(function(item){
             document.getElementById('right').innerHTML = t.view.render('dashboard/right');
             t.gotoUrl('/'+t.team.current.id+'/'+bucket_id+'/'+item.id);
         }).catch(function(e){
@@ -22,8 +23,8 @@
         });
     });
     var html = '';
-    for(var status in t.team.item.statuses) {
-        var opt = t.team.item.statuses[status];
+    for(var status in t.item.statuses) {
+        var opt = t.item.statuses[status];
         html +=  "<option value='"+status+"'>"+opt.label+"</option>";
     }
     form.status.innerHTML = html + form.status.innerHTML;

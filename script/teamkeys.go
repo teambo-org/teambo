@@ -1,9 +1,9 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"flag"
 )
 
 var team_id *string = flag.String("t", "", "Team ID")
@@ -50,6 +50,7 @@ func main() {
 	fmt.Println("/var/lib/teambo/teams/" + *team_id + ".db")
 	list_buckets()
 	list_keys("bucket")
+	list_keys("item")
 	list_keys("member")
-	list_keys("3WCstSow")
+	// list_keys("xz6tg5pF")
 }

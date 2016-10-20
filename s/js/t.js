@@ -70,11 +70,11 @@ var Teambo = (function(t){
             }
             Promise.all(p).then(function(){
                 if(t.view.isset('team')) {
-                    if('bucket_id' in data && data.bucket_id in t.view.get('team').buckets) {
-                        data.bucket = t.view.get('team').buckets[data.bucket_id];
+                    if('bucket_id' in data) {
+                        data.bucket = t.bucket.get(data.bucket_id);
                     }
-                    if('item_id' in data && data.item_id in t.view.get('team').buckets[data.bucket_id].items) {
-                        data.item = t.view.get('team').buckets[data.bucket_id].items[data.item_id];
+                    if('item_id' in data) {
+                        data.item = t.item.get(data.item_id);
                     }
                 }
                 if(route.tpl.indexOf('external') !== 0 && !document.getElementById('dash-main')) {
@@ -105,7 +105,10 @@ var Teambo = (function(t){
                     if(tar.firstChild.classList.contains('require-team') && !t.view.isset('team')) {
                         t.gotoUrl('/account');
                     }
-                    if(tar.firstChild.classList.contains('require-bucket') && t.view.get('team').buckets.indexOf(data.bucket_id) < 0) {
+                    if(tar.firstChild.classList.contains('require-bucket') && data.bucket) {
+                        t.gotoUrl('/dashboard');
+                    }
+                    if(tar.firstChild.classList.contains('require-item') && data.item) {
                         t.gotoUrl('/dashboard');
                     }
                 }
@@ -375,7 +378,6 @@ document.addEventListener("keydown", function(e) {
     if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && e.key != "Escape") {
         return;
     }
-    console.log(e);
     if(e.ctrlKey || e.altKey) {
         return;
     }

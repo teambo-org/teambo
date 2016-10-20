@@ -50,7 +50,7 @@ func Team(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Team version does not match", 409)
 				return
 			}
-			exists, err := model.TeamMemberExists(id, mkey)
+			exists, err := model.MemberExists(id, mkey)
 			if err != nil || !exists {
 				error_out(w, "Team member not found", 403)
 				return
@@ -75,7 +75,7 @@ func Team(w http.ResponseWriter, r *http.Request) {
 			error_out(w, "Team does not exist", 404)
 			return
 		}
-		exists, err := model.TeamMemberExists(id, mkey)
+		exists, err := model.MemberExists(id, mkey)
 		if err != nil || !exists {
 			error_out(w, "Team member not found", 403)
 			return

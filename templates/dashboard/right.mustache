@@ -21,7 +21,7 @@
         <ul class="tasks">
         {{#item_list}}
             <li class="item-{{opts.status}}">
-                <a href="#/{{team.id}}/{{bucket_id}}/{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
+                <a href="#/{{team.id}}/{{opts.bucket_id}}/{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
             </li>
         {{/item_list}}
         </ul>

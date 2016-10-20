@@ -8,16 +8,15 @@ import (
 	// "log"
 )
 
-func TeamItem(w http.ResponseWriter, r *http.Request) {
+func Item(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	bucket_id := r.FormValue("bucket_id")
 	mkey := r.FormValue("mkey")
 	id := r.FormValue("id")
 	ct := r.FormValue("ct")
 
-	item := model.TeamItem{}
+	item := model.Item{}
 	err := errors.New("")
 
 	team, err := model.FindTeam(team_id)
@@ -30,33 +29,23 @@ func TeamItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exists, err := model.TeamMemberExists(team_id, mkey)
+	exists, err := model.MemberExists(team_id, mkey)
 	if err != nil || !exists {
 		// failed authentication
 		error_out(w, "Team member not found", 403)
 		return
 	}
 
-	bucket, err := model.FindTeamBucket(team_id, bucket_id)
-	if err != nil {
-		error_out(w, "Bucket could not be found", 500)
-		return
-	}
-	if bucket.Id != bucket_id {
-		error_out(w, "Bucket does not exist", 404)
-		return
-	}
-
 	if r.Method == "POST" {
 		if id == "" {
-			item = model.NewTeamItem(team_id, bucket_id)
+			item = model.NewItem(team_id)
 			err = item.Save(team_id)
 			if err != nil {
 				error_out(w, "Item could not be created", 500)
 				return
 			}
 		} else if len(id) > 0 && len(ct) > 0 {
-			item, err = model.FindTeamItem(team_id, bucket_id, id)
+			item, err = model.FindItem(team_id, id)
 			if err != nil {
 				error_out(w, "Item could not be found", 500)
 				return
@@ -76,7 +65,7 @@ func TeamItem(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		item, err = model.FindTeamItem(team_id, bucket_id, id)
+		item, err = model.FindItem(team_id, id)
 		if err != nil {
 			error_out(w, "Item could not be found", 500)
 			return
@@ -91,15 +80,13 @@ func TeamItem(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(string(res)))
 }
 
-func TeamItemRemove(w http.ResponseWriter, r *http.Request) {
+func ItemAll(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
 	mkey := r.FormValue("mkey")
-	bucket_id := r.FormValue("bucket_id")
-	item_id := r.FormValue("item_id")
 
-	item := model.TeamItem{}
+	items := []model.Item{}
 	err := errors.New("")
 
 	team, err := model.FindTeam(team_id)
@@ -112,26 +99,57 @@ func TeamItemRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exists, err := model.TeamMemberExists(team_id, mkey)
+	exists, err := model.MemberExists(team_id, mkey)
+	if err != nil || !exists {
+		error_out(w, "Team member not found", 403)
+		return
+	}
+
+	if r.Method == "POST" {
+		error_out(w, "Method not allowed", 405)
+		return
+	} else {
+		items, err = model.AllItems(team_id)
+		if err != nil {
+			error_out(w, "Bucket could not be found", 500)
+			return
+		}
+	}
+
+	res, _ := json.Marshal(items)
+	w.Write([]byte(string(res)))
+}
+
+func ItemRemove(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	team_id := r.FormValue("team_id")
+	mkey := r.FormValue("mkey")
+	item_id := r.FormValue("item_id")
+
+	item := model.Item{}
+	err := errors.New("")
+
+	team, err := model.FindTeam(team_id)
+	if err != nil {
+		error_out(w, "Team could not be found", 500)
+		return
+	}
+	if team.Id != team_id {
+		error_out(w, "Team does not exist", 404)
+		return
+	}
+
+	exists, err := model.MemberExists(team_id, mkey)
 	if err != nil || !exists {
 		// failed authentication
 		error_out(w, "Team member not found", 403)
 		return
 	}
 
-	bucket, err := model.FindTeamBucket(team_id, bucket_id)
-	if err != nil {
-		error_out(w, "Bucket could not be found", 500)
-		return
-	}
-	if bucket.Id != bucket_id {
-		error_out(w, "Bucket does not exist", 404)
-		return
-	}
-
 	if r.Method == "POST" {
 		if len(item_id) > 0 {
-			item, err = model.FindTeamItem(team_id, bucket_id, item_id)
+			item, err = model.FindItem(team_id, item_id)
 			if err != nil {
 				error_out(w, "Item could not be found", 500)
 				return

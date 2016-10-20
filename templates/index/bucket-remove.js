@@ -5,7 +5,7 @@
     form.addEventListener("submit", function(e) {
         form.disable();
         var id = form.id.value;
-        t.team.bucket.remove(id).then(function(){
+        t.bucket.remove(id).then(function(){
             document.getElementById('right').innerHTML = t.view.render('dashboard/right');
             t.gotoUrl('/'+t.team.current.id);
         }).catch(function(e){

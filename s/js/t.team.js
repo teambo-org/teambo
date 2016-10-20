@@ -12,10 +12,8 @@ Teambo.team = (function(t){
             id:         data.id,
             iv:         data.iv,
             mkey:       mkey,
-            opts:       data.opts       ? data.opts       : {},
-            hist:       data.hist       ? data.hist       : [],
-            bucket_ids: data.bucket_ids ? data.bucket_ids : [],
-            buckets: {},
+            opts:       data.opts ? data.opts : {},
+            hist:       data.hist ? data.hist : [],
             save: function() {
                 if(!mkey) {
                     return Promise.reject('No mkey');
@@ -62,8 +60,7 @@ Teambo.team = (function(t){
                 var data = {
                     id:   self.id,
                     opts: self.opts,
-                    hist: self.hist,
-                    bucket_ids: self.bucket_ids
+                    hist: self.hist
                 };
                 if(iv) {
                     data.iv = iv;
@@ -77,11 +74,7 @@ Teambo.team = (function(t){
                 return t.crypto.decrypt(ct, key);
             },
             bucket_list: function() {
-                var ret = [];
-                for(var k in self.buckets) {
-                    ret.push(self.buckets[k]);
-                }
-                return ret;
+                return t.bucket.all;
             },
             theme: function() {
                 if(typeof(self.opts.theme) === "object") {
@@ -102,25 +95,10 @@ Teambo.team = (function(t){
             t.acct.current.team.find(id).then(function(o){
                 team.current = o;
                 var p = [];
-                o.bucket_ids.forEach(function(bucket_id){
-                    p.push(team.bucket.find(bucket_id).then(function(bucket){
-                        team.current.buckets[bucket.id] = bucket;
-                    }));
-                });
+                p.push(t.bucket.findAll());
+                p.push(t.item.findAll());
                 Promise.all(p).then(function() {
-                    var p = [];
-                    team.current.bucket_ids.forEach(function(bucket_id){
-                        t.team.current.buckets[bucket_id].item_ids.forEach(function(item_id){
-                            p.push(team.item.find(bucket_id, item_id).then(function(item){
-                                team.current.buckets[bucket_id].items[item.id] = item;
-                            }));
-                        });
-                    });
-                    Promise.all(p).then(function() {
-                        fulfill(o);
-                    }).catch(function(e){
-                        reject(e);
-                    });
+                    fulfill(o);
                 }).catch(function(e){
                     reject(e);
                 });

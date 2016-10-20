@@ -28,14 +28,18 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		controller.AcctVerification(w, r)
 	case "/team":
 		controller.Team(w, r)
-	case "/team/bucket":
-		controller.TeamBucket(w, r)
-	case "/team/bucket/remove":
-		controller.TeamBucketRemove(w, r)
-	case "/team/item":
-		controller.TeamItem(w, r)
-	case "/team/item/remove":
-		controller.TeamItemRemove(w, r)
+	case "/bucket":
+		controller.Bucket(w, r)
+	case "/bucket/all":
+		controller.BucketAll(w, r)
+	case "/bucket/remove":
+		controller.BucketRemove(w, r)
+	case "/item":
+		controller.Item(w, r)
+	case "/item/all":
+		controller.ItemAll(w, r)
+	case "/item/remove":
+		controller.ItemRemove(w, r)
 	// case "/team/invite":
 	// controller.team_invite(w, r)
 	case "/app.manifest":

@@ -40,12 +40,16 @@ func (t Team) Remove() (err error) {
 	return nil
 }
 
-func (t Team) NewMember() (member TeamMember) {
-	return NewTeamMember(t.Id)
+func (t Team) NewMember() Member {
+	return NewMember(t.Id)
 }
 
-func (t Team) NewBucket() (bucket TeamBucket) {
-	return NewTeamBucket(t.Id)
+func (t Team) NewBucket() Bucket {
+	return NewBucket(t.Id)
+}
+
+func (t Team) NewItem() Item {
+	return NewItem(t.Id)
 }
 
 func NewTeam() Team {

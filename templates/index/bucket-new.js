@@ -8,7 +8,7 @@
     form.addEventListener("submit", function(e) {
         form.disable();
         var name = form.name.value;
-        t.team.bucket.create(name).then(function(bucket){
+        t.bucket.create(name).then(function(bucket){
             document.getElementById('right').innerHTML = t.view.render('dashboard/right');
             t.gotoUrl('/'+t.team.current.id+'/'+bucket.id);
         }).catch(function(e){
