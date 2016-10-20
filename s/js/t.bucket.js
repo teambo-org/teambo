@@ -63,6 +63,9 @@ Teambo.bucket = (function(t){
     this.item_count = function() {
       return self.item_list().length;
     };
+    this.progress = function() {
+      return (self.item_list_complete().length / self.item_list().length) * 100;
+    };
   };
 
   bucket.all = [];

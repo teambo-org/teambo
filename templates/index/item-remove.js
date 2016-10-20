@@ -7,7 +7,7 @@
     var item_id = form.item_id.value;
     var bucket_id = form.bucket_id.value;
     t.item.remove(item_id).then(function(){
-      document.getElementById('right').innerHTML = t.view.render('dashboard/right');
+      t.updateRightNav();
       t.gotoUrl('/'+t.team.current.id+'/'+bucket_id);
     }).catch(function(e){
       form.enable();

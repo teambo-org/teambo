@@ -17,7 +17,7 @@
       bucket_id: form.bucket.value
     };
     t.item.update(item_id, data).then(function(item){
-      document.getElementById('right').innerHTML = t.view.render('dashboard/right');
+      t.updateRightNav();
       t.gotoUrl('/'+t.team.current.id+'/'+item.opts.bucket_id+'/'+item_id);
     }).catch(function(e){
       form.enable();

@@ -15,7 +15,7 @@
       bucket_id: bucket_id
     };
     t.item.create(data).then(function(item){
-      document.getElementById('right').innerHTML = t.view.render('dashboard/right');
+      t.updateRightNav();
       t.gotoUrl('/'+t.team.current.id+'/'+bucket_id+'/'+item.id);
     }).catch(function(e){
       form.enable();

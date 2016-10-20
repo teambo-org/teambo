@@ -321,6 +321,12 @@ var Teambo = (function(t){
     }
   };
 
+  t.updateRightNav = function() {
+    var right = document.getElementById('right');
+    right.innerHTML = t.view.render('dashboard/right');
+    run_template_js(right);
+  }
+
   t.nextNav = function(fn) {
     nav_queue.push(fn);
   };

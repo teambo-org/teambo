@@ -1,4 +1,4 @@
-<div class="section account hi-20">
+<div class="section account hi-20" data-tpljs="dashboard/right">
     <!--
     <i class="icon-cog nav"></i>
     -->
@@ -14,11 +14,12 @@
         <div class="totals">
             {{item_count}}
         </div>
-        <a href="#/{{team.id}}/{{id}}" class="hi-10">
+        <a href="#/{{team.id}}/{{id}}" class="hi-10 bucket">
             <div class="img"><i class="icon-flag-filled"></i></div>
             <div class="name">{{opts.name}}</div>
+            <div class="progress" data-progress="{{progress}}"></div>
         </a>
-        <ul class="tasks">
+        <ul class="items">
         {{#item_list}}
             <li class="item-{{opts.status}}">
                 <a href="#/{{team.id}}/{{opts.bucket_id}}/{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>

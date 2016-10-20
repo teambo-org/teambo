@@ -6,7 +6,7 @@
     form.disable();
     var id = form.id.value;
     t.bucket.remove(id).then(function(){
-      document.getElementById('right').innerHTML = t.view.render('dashboard/right');
+      t.updateRightNav();
       t.gotoUrl('/'+t.team.current.id);
     }).catch(function(e){
       form.enable();

@@ -10,7 +10,7 @@
     form.disable();
     var data = form.values(['name', 'description']);
     t.bucket.update(bucket_id, data).then(function(bucket){
-      document.getElementById('right').innerHTML = t.view.render('dashboard/right');
+      t.updateRightNav();
       t.gotoUrl('/'+t.team.current.id+'/'+bucket.id);
     }).catch(function(e){
       form.enable();
