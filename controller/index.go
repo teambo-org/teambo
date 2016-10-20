@@ -133,7 +133,13 @@ func Initjs(w http.ResponseWriter, r *http.Request) {
 	b.WriteTo(w)
 }
 
+var manifest_cache = ""
+
 func Manifest(w http.ResponseWriter, r *http.Request) {
+	if manifest_cache != "" {
+		w.Write([]byte(manifest_cache))
+		return
+	}
 	t, err := template.ParseFiles("templates/app.manifest")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
@@ -160,13 +166,24 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 			FONT:   find_fonts(),
 		}
 	}
-	err = t.Execute(w, p)
+	var b bytes.Buffer
+	err = t.Execute(&b, p)
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
+	if util.Config("cache.manifest") == "true" {
+		manifest_cache = b.String()
+	}
+	w.Write(b.Bytes())
 }
 
+var webmanifest_cache = ""
+
 func WebManifest(w http.ResponseWriter, r *http.Request) {
+	if webmanifest_cache != "" {
+		w.Write([]byte(webmanifest_cache))
+		return
+	}
 	t, err := template.ParseFiles("templates/app.manifestweb")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
@@ -185,10 +202,15 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 		"description": "What are you doing today?",
 		"icon_path":   "/i/icon/teambo",
 	}
-	err = t.Execute(w, p)
+	var b bytes.Buffer
+	err = t.Execute(&b, p)
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
+	if util.Config("cache.manifest") == "true" {
+		webmanifest_cache = b.String()
+	}
+	w.Write(b.Bytes())
 }
 
 func append_js_init(w io.Writer) {
