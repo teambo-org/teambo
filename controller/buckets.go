@@ -47,9 +47,6 @@ func Buckets(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Bucket could not be saved", 500)
 				return
 			}
-		} else {
-			error_out(w, "Invalid request", 400)
-			return
 		}
 
 		res, _ = json.Marshal(bucket)
@@ -63,5 +60,6 @@ func Buckets(w http.ResponseWriter, r *http.Request) {
 
 		res, _ = json.Marshal(buckets)
 	}
+
 	w.Write([]byte(string(res)))
 }
