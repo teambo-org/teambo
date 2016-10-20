@@ -32,14 +32,6 @@
       } else if(xhr.status === 403) {
         password_reset();
       }
-    }).catch(function(xhr){
-      logo.classList.remove('spinner');
-      if(xhr.status === 200) {
-        password_reset();
-      } else {
-        form.enable();
-        form.error.msg('Error', 'You cannot log in while you are offline.');
-      }
     });
   };
 
