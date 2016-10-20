@@ -65,12 +65,12 @@
 
 #dashboard.chat-collapsed .chat .area .toggle { display: none; }
 
-#dashboard .right ul.tasks { font-size: 0.8em; margin: 0; padding: 0.6em 0; }
-#dashboard .right ul.tasks li { list-style: none; padding: 0; line-height: 1.1em; }
-#dashboard .right ul.tasks li i { position: absolute; top: 0.25em; left: 0.4em; }
-#dashboard .right ul.tasks li a { display: block; padding: 0.25em 0.6em 0.2em 2.0em; position: relative; }
-#dashboard .right ul.tasks li.active {  }
-#dashboard .right ul.tasks li.item-complete { display: none; }
+#dashboard .right ul.items { font-size: 0.8em; margin: 0; padding: 0.6em 0; }
+#dashboard .right ul.items li { list-style: none; padding: 0; line-height: 1.1em; }
+#dashboard .right ul.items li i { position: absolute; top: 0.25em; left: 0.4em; }
+#dashboard .right ul.items li a { display: block; padding: 0.25em 0.6em 0.2em 2.0em; position: relative; }
+#dashboard .right ul.items li.active {  }
+#dashboard .right ul.items li.item-complete { display: none; }
 
 #dashboard .right .account { height: 2em; }
 #dashboard .right .account a { display: block; }
@@ -85,7 +85,7 @@
 
 #dashboard .main h1 { margin-bottom: 0.5em; }
 
-#dashboard .main .task p { margin: 0; }
+#dashboard .main .item p { margin: 0; }
 #dashboard .main section { padding: 1em; margin: 0 0 1em; }
 #dashboard .main section.description { margin-right: 13em; }
 #dashboard .main section.tags { float: right; margin-left: 1em; width: 12em; padding: 0; }
@@ -130,7 +130,9 @@
 #dashboard .main ul.items li span.name { margin-left: 1.7em; display: block; }
 #dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; }
 
-#dashboard .main .dash ul.buckets ul.tasks li { list-style: none; }
+#dashboard .main .bucket p.description { padding-left: 3em; margin-top: 0; }
+
+#dashboard .main .dash ul.buckets ul.items li { list-style: none; }
 #dashboard .main nav { float: right; margin-top: 0.5em; }
 #dashboard .main nav a { float: left; padding: 0 1em; line-height: 2em; }
 #dashboard .main nav.breadcrumbs { float: none; margin: -1em 0 1em -1em; height: 2em; }
