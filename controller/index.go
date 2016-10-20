@@ -167,7 +167,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 }
 
 func WebManifest(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("templates/webapp.manifest")
+	t, err := template.ParseFiles("templates/app.manifestweb")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
 		http.Error(w, string(res), 500)
