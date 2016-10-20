@@ -1,7 +1,7 @@
 (function(t){
-    "use strict";
+  "use strict";
 
-    t.view.updateTheme();
-    t.updateStatus();
+  t.view.updateTheme();
+  t.updateStatus();
 
 })(Teambo);
