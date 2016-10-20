@@ -3,7 +3,6 @@ package controller
 import (
 	"../model"
 	"encoding/json"
-	"errors"
 	"net/http"
 	// "log"
 )
@@ -12,29 +11,15 @@ func Item(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	mkey := r.FormValue("mkey")
 	id := r.FormValue("id")
 	ct := r.FormValue("ct")
 
-	item := model.Item{}
-	err := errors.New("")
-
-	team, err := model.FindTeam(team_id)
+	_, err := auth_team(w, r)
 	if err != nil {
-		error_out(w, "Team could not be found", 500)
-		return
-	}
-	if team.Id != team_id {
-		error_out(w, "Team does not exist", 404)
 		return
 	}
 
-	exists, err := model.MemberExists(team_id, mkey)
-	if err != nil || !exists {
-		// failed authentication
-		error_out(w, "Team member not found", 403)
-		return
-	}
+	item := model.Item{}
 
 	if r.Method == "POST" {
 		if id == "" {
@@ -84,26 +69,13 @@ func ItemAll(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	mkey := r.FormValue("mkey")
+
+	_, err := auth_team(w, r)
+	if err != nil {
+		return
+	}
 
 	items := []model.Item{}
-	err := errors.New("")
-
-	team, err := model.FindTeam(team_id)
-	if err != nil {
-		error_out(w, "Team could not be found", 500)
-		return
-	}
-	if team.Id != team_id {
-		error_out(w, "Team does not exist", 404)
-		return
-	}
-
-	exists, err := model.MemberExists(team_id, mkey)
-	if err != nil || !exists {
-		error_out(w, "Team member not found", 403)
-		return
-	}
 
 	if r.Method == "POST" {
 		error_out(w, "Method not allowed", 405)
@@ -124,28 +96,14 @@ func ItemRemove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	mkey := r.FormValue("mkey")
 	item_id := r.FormValue("item_id")
 
-	item := model.Item{}
-	err := errors.New("")
-
-	team, err := model.FindTeam(team_id)
+	_, err := auth_team(w, r)
 	if err != nil {
-		error_out(w, "Team could not be found", 500)
-		return
-	}
-	if team.Id != team_id {
-		error_out(w, "Team does not exist", 404)
 		return
 	}
 
-	exists, err := model.MemberExists(team_id, mkey)
-	if err != nil || !exists {
-		// failed authentication
-		error_out(w, "Team member not found", 403)
-		return
-	}
+	item := model.Item{}
 
 	if r.Method == "POST" {
 		if len(item_id) > 0 {

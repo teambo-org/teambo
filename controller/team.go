@@ -12,16 +12,17 @@ import (
 func Team(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	id := r.FormValue("id")
+	team_id := r.FormValue("team_id")
 	iv := r.FormValue("iv")
 	mkey := r.FormValue("mkey")
 	ct := r.FormValue("ct")
 
 	team := model.Team{}
 	err := errors.New("")
+	res := map[string]interface{}{}
 
 	if r.Method == "POST" {
-		if id == "" {
+		if team_id == "" {
 			team = model.NewTeam()
 			err = team.Save()
 			if err != nil {
@@ -36,23 +37,14 @@ func Team(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			mkey = member.Mkey
-		} else if len(id) > 0 && len(mkey) > 0 && len(ct) > 0 && len(iv) > 0 {
-			team, err = model.FindTeam(id)
+			res["mkey"] = mkey
+		} else if len(team_id) > 0 && len(mkey) > 0 && len(ct) > 0 && len(iv) > 0 {
+			team, err = auth_team(w, r)
 			if err != nil {
-				error_out(w, "Team could not be found", 500)
-				return
-			}
-			if team.Id != id {
-				error_out(w, "Team does not exist", 404)
 				return
 			}
 			if !strings.HasPrefix(team.Ciphertext, iv) {
 				error_out(w, "Team version does not match", 409)
-				return
-			}
-			exists, err := model.MemberExists(id, mkey)
-			if err != nil || !exists {
-				error_out(w, "Team member not found", 403)
 				return
 			}
 			team.Ciphertext = ct
@@ -66,25 +58,13 @@ func Team(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		team, err = model.FindTeam(id)
+		team, err = auth_team(w, r)
 		if err != nil {
-			error_out(w, "Team could not be found", 500)
-			return
-		}
-		if team.Id != id {
-			error_out(w, "Team does not exist", 404)
-			return
-		}
-		exists, err := model.MemberExists(id, mkey)
-		if err != nil || !exists {
-			error_out(w, "Team member not found", 403)
 			return
 		}
 	}
 
-	res, _ := json.Marshal(map[string]interface{}{
-		"team": team,
-		"mkey": mkey,
-	})
-	w.Write([]byte(string(res)))
+	res["team"] = team
+	res_json, _ := json.Marshal(res)
+	w.Write([]byte(string(res_json)))
 }

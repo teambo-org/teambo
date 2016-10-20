@@ -3,7 +3,6 @@ package controller
 import (
 	"../model"
 	"encoding/json"
-	"errors"
 	"net/http"
 	// "log"
 )
@@ -12,26 +11,13 @@ func Bucket(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	mkey := r.FormValue("mkey")
 	id := r.FormValue("id")
 	ct := r.FormValue("ct")
 
 	bucket := model.Bucket{}
-	err := errors.New("")
 
-	team, err := model.FindTeam(team_id)
+	_, err := auth_team(w, r)
 	if err != nil {
-		error_out(w, "Team could not be found", 500)
-		return
-	}
-	if team.Id != team_id {
-		error_out(w, "Team does not exist", 404)
-		return
-	}
-
-	exists, err := model.MemberExists(team_id, mkey)
-	if err != nil || !exists {
-		error_out(w, "Team member not found", 403)
 		return
 	}
 
@@ -83,24 +69,11 @@ func BucketAll(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	mkey := r.FormValue("mkey")
 
 	buckets := []model.Bucket{}
-	err := errors.New("")
 
-	team, err := model.FindTeam(team_id)
+	_, err := auth_team(w, r)
 	if err != nil {
-		error_out(w, "Team could not be found", 500)
-		return
-	}
-	if team.Id != team_id {
-		error_out(w, "Team does not exist", 404)
-		return
-	}
-
-	exists, err := model.MemberExists(team_id, mkey)
-	if err != nil || !exists {
-		error_out(w, "Team member not found", 403)
 		return
 	}
 
@@ -123,26 +96,12 @@ func BucketRemove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	mkey := r.FormValue("mkey")
 	bucket_id := r.FormValue("bucket_id")
 
 	bucket := model.Bucket{}
-	err := errors.New("")
 
-	team, err := model.FindTeam(team_id)
+	_, err := auth_team(w, r)
 	if err != nil {
-		error_out(w, "Team could not be found", 500)
-		return
-	}
-	if team.Id != team_id {
-		error_out(w, "Team does not exist", 404)
-		return
-	}
-
-	exists, err := model.MemberExists(team_id, mkey)
-	if err != nil || !exists {
-		// failed authentication
-		error_out(w, "Team member not found", 403)
 		return
 	}
 
