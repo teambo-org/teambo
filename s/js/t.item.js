@@ -32,9 +32,9 @@ Teambo.item = (function(t){
       data.iv = data.iv ? data.iv : iv;
     }
     t.extend(this, {
-      id:    data.id,
-      opts:    data.opts ? data.opts : {},
-      hist:    data.hist ? data.hist : []
+      id: data.id,
+      opts: data.opts ? data.opts : {},
+      hist: data.hist ? data.hist : []
     });
     this.save = function() {
       return t.promise(function(fulfill, reject) {
@@ -43,10 +43,10 @@ Teambo.item = (function(t){
         }
         t.xhr.post('/item', {
           data: {
-            team_id:   t.team.current.id,
-            mkey:    t.team.current.mkey,
-            id:    self.id,
-            ct:    self.encrypted()
+            team_id: t.team.current.id,
+            mkey: t.team.current.mkey,
+            item_id: self.id,
+            ct: self.encrypted()
           }
         }).then(function(xhr){
           if(xhr.status == 200) {
@@ -94,7 +94,7 @@ Teambo.item = (function(t){
 
   item.create = function(opts) {
     return t.promise(function(fulfill, reject) {
-      t.xhr.post('/item', {
+      t.xhr.post('/items', {
         data: {
           team_id:   t.team.current.id,
           mkey:    t.team.current.mkey
@@ -103,8 +103,8 @@ Teambo.item = (function(t){
         if(xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           var new_item = new t.item({
-            id:    data.id,
-            opts:    opts
+            id: data.id,
+            opts: opts
           });
           new_item.save().then(function(xhr){
             item.all.push(new_item);
@@ -215,9 +215,9 @@ Teambo.item = (function(t){
     return t.promise(function(fulfill, reject) {
       t.xhr.get('/item', {
         data: {
-          id: id,
           team_id: team_id,
-          mkey: mkey
+          mkey: mkey,
+          item_id: id
         }
       }).then(function(xhr) {
         if (xhr.status === 200) {
@@ -276,7 +276,7 @@ Teambo.item = (function(t){
   };
   item.fetchAll = function(team_id, mkey) {
     return t.promise(function(fulfill, reject) {
-      t.xhr.get('/item/all', {
+      t.xhr.get('/items', {
         data: {
           team_id: team_id,
           mkey: mkey
