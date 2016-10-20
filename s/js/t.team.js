@@ -22,10 +22,10 @@ Teambo.team = (function(t){
           var new_ct = self.encrypted();
           t.xhr.post('/team', {
             data: {
-              id:   self.id,
-              iv:   self.iv,
+              team_id: self.id,
+              iv: self.iv,
               mkey: mkey,
-              ct:   new_ct
+              ct: new_ct
             }
           }).then(function(xhr){
             if(xhr.status == 200) {
@@ -117,7 +117,8 @@ Teambo.team = (function(t){
             id: data.team.id,
             iv: 'new',
             opts: {
-              name: name
+              name: name,
+              theme: 'Default'
             }
           }, data.mkey, key);
           new_team.save().then(function(){
