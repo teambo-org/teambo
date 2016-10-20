@@ -1,6 +1,6 @@
-describe("t.team.js", function() {
+describe("Team", function() {
 
-  it("Creates team", function(done) {
+  it("Can be created", function(done) {
     Teambo.team.create("New Test Team").then(function(team){
       expect(Teambo.acct.current.teams.length).toBe(1);
       done();
@@ -10,7 +10,7 @@ describe("t.team.js", function() {
     });
   });
 
-  it("Finds team", function(done) {
+  it("Can be found", function(done) {
     var t = Teambo.acct.current.teams[0];
     Teambo.acct.current.team.find(t.id).then(function(team){
       expect(team.opts.name).toBe("New Test Team");
@@ -22,7 +22,7 @@ describe("t.team.js", function() {
     });
   });
 
-  it("Edits team name", function(done) {
+  it("Can be edited", function(done) {
     Teambo.team.current.update({name: "Test Team"}).then(function(team){
       expect(team.opts.name).toBe("Test Team");
       done();
@@ -32,9 +32,9 @@ describe("t.team.js", function() {
     });
   });
 
-  it("Edits team theme", function(done) {
-    Teambo.team.current.update({theme: "Webdam"}).then(function(team){
-      expect(team.opts.theme).toBe("Webdam");
+  it("Can have a theme", function(done) {
+    Teambo.team.current.update({theme: "Dark"}).then(function(team){
+      expect(team.opts.theme).toBe("Dark");
       done();
     }).catch(function(e){
       fail("Team not found");

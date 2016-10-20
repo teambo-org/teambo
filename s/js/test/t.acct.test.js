@@ -1,11 +1,11 @@
-describe("t.acct.js", function() {
+describe("Account", function() {
 
   var email = "test@test.test";
   var pass = Teambo.crypto.randomKey();
 
   Teambo.acct.deAuth();
 
-  it("Creates verified accounts", function(done) {
+  it("Can be created", function(done) {
     var bypass = true;
     Teambo.acct.verification.send(email, pass, bypass).then(function(){
       expect(Teambo.acct.current).not.toBe(null);
@@ -15,12 +15,12 @@ describe("t.acct.js", function() {
     });
   });
 
-  it("Deauths", function() {
+  it("Can be deauthenticated", function() {
     Teambo.acct.deAuth();
     expect(Teambo.acct.current).toBe(null);
   });
 
-  it("Auths", function(done) {
+  it("Can be authenticated", function(done) {
     Teambo.acct.auth(email, pass).then(function(){
       expect(Teambo.acct.current).not.toBe(null);
       done();

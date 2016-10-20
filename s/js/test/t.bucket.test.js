@@ -1,7 +1,7 @@
-describe("t.bucket.js", function() {
+describe("Bucket", function() {
 
-  it("Creates bucket", function(done) {
-    Teambo.bucket.create('New Test Bucket').then(function(b){
+  it("Can be created", function(done) {
+    Teambo.bucket.create({name: 'New Test Bucket'}).then(function(b){
       expect(b.opts.name).toBe("New Test Bucket");
       done();
     }).catch(function(e){
@@ -10,7 +10,7 @@ describe("t.bucket.js", function() {
     });
   });
 
-  it("Edits bucket name", function(done) {
+  it("Can be edited", function(done) {
     Teambo.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
       Teambo.bucket.update(bucket_id, {name: 'Test Bucket'}).then(function(b){
@@ -23,8 +23,8 @@ describe("t.bucket.js", function() {
     });
   });
 
-  it("Deletes bucket", function(done) {
-    Teambo.bucket.create('Bucket to Delete').then(function(b){
+  it("Can be deleted", function(done) {
+    Teambo.bucket.create({name: 'Bucket to Delete'}).then(function(b){
       Teambo.bucket.remove(b.id).then(function(b){
         Teambo.bucket.findAll().then(function(buckets) {
           expect(buckets.length).toBe(1);
@@ -34,6 +34,16 @@ describe("t.bucket.js", function() {
         fail("Team not found");
         done();
       });
+    }).catch(function(e){
+      fail("Team not found");
+      done();
+    });
+  });
+
+  it("Can have description", function(done) {
+    Teambo.bucket.create({name: 'Test Bucket With Description', description: 'Hello, World.'}).then(function(b){
+      expect(b.opts.description).toBe("Hello, World.");
+      done();
     }).catch(function(e){
       fail("Team not found");
       done();

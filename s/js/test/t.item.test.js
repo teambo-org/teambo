@@ -1,6 +1,6 @@
-describe("t.item.js", function() {
+describe("Item", function() {
 
-  it("Creates item", function(done) {
+  it("Can be created", function(done) {
     Teambo.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
       Teambo.item.create({name: 'New Test Item', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
@@ -13,7 +13,7 @@ describe("t.item.js", function() {
     });
   });
 
-  it("Edits item name", function(done) {
+  it("Can be edited", function(done) {
     Teambo.item.findAll().then(function(items) {
       item_id = items[0].id;
       Teambo.item.update(item_id, {name: 'Test Item'}).then(function(item){
@@ -26,7 +26,7 @@ describe("t.item.js", function() {
     });
   });
 
-  it("Deletes item", function(done) {
+  it("Can be deleted", function(done) {
     Teambo.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
       Teambo.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
@@ -46,7 +46,7 @@ describe("t.item.js", function() {
     });
   });
 
-  it("Removes item from cache upon deletion", function(done) {
+  it("Is removed from cache upon deletion", function(done) {
     Teambo.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
       Teambo.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
@@ -71,7 +71,7 @@ describe("t.item.js", function() {
     });
   });
 
-  it("Creates item with status", function(done) {
+  it("Can have a status", function(done) {
     Teambo.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
       Teambo.item.create({name: 'In Progress Item', status: 'inprogress', description: 'This is an in progress item', bucket_id: bucket_id}).then(function(item){
