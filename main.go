@@ -28,10 +28,10 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		controller.AcctVerification(w, r)
 	case "/team":
 		controller.Team(w, r)
+	case "/buckets":
+		controller.Buckets(w, r)
 	case "/bucket":
 		controller.Bucket(w, r)
-	case "/bucket/all":
-		controller.BucketAll(w, r)
 	case "/bucket/remove":
 		controller.BucketRemove(w, r)
 	case "/item":

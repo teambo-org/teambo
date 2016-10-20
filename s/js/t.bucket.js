@@ -21,9 +21,9 @@ Teambo.bucket = (function(t){
         t.xhr.post('/bucket', {
           data: {
             team_id: t.team.current.id,
-            mkey:  t.team.current.mkey,
-            id:    self.id,
-            ct:    self.encrypted()
+            mkey: t.team.current.mkey,
+            bucket_id: self.id,
+            ct: self.encrypted()
           }
         }).then(function(xhr){
           if(xhr.status == 200) {
@@ -66,7 +66,6 @@ Teambo.bucket = (function(t){
   };
 
   bucket.all = [];
-
   bucket.cacheIds = function() {
     var hash = t.crypto.sha(t.team.current.id+"buckets"+t.salt);
     var ids = [];
@@ -75,20 +74,23 @@ Teambo.bucket = (function(t){
     }
     return localforage.setItem(hash, bucket.encrypt(ids));
   };
-
-  bucket.create = function(name) {
+  bucket.create = function(opts, id) {
     return t.promise(function(fulfill, reject) {
-      t.xhr.post('/bucket', {
-        data: {
-          team_id: t.team.current.id,
-          mkey:  t.team.current.mkey
-        }
+      var data = {
+        team_id: t.team.current.id,
+        mkey:  t.team.current.mkey
+      };
+      if(id) {
+        data.bucket_id = id
+      }
+      t.xhr.post('/buckets', {
+        data: data
       }).then(function(xhr){
         if(xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           var new_bucket = new t.bucket({
             id:   data.id,
-            opts: {name: name}
+            opts: opts
           });
           new_bucket.save().then(function(xhr){
             bucket.all.push(new_bucket);
@@ -107,7 +109,6 @@ Teambo.bucket = (function(t){
       });
     });
   };
-
   bucket.update = function(bucket_id, opts) {
     return t.promise(function(fulfill, reject) {
       bucket.fetch(bucket_id, t.team.current.id, t.team.current.mkey).then(function(ct){
@@ -130,7 +131,6 @@ Teambo.bucket = (function(t){
       });
     });
   };
-
   bucket.remove = function(bucket_id) {
     return t.promise(function(fulfill, reject) {
       t.xhr.post('/bucket/remove', {
@@ -158,7 +158,6 @@ Teambo.bucket = (function(t){
       });
     });
   };
-
   bucket.get = function(id) {
     for(var i in bucket.all) {
       var b = bucket.all[i];
@@ -167,7 +166,6 @@ Teambo.bucket = (function(t){
       }
     }
   };
-
   bucket.find = function(id) {
     return t.promise(function(fulfill, reject){
       var team = t.team.current;
@@ -188,7 +186,7 @@ Teambo.bucket = (function(t){
     return t.promise(function(fulfill, reject) {
       t.xhr.get('/bucket', {
         data: {
-          id: id,
+          bucket_id: id,
           team_id: team_id,
           mkey: mkey
         }
@@ -251,7 +249,7 @@ Teambo.bucket = (function(t){
   };
   bucket.fetchAll = function(team_id, mkey) {
     return t.promise(function(fulfill, reject) {
-      t.xhr.get('/bucket/all', {
+      t.xhr.get('/buckets', {
         data: {
           team_id: team_id,
           mkey: mkey
@@ -264,7 +262,6 @@ Teambo.bucket = (function(t){
           reject("Failed to retrieve all buckets");
         }
       });
-
     });
   };
 
