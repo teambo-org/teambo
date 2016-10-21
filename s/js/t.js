@@ -94,24 +94,25 @@ var Teambo = (function(t){
         nav_queue = [];
         var tar = document.getElementById(target);
         tar.innerHTML = t.view.render(route.tpl, data);
-        run_template_js(tar);
         if(tar.firstChild) {
-          if(tar.firstChild.classList.contains('require-auth') && !t.acct.isAuthed()) {
-            t.gotoUrl('/login');
+          var class_list = tar.firstChild.classList;
+          if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
+            return t.gotoUrl('/login');
           }
-          if(tar.firstChild.classList.contains('require-no-auth') && t.acct.isAuthed()) {
-            t.gotoUrl('/account');
+          if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
+            return t.gotoUrl('/account');
           }
-          if(tar.firstChild.classList.contains('require-team') && !t.view.isset('team')) {
-            t.gotoUrl('/account');
+          if(class_list.contains('require-team') && !t.view.isset('team')) {
+            return t.gotoUrl('/account');
           }
-          if(tar.firstChild.classList.contains('require-bucket') && data.bucket) {
-            t.gotoUrl('/dashboard');
+          if(class_list.contains('require-bucket') && data.bucket) {
+            return t.gotoUrl('/dashboard');
           }
-          if(tar.firstChild.classList.contains('require-item') && data.item) {
-            t.gotoUrl('/dashboard');
+          if(class_list.contains('require-item') && data.item) {
+            return t.gotoUrl('/dashboard');
           }
         }
+        run_template_js(tar);
         if(loaded) {
           tar.scrollTop = 0;
         }
