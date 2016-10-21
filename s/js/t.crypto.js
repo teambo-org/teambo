@@ -34,10 +34,10 @@ Teambo.crypto = (function(t, sjcl){
       iter = typeof iter === 'undefined' ? 10000 : iter;
       var passBitArray = sjcl.codec.base64.toBits(key);
       var crypt = sjcl.encrypt(passBitArray, JSON.stringify(data), {
-        mode:'ccm',
-        iter:iter,
-        ks:256,
-        ts:64
+        mode: 'ccm',
+        iter: iter,
+        ks: 256,
+        ts: 64
       });
       var data = JSON.parse(crypt);
       return data.iv + " " + data.ct
@@ -50,10 +50,10 @@ Teambo.crypto = (function(t, sjcl){
           passBitArray = sjcl.codec.base64.toBits(key);
         var json = sjcl.decrypt(passBitArray, sjcl.json.encode({
           iv: iv,
-          v:1,
-          iter:iter,
-          ks:256,
-          ts:64,
+          v: 1,
+          iter: iter,
+          ks: 256,
+          ts: 64,
           mode: "ccm",
           adata: "",
           cipher: "aes",

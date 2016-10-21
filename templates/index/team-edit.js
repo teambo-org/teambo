@@ -8,10 +8,7 @@
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = {
-      name: form.name.value,
-      theme: form.theme.value
-    };
+    var data = form.values(['name', 'theme']);
     var submit = function() {
       t.team.current.update(data).then(function(team){
         document.getElementById('main').innerHTML = t.view.render('dashboard/main');

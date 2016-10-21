@@ -4,6 +4,7 @@ import (
 	"../model"
 	"encoding/json"
 	"net/http"
+	"strings"
 	// "log"
 )
 
@@ -13,6 +14,7 @@ func Item(w http.ResponseWriter, r *http.Request) {
 	team_id := r.FormValue("team_id")
 	item_id := r.FormValue("item_id")
 	ct := r.FormValue("ct")
+	iv := r.FormValue("iv")
 
 	_, err := auth_team(w, r)
 	if err != nil {
@@ -30,6 +32,10 @@ func Item(w http.ResponseWriter, r *http.Request) {
 			}
 			if item.Id != item_id {
 				error_out(w, "Item does not exist", 404)
+				return
+			}
+			if !strings.HasPrefix(item.Ciphertext, iv) {
+				error_out(w, "Team version does not match", 409)
 				return
 			}
 			item.Ciphertext = ct

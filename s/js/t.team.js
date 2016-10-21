@@ -23,9 +23,9 @@ Teambo.team = (function(t){
           t.xhr.post('/team', {
             data: {
               team_id: self.id,
-              iv: self.iv,
               mkey: mkey,
-              ct: new_ct
+              ct: new_ct,
+              iv: self.iv
             }
           }).then(function(xhr){
             if(xhr.status == 200) {
@@ -82,7 +82,7 @@ Teambo.team = (function(t){
         } else if(typeof(self.opts.theme) === "string" && self.opts.theme in t.themes) {
           return t.themes[self.opts.theme];
         } else {
-          return t.themes['dark'];
+          return t.themes['Default'];
         }
       }
     });
@@ -92,14 +92,16 @@ Teambo.team = (function(t){
 
   team.init = function(id) {
     return t.promise(function(fulfill, reject){
-      t.acct.current.team.find(id).then(function(o){
+      t.acct.current.team.find(id).then(function(o) {
         team.current = o;
+        t.item.all = [];
+        t.bucket.all = [];
         var p = [];
         p.push(t.bucket.findAll());
         p.push(t.item.findAll());
         Promise.all(p).then(function() {
           fulfill(o);
-        }).catch(function(e){
+        }).catch(function(e) {
           reject(e);
         });
       });
@@ -110,9 +112,9 @@ Teambo.team = (function(t){
     return t.promise(function(fulfill, reject) {
       t.xhr.post('/team').then(function(xhr){
         if(xhr.status == 200) {
-          var data = JSON.parse(xhr.responseText),
-            key = t.crypto.randomKey(),
-            acct = t.acct.current;
+          var data = JSON.parse(xhr.responseText);
+          var key  = t.crypto.randomKey();
+          var acct = t.acct.current;
           var new_team = new team({
             id: data.team.id,
             iv: 'new',
@@ -139,6 +141,34 @@ Teambo.team = (function(t){
         reject(e);
       });
     });
+  };
+
+  team.findCached = function(id, ct) {
+    if(!team.current) return Promise.reject();
+    var hash = t.crypto.sha(team.current.id+id+t.salt);
+    return localforage.getItem(hash);
+  };
+
+  team.cache = function(id, ct) {
+    if(!team.current) return Promise.reject();
+    var hash = t.crypto.sha(team.current.id+id+t.salt);
+    return localforage.setItem(hash, ct);
+  };
+
+  team.uncache = function(id) {
+    if(!team.current) return Promise.reject();
+    var hash = t.crypto.sha(team.current.id+id+t.salt);
+    return localforage.removeItem(hash);
+  };
+
+  team.encrypt = function(data) {
+    if(!team.current) return null;
+    return team.current.encrypt(data);
+  };
+
+  team.decrypt = function(ct) {
+    if(!team.current) return null;
+    return team.current.decrypt(ct);
   };
 
   // t.event.register('bucket-create', {

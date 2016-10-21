@@ -12,8 +12,8 @@ describe("Bucket", function() {
 
   it("Can be edited", function(done) {
     Teambo.bucket.findAll().then(function(buckets) {
-      bucket_id = buckets[0].id;
-      Teambo.bucket.update(bucket_id, {name: 'Test Bucket'}).then(function(b){
+      var bucket = buckets[0];
+      bucket.update({name: 'Test Bucket'}).then(function(b){
         expect(b.opts.name).toBe("Test Bucket");
         done();
       }).catch(function(e){
@@ -25,7 +25,7 @@ describe("Bucket", function() {
 
   it("Can be deleted", function(done) {
     Teambo.bucket.create({name: 'Bucket to Delete'}).then(function(b){
-      Teambo.bucket.remove(b.id).then(function(b){
+      b.remove().then(function(){
         Teambo.bucket.findAll().then(function(buckets) {
           expect(buckets.length).toBe(1);
           done();

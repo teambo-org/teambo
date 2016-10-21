@@ -10,19 +10,31 @@
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = {
-      name: form.name.value,
-      description: form.description.value,
-      status: form.status.value,
-      bucket_id: form.bucket.value
+    var data = form.values(['name', 'description', 'status', 'bucket']);
+    var submit = function() {
+      item.update(data).then(function(item){
+        t.updateRightNav();
+        t.gotoUrl('/'+t.team.current.id+'/'+item.opts.bucket_id+'/'+item.id);
+      }).catch(function(xhr){
+        if(xhr.status === 409) {
+          var opts = t.clone(item.opts);
+          item.refresh().then(function(new_item){
+            // Only overwrite changed properties
+            for(var i in opts) {
+              if(data[i] != opts[i]) {
+                new_item[i] = data[i];
+              }
+            }
+            item = new_item;
+            submit();
+          });
+        } else {
+          form.enable();
+          form.error.msg("Item could not be created", "Please try again");
+        }
+      });
     };
-    t.item.update(item_id, data).then(function(item){
-      t.updateRightNav();
-      t.gotoUrl('/'+t.team.current.id+'/'+item.opts.bucket_id+'/'+item_id);
-    }).catch(function(e){
-      form.enable();
-      form.error.msg("Item could not be created", "Please try again");
-    });
+    submit();
   });
   var html = '';
   for(var status in t.item.statuses) {

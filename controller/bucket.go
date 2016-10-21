@@ -4,6 +4,7 @@ import (
 	"../model"
 	"encoding/json"
 	"net/http"
+	"strings"
 	// "log"
 )
 
@@ -13,6 +14,7 @@ func Bucket(w http.ResponseWriter, r *http.Request) {
 	team_id := r.FormValue("team_id")
 	bucket_id := r.FormValue("bucket_id")
 	ct := r.FormValue("ct")
+	iv := r.FormValue("iv")
 
 	_, err := auth_team(w, r)
 	if err != nil {
@@ -30,6 +32,10 @@ func Bucket(w http.ResponseWriter, r *http.Request) {
 			}
 			if bucket.Id != bucket_id {
 				error_out(w, "Bucket does not exist", 404)
+				return
+			}
+			if !strings.HasPrefix(bucket.Ciphertext, iv) {
+				error_out(w, "Team version does not match", 409)
 				return
 			}
 			bucket.Ciphertext = ct

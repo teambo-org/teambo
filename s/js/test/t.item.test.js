@@ -15,9 +15,9 @@ describe("Item", function() {
 
   it("Can be edited", function(done) {
     Teambo.item.findAll().then(function(items) {
-      item_id = items[0].id;
-      Teambo.item.update(item_id, {name: 'Test Item'}).then(function(item){
-        expect(item.opts.name).toBe("Test Item");
+      item = items[0];
+      item.update({name: 'Test Item'}).then(function(new_item){
+        expect(new_item.opts.name).toBe("Test Item");
         done();
       }).catch(function(e){
         fail("Item could not be edited");
@@ -30,7 +30,7 @@ describe("Item", function() {
     Teambo.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
       Teambo.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
-        Teambo.item.remove(item.id).then(function(){
+        item.remove().then(function(){
           Teambo.item.findAll().then(function(items){
             expect(items.length).toBe(1);
             done();
@@ -51,7 +51,7 @@ describe("Item", function() {
       bucket_id = buckets[0].id;
       Teambo.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
         var item_id = item.id;
-        Teambo.item.remove(item.id).then(function(b){
+        item.remove().then(function(b){
           Teambo.item.findAll().then(function(items) {
             expect(items.length).toBe(1);
             var hash = Teambo.crypto.sha(Teambo.team.current.id+item_id+Teambo.salt);

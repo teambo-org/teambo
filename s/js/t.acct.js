@@ -4,10 +4,12 @@ Teambo.acct = (function (t) {
   var acct = function (data, akey, key) {
     var self = this;
     if (typeof data === 'string') {
+      var iv = data.split(' ')[0];
       data = t.crypto.decrypt(data, key);
+      data.iv = data.iv ? data.iv : iv;
     }
     t.extend(this, {
-      id:  data.id,
+      id:    data.id,
       email: data.email,
       opts:  data.opts  || {},
       hist:  data.hist  || [],
@@ -43,7 +45,7 @@ Teambo.acct = (function (t) {
       encrypted: function () {
         return self.encrypt({
           email: self.email,
-          id:  self.id,
+          id:    self.id,
           key:   key,
           akey:  akey,
           teams: self.teams,
@@ -90,13 +92,6 @@ Teambo.acct = (function (t) {
             });
           });
         },
-        reset: function () {
-          if (!t.debug()) {
-            return;
-          }
-          self.teams = [];
-          self.save();
-        },
         find: function (id) {
           return t.promise(function (fulfill, reject) {
             var d = t.findByProperty(self.teams, 'id', id);
@@ -139,7 +134,7 @@ Teambo.acct = (function (t) {
           return t.promise(function(fulfill, reject) {
             t.xhr.get('/team', {
               data: {
-                id: id,
+                team_id: id,
                 mkey: mkey
               }
             }).then(function(xhr) {
@@ -198,15 +193,12 @@ Teambo.acct = (function (t) {
   };
 
   acct.auth = function (email, pass) {
-    var id   = t.crypto.sha(email),
-      key  = t.crypto.pbk(pass, email),
-      akey = t.crypto.pbk(pass, id + key);
+    var id   = t.crypto.sha(email);
+    var key  = t.crypto.pbk(pass, email);
+    var akey = t.crypto.pbk(pass, id + key);
     return t.promise(function (fulfill, reject) {
       t.xhr.post('/acct/auth', {
-        data: {
-          id:   id,
-          akey: akey
-        }
+        data: {id: id, akey: akey}
       }).then(function (xhr) {
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
@@ -232,10 +224,10 @@ Teambo.acct = (function (t) {
   };
 
   acct.auth.offline = function (email, pass) {
-    var id   = t.crypto.sha(email),
-      hash = t.crypto.sha(email + t.salt),
-      key  = t.crypto.pbk(pass, email),
-      akey = t.crypto.pbk(pass, id + key);
+    var id   = t.crypto.sha(email);
+    var hash = t.crypto.sha(email + t.salt);
+    var key  = t.crypto.pbk(pass, email);
+    var akey = t.crypto.pbk(pass, id + key);
     return t.promise(function (fulfill, reject) {
       localforage.getItem(hash).then(function (item) {
         var data = t.crypto.decrypt(item, key);
@@ -253,9 +245,9 @@ Teambo.acct = (function (t) {
       if(!email || !pass) {
         return Promise.reject();
       }
-      var id   = t.crypto.sha(email),
-        key  = t.crypto.pbk(pass, email),
-        akey = t.crypto.pbk(pass, id + key);
+      var id   = t.crypto.sha(email);
+      var key  = t.crypto.pbk(pass, email);
+      var akey = t.crypto.pbk(pass, id + key);
       return t.promise(function (fulfill, reject) {
         var xhr_data = {
           email: email,
@@ -293,11 +285,7 @@ Teambo.acct = (function (t) {
       return t.promise(function (fulfill, reject) {
         var send_confirmation = function () {
           t.xhr.post('/acct/verification', {
-            data: {
-              id:   id,
-              akey: akey,
-              vkey: vkey
-            }
+            data: {id: id, akey: akey, vkey: vkey}
           }).then(function (xhr){
             if(xhr.status == 200) {
               localforage.removeItem('verification');

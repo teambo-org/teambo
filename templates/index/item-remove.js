@@ -5,10 +5,10 @@
   form.addEventListener("submit", function(e) {
     form.disable();
     var item_id = form.item_id.value;
-    var bucket_id = form.bucket_id.value;
-    t.item.remove(item_id).then(function(){
+    var item = t.item.get(item_id);
+    item.remove().then(function(){
       t.updateRightNav();
-      t.gotoUrl('/'+t.team.current.id+'/'+bucket_id);
+      t.gotoUrl('/'+t.team.current.id+'/'+item.opts.bucket_id);
     }).catch(function(e){
       form.enable();
       form.error.msg("Item could not be removed.", "Please try again");

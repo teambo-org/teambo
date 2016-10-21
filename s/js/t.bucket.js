@@ -1,83 +1,161 @@
 Teambo.bucket = (function(t){
   "use strict";
 
-  var bucket = function(data) {
+  var model = function(data) {
     var self = this;
     if(typeof data == 'string') {
       var iv = data.split(' ')[0];
-      data = bucket.decrypt(data);
+      data = t.team.decrypt(data);
       data.iv = data.iv ? data.iv : iv;
     }
     t.extend(this, {
       id: data.id,
-      opts: data.opts ? data.opts : {}
-    });
-    this.save = function() {
-      return t.promise(function(fulfill, reject) {
-        if(!self.id) {
-          reject('must supply bucket id to save');
-          return;
-        }
-        t.xhr.post('/bucket', {
-          data: {
-            team_id: t.team.current.id,
-            mkey: t.team.current.mkey,
-            bucket_id: self.id,
-            ct: self.encrypted()
-          }
-        }).then(function(xhr){
-          if(xhr.status == 200) {
-            self.cache();
-            fulfill(xhr);
-          } else {
-            reject(xhr);
-          }
-        }).catch(function(e){
-          reject(e);
+      iv: data.iv,
+      opts: data.opts ? data.opts : {},
+      save: function() {
+        return t.promise(function(fulfill, reject) {
+          var new_ct = self.encrypted();
+          t.xhr.post('/bucket', {
+            data: {
+              team_id: t.team.current.id,
+              mkey: t.team.current.mkey,
+              bucket_id: self.id,
+              ct: new_ct,
+              iv: self.iv
+            }
+          }).then(function(xhr){
+            if(xhr.status == 200) {
+              self.iv = new_ct.split(' ')[0];
+              self.cache().then(function() {
+                fulfill(self);
+              });
+            } else {
+              reject(xhr);
+            }
+          }).catch(function(e){
+            reject(e);
+          });
         });
-      });
-    };
-    this.cache = function() {
-      var hash = t.crypto.sha(t.team.current.id+self.id+t.salt);
-      localforage.setItem(hash, self.encrypted());
-    };
-    this.encrypted = function() {
-      return bucket.encrypt({
-        id: self.id,
-        opts: self.opts
-      });
-    };
-    this.item_list = function() {
-      return t.item.getByBucket(self.id);
-    };
-    this.item_list_incomplete = function() {
-      return self.item_list().filter(function(o) {
-        return o.opts.status !== 'complete';
-      });
-    };
-    this.item_list_complete = function() {
-      return self.item_list().filter(function(o) {
-        return o.opts.status === 'complete';
-      });
-    };
-    this.item_count = function() {
-      return self.item_list().length;
-    };
-    this.progress = function() {
-      return (self.item_list_complete().length / self.item_list().length) * 100;
-    };
+      },
+      update: function(opts) {
+        var orig_opts = t.clone(self.opts);
+        self.opts = t.extend(self.opts, opts);
+        return t.promise(function(fulfill, reject) {
+          self.save().then(function(xhr) {
+            self.cache().then(function(){
+              fulfill(self);
+            });
+          }).catch(function(e) {
+            self.opts = orig_opts;
+            reject(e);
+          });
+        });
+      },
+      refresh: function() {
+        return t.promise(function (fulfill, reject) {
+          var d = t.team.current;
+          model.fetch(self.id, d.id, d.mkey).then(function(ct) {
+            var m = new model(ct);
+            m.cache().then(function(){
+              fulfill(m);
+            });
+          }).catch(function(e) {
+            reject(e);
+          });
+        });
+      },
+      cache: function() {
+        return t.promise(function (fulfill, reject) {
+          var updated = false;
+          model.all.forEach(function(m, i) {
+            if(m.id == self.id) {
+              model.all[i] = self;
+              updated = true;
+            }
+          });
+          if(!updated) {
+            model.all.push(self);
+          }
+          model.cacheIds().then(function() {
+            t.team.cache(self.id, self.encrypted(self.iv)).then(function() {
+              fulfill(self);
+            });
+          });
+        });
+      },
+      uncache: function() {
+        t.deleteByProperty(model.all, 'id', self.id);
+        return t.promise(function (fulfill, reject) {
+          model.cacheIds().then(function(){
+            t.team.uncache(self.id).then(function() {
+              fulfill(self);
+            });
+          });
+        });
+      },
+      remove: function() {
+        return t.promise(function(fulfill, reject) {
+          t.xhr.post('/bucket/remove', {
+            data: {
+              team_id: t.team.current.id,
+              mkey:    t.team.current.mkey,
+              bucket_id: self.id
+            }
+          }).then(function(xhr){
+            if(xhr.status == 204) {
+              self.uncache().then(function(){
+                fulfill();
+              });
+            } else {
+              reject(xhr);
+            }
+          }).catch(function(e){
+            reject(e);
+          });
+        });
+      },
+      encrypted: function(iv) {
+        var data = {
+          id:   self.id,
+          opts: self.opts
+        };
+        if(iv) {
+          data.iv = iv;
+        }
+        return t.team.encrypt(data);
+      },
+      item_list: function() {
+        return t.item.getByBucket(self.id);
+      },
+      item_list_incomplete: function() {
+        return self.item_list().filter(function(o) {
+          return o.opts.status !== 'complete';
+        });
+      },
+      item_list_complete: function() {
+        return self.item_list().filter(function(o) {
+          return o.opts.status === 'complete';
+        });
+      },
+      item_count: function() {
+        return self.item_list().length;
+      },
+      progress: function() {
+        return (self.item_list_complete().length / self.item_list().length) * 100;
+      }
+    });
   };
 
-  bucket.all = [];
-  bucket.cacheIds = function() {
-    var hash = t.crypto.sha(t.team.current.id+"buckets"+t.salt);
+  model.all = [];
+
+  model.cacheIds = function() {
     var ids = [];
-    for(var i in bucket.all) {
-      ids.push(bucket.all[i].id);
-    }
-    return localforage.setItem(hash, bucket.encrypt(ids));
+    model.all.forEach(function(m) {
+      ids.push(m.id);
+    });
+    return t.team.cache("buckets", t.team.encrypt(ids));
   };
-  bucket.create = function(opts, id) {
+  model.create = function(opts, id) {
     return t.promise(function(fulfill, reject) {
       var data = {
         team_id: t.team.current.id,
@@ -91,14 +169,13 @@ Teambo.bucket = (function(t){
       }).then(function(xhr){
         if(xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
-          var new_bucket = new t.bucket({
+          var new_model = new model({
             id:   data.id,
-            opts: opts
+            opts: opts,
+            iv: 'new'
           });
-          new_bucket.save().then(function(xhr){
-            bucket.all.push(new_bucket);
-            bucket.cacheIds();
-            fulfill(new_bucket);
+          new_model.save().then(function(xhr){
+            fulfill(new_model);
           }).catch(function(e){
             reject(e);
           });
@@ -112,72 +189,23 @@ Teambo.bucket = (function(t){
       });
     });
   };
-  bucket.update = function(bucket_id, opts) {
-    return t.promise(function(fulfill, reject) {
-      bucket.fetch(bucket_id, t.team.current.id, t.team.current.mkey).then(function(ct){
-        var b = new t.bucket(t.bucket.decrypt(ct));
-        b.opts = t.extend(b.opts, opts);
-        b.save().then(function(xhr){
-          for(var i in bucket.all) {
-            if(bucket.all[i].id == bucket_id) {
-              bucket.all[i] = b;
-            }
-          }
-          fulfill(b);
-        }).catch(function(e){
-          reject(e);
-        });
-      }).catch(function(e){
-        // Save bucket update event
-        // Apply bucket update event
-        reject(e);
-      });
-    });
-  };
-  bucket.remove = function(bucket_id) {
-    return t.promise(function(fulfill, reject) {
-      t.xhr.post('/bucket/remove', {
-        data: {
-          team_id: t.team.current.id,
-          mkey:  t.team.current.mkey,
-          bucket_id: bucket_id
-        }
-      }).then(function(xhr){
-        if(xhr.status == 204) {
-          var hash = t.crypto.sha(t.team.current.id+bucket_id+t.salt);
-          localforage.removeItem(hash).then(function(){
-            bucket.all = t.deleteByProperty(bucket.all, 'id', bucket_id);
-            bucket.cacheIds().then(function(){
-              fulfill();
-            });
-          });
-        } else {
-          reject(xhr);
-        }
-      }).catch(function(e){
-        // Save bucket delete event
-        // Apply bucket delete event
-        reject(e);
-      });
-    });
-  };
-  bucket.get = function(id) {
-    for(var i in bucket.all) {
-      var b = bucket.all[i];
+  model.get = function(id) {
+    for(var i in model.all) {
+      var b = model.all[i];
       if(b.id == id) {
         return b;
       }
     }
   };
-  bucket.find = function(id) {
+  model.find = function(id) {
     return t.promise(function(fulfill, reject){
       var team = t.team.current;
       localforage.getItem(t.crypto.sha(team.id+id+t.salt)).then(function(ct){
         if(ct) {
-          fulfill(new bucket(bucket.decrypt(ct)));
+          fulfill(new model(ct));
         } else {
-          bucket.fetch(id, team.id, team.mkey).then(function(ct) {
-            fulfill(new bucket(bucket.decrypt(ct)));
+          model.fetch(id, team.id, team.mkey).then(function(ct) {
+            fulfill(new model(ct));
           }).catch(function(e) {
             reject(e);
           });
@@ -185,7 +213,7 @@ Teambo.bucket = (function(t){
       });
     });
   };
-  bucket.fetch = function(id, team_id, mkey) {
+  model.fetch = function(id, team_id, mkey) {
     return t.promise(function(fulfill, reject) {
       t.xhr.get('/bucket', {
         data: {
@@ -204,45 +232,39 @@ Teambo.bucket = (function(t){
 
     });
   };
-  bucket.encrypt = function(data) {
-    return t.team.current.encrypt(data);
-  };
-  bucket.decrypt = function(ct) {
-    return t.team.current.decrypt(ct);
-  };
-  bucket.findAll = function() {
+  model.findAll = function() {
     return t.promise(function(fulfill, reject) {
-      var ret = [],
-        p = [],
-        team = t.team.current;
-      var hash = t.crypto.sha(team.id+"buckets"+t.salt);
-      localforage.getItem(hash).then(function(ct){
+      if(model.all.length) {
+        fulfill(model.all);
+        return;
+      }
+      var team = t.team.current;
+      t.team.findCached("buckets").then(function(ct){
+        var ret = [];
         if(ct) {
-          var ids = bucket.decrypt(ct);
+          var ids = t.team.decrypt(ct);
           var p = [];
           for(var i in ids) {
-            if(!ids[i]) {
-              continue;
-            }
-            p.push(bucket.find(ids[i]).then(function(b){
+            if(!ids[i]) continue;
+            p.push(model.find(ids[i]).then(function(b){
               ret.push(b);
             }));
           }
           Promise.all(p).then(function() {
-            bucket.all = ret;
+            model.all = ret;
             fulfill(ret);
           }).catch(function(e){
             reject(e);
           });
         } else {
-          bucket.fetchAll(team.id, team.mkey).then(function(data){
-            var buckets = [];
+          model.fetchAll(team.id, team.mkey).then(function(data){
             for(var i in data) {
-              buckets.push(new bucket(data[i].ct));
+              ret.push(new model(data[i].ct));
             }
-            bucket.all = buckets;
-            bucket.cacheIds();
-            fulfill(buckets);
+            model.all = ret;
+            model.cacheIds().then(function() {
+              fulfill(ret);
+            });
           }).catch(function(e){
             reject(e);
           });
@@ -250,7 +272,7 @@ Teambo.bucket = (function(t){
       });
     });
   };
-  bucket.fetchAll = function(team_id, mkey) {
+  model.fetchAll = function(team_id, mkey) {
     return t.promise(function(fulfill, reject) {
       t.xhr.get('/buckets', {
         data: {
@@ -262,13 +284,13 @@ Teambo.bucket = (function(t){
           var data = JSON.parse(xhr.responseText);
           fulfill(data || []);
         } else {
-          reject("Failed to retrieve all buckets");
+          reject(xhr);
         }
       });
     });
   };
 
-  return bucket;
+  return model;
 
   // t.event.register('bucket-create', {
     // apply: function(events, obj) {

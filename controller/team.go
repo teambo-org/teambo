@@ -13,9 +13,9 @@ func Team(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
-	iv := r.FormValue("iv")
 	mkey := r.FormValue("mkey")
 	ct := r.FormValue("ct")
+	iv := r.FormValue("iv")
 
 	team := model.Team{}
 	err := errors.New("")
