@@ -132,7 +132,7 @@
 #dashboard .main ul.items li span.name { margin-left: 1.7em; display: block; }
 #dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; }
 
-#dashboard .main .bucket p.description { padding-left: 3em; margin-top: 0; }
+#dashboard .main .bucket p.description { padding: 0.5em 0.8em; margin-top: 0; }
 
 #dashboard .main .dash ul.buckets ul.items li { list-style: none; }
 #dashboard .main nav { float: right; margin-top: 0.5em; }
