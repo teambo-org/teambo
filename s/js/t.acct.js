@@ -197,9 +197,14 @@ Teambo.acct = (function (t) {
     var key  = t.crypto.pbk(pass, email);
     var akey = t.crypto.pbk(pass, id + key);
     return t.promise(function (fulfill, reject) {
-      t.xhr.post('/acct/auth', {
-        data: {id: id, akey: akey}
-      }).then(function (xhr) {
+      if(t.online()) {
+        var p = t.xhr.post('/acct/auth', {
+          data: {id: id, akey: akey}
+        });
+      } else {
+        var p = Promise.reject();
+      }
+      p.then(function (xhr) {
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
           if (!data || !data.ct) {
