@@ -81,4 +81,6 @@
     t.gotoUrl('/account');
   }
 
+  t.updateStatus();
+
 })(Teambo);
