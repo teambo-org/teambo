@@ -1,4 +1,4 @@
-(function(t){
+function(t){
     "use strict";
 
     document.querySelectorAll('#right .progress').forEach(function(el) {
@@ -9,4 +9,4 @@
       el.appendChild(remaining);
     });
 
-})(Teambo);
+}

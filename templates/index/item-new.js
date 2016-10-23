@@ -1,4 +1,4 @@
-(function(t){
+function(t){
   "use strict";
 
   t.editing(true);
@@ -29,4 +29,4 @@
   }
   form.status.innerHTML = html + form.status.innerHTML;
 
-})(Teambo);
+}

@@ -1,4 +1,4 @@
-(function(t){
+function(t){
   "use strict";
 
   var form = new t.form(document.item_remove);
@@ -16,4 +16,4 @@
   });
   document.getElementById('delete_submit').focus();
 
-})(Teambo);
+}

@@ -1,4 +1,4 @@
-(function(t){
+function(t){
   "use strict";
 
   var form = new t.form(document.bucket_remove);
@@ -15,4 +15,4 @@
   });
   document.getElementById('delete_submit').focus();
 
-})(Teambo);
+}

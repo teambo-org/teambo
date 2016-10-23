@@ -1,4 +1,4 @@
-(function(t){
+function(t){
   "use strict";
 
   t.editing(true);
@@ -49,4 +49,4 @@
   }
   form.bucket.innerHTML = html + form.bucket.innerHTML;
 
-})(Teambo);
+}

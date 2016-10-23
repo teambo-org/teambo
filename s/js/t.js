@@ -317,9 +317,10 @@ var Teambo = (function(t){
       var el = els[i],
         tplname = el.getAttribute('data-tpljs');
       if(tplname in template_js) {
-        template_js[tplname]();
+        template_js[tplname](t);
       }
     }
+
   };
 
   t.updateRightNav = function() {

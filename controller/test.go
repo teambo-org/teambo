@@ -23,6 +23,7 @@ var tests = []string{
 	"/js/test/t.team.test.js",
 	"/js/test/t.bucket.test.js",
 	"/js/test/t.item.test.js",
+	"/js/test/stress.test.js",
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {

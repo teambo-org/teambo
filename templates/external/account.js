@@ -1,4 +1,4 @@
-(function(t){
+function(t){
   "use strict";
 
   t.editing(true);
@@ -27,4 +27,4 @@
     }
   });
 
-})(Teambo);
+}

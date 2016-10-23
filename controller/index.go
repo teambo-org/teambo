@@ -223,7 +223,7 @@ func append_js_init(w io.Writer) {
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
-		tpljs = append(tpljs, "'"+k+"': function(){\n"+scripts[k]+"\n}")
+		tpljs = append(tpljs, "'"+k+"': "+scripts[k])
 	}
 	template_scripts := strings.Join(tpljs, ", ")
 	audio, _ := json.Marshal(find_audio())
