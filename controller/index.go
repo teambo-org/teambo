@@ -35,7 +35,7 @@ var js = []string{
 	"/js/lib/sjcl.js",
 	"/js/lib/jsuri-1.1.1.js",
 	"/js/lib/fastclick.js",
-	"/js/lib/mustache.js",
+	"/js/lib/mustache.2.2.1.min.js",
 	"/js/lib/localforage.min.js",
 	"/js/lib/promise-7.0.4.min.js",
 	"/js/lib/classList.js",
