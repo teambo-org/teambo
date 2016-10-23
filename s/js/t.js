@@ -195,20 +195,26 @@ var Teambo = (function(t){
         }
       });
       document.body.addEventListener('click', function(e) {
-        if(anchorClass(e.target, 'replace')) {
-          e.preventDefault();
-          t.gotoUrl(e.target.getAttribute('href').substr(1), true);
+        var el = e.target;
+        if(el.nodeName != 'A' && el.parentNode.nodeName == 'A') {
+          el = e.target.parentNode;
+        } else if(el.nodeName != 'A') {
           return;
         }
-        if(anchorClass(e.target, 'logout')) {
+        if(anchorClass(el, 'replace')) {
+          e.preventDefault();
+          t.gotoUrl(el.getAttribute('href').substr(1), true);
+          return;
+        }
+        if(anchorClass(el, 'logout')) {
           e.preventDefault();
           t.acct.deAuth();
           t.gotoUrl('/login');
           return;
         }
-        if(anchorClass(e.target, 'force')) {
+        if(anchorClass(el, 'force')) {
           e.preventDefault();
-          hashChange(e.target.getAttribute('href').substr(1));
+          hashChange(el.getAttribute('href').substr(1));
           return;
         }
       });
