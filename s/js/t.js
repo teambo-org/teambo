@@ -24,10 +24,6 @@ var Teambo = (function(t){
     return testing;
   };
 
-  t.setTarget = function(id) {
-    target = id;
-  };
-
   t.updateReady = function(ready) {
     if(typeof ready === 'boolean') {
       updateready = ready;
@@ -54,80 +50,78 @@ var Teambo = (function(t){
     if(updateready) {
       window.location.reload();
     }
-    if(route) {
-      t.extend(data, route.data);
-      var p = [];
-      if('team_id' in data && (!(t.view.isset('team')) || t.view.get('team').id != data.team_id)) {
-        if(t.acct.isAuthed()) {
-          p.push(t.team.init(data.team_id).then(function(team){
-            t.view.set('team', team);
-          }));
-        } else {
-          after_auth = hash;
-          t.gotoUrl('/login');
-          return;
+    if(!route) {
+      t.log('route not found ' + hash);
+      return;
+    }
+    t.extend(data, route.data);
+    var p = [];
+    if('team_id' in data && (!(t.view.isset('team')) || t.view.get('team').id != data.team_id)) {
+      if(t.acct.isAuthed()) {
+        p.push(t.team.init(data.team_id).then(function(team){
+          t.view.set('team', team);
+        }));
+      } else {
+        after_auth = hash;
+        t.gotoUrl('/login');
+        return;
+      }
+    }
+    Promise.all(p).then(function(){
+      if(t.view.isset('team')) {
+        if('bucket_id' in data) {
+          data.bucket = t.bucket.get(data.bucket_id);
+        }
+        if('item_id' in data) {
+          data.item = t.item.get(data.item_id);
         }
       }
-      Promise.all(p).then(function(){
-        if(t.view.isset('team')) {
-          if('bucket_id' in data) {
-            data.bucket = t.bucket.get(data.bucket_id);
-          }
-          if('item_id' in data) {
-            data.item = t.item.get(data.item_id);
-          }
+      if(route.tpl.indexOf('external') !== 0 && !document.getElementById('dash-main')) {
+        if(!t.view.isset('team')) {
+          t.gotoUrl('/account');
         }
-        if(route.tpl.indexOf('external') !== 0 && !document.getElementById('dash-main')) {
-          if(!t.view.isset('team')) {
-            t.gotoUrl('/account');
-          }
-          document.getElementById('page').innerHTML = t.view.render("layout/dashboard", data, true);
-          run_template_js(document.getElementById('page'));
-          target = "dash-main";
-        } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
-          t.view.unset('team');
-          target = "page";
-        }
-        for (var i in nav_queue) {
-          nav_queue[i]();
-        };
-        nav_queue = [];
-        var tar = document.getElementById(target);
-        tar.innerHTML = t.view.render(route.tpl, data);
-        if(tar.firstChild) {
-          var class_list = tar.firstChild.classList;
-          if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
-            return t.gotoUrl('/login');
-          }
-          if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
-            return t.gotoUrl('/account');
-          }
-          if(class_list.contains('require-team') && !t.view.isset('team')) {
-            return t.gotoUrl('/account');
-          }
-          if(class_list.contains('require-bucket') && data.bucket) {
-            return t.gotoUrl('/dashboard');
-          }
-          if(class_list.contains('require-item') && data.item) {
-            return t.gotoUrl('/dashboard');
-          }
-        }
-        run_template_js(tar);
-        if(loaded) {
-          tar.scrollTop = 0;
-        }
-        setTimeout(function(loaded){
-          scrollToSub(hash, loaded);
-        }, 0, loaded);
-        if(loaded) {
-          t.audio.play('click', 1);
-        }
-        last_hash = hash;
-        loaded = true;
+        document.getElementById('page').innerHTML = t.view.render("layout/dashboard", data, true);
+        run_template_js(document.getElementById('page'));
+        target = "dash-main";
+      } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
+        t.view.unset('team');
+        target = "page";
+      }
+      nav_queue.forEach(function(fn) {
+        fn();
       });
-    } else {
-      t.log('route not found ' + hash);
-    }
+      nav_queue = [];
+      var tar = document.getElementById(target);
+      tar.innerHTML = t.view.render(route.tpl, data);
+      if(tar.firstChild) {
+        var class_list = tar.firstChild.classList;
+        if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
+          return t.gotoUrl('/login');
+        }
+        if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
+          return t.gotoUrl('/account');
+        }
+        if(class_list.contains('require-team') && !t.view.isset('team')) {
+          return t.gotoUrl('/account');
+        }
+        if(class_list.contains('require-bucket') && data.bucket) {
+          return t.gotoUrl('/dashboard');
+        }
+        if(class_list.contains('require-item') && data.item) {
+          return t.gotoUrl('/dashboard');
+        }
+      }
+      run_template_js(tar);
+      if(loaded) {
+        tar.scrollTop = 0;
+      }
+      scrollToSub(hash, loaded);
+      if(loaded) {
+        t.audio.play('click', 1);
+      }
+      last_hash = hash;
+      loaded = true;
+    });
   };
 
   t.gotoUrl = function(href, replace) {
