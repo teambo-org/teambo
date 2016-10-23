@@ -258,12 +258,17 @@ Teambo.bucket = (function(t){
           });
         } else {
           model.fetchAll(team.id, team.mkey).then(function(data){
-            for(var i in data) {
-              ret.push(new model(data[i].ct));
-            }
-            model.all = ret;
-            model.cacheIds().then(function() {
-              fulfill(ret);
+            var cp = [];
+            data.forEach(function(o) {
+              var m = new model(o.ct);
+              ret.push(m);
+              cp.push(m.cache());
+            });
+            Promise.all(cp).then(function() {
+              model.all = ret;
+              model.cacheIds().then(function() {
+                fulfill(ret);
+              });
             });
           }).catch(function(e){
             reject(e);
