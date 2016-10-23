@@ -3,6 +3,8 @@ describe("Account", function() {
   var email = "test@test.test";
   var pass = Teambo.crypto.randomKey();
 
+  console.log(pass);
+
   Teambo.gotoUrl("");
   Teambo.acct.deAuth();
 
