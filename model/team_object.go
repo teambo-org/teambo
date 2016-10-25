@@ -8,16 +8,21 @@ import (
 	// "errors"
 )
 
-type Item struct {
+type TeamBucket struct {
+	Name string
+}
+
+type TeamObject struct {
+	Bucket     string
 	Id         string `json:"id"`
 	Ciphertext string `json:"ct"`
 }
 
-func (ti Item) Save(team_id string) (err error) {
+func (o TeamObject) Save(team_id string) (err error) {
 	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("item"))
+		b, err := tx.CreateBucketIfNotExists([]byte(o.Bucket))
 
-		err = b.Put([]byte(ti.Id), []byte(ti.Ciphertext))
+		err = b.Put([]byte(o.Id), []byte(o.Ciphertext))
 		if err != nil {
 			return err
 		}
@@ -32,11 +37,11 @@ func (ti Item) Save(team_id string) (err error) {
 	return nil
 }
 
-func (ti Item) Remove(team_id string) (err error) {
+func (o TeamObject) Remove(team_id string) (err error) {
 	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("item"))
+		b, err := tx.CreateBucketIfNotExists([]byte(o.Bucket))
 
-		err = b.Delete([]byte(ti.Id))
+		err = b.Delete([]byte(o.Id))
 		if err != nil {
 			return err
 		}
@@ -50,23 +55,23 @@ func (ti Item) Remove(team_id string) (err error) {
 	return nil
 }
 
-func NewItem(team_id string) Item {
+func (tb TeamBucket) NewObject(team_id string) TeamObject {
 	id := util.RandStr(8)
 	for {
-		exists, _ := ItemExists(team_id, id)
+		exists, _ := tb.Exists(team_id, id)
 		if exists {
 			id = util.RandStr(8)
 		} else {
 			break
 		}
 	}
-	return Item{id, "new"}
+	return TeamObject{tb.Name, id, "new"}
 }
 
-func FindItem(team_id string, id string) (item Item, err error) {
+func (tb TeamBucket) Find(team_id string, id string) (o TeamObject, err error) {
 	ct := ""
 	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("item"))
+		b, err := tx.CreateBucketIfNotExists([]byte(tb.Name))
 
 		v := b.Get([]byte(id))
 		if err != nil {
@@ -79,36 +84,36 @@ func FindItem(team_id string, id string) (item Item, err error) {
 	})
 	if err != nil {
 		fmt.Println(err)
-		return item, err
+		return o, err
 	}
 
 	if ct != "" {
-		item = Item{id, ct}
-		return item, nil
+		o = TeamObject{tb.Name, id, ct}
+		return o, nil
 	}
-	return item, nil
+	return o, nil
 }
 
-func AllItems(team_id string) (items []Item, err error) {
+func (tb TeamBucket) All(team_id string) (o []TeamObject, err error) {
 	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, _ := tx.CreateBucketIfNotExists([]byte("item"))
+		b, _ := tx.CreateBucketIfNotExists([]byte(tb.Name))
 		b.ForEach(func(k, v []byte) error {
-			items = append(items, Item{string(k), string(v)})
+			o = append(o, TeamObject{tb.Name, string(k), string(v)})
 			return nil
 		})
 		return nil
 	})
 	if err != nil {
 		fmt.Println(err)
-		return items, err
+		return o, err
 	}
-	return items, nil
+	return o, nil
 }
 
-func ItemExists(team_id string, id string) (exists bool, err error) {
+func (tb TeamBucket) Exists(team_id string, id string) (exists bool, err error) {
 	exists = false
 	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, _ := tx.CreateBucketIfNotExists([]byte("item"))
+		b, _ := tx.CreateBucketIfNotExists([]byte(tb.Name))
 		c := b.Cursor()
 
 		prefix := []byte(id)

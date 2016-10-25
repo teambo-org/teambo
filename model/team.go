@@ -40,16 +40,19 @@ func (t Team) Remove() (err error) {
 	return nil
 }
 
-func (t Team) NewMember() Member {
-	return NewMember(t.Id)
+func (t Team) NewMember() TeamObject {
+	members := TeamBucket{"member"}
+	return members.NewObject(t.Id)
 }
 
-func (t Team) NewBucket() Bucket {
-	return NewBucket(t.Id)
+func (t Team) NewBucket() TeamObject {
+	buckets := TeamBucket{"bucket"}
+	return buckets.NewObject(t.Id)
 }
 
-func (t Team) NewItem() Item {
-	return NewItem(t.Id)
+func (t Team) NewItem() TeamObject {
+	items := TeamBucket{"item"}
+	return items.NewObject(t.Id)
 }
 
 func NewTeam() Team {

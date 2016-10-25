@@ -225,7 +225,8 @@ func append_js_init(w io.Writer) {
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
-		tpljs = append(tpljs, "'"+k+"': "+scripts[k])
+		tplname := strings.Replace(k, string(os.PathSeparator), "/", -1)
+		tpljs = append(tpljs, "'"+tplname+"': "+scripts[k])
 	}
 	template_scripts := strings.Join(tpljs, ", ")
 	audio, _ := json.Marshal(find_audio())
@@ -291,10 +292,11 @@ func compile_templates() (map[string]string, map[string]string) {
 	template_js := map[string]string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		filename, _ := filepath.Rel("templates", path)
-		if !f.IsDir() && strings.Contains(filename, "/") {
+		if !f.IsDir() && strings.Contains(filename, string(os.PathSeparator)) {
 			tpl, _ := ioutil.ReadFile(path)
 			if strings.HasSuffix(filename, ".mustache") {
 				tplname := strings.TrimSuffix(filename, ".mustache")
+				tplname = strings.Replace(tplname, string(os.PathSeparator), "/", -1)
 				templates[tplname] = string(tpl)
 			}
 			if strings.HasSuffix(filename, ".js") {
@@ -310,12 +312,12 @@ func compile_templates() (map[string]string, map[string]string) {
 }
 
 func find_audio() []string {
-	dir := "s/audio"
+	dir := "s" + string(os.PathSeparator) + "audio"
 	audio := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() && strings.HasSuffix(path, ".mp3") {
 			name := strings.TrimSuffix(path, ".mp3")
-			audio = append(audio, strings.TrimPrefix(name, dir+"/"))
+			audio = append(audio, strings.TrimPrefix(name, dir+string(os.PathSeparator)))
 		}
 		return nil
 	}
@@ -324,11 +326,11 @@ func find_audio() []string {
 }
 
 func find_images() []string {
-	dir := "s/i"
+	dir := "s" + string(os.PathSeparator) + "i"
 	images := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {
-			images = append(images, strings.TrimPrefix(path, dir+"/"))
+			images = append(images, strings.TrimPrefix(path, dir+string(os.PathSeparator)))
 		}
 		return nil
 	}
@@ -337,11 +339,11 @@ func find_images() []string {
 }
 
 func find_fonts() []string {
-	dir := "s/font"
+	dir := "s" + string(os.PathSeparator) + "font"
 	images := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {
-			images = append(images, strings.TrimPrefix(path, dir+"/"))
+			images = append(images, strings.TrimPrefix(path, dir+string(os.PathSeparator)))
 		}
 		return nil
 	}

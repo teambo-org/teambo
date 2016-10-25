@@ -22,12 +22,12 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/acct/auth":         controller.AcctAuth,
 	"/acct/verification": controller.AcctVerification,
 	"/team":              controller.Team,
-	"/buckets":           controller.Buckets,
-	"/bucket":            controller.Bucket,
-	"/bucket/remove":     controller.BucketRemove,
-	"/items":             controller.Items,
-	"/item":              controller.Item,
-	"/item/remove":       controller.ItemRemove,
+	"/buckets":           controller.HandleTeamObjects("bucket"),
+	"/bucket":            controller.HandleTeamObject("bucket"),
+	"/bucket/remove":     controller.HandleTeamObjectRemove("bucket"),
+	"/items":             controller.HandleTeamObjects("item"),
+	"/item":              controller.HandleTeamObject("item"),
+	"/item/remove":       controller.HandleTeamObjectRemove("item"),
 	"/app.manifest":      controller.Manifest,
 	"/app.manifestweb":   controller.WebManifest,
 	"/init.js":           controller.Initjs,
@@ -55,8 +55,11 @@ func main() {
 
 	config := util.ParseConfig(*config_path)
 
+	log.Println(config["app.data"])
+
 	err := model.GlobalInit()
 	if err != nil {
+		log.Println(err.Error())
 		log.Fatal("Could not open Bolt DB for writing")
 	}
 
@@ -64,7 +67,7 @@ func main() {
 
 	if config["ssl.active"] == "true" {
 		srv := &http.Server{
-			Addr: ":443",
+			Addr: ":4043",
 		}
 		http2.ConfigureServer(srv, &http2.Server{})
 		log.Fatal(srv.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"]))

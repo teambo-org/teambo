@@ -36,7 +36,7 @@ func Team(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Team member could not be saved", 500)
 				return
 			}
-			mkey = member.Mkey
+			mkey = member.Id
 			res["mkey"] = mkey
 		} else if len(team_id) > 0 && len(mkey) > 0 && len(ct) > 0 && len(iv) > 0 {
 			team, err = auth_team(w, r)

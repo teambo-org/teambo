@@ -1,7 +1,7 @@
 describe("Stress", function() {
 
   // var factor = 100;
-  var factor = 40;
+  var factor = 0;
 
   it("Performs well with "+factor+" buckets each having "+factor+" items", function(done) {
     var i = 0;

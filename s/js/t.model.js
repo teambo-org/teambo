@@ -16,15 +16,14 @@ Teambo.model = (function(t){
       save: function() {
         return t.promise(function(fulfill, reject) {
           var new_ct = self.encrypted();
-          var d = {
-            team_id: t.team.current.id,
-            mkey: t.team.current.mkey,
-            ct: new_ct,
-            iv: self.iv
-          };
-          d[model.type + '_id'] = self.id;
           t.xhr.post('/'+model.type, {
-            data: d
+            data: {
+              team_id: t.team.current.id,
+              mkey: t.team.current.mkey,
+              id: self.id,
+              ct: new_ct,
+              iv: self.iv
+            }
           }).then(function(xhr){
             if(xhr.status == 200) {
               self.iv = new_ct.split(' ')[0];
@@ -97,13 +96,12 @@ Teambo.model = (function(t){
       },
       remove: function() {
         return t.promise(function(fulfill, reject) {
-          var d = {
-            team_id: t.team.current.id,
-            mkey:    t.team.current.mkey
-          };
-          d[model.type+'_id'] = self.id;
           t.xhr.post('/'+model.type+'/remove', {
-            data: d
+            data: {
+              team_id: t.team.current.id,
+              mkey:    t.team.current.mkey,
+              id:      self.id
+            }
           }).then(function(xhr){
             if(xhr.status == 204) {
               self.uncache().then(function(){
@@ -151,13 +149,13 @@ Teambo.model = (function(t){
         }).then(function(xhr){
           if(xhr.status == 200) {
             var data = JSON.parse(xhr.responseText);
-            var item = new model({
+            var m = new model({
               id:   data.id,
               opts: opts,
               iv:  'new'
             });
-            item.save().then(function(xhr){
-              fulfill(item);
+            m.save().then(function(xhr){
+              fulfill(m);
             }).catch(function(e){
               reject(e);
             });
@@ -178,7 +176,7 @@ Teambo.model = (function(t){
           data: {
             team_id: team_id,
             mkey: mkey,
-            item_id: id
+            id: id
           }
         }).then(function(xhr) {
           if (xhr.status === 200) {
