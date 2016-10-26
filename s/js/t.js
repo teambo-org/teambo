@@ -386,10 +386,13 @@ document.addEventListener("keydown", function(e) {
   if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && e.key != "Escape") {
     return;
   }
+  var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
+  if(e.ctrlKey && key == 'q') {
+    window.location.hash = "";
+  }
   if(e.ctrlKey || e.altKey) {
     return;
   }
-  var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
   var sections = ['left', 'main', 'right'];
   if (["arrowdown", "s"].indexOf(key) >= 0) {
     var targets = document.querySelectorAll('a[href], input.submit');

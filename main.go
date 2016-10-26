@@ -55,8 +55,6 @@ func main() {
 
 	config := util.ParseConfig(*config_path)
 
-	log.Println(config["app.data"])
-
 	err := model.GlobalInit()
 	if err != nil {
 		log.Println(err.Error())
@@ -67,12 +65,12 @@ func main() {
 
 	if config["ssl.active"] == "true" {
 		srv := &http.Server{
-			Addr: ":4043",
+			Addr: ":"+config["port.https"],
 		}
 		http2.ConfigureServer(srv, &http2.Server{})
 		log.Fatal(srv.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"]))
 	} else {
-		err := http.ListenAndServe(":80", nil)
+		err := http.ListenAndServe(":"+config["port.http"], nil)
 		if err != nil {
 			fmt.Println("ERROR - " + err.Error())
 		}
