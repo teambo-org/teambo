@@ -14,3 +14,5 @@ static.cache   false
 static.min     false
 app.manifest   true
 tests.enabled  true
+port.http      80
+port.https     443
