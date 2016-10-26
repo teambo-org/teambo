@@ -83,5 +83,25 @@ describe("Item", function() {
       });
     });
   });
+  
+  it("Can be moved between buckets", function(done) {
+    Teambo.bucket.findAll().then(function(buckets) {
+      bucket_id = buckets[0].id;
+      bucket2 = buckets[1];
+      Teambo.item.create({name: 'Moved Item', status: 'ready', description: 'This is a test item for move', bucket_id: bucket_id}).then(function(item){
+        var item_id = item.id;
+        item.update({bucket_id: bucket2.id}).then(function(new_item){
+          expect(new_item.opts.bucket_id).toBe(bucket2.id);
+          done();
+        }).catch(function(e){
+          fail("Item could not be edited");
+          done();
+        });
+      }).catch(function(e){
+        fail("Item could not be created");
+        done();
+      });
+    });
+  });
 
 });

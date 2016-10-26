@@ -10,7 +10,7 @@ function(t){
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = form.values(['name', 'description', 'status', 'bucket']);
+    var data = form.values(['name', 'description', 'status', 'bucket_id']);
     var submit = function() {
       item.update(data).then(function(item){
         t.updateRightNav();
@@ -47,6 +47,6 @@ function(t){
     var bucket = t.bucket.all[i];
     html +=  "<option value='"+bucket.id+"'"+(bucket.id === bucket_id ? " selected='selected'" : "")+">"+bucket.opts.name+"</option>";
   }
-  form.bucket.innerHTML = html + form.bucket.innerHTML;
+  form.bucket_id.innerHTML = html + form.bucket_id.innerHTML;
 
 }
