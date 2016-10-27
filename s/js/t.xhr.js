@@ -6,7 +6,6 @@ Teambo.xhr = (function(t){
       var x = new(window.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
       x.open(method, url, 1);
       x.timeout = 'timeout' in opts ? opts.timeout : 5000;
-      // x.setRequestHeader('teambo-auth', 'asdf');
       for(var i in opts.headers) {
         x.setRequestHeader(i, opts.headers[i]);
       }
@@ -22,6 +21,19 @@ Teambo.xhr = (function(t){
       };
       x.send(opts.data);
     });
+  }
+
+  var encode_data = function(opts) {
+    if(typeof opts.data === 'object') {
+      var str = [];
+      for(var p in opts.data) {
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(opts.data[p]));
+      }
+      opts.data = str.join("&");
+      opts.headers = opts.headers ? opts.headers : {};
+      opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
+    return opts;
   }
 
   t.extend(xhr, {
@@ -40,19 +52,6 @@ Teambo.xhr = (function(t){
       return xhr('POST', url, opts);
     }
   });
-
-  var encode_data = function(opts) {
-    if(typeof opts.data === 'object') {
-      var str = [];
-      for(var p in opts.data) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(opts.data[p]));
-      }
-      opts.data = str.join("&");
-      opts.headers = opts.headers ? opts.headers : {};
-      opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-    }
-    return opts;
-  }
 
   return xhr;
 
