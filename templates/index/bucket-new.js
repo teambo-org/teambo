@@ -9,7 +9,7 @@ function(t){
     form.disable();
     var data = form.values(['name', 'description']);
     t.bucket.create(data).then(function(bucket){
-      t.updateRightNav();
+      t.updateSideNav();
       t.gotoUrl(bucket.url);
     }).catch(function(e){
       form.enable();

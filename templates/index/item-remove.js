@@ -8,7 +8,7 @@ function(t){
     var item = t.item.get(item_id);
     var bucket = item.bucket();
     item.remove().then(function(){
-      t.updateRightNav();
+      t.updateSideNav();
       t.gotoUrl(bucket.url);
     }).catch(function(e){
       form.enable();

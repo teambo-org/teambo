@@ -330,10 +330,13 @@ var Teambo = (function(t){
 
   };
 
-  t.updateRightNav = function() {
+  t.updateSideNav = function() {
     var right = document.getElementById('right');
     right.innerHTML = t.view.render('dashboard/right');
     run_template_js(right);
+    var left = document.getElementById('left');
+    left.innerHTML = t.view.render('dashboard/left');
+    run_template_js(left);
   }
 
   t.nextNav = function(fn) {
