@@ -40,7 +40,7 @@ Teambo.acct = (function (t) {
       cache: function () {
         var hash = t.crypto.sha(self.email + t.salt);
         sessionStorage.setItem('auth', JSON.stringify({hash: hash, akey: akey, key: key}));
-        localforage.setItem(hash, self.encrypted());
+        return localforage.setItem(hash, self.encrypted());
       },
       encrypted: function () {
         return self.encrypt({
@@ -171,6 +171,7 @@ Teambo.acct = (function (t) {
           var data = t.crypto.decrypt(ct, auth.key);
           if (data) {
             acct.current = new acct(data, auth.akey, auth.key);
+            sessionStorage.removeItem('auth');
             fulfill();
           } else {
             reject();

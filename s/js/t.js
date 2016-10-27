@@ -48,7 +48,10 @@ var Teambo = (function(t){
     var route = t.router.find(path);
     data = t.extend(data || {}, uri.getQueryParams());
     if(updateready) {
-      window.location.reload();
+      t.acct.current.cache().then(function(){
+        window.location.reload();
+      });
+      return;
     }
     if(!route) {
       t.log('route not found ' + hash);

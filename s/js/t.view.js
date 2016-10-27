@@ -78,7 +78,9 @@ Teambo.view = (function(t){
           if(window.applicationCache.status === window.applicationCache.UPDATEREADY
           || window.applicationCache.status === window.applicationCache.CHECKING) {
             if(!t.moved() && !t.editing()) {
-              window.location.reload();
+              t.acct.current.cache().then(function() {
+                window.location.reload();
+              });
             } else {
               t.updateReady(true);
             }
