@@ -9,9 +9,9 @@ Teambo.item = (function(t){
         return model.statuses[self.opts.status];
       },
       bucket: function() {
-        return t.bucket.all[self.bucket_id];
+        return t.bucket.all[self.opts.bucket_id];
       },
-      url: '/'+t.team.current.id+'/'+self.bucket_id+'/'+self.id
+      url: '/'+t.team.current.id+'/'+self.opts.bucket_id+'/'+self.id
     });
   };
   
