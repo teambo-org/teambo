@@ -78,9 +78,13 @@ Teambo.view = (function(t){
           if(window.applicationCache.status === window.applicationCache.UPDATEREADY
           || window.applicationCache.status === window.applicationCache.CHECKING) {
             if(!t.moved() && !t.editing()) {
-              t.acct.current.cache().then(function() {
+              if(t.acct.current) {
+                t.acct.current.cache().then(function() {
+                  window.location.reload();
+                });
+              } else {
                 window.location.reload();
-              });
+              }
             } else {
               t.updateReady(true);
             }
@@ -102,9 +106,19 @@ Teambo.view = (function(t){
             }, 30000);
           }
         };
+        if(window.applicationCache.status === 3) {
+          window.applicationCache.addEventListener('cached', function(e) {
+            window.applicationCache.update();
+            startCacheCheck();
+          }, false);
+        } else {
+          window.applicationCache.update();
+          startCacheCheck();
+        }
 
-        window.applicationCache.update();
-        startCacheCheck();
+        // window.applicationCache.addEventListener('progress', function(e) {
+          // console.log(e);
+        // }, false);
       }
     },
     render: function(tplname, data, override) {

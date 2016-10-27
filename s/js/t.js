@@ -48,9 +48,13 @@ var Teambo = (function(t){
     var route = t.router.find(path);
     data = t.extend(data || {}, uri.getQueryParams());
     if(updateready) {
-      t.acct.current.cache().then(function(){
+      if(t.acct.current) {
+        t.acct.current.cache().then(function() {
+          window.location.reload();
+        });
+      } else {
         window.location.reload();
-      });
+      }
       return;
     }
     if(!route) {
