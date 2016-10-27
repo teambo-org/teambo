@@ -13,7 +13,7 @@ type TeamBucket struct {
 }
 
 type TeamObject struct {
-	Bucket     string
+	Bucket     string `json:"-"`
 	Id         string `json:"id"`
 	Ciphertext string `json:"ct"`
 }
