@@ -1,6 +1,6 @@
 <div class="team-edit" data-tpljs="index/team-edit">
     <nav class="breadcrumbs">
-        <a href="#/{{team.id}}" data-keybind="b escape">Team</a>
+        <a href="#{{team.url}}" data-keybind="b escape">Team</a>
         <span>Settings</span>
     </nav>
     <h1>Team Settings</h1>
@@ -16,7 +16,7 @@
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Save" />
-            <a class="cancel" href="#/{{team.id}}">cancel</a>
+            <a class="cancel" href="#{{team.url}}">cancel</a>
         </div>
         <div class="error"></div>
     </form>

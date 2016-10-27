@@ -13,7 +13,7 @@ function(t){
     var submit = function() {
       bucket.update(data).then(function(bucket){
         t.updateRightNav();
-        t.gotoUrl('/'+t.team.current.id+'/'+bucket.id);
+        t.gotoUrl(bucket.url);
       }).catch(function(xhr){
         if(xhr.status === 409) {
           var opts = t.clone(bucket.opts);
@@ -29,7 +29,7 @@ function(t){
           });
         } else {
           form.enable();
-          form.error.msg("Item could not be created", "Please try again");
+          form.error.msg("Bucket could not be saved", "Please try again");
         }
       });
     };

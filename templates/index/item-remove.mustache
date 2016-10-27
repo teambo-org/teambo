@@ -1,8 +1,8 @@
 <div class="item-remove" data-tpljs="index/item-remove">
     <nav class="breadcrumbs">
-        <a href="#/{{team.id}}">Team</a>
-        <a href="#/{{team.id}}/{{bucket.id}}">Bucket</a>
-        <a href="#/{{team.id}}/{{bucket.id}}/{{item.id}}" data-keybind="q escape">Item</a>
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{bucket.url}}">Bucket</a>
+        <a href="#{{item.url}}" data-keybind="q escape">Item</a>
         <span>Remove</span>
     </nav>
     <h1>{{#item.status}}<i class="icon-{{icon}}"></i>{{/item.status}} {{item.opts.name}}</h1>
@@ -13,7 +13,7 @@
         <div class="field submit">
             <input type="submit" class="submit" id="delete_submit" value="Remove Item" />
             <br/>
-            <a class="cancel" href="#/{{team.id}}/{{bucket.id}}/{{item.id}}">cancel</a>
+            <a class="cancel" href="#{{item.url}}">cancel</a>
         </div>
         <div class="error"></div>
     </form>

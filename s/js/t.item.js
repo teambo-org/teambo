@@ -7,7 +7,11 @@ Teambo.item = (function(t){
     t.extend(this, {
       status: function() {
         return model.statuses[self.opts.status];
-      }
+      },
+      bucket: function() {
+        return t.bucket.all[self.bucket_id];
+      },
+      url: '/'+t.team.current.id+'/'+self.bucket_id+'/'+self.id
     });
   };
   

@@ -14,7 +14,7 @@ function(t){
     var submit = function() {
       item.update(data).then(function(item){
         t.updateRightNav();
-        t.gotoUrl('/'+t.team.current.id+'/'+item.opts.bucket_id+'/'+item.id);
+        t.gotoUrl(item.url);
       }).catch(function(xhr){
         if(xhr.status === 409) {
           var opts = t.clone(item.opts);
@@ -30,7 +30,7 @@ function(t){
           });
         } else {
           form.enable();
-          form.error.msg("Item could not be created", "Please try again");
+          form.error.msg("Item could not be saved", "Please try again");
         }
       });
     };

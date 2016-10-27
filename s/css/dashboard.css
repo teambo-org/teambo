@@ -17,8 +17,8 @@
 #dashboard .section { clear: both; }
 #dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
 #dashboard .section .bucket { position: relative; }
-#dashboard .section .bucket .progress { position: absolute; bottom: 0; left: 2em; right: 0; height: 2px; }
-#dashboard .section .bucket .progress > div { height: 2px; }
+#dashboard .progress { position: absolute; bottom: 0; left: 2em; right: 0; height: 2px; }
+#dashboard .progress > div { height: 2px; }
 #dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; overflow: hidden; position: relative; }
 #dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; display: none; }
 #dashboard .section div.totals { float: right; opacity: 0.5; font-size: 0.7em; line-height: 2.9em; padding: 0 1em; text-align: center; }

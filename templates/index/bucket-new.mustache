@@ -1,6 +1,6 @@
 <div class="bucket-new" data-tpljs="index/bucket-new">
     <nav class="breadcrumbs">
-        <a href="#/{{team.id}}" class="active" data-keybind="q escape">Team</a>
+        <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
         <span class="active">Create Bucket</span>
     </nav>
     <h1>Create Bucket</h1>
@@ -15,7 +15,7 @@
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Create Bucket" />
-            <a class="cancel" href="#/{{team.id}}">cancel</a>
+            <a class="cancel" href="#{{team.url}}">cancel</a>
         </div>
         <div class="error"></div>
     </form>

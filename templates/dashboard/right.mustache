@@ -14,18 +14,20 @@
         <div class="totals">
             {{item_count}}
         </div>
-        <a href="#/{{team.id}}/{{id}}" class="hi-10 bucket">
+        <a href="#{{url}}" class="hi-10 bucket">
             <div class="img"><i class="icon-flag-filled"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress" data-progress="{{progress}}"></div>
         </a>
+        {{#item_count_incomplete}}
         <ul class="items">
         {{#item_list}}
             <li class="item-{{opts.status}}">
-                <a href="#/{{team.id}}/{{opts.bucket_id}}/{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
+                <a href="#{{url}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
             </li>
         {{/item_list}}
         </ul>
+        {{/item_count_incomplete}}
     </div>
     {{/team.bucket_list}}
 <!--

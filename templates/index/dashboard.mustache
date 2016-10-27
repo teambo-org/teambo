@@ -1,16 +1,16 @@
 <div class="dash" data-tpljs="index/dashboard">
     <nav>
-        <a href="#/{{team.id}}/new" data-keybind="c">Create Bucket</a>
+        <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
     </nav>
     <nav class="breadcrumbs">
         <span>Team</span>
     </nav>
     <h1>{{team.opts.name}}</h1>
-    <a name="skipnav" class="skip-nav" href="#/{{team.id}}"></a>
+    <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="buckets" id="buckets">
     {{#team.bucket_list}}
     <li class="bucket" id="bucket-li-{{id}}">
-        <a href="#/{{team.id}}/{{id}}">
+        <a href="#{{url}}">
             <i class="icon-flag-filled"></i>
             <span class="name">{{opts.name}}</span>
             <div class="info">{{item_count}} Item{{#inf}}{{item_count}}{{/inf}}</div>

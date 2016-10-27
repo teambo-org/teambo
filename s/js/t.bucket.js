@@ -21,9 +21,13 @@ Teambo.bucket = (function(t){
       item_count: function() {
         return self.item_list().length;
       },
+      item_count_incomplete: function() {
+        return self.item_list_incomplete().length;
+      },
       progress: function() {
         return (self.item_list_complete().length / self.item_list().length) * 100;
-      }
+      },
+      url: '/'+t.team.current.id+'/'+self.id
     });
   };
   

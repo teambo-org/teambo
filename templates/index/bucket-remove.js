@@ -7,7 +7,7 @@ function(t){
     var id = form.id.value;
     t.bucket.get(id).remove().then(function(){
       t.updateRightNav();
-      t.gotoUrl('/'+t.team.current.id);
+      t.gotoUrl(t.team.current.url);
     }).catch(function(e){
       form.enable();
       form.error.msg("Bucket could not be removed.", "Please try again");

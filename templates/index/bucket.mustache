@@ -1,23 +1,23 @@
 <div class="bucket require-auth require-team" data-tpljs="index/bucket">
     <nav>
-        <a href="#/{{team.id}}/{{bucket.id}}/remove" data-keybind="r">Remove</a>
-        <a href="#/{{team.id}}/{{bucket.id}}/edit" data-keybind="e">Edit</a>
-        <a href="#/{{team.id}}/{{bucket.id}}/new" data-keybind="c">Create Item</a>
+        <a href="#{{bucket.url}}/remove" data-keybind="r">Remove</a>
+        <a href="#{{bucket.url}}/edit" data-keybind="e">Edit</a>
+        <a href="#{{bucket.url}}/new" data-keybind="c">Create Item</a>
     </nav>
     <nav class="breadcrumbs">
-        <a href="#/{{team.id}}" class="active" data-keybind="q escape">Team</a>
+        <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
         <span class="active">Bucket</span>
     </nav>
     <h1><i class="icon-flag-filled"></i> {{bucket.opts.name}}</h1>
     {{#bucket.opts.description}}
     <p class="description hi-10">{{bucket.opts.description}}</p>
     {{/bucket.opts.description}}
-    <a name="skipnav" class="skip-nav" href="#/{{team.id}}/{{bucket.id}}"></a>
+    <a name="skipnav" class="skip-nav" href="#{{bucket.url}}"></a>
     <div class="up2"><div class="up2l">
         <ul class="items incomplete">
         {{#bucket.item_list_incomplete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#/{{team.id}}/{{bucket.id}}/{{id}}" title="{{opts.status}}">
+                <a href="#{{url}}" title="{{opts.status}}">
                     {{#status}}
                     <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
                     {{/status}}
@@ -30,7 +30,7 @@
         <ul class="items complete">
         {{#bucket.item_list_complete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#/{{team.id}}/{{bucket.id}}/{{id}}">
+                <a href="#{{url}}">
                     {{#status}}
                     <i class="icon-{{icon}}"></i>
                     {{/status}}

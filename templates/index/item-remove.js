@@ -6,9 +6,10 @@ function(t){
     form.disable();
     var item_id = form.item_id.value;
     var item = t.item.get(item_id);
+    var bucket = item.bucket();
     item.remove().then(function(){
       t.updateRightNav();
-      t.gotoUrl('/'+t.team.current.id+'/'+item.opts.bucket_id);
+      t.gotoUrl(bucket.url);
     }).catch(function(e){
       form.enable();
       form.error.msg("Item could not be removed.", "Please try again");
