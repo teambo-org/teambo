@@ -56,6 +56,7 @@ var js = []string{
 	"/js/t.model.js",
 	"/js/t.bucket.js",
 	"/js/t.item.js",
+	"/js/t.keybind.js",
 }
 var jsinit = []string{
 	"/init.js",
