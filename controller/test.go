@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 	// "fmt"
 )
 
@@ -63,6 +64,13 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' data:; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob:")
 	if util.Config("ssl.active") == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+	}
+	if util.Config("ssl.hpkp") != "" {
+		var keys = ""
+		for _, k := range strings.Split(util.Config("ssl.hpkp"), " ") {
+			keys = keys + "pin-sha256=\""+k+"\"; "
+		}
+		w.Header().Set("Public-Key-Pins", keys + "max-age=30")
 	}
 
 	err = t.Execute(w, p)

@@ -109,6 +109,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if util.Config("ssl.active") == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 	}
+	if util.Config("ssl.hpkp") != "" {
+		var keys = ""
+		for _, k := range strings.Split(util.Config("ssl.hpkp"), " ") {
+			keys = keys + "pin-sha256=\""+k+"\"; "
+		}
+		w.Header().Set("Public-Key-Pins", keys + "max-age=30")
+	}
 
 	if util.Config("static.cache") == "true" {
 		// w.Header().Set("X-Cache-Edge", "0")

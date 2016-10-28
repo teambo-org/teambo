@@ -5,6 +5,7 @@ app.data       /var/lib/teambo
 ssl.active     true
 ssl.crt        ssl/generic.crt
 ssl.key        ssl/generic.key
+ssl.hpkp       UTQtSCJljlXQqFVZoz40hJ8tLO+XJp9KsGrHIfkb0t8= 47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
 smtp.host      mailtrap.io
 smtp.port      465
 smtp.user      __USER__
@@ -14,5 +15,6 @@ static.cache   false
 static.min     false
 app.manifest   true
 tests.enabled  true
+cache.manifest false
 port.http      80
 port.https     443
