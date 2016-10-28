@@ -150,7 +150,7 @@ Teambo.model = (function(t){
     model.create = function(opts) {
       return t.promise(function(fulfill, reject) {
         if('schema' in model) {
-          var errs = model.schema.validate(data.opts);
+          var errs = model.schema.validate(opts);
           if(errs.length) {
             reject(errs);
             return;
