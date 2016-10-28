@@ -78,7 +78,7 @@ var Teambo = (function(t){
       if(t.view.isset('team')) {
         if('bucket_id' in data) {
           data.bucket = t.bucket.get(data.bucket_id);
-        }
+        } 
         if('item_id' in data) {
           data.item = t.item.get(data.item_id);
         }
@@ -119,6 +119,26 @@ var Teambo = (function(t){
         }
       }
       run_template_js(tar);
+      var els = document.querySelectorAll('.bucket');
+      for(var i = 0; els[i]; i++) {
+        els[i].classList.remove('active');
+      }
+      if('bucket' in data) {
+        var els = document.querySelectorAll('.bucket-'+data.bucket.id);
+        for(var i = 0; els[i]; i++) {
+          els[i].classList.add('active');
+        }
+      }
+      var els = document.querySelectorAll('.item');
+      for(var i = 0; els[i]; i++) {
+        els[i].classList.remove('active');
+      }
+      if('item' in data) {
+        var els = document.querySelectorAll('.item-'+data.item.id);
+        for(var i = 0; els[i]; i++) {
+          els[i].classList.add('active');
+        }
+      }
       if(loaded) {
         tar.scrollTop = 0;
       }
