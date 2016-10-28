@@ -116,7 +116,7 @@
 
 #dashboard .main .nav #status { position: absolute; bottom: 0; width: 100%; text-align: center; line-height: 2em; text-transform: uppercase; }
 
-#dashboard .main .team { height: 2em; }
+#dashboard .main .team { }
 #dashboard .main .team a { display: block; }
 #dashboard .main .team a:hover .icon-down-open-1 { opacity: 0.8; background: none; }
 
