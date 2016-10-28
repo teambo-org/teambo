@@ -15,6 +15,13 @@ Teambo.model = (function(t){
       hist: data.hist ? data.hist : [],
       save: function() {
         return t.promise(function(fulfill, reject) {
+          if('schema' in model) {
+            var errs = model.schema.validate(data.opts);
+            if(errs.length) {
+              reject(errs);
+              return;
+            }
+          }
           var new_ct = self.encrypted();
           t.xhr.post('/'+model.type, {
             data: {
@@ -142,6 +149,13 @@ Teambo.model = (function(t){
   
     model.create = function(opts) {
       return t.promise(function(fulfill, reject) {
+        if('schema' in model) {
+          var errs = model.schema.validate(data.opts);
+          if(errs.length) {
+            reject(errs);
+            return;
+          }
+        }
         t.xhr.post('/'+model.type+'s', {
           data: {
             team_id: t.team.current.id,

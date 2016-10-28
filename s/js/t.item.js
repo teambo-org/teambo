@@ -19,6 +19,13 @@ Teambo.item = (function(t){
   
   model.type = 'item';
   
+  model.schema = new t.schema({
+    name:        { type: "string", required: true,  minLength: 1, maxLength: 256 },
+    description: { type: "string", required: false, maxLength: 65535 },
+    bucket_id:   { type: "string", required: true,  minLength: 8, maxLength: 8 },
+    status:      { type: "string", required: true,  maxLength: 16 }
+  });
+  
   t.model.extend(model);
 
   model.getByBucket = function(bucket_id) {

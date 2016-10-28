@@ -53,6 +53,7 @@ var js = []string{
 	"/js/t.form.js",
 	"/js/t.chat.js",
 	"/js/t.team.js",
+	"/js/t.schema.js",
 	"/js/t.model.js",
 	"/js/t.bucket.js",
 	"/js/t.item.js",
