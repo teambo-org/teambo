@@ -85,7 +85,9 @@ Teambo.team = (function(t){
           return t.themes['Default'];
         }
       },
-      url: '/'+data.id
+      url: function() {
+        return '/'+data.id;
+      }
     });
   };
 

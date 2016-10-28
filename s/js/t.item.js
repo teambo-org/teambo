@@ -11,7 +11,9 @@ Teambo.item = (function(t){
       bucket: function() {
         return t.bucket.all[self.opts.bucket_id];
       },
-      url: '/'+t.team.current.id+'/'+self.opts.bucket_id+'/'+self.id
+      url: function() {
+        return '/'+t.team.current.id+'/'+self.opts.bucket_id+'/'+self.id;
+      }
     });
   };
   

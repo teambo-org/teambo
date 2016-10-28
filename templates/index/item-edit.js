@@ -14,7 +14,7 @@ function(t){
     var submit = function() {
       item.update(data).then(function(item){
         t.updateSideNav();
-        t.gotoUrl(item.url);
+        t.gotoUrl(item.url());
       }).catch(function(xhr){
         if(xhr.status === 409) {
           var opts = t.clone(item.opts);

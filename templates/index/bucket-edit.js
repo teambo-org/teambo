@@ -13,7 +13,7 @@ function(t){
     var submit = function() {
       bucket.update(data).then(function(bucket){
         t.updateSideNav();
-        t.gotoUrl(bucket.url);
+        t.gotoUrl(bucket.url());
       }).catch(function(xhr){
         if(xhr.status === 409) {
           var opts = t.clone(bucket.opts);

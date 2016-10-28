@@ -10,7 +10,7 @@ function(t){
     var data = form.values(['name', 'description', 'status', 'bucket_id']);
     t.item.create(data).then(function(item){
       t.updateSideNav();
-      t.gotoUrl(item.url);
+      t.gotoUrl(item.url());
     }).catch(function(e){
       form.enable();
       form.error.msg("Item could not be created", "Please try again");
