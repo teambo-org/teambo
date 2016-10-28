@@ -72,6 +72,9 @@ func FindTeam(id string) (item Team, err error) {
 	ct := ""
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("team"))
+		if b == nil {
+			return nil
+		}
 		v := b.Get([]byte(id))
 		if err != nil {
 			return err
@@ -94,7 +97,11 @@ func FindTeam(id string) (item Team, err error) {
 func TeamExists(id string) (exists bool, err error) {
 	exists = false
 	db_view(func(tx *bolt.Tx) error {
-		c := tx.Bucket([]byte("team")).Cursor()
+		var b = tx.Bucket([]byte("team"))
+		if b == nil {
+			return nil
+		}
+		var c = b.Cursor()
 		prefix := []byte(id)
 		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
 			exists = true

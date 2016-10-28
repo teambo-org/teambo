@@ -70,8 +70,11 @@ func (tb TeamBucket) NewObject(team_id string) TeamObject {
 
 func (tb TeamBucket) Find(team_id string, id string) (o TeamObject, err error) {
 	ct := ""
-	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte(tb.Name))
+	db_team_view(team_id, func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(tb.Name))
+		if b == nil {
+			return nil
+		}
 
 		v := b.Get([]byte(id))
 		if err != nil {
@@ -95,8 +98,11 @@ func (tb TeamBucket) Find(team_id string, id string) (o TeamObject, err error) {
 }
 
 func (tb TeamBucket) All(team_id string) (o []TeamObject, err error) {
-	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, _ := tx.CreateBucketIfNotExists([]byte(tb.Name))
+	db_team_view(team_id, func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(tb.Name))
+		if b == nil {
+			return nil
+		}
 		b.ForEach(func(k, v []byte) error {
 			o = append(o, TeamObject{tb.Name, string(k), string(v)})
 			return nil
@@ -112,8 +118,11 @@ func (tb TeamBucket) All(team_id string) (o []TeamObject, err error) {
 
 func (tb TeamBucket) Exists(team_id string, id string) (exists bool, err error) {
 	exists = false
-	db_team_update(team_id, func(tx *bolt.Tx) error {
-		b, _ := tx.CreateBucketIfNotExists([]byte(tb.Name))
+	db_team_view(team_id, func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(tb.Name))
+		if b == nil {
+			return nil
+		}
 		c := b.Cursor()
 
 		prefix := []byte(id)
