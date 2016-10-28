@@ -19,16 +19,20 @@ Teambo.acct = (function (t) {
           return Promise.reject('No akey');
         }
         return t.promise(function (fulfill, reject) {
+          var new_ct = self.encrypted();
           t.xhr.post('/acct', {
             data: {
               id:   self.id,
               akey: akey,
-              ct:   self.encrypted()
+              ct:   self.encrypted(),
+              iv:   self.iv
             }
           }).then(function (xhr) {
             if (xhr.status === 200) {
-              self.cache();
-              fulfill(xhr);
+              self.iv = new_ct.split(' ')[0];
+              self.cache().then(function() {
+                fulfill(xhr);
+              });
             } else {
               reject(xhr);
             }
@@ -40,17 +44,21 @@ Teambo.acct = (function (t) {
       cache: function () {
         var hash = t.crypto.sha(self.email + t.salt);
         sessionStorage.setItem('auth', JSON.stringify({hash: hash, akey: akey, key: key}));
-        return localforage.setItem(hash, self.encrypted());
+        return localforage.setItem(hash, self.encrypted(self.iv));
       },
-      encrypted: function () {
-        return self.encrypt({
+      encrypted: function (iv) {
+        var data = {
           email: self.email,
           id:    self.id,
           key:   key,
           akey:  akey,
           teams: self.teams,
           opts:  self.opts
-        });
+        };
+        if(iv) {
+          data.iv = iv;
+        }
+        return self.encrypt(data);
       },
       encrypt: function (data) {
         return t.crypto.encrypt(data, key);
