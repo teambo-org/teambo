@@ -118,7 +118,8 @@ Teambo.model = (function(t){
       encrypted: function(iv) {
         var data = {
           id:   self.id,
-          opts: self.opts
+          opts: self.opts,
+          hist: self.hist
         };
         if(iv) {
           data.iv = iv;
