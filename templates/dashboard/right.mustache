@@ -14,7 +14,7 @@
         <div class="totals">
             {{item_count}}
         </div>
-        <a href="#{{url}}" class="hi-10 bucket">
+        <a href="#{{url}}" class="hi-10 bucket bucket-{{id}}">
             <div class="img"><i class="icon-flag-filled"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress" data-progress="{{progress}}"></div>
@@ -23,7 +23,7 @@
         <ul class="items">
         {{#item_list}}
             <li class="item-{{opts.status}}">
-                <a href="#{{url}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
+                <a href="#{{url}}" class="item item-{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
             </li>
         {{/item_list}}
         </ul>
