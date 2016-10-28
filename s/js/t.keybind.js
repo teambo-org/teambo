@@ -47,6 +47,7 @@
       targets[0].focus();
     }
     if(key === "spacebar" && document.activeElement !== null) {
+      e.preventDefault();
       document.activeElement.click();
     }
     var keybind = document.querySelectorAll('a[data-keybind~="'+key+'"]');
