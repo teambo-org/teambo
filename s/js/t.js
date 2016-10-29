@@ -9,7 +9,6 @@ var Teambo = (function(t){
   var debug       = false;
   var last_hash   = '';
   var after_auth  = null;
-  var template_js = {};
   var testing     = false;
   var editing     = false;
   var nav_queue   = [];
@@ -87,8 +86,7 @@ var Teambo = (function(t){
         if(!t.view.isset('team')) {
           t.gotoUrl('/account');
         }
-        document.getElementById('page').innerHTML = t.view.render("layout/dashboard", data, true);
-        run_template_js(document.getElementById('page'));
+        t.view.render('page', "layout/dashboard", data);
         target = "dash-main";
       } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
         t.view.unset('team');
@@ -99,46 +97,7 @@ var Teambo = (function(t){
       });
       nav_queue = [];
       var tar = document.getElementById(target);
-      tar.innerHTML = t.view.render(route.tpl, data);
-      if(tar.firstChild) {
-        var class_list = tar.firstChild.classList;
-        if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
-          return t.gotoUrl('/login');
-        }
-        if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
-          return t.gotoUrl('/account');
-        }
-        if(class_list.contains('require-team') && !t.view.isset('team')) {
-          return t.gotoUrl('/account');
-        }
-        if(class_list.contains('require-bucket') && data.bucket) {
-          return t.gotoUrl('/dashboard');
-        }
-        if(class_list.contains('require-item') && data.item) {
-          return t.gotoUrl('/dashboard');
-        }
-      }
-      run_template_js(tar);
-      var els = document.querySelectorAll('.bucket');
-      for(var i = 0; els[i]; i++) {
-        els[i].classList.remove('active');
-      }
-      if('bucket' in data) {
-        var els = document.querySelectorAll('.bucket-'+data.bucket.id);
-        for(var i = 0; els[i]; i++) {
-          els[i].classList.add('active');
-        }
-      }
-      var els = document.querySelectorAll('.item');
-      for(var i = 0; els[i]; i++) {
-        els[i].classList.remove('active');
-      }
-      if('item' in data) {
-        var els = document.querySelectorAll('.item-'+data.item.id);
-        for(var i = 0; els[i]; i++) {
-          els[i].classList.add('active');
-        }
-      }
+      t.view.render(target, route.tpl, data);
       if(loaded) {
         tar.scrollTop = 0;
       }
@@ -190,7 +149,6 @@ var Teambo = (function(t){
     debug = opts.debug;
     testing = opts.testing;
 
-    template_js = opts.template_js;
     t.view.init(opts);
 
     t.router.init(opts.templates);
@@ -337,27 +295,6 @@ var Teambo = (function(t){
       });
     }
   };
-
-  var run_template_js = function(tar) {
-    var els = tar.querySelectorAll('[data-tpljs]');
-    for(var i = 0; els[i]; i++) {
-      var el = els[i],
-        tplname = el.getAttribute('data-tpljs');
-      if(tplname in template_js) {
-        template_js[tplname](t);
-      }
-    }
-
-  };
-
-  t.updateSideNav = function() {
-    var right = document.getElementById('right');
-    right.innerHTML = t.view.render('dashboard/right');
-    run_template_js(right);
-    var left = document.getElementById('left');
-    left.innerHTML = t.view.render('dashboard/left');
-    run_template_js(left);
-  }
 
   t.nextNav = function(fn) {
     nav_queue.push(fn);

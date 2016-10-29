@@ -10,10 +10,10 @@ function(t){
     }
     var html = '';
     teams.forEach(function(team) {
-      html += t.view.render('external/_team-li', team);
+      html += t.view.renderTemplate('external/_team-li', team);
     });
     el.innerHTML = html + el.innerHTML;
-    var theme_styles = t.view.render('external/account-themes', {teams: teams}),
+    var theme_styles = t.view.renderTemplate('external/account-themes', {teams: teams}),
       url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('account-themes').href = "data:text/css;base64,"+url;
 

@@ -1,38 +1,33 @@
 Teambo.view = (function(t){
   "use strict";
 
-  var templates   = {},
-    template_js = {},
-    obj = {
-      linkify : function() {
-        return function(text, render) {
-          return linkify(render(text));
-        }
-      },
-      urle : function() {
-        return function(text, render) {
-          return encodeURIComponent(render(text));
-        };
-      },
-      // markdown : function() {
-        // return function(text, render) {
-          // return micromarkdown.parse(render(text));
-        // };
-      // },
-      nl2br: function() {
-        return function(text, render) {
-          return render(text).split("\r").join("[r]").split("\n").join("<br/>");
-        };
-      },
-      chat: {
-        autoclose: true
-      },
-      inf : function() {
-        return function(text, render) {
-          return parseInt(render(text)) === 1 ? '' : 's';
-        };
+  var templates   = {};
+  var template_js = {};
+  var obj = {
+    linkify : function() {
+      return function(text, render) {
+        return linkify(render(text));
       }
-    };
+    },
+    urle : function() {
+      return function(text, render) {
+        return encodeURIComponent(render(text));
+      };
+    },
+    nl2br: function() {
+      return function(text, render) {
+        return render(text).split("\r").join("[r]").split("\n").join("<br/>");
+      };
+    },
+    chat: {
+      autoclose: true
+    },
+    inf : function() {
+      return function(text, render) {
+        return parseInt(render(text)) === 1 ? '' : 's';
+      };
+    }
+  };
 
   var linkify = function (text) {
     var r = ' ' +  text + ' ',
@@ -63,76 +58,142 @@ Teambo.view = (function(t){
         };
       }
     }
-    var theme_styles = t.view.render('dashboard/theme', {}, data);
+    var theme_styles = t.view.renderTemplate('dashboard/theme', {}, data);
     var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('theme').href = "data:text/css;base64,"+url;
   };
 
-  return {
-    init: function(opts) {
-      templates = opts.templates;
-      template_js = opts.template_js;
+  var updateSideNav = function() {
+    render('right', 'dashboard/right');
+    render('left', 'dashboard/left');
+    t.updateStatus();
+  };
+  
+  var init = function(opts) {
+    templates = opts.templates;
+    template_js = opts.template_js;
 
-      if(window.applicationCache.status !== 0) {
-        window.applicationCache.addEventListener('updateready', function(e) {
-          if(window.applicationCache.status === window.applicationCache.UPDATEREADY
-          || window.applicationCache.status === window.applicationCache.CHECKING) {
-            if(!t.moved() && !t.editing()) {
-              if(t.acct.current) {
-                t.acct.current.cache().then(function() {
-                  window.location.reload();
-                });
-              } else {
+    if(window.applicationCache.status !== 0) {
+      window.applicationCache.addEventListener('updateready', function(e) {
+        if(window.applicationCache.status === window.applicationCache.UPDATEREADY
+        || window.applicationCache.status === window.applicationCache.CHECKING) {
+          if(!t.moved() && !t.editing()) {
+            if(t.acct.current) {
+              t.acct.current.cache().then(function() {
                 window.location.reload();
-              }
+              });
             } else {
-              t.updateReady(true);
+              window.location.reload();
             }
+          } else {
+            t.updateReady(true);
           }
-          t.online(true);
-        }, false);
-        window.applicationCache.addEventListener('noupdate', function(e) {
-          t.online(true);
-        }, false);
-        window.applicationCache.addEventListener('error', function(e) {
-          t.online(false);
-        }, false);
+        }
+        t.online(true);
+      }, false);
+      window.applicationCache.addEventListener('noupdate', function(e) {
+        t.online(true);
+      }, false);
+      window.applicationCache.addEventListener('error', function(e) {
+        t.online(false);
+      }, false);
 
-        var startCacheCheck = function() {
-          if(!t.updateReady()) {
-            setTimeout(function(){
-              window.applicationCache.update();
-              startCacheCheck();
-            }, 30000);
-          }
-        };
-        if(window.applicationCache.status === 3) {
-          window.applicationCache.addEventListener('cached', function(e) {
+      var startCacheCheck = function() {
+        if(!t.updateReady()) {
+          setTimeout(function(){
             window.applicationCache.update();
             startCacheCheck();
-          }, false);
-        } else {
+          }, 30000);
+        }
+      };
+      if(window.applicationCache.status === 3) {
+        window.applicationCache.addEventListener('cached', function(e) {
           window.applicationCache.update();
           startCacheCheck();
-        }
-
-        // window.applicationCache.addEventListener('progress', function(e) {
-          // console.log(e);
-        // }, false);
+        }, false);
+      } else {
+        window.applicationCache.update();
+        startCacheCheck();
       }
-    },
-    render: function(tplname, data, override) {
-      data = data ? data : {};
-      override = override ? override : {};
-      t.extend(data, obj);
-      t.extend(data, override);
-      var html = Mustache.render(
-        templates[tplname],
-        data,
-        templates
-      );
-      return html;
-    },
+
+      // window.applicationCache.addEventListener('progress', function(e) {
+        // console.log(e);
+      // }, false);
+    }
+  };
+  
+  var renderTemplate = function(tplname, data, override) {
+    data = data ? data : {};
+    override = override ? override : {};
+    t.extend(data, obj);
+    t.extend(data, override);
+    var html = Mustache.render(
+      templates[tplname],
+      data,
+      templates
+    );
+    return html;
+  };
+  
+  var render = function(target, tplname, data, override) {
+    data = data ? data : {};
+    override = override ? override : {};
+    if(typeof target === "string") {
+      target = document.getElementById(target);
+    }
+    target.innerHTML = renderTemplate(tplname, data, override);
+    if(target.firstChild) {
+      var class_list = target.firstChild.classList;
+      if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
+        return t.gotoUrl('/login');
+      }
+      if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
+        return t.gotoUrl('/account');
+      }
+      if(class_list.contains('require-team') && !t.view.isset('team')) {
+        return t.gotoUrl('/account');
+      }
+      if(class_list.contains('require-bucket') && data.bucket) {
+        return t.gotoUrl('/dashboard');
+      }
+      if(class_list.contains('require-item') && data.item) {
+        return t.gotoUrl('/dashboard');
+      }
+    }
+    run_template_js(target);
+    // TODO: replace this with data binding?
+    var els = document.querySelectorAll('a[data-obj^=bucket-]');
+    for(var i = 0; els[i]; i++) {
+      els[i].classList.remove('active');
+      if('bucket' in data && els[i].dataset.obj == 'bucket-'+data.bucket.id) {
+        console.log('bucket-'+data.bucket.id);
+        els[i].classList.add('active');
+      }
+    }
+    var els = document.querySelectorAll('a[data-obj^=item-]');
+    for(var i = 0; els[i]; i++) {
+      els[i].classList.remove('active');
+      if('item' in data && els[i].dataset.obj == 'item-'+data.item.id) {
+        els[i].classList.add('active');
+      }
+    }
+  };
+
+  var run_template_js = function(tar) {
+    var els = tar.querySelectorAll('[data-tpljs]');
+    for(var i = 0; els[i]; i++) {
+      var el = els[i],
+        tplname = el.getAttribute('data-tpljs');
+      if(tplname in template_js) {
+        template_js[tplname](t);
+      }
+    }
+  };
+  
+  return {
+    init: init,
+    render: render,
+    renderTemplate: renderTemplate,
     isset: function(k) {
       return k in obj;
     },
@@ -146,7 +207,8 @@ Teambo.view = (function(t){
       delete obj[k];
     },
     obj: obj,
-    updateTheme: update_theme
+    updateTheme: update_theme,
+    updateSideNav: updateSideNav
   };
 
 })(Teambo);

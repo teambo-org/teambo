@@ -12,7 +12,7 @@ function(t){
     var data = form.values(['name', 'description']);
     var submit = function() {
       bucket.update(data).then(function(bucket){
-        t.updateSideNav();
+        t.view.updateSideNav();
         t.gotoUrl(bucket.url());
       }).catch(function(xhr){
         if(xhr.status === 409) {

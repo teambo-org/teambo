@@ -11,7 +11,7 @@ function(t){
     var data = form.values(['name', 'theme']);
     var submit = function() {
       t.team.current.update(data).then(function(team){
-        document.getElementById('main').innerHTML = t.view.render('dashboard/main');
+        t.updateSideNav();
         t.gotoUrl('/'+t.team.current.id);
       }).catch(function(xhr){
         if(xhr.status === 409) {

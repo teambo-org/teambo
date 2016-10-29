@@ -2,13 +2,13 @@ function(t){
   "use strict";
 
   var form = new t.form(document.item_remove);
+  var item_id = form.item_id.value;
+  var item = t.item.get(item_id);
+  var bucket = item.bucket();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var item_id = form.item_id.value;
-    var item = t.item.get(item_id);
-    var bucket = item.bucket();
     item.remove().then(function(){
-      t.updateSideNav();
+      t.view.updateSideNav();
       t.gotoUrl(bucket.url());
     }).catch(function(e){
       form.enable();
