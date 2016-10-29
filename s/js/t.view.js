@@ -166,7 +166,6 @@ Teambo.view = (function(t){
     for(var i = 0; els[i]; i++) {
       els[i].classList.remove('active');
       if('bucket' in data && els[i].dataset.obj == 'bucket-'+data.bucket.id) {
-        console.log('bucket-'+data.bucket.id);
         els[i].classList.add('active');
       }
     }
