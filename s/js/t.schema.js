@@ -36,7 +36,7 @@ Teambo.schema = (function(t){
         var errs = [];
         for(var k in data) {
           if(!(k in rules)) {
-            errs.push("Undefined property "+k);
+            delete(data[k]);
             continue;
           }
           var err = validate_property(rules[k], k, data);
