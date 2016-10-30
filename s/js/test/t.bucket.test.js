@@ -51,11 +51,11 @@ describe("Bucket", function() {
   });
 
   it("Cannot have undefined properties", function(done) {
-    Teambo.bucket.create({name: 'Test Bucket With Description', description: 'Hello, World.', asdf: 'asdasdfasdfasdfasdf'}).then(function(b){
-      fail("Model creation did not fail");
+    Teambo.bucket.create({name: 'Test Bucket without undefined properties', description: 'Hello, World.', asdf: 'asdasdfasdfasdfasdf'}).then(function(b){
+      expect(b.opts.asdf).toBe(undefined);
       done();
     }).catch(function(e){
-      expect(e.length).toBe(1);
+      fail("Model could not be saved");
       done();
     });
   });
