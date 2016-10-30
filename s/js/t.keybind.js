@@ -46,6 +46,9 @@
       }
       targets[0].focus();
     }
+    if(key === "z") {
+      t.chat.toggle();
+    }
     if(key === "spacebar" && document.activeElement !== null) {
       e.preventDefault();
       document.activeElement.click();

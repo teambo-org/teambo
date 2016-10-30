@@ -305,7 +305,7 @@ Teambo.acct = (function (t) {
               localforage.removeItem('verification');
               acct.current = new acct({
                 email: email,
-                id:  id,
+                id:    id,
                 teams: [],
                 opts:  {}
               }, akey, key);
@@ -325,7 +325,7 @@ Teambo.acct = (function (t) {
           localforage.getItem('verification').then(function (v) {
             if(v) {
               email = v.email;
-              id  = v.id;
+              id    = v.id;
               key   = v.key;
               akey  = v.akey;
               send_confirmation();

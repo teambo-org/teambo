@@ -1,6 +1,6 @@
 Teambo.chat = (function(t){
 
-  var toggle_chat = function(state) {
+  var toggle = function(state) {
     var dash = document.getElementById('dashboard'),
       collapsed = dash.classList.contains('chat-collapsed');
     if(state === 1) {
@@ -28,19 +28,20 @@ Teambo.chat = (function(t){
         if(e.target.classList.contains('toggle')
         || e.target.parentNode.classList.contains('toggle')) {
           e.preventDefault();
-          toggle_chat();
+          toggle();
         } else if(e.target.classList.contains('open')) {
-          toggle_chat(1);
+          toggle(1);
         }
       });
       var autoclose = function(e) {
         if(opts.autoclose) {
-          toggle_chat(0);
+          toggle(0);
         }
       }
       document.getElementById('main').addEventListener('click', autoclose);
       document.getElementById('right').addEventListener('click', autoclose);
-    }
+    },
+    toggle: toggle
   };
 
 })(Teambo);
