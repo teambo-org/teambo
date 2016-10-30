@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
+	"time"
 	// "errors"
 )
 
@@ -53,6 +54,26 @@ func (o TeamObject) Remove(team_id string) (err error) {
 		return err
 	}
 	return nil
+}
+
+func (o TeamObject) Log(team_id string, iv string) (log string, err error) {
+	db_team_update(team_id, func(tx *bolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists([]byte("log"))
+		ts := time.Now().UnixNano()
+		k := fmt.Sprintf("%d-%s-%s", ts, o.Bucket, o.Id)
+		err = b.Put([]byte(k), []byte(iv))
+		if err != nil {
+			return err
+		}
+		log = k + "-" + iv
+
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return log, err
+	}
+	return log, nil
 }
 
 func (tb TeamBucket) NewObject(team_id string) TeamObject {

@@ -22,6 +22,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/acct/auth":         controller.AcctAuth,
 	"/acct/verification": controller.AcctVerification,
 	"/team":              controller.Team,
+	"/socket":            controller.Socket,
 	"/buckets":           controller.HandleTeamObjects("bucket"),
 	"/bucket":            controller.HandleTeamObject("bucket"),
 	"/bucket/remove":     controller.HandleTeamObjectRemove("bucket"),
@@ -61,11 +62,13 @@ func main() {
 		log.Fatal("Could not open Bolt DB for writing")
 	}
 
+	go controller.SocketHub.Run()
+
 	http.Handle("/", StaticHandler{})
 
 	if config["ssl.active"] == "true" {
 		srv := &http.Server{
-			Addr: ":"+config["port.https"],
+			Addr: ":" + config["port.https"],
 		}
 		http2.ConfigureServer(srv, &http2.Server{})
 		log.Fatal(srv.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"]))

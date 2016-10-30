@@ -1,6 +1,8 @@
 Teambo.team = (function(t){
   "use strict";
 
+  var socket_interval = null;
+
   var team = function(data, mkey, key) {
     var self = this;
     if(typeof data == 'string') {
@@ -67,8 +69,8 @@ Teambo.team = (function(t){
         }
         return self.encrypt(data);
       },
-      encrypt: function(data) {
-        return t.crypto.encrypt(data, key);
+      encrypt: function(data, config) {
+        return t.crypto.encrypt(data, key, config);
       },
       decrypt: function(ct) {
         return t.crypto.decrypt(ct, key);
@@ -87,6 +89,84 @@ Teambo.team = (function(t){
       },
       url: function() {
         return '/'+data.id;
+      },
+      startSocket: function(team_id) {
+        var connected = null;
+        var connection = null;
+        var wrapperfunc = function(){
+          if (typeof(WebSocket) === "function" && (!connection || connection.readyState > 0)) {
+            if(connected) {
+              t.online(true);
+              return;
+            }
+            var uri = new Uri(window.location);
+            var host = uri.host();
+            var scheme = uri.protocol() == 'https' ? 'wss' : 'ws';
+            connection = new WebSocket(scheme+"://"+host+"/socket?team_id="+self.id+"&mkey="+self.mkey);
+            connected = true;
+            connection.onclose = function(evt) {
+              connected = false;
+              connection = null;
+              t.online(false);
+            }
+            connection.onmessage = function(evt) {
+              var parts = evt.data.split('-');
+              if(parts[1]) {
+                var ts   = parts[0];
+                var type = parts[1];
+                var id   = parts[2];
+                var iv   = parts[3];
+                if(iv === 'removed') {
+                  var m = t[type].get(id);
+                  if(m) {
+                    var bucket_id = m.opts.bucket_id;
+                    m.uncache().then(function() {
+                      t.view.updateSideNav();
+                      // TODO: move to event listener
+                      var bucket = t.view.get('bucket');
+                      var item   = t.view.get('item');
+                      console.log(bucket, item);
+                      if(type == 'bucket' && bucket && bucket.id == id) {
+                        t.gotoUrl(t.team.current.url());
+                        // show message
+                      } else if(type == 'item' && bucket && bucket.id == bucket_id && (!item || item.id == id)) {
+                        t.gotoUrl(bucket.url());
+                        // show message
+                      }
+                    });
+                  }
+                } else {
+                  t[type].find(id).then(function(m) {
+                    if(m && m.iv != iv) {
+                      m.refresh().then(function() {
+                        t.view.updateSideNav();
+                        // TODO: move to event listener
+                        var bucket = t.view.get('bucket');
+                        var item   = t.view.get('item');
+                        if(type == 'bucket' && bucket && bucket.id == id) {
+                          if(!t.editing()) {
+                            t.refresh();
+                          } else {
+                            // show message
+                          }
+                        } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
+                          if(!t.editing()) {
+                            t.refresh();
+                          } else {
+                            // show message
+                          }
+                        }
+                      });
+                    }
+                  });
+                }
+              }
+              console.log(evt.data);
+            }
+          }
+        };
+        wrapperfunc();
+        socket_interval = setInterval(wrapperfunc, 1000);
       }
     });
   };
@@ -102,6 +182,7 @@ Teambo.team = (function(t){
         var p = [];
         p.push(t.bucket.findAll());
         p.push(t.item.findAll());
+        o.startSocket();
         Promise.all(p).then(function() {
           fulfill(o);
         }).catch(function(e) {
@@ -164,9 +245,9 @@ Teambo.team = (function(t){
     return localforage.removeItem(hash);
   };
 
-  team.encrypt = function(data) {
+  team.encrypt = function(data, config) {
     if(!team.current) return null;
-    return team.current.encrypt(data);
+    return team.current.encrypt(data, config);
   };
 
   team.decrypt = function(ct) {

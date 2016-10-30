@@ -43,8 +43,11 @@ Teambo.acct = (function (t) {
       },
       cache: function () {
         var hash = t.crypto.sha(self.email + t.salt);
-        sessionStorage.setItem('auth', JSON.stringify({hash: hash, akey: akey, key: key}));
         return localforage.setItem(hash, self.encrypted(self.iv));
+      },
+      cacheAuth: function() {
+        var hash = t.crypto.sha(self.email + t.salt);
+        sessionStorage.setItem('auth', JSON.stringify({hash: hash, akey: akey, key: key}));
       },
       encrypted: function (iv) {
         var data = {
@@ -227,7 +230,6 @@ Teambo.acct = (function (t) {
       }).catch(function (xhr) {
         acct.auth.offline(email, pass).then(function (a) {
           acct.current = a;
-          acct.current.cache();
           t.view.set('acct', acct.current);
           fulfill(true);
         }).catch(function () {

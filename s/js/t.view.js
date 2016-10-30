@@ -68,7 +68,7 @@ Teambo.view = (function(t){
     render('left', 'dashboard/left');
     t.updateStatus();
   };
-  
+
   var init = function(opts) {
     templates = opts.templates;
     template_js = opts.template_js;
@@ -79,9 +79,8 @@ Teambo.view = (function(t){
         || window.applicationCache.status === window.applicationCache.CHECKING) {
           if(!t.moved() && !t.editing()) {
             if(t.acct.current) {
-              t.acct.current.cache().then(function() {
-                window.location.reload();
-              });
+              t.acct.current.cacheAuth()
+              window.location.reload();
             } else {
               window.location.reload();
             }
@@ -121,7 +120,7 @@ Teambo.view = (function(t){
       // }, false);
     }
   };
-  
+
   var renderTemplate = function(tplname, data, override) {
     data = data ? data : {};
     override = override ? override : {};
@@ -134,7 +133,7 @@ Teambo.view = (function(t){
     );
     return html;
   };
-  
+
   var render = function(target, tplname, data, override) {
     data = data ? data : {};
     override = override ? override : {};
@@ -153,10 +152,10 @@ Teambo.view = (function(t){
       if(class_list.contains('require-team') && !t.view.isset('team')) {
         return t.gotoUrl('/account');
       }
-      if(class_list.contains('require-bucket') && data.bucket) {
+      if(class_list.contains('require-bucket') && !data.bucket) {
         return t.gotoUrl('/dashboard');
       }
-      if(class_list.contains('require-item') && data.item) {
+      if(class_list.contains('require-item') && !data.item) {
         return t.gotoUrl('/dashboard');
       }
     }
@@ -188,7 +187,7 @@ Teambo.view = (function(t){
       }
     }
   };
-  
+
   return {
     init: init,
     render: render,

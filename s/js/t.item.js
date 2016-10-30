@@ -9,7 +9,7 @@ Teambo.item = (function(t){
         return model.statuses[self.opts.status];
       },
       bucket: function() {
-        return t.bucket.all[self.opts.bucket_id];
+        return t.bucket.get(self.opts.bucket_id);
       },
       url: function() {
         return '/'+t.team.current.id+'/'+self.opts.bucket_id+'/'+self.id;

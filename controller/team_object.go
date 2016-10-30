@@ -51,6 +51,14 @@ func TeamObject(bucket_name string, w http.ResponseWriter, r *http.Request) {
 				error_out(w, strings.Title(bucket_name)+" could not be saved", 500)
 				return
 			}
+
+			parts := strings.Split(ct, " ")
+			new_iv := parts[0]
+			if new_iv != "new" {
+				log, _ := obj.Log(team_id, new_iv)
+				SocketHub.broadcast <- wsmessage{team_id, log}
+			}
+
 		} else {
 			error_out(w, "Invalid Request", 400)
 			return
@@ -106,8 +114,9 @@ func TeamObjectRemove(bucket_name string, w http.ResponseWriter, r *http.Request
 				error_out(w, strings.Title(bucket_name)+" could not be removed", 500)
 				return
 			}
-			w.WriteHeader(204)
-			return
+
+			log, _ := obj.Log(team_id, "removed")
+			SocketHub.broadcast <- wsmessage{team_id, log}
 		} else {
 			error_out(w, "Invalid Request", 400)
 			return
@@ -117,7 +126,7 @@ func TeamObjectRemove(bucket_name string, w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	error_out(w, "Invalid Request", 400)
+	w.WriteHeader(204)
 	return
 }
 
@@ -152,7 +161,7 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Bucket could not be created", 500)
 				return
 			}
-		} else if len(id) > 0 {
+		} else {
 			obj, err = bucket.Find(team_id, id)
 			if err != nil {
 				error_out(w, "Database error", 500)

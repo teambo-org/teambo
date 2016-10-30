@@ -60,13 +60,11 @@ func compile_js(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
 	w.Header().Set("Content-Type", mime.TypeByExtension(".js"))
-	w.Write([]byte("(function(){"))
 	for _, v := range js {
 		src, _ := os.Open("s" + v)
 		jsmin.Run(src, w)
 	}
 	append_js_init(w)
-	w.Write([]byte("})();"))
 }
 
 func compile_css(w http.ResponseWriter, r *http.Request) {

@@ -48,9 +48,8 @@ var Teambo = (function(t){
     data = t.extend(data || {}, uri.getQueryParams());
     if(updateready) {
       if(t.acct.current) {
-        t.acct.current.cache().then(function() {
-          window.location.reload();
-        });
+        t.acct.current.cacheAuth();
+        window.location.reload();
       } else {
         window.location.reload();
       }
@@ -74,13 +73,15 @@ var Teambo = (function(t){
       }
     }
     Promise.all(p).then(function(){
-      if(t.view.isset('team')) {
-        if('bucket_id' in data) {
-          data.bucket = t.bucket.get(data.bucket_id);
-        } 
-        if('item_id' in data) {
-          data.item = t.item.get(data.item_id);
-        }
+      if(t.view.isset('team') && 'bucket_id' in data) {
+        t.view.set('bucket', t.bucket.get(data.bucket_id));
+      } else {
+        t.view.unset('bucket');
+      }
+      if(t.view.isset('team') && 'item_id' in data) {
+        t.view.set('item', t.item.get(data.item_id));
+      } else {
+        t.view.unset('item');
       }
       if(route.tpl.indexOf('external') !== 0 && !document.getElementById('dash-main')) {
         if(!t.view.isset('team')) {
@@ -96,6 +97,8 @@ var Teambo = (function(t){
         fn();
       });
       nav_queue = [];
+      editing = false;
+      console.log(data);
       var tar = document.getElementById(target);
       t.view.render(target, route.tpl, data);
       if(loaded) {
@@ -124,6 +127,8 @@ var Teambo = (function(t){
     moved = true;
     hashChange(window.location.hash.substr(1));
   };
+
+  t.refresh = refresh;
 
   t.replace = function(url, data) {
     hashChange(url, data);

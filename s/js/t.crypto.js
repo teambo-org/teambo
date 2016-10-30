@@ -27,20 +27,28 @@ Teambo.crypto = (function(t, sjcl){
       return sjcl.codec.base64.fromBits(key);
     },
     randomKey: function() {
-      return sjcl.codec.base64.fromBits(sjcl.random.randomWords(8,0)).slice(0,-2);
+      return sjcl.codec.base64.fromBits(sjcl.random.randomWords(8, 0)).slice(0,-2);
     },
     tempKey: function() {
       return this.randomKey().replace(/[^0-9a-zA-Z]/, '').substr(0,8);
     },
-    encrypt: function(data, key, iter) {
-      iter = typeof iter === 'undefined' ? 10000 : iter;
+    iv: function() {
+      return sjcl.codec.base64.fromBits(sjcl.random.randomWords(4, 0)).slice(0,-2);
+    },
+    encrypt: function(data, key, opts) {
+      opts = opts ? opts : {};
+      var iter = 'iter' in opts ? opts.iter : 10000;
       var passBitArray = sjcl.codec.base64.toBits(key);
-      var crypt = sjcl.encrypt(passBitArray, JSON.stringify(data), {
+      var config = {
         mode: 'ccm',
         iter: iter,
         ks: 256,
         ts: 64
-      });
+      };
+      if('iv' in opts) {
+        config.iv = opts.iv;
+      }
+      var crypt = sjcl.encrypt(passBitArray, JSON.stringify(data), config);
       var data = JSON.parse(crypt);
       return data.iv + " " + data.ct
     },

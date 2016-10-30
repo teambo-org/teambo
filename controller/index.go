@@ -102,20 +102,26 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	ws_scheme := "ws"
+	if util.Config("ssl.active") == "true" {
+		ws_scheme = "wss"
+	}
+	ws_url := ws_scheme + "://" + util.Config("app.host")
+
 	w.Header().Set("X-Frame-Options", "DENY")
 	w.Header().Set("X-XSS-Protection", "1; mode=block")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("X-Permitted-Cross-Domain-Policies", "none")
-	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' data:; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob:")
+	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' data:; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob: "+ws_url)
 	if util.Config("ssl.active") == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 	}
 	if util.Config("ssl.hpkp") != "" {
 		var keys = ""
 		for _, k := range strings.Split(util.Config("ssl.hpkp"), " ") {
-			keys = keys + "pin-sha256=\""+k+"\"; "
+			keys = keys + "pin-sha256=\"" + k + "\"; "
 		}
-		w.Header().Set("Public-Key-Pins", keys + "max-age=30")
+		w.Header().Set("Public-Key-Pins", keys+"max-age=30")
 	}
 
 	if util.Config("static.cache") == "true" {

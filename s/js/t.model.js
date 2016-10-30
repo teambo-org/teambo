@@ -11,6 +11,7 @@ Teambo.model = (function(t){
     t.extend(this, {
       id: data.id,
       iv: data.iv,
+      orig: data.opts ? t.clone(data.opts) : {},
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
       save: function() {
@@ -22,7 +23,11 @@ Teambo.model = (function(t){
               return;
             }
           }
-          var new_ct = self.encrypted();
+          var iv = t.crypto.iv();
+          var diff = self.diff();
+          // TODO: Replace new Date() with server synced date time
+          self.hist.push({iv: iv, diff: diff, ts: new Date().getTime()});
+          var new_ct = self.encrypted(iv);
           t.xhr.post('/'+model.type, {
             data: {
               team_id: t.team.current.id,
@@ -33,11 +38,13 @@ Teambo.model = (function(t){
             }
           }).then(function(xhr){
             if(xhr.status == 200) {
-              self.iv = new_ct.split(' ')[0];
+              self.iv = iv;
+              self.orig = self.opts;
               self.cache().then(function() {
                 fulfill(self);
               });
             } else {
+              t.deleteByProperty(self.hist, 'iv', iv);
               reject(xhr);
             }
           }).catch(function(e){
@@ -46,7 +53,6 @@ Teambo.model = (function(t){
         });
       },
       update: function(opts) {
-        var orig_opts = t.clone(self.opts);
         self.opts = t.extend(self.opts, opts);
         return t.promise(function(fulfill, reject) {
           self.save().then(function(xhr) {
@@ -54,7 +60,7 @@ Teambo.model = (function(t){
               fulfill(o);
             });
           }).catch(function(e) {
-            self.opts = orig_opts;
+            self.opts = self.orig;
             reject(e);
           });
         });
@@ -128,10 +134,21 @@ Teambo.model = (function(t){
           opts: self.opts,
           hist: self.hist
         };
+        var config = {};
         if(iv) {
           data.iv = iv;
+          config.iv = iv;
         }
-        return t.team.encrypt(data);
+        return t.team.encrypt(data, config);
+      },
+      diff: function() {
+        var diff = {};
+        for(var i in self.opts) {
+          if(self.orig[i] != self.opts[i]) {
+            diff[i] = self.opts[i];
+          }
+        }
+        return diff;
       }
     });
   };
@@ -169,6 +186,7 @@ Teambo.model = (function(t){
               opts: opts,
               iv:  'new'
             });
+            m.orig = {};
             m.save().then(function(xhr){
               fulfill(m);
             }).catch(function(e){
