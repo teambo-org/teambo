@@ -26,7 +26,7 @@ Teambo.model = (function(t){
           var iv = t.crypto.iv();
           var diff = self.diff();
           // TODO: Replace new Date() with server synced date time
-          self.hist.push({iv: iv, diff: diff, ts: new Date().getTime()});
+          self.hist.push({iv: iv, diff: diff, ts: new Date().getTime()/*, mid: member.id */});
           var new_ct = self.encrypted(iv);
           t.xhr.post('/'+model.type, {
             data: {
@@ -234,6 +234,11 @@ Teambo.model = (function(t){
     model.find = function(id) {
       return t.promise(function(fulfill, reject){
         var team = t.team.current;
+        var m = model.get(id);
+        if(m) {
+          fulfill(m);
+          return;
+        }
         t.team.findCached(id).then(function(ct){
           if(ct) {
             fulfill(new model(ct));

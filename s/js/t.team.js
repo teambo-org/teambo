@@ -117,27 +117,31 @@ Teambo.team = (function(t){
             }
           } else {
             t[type].find(id).then(function(m) {
+              var p = [];
               if(m && m.iv != iv) {
-                m.refresh().then(function() {
-                  t.view.updateSideNav();
-                  // TODO: move to event listener
-                  var bucket = t.view.get('bucket');
-                  var item   = t.view.get('item');
-                  if(type == 'bucket' && bucket && bucket.id == id) {
-                    if(!t.editing()) {
-                      t.refresh();
-                    } else {
-                      // show message
-                    }
-                  } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
-                    if(!t.editing()) {
-                      t.refresh();
-                    } else {
-                      // show message
-                    }
-                  }
-                });
+                p.push(m.refresh());
+              } else {
+                p.push(m.cache());
               }
+              Promise.all(p).then(function(){
+                t.view.updateSideNav();
+                // TODO: move to event listener
+                var bucket = t.view.get('bucket');
+                var item   = t.view.get('item');
+                if(type == 'bucket' && bucket && bucket.id == id) {
+                  if(!t.editing()) {
+                    t.refresh();
+                  } else {
+                    // show message
+                  }
+                } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
+                  if(!t.editing()) {
+                    t.refresh();
+                  } else {
+                    // show message
+                  }
+                }
+              });
             });
           }
         }
@@ -155,6 +159,7 @@ Teambo.team = (function(t){
             var uri = new Uri(window.location);
             var host = uri.host();
             var scheme = uri.protocol() == 'https' ? 'wss' : 'ws';
+            // TODO: add ts
             connection = new WebSocket(scheme+"://"+host+"/socket?team_id="+self.id+"&mkey="+self.mkey);
             connected = true;
             connection.onclose = function(evt) {
