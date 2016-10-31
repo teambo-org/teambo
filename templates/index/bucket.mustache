@@ -1,7 +1,9 @@
 <div class="bucket require-auth require-team">
     <nav>
+    {{#bucket.iv}}
         <a href="#{{bucket.url}}/remove" data-keybind="r">Remove</a>
         <a href="#{{bucket.url}}/edit" data-keybind="e">Edit</a>
+    {{/bucket.iv}}
         <a href="#{{bucket.url}}/new" data-keybind="c">Create Item</a>
     </nav>
     <nav class="breadcrumbs">

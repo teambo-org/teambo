@@ -157,14 +157,18 @@ Teambo.model = (function(t){
   model.extend = function(model) {
     model.all = [];
 
-    model.cacheIds = function() {
+    model.ids = function() {
       var ids = [];
       model.all.forEach(function(m) {
         ids.push(m.id);
       });
-      return t.team.cache(model.type + 's', t.team.encrypt(ids));
+      return ids;
     };
-  
+
+    model.cacheIds = function() {
+      return t.team.cache(model.type + 's', t.team.encrypt(model.ids()));
+    };
+
     model.create = function(opts) {
       return t.promise(function(fulfill, reject) {
         if('schema' in model) {
@@ -203,7 +207,7 @@ Teambo.model = (function(t){
         });
       });
     };
-    
+
     model.fetch = function(id, team_id, mkey) {
       return t.promise(function(fulfill, reject) {
         t.xhr.get('/'+model.type, {
@@ -235,7 +239,7 @@ Teambo.model = (function(t){
     model.find = function(id) {
       return t.promise(function(fulfill, reject){
         var team = t.team.current;
-        var m = model.get(id);
+        var m = model.get(id, true);
         if(m) {
           fulfill(m);
           return;
@@ -299,7 +303,7 @@ Teambo.model = (function(t){
         });
       });
     };
-  
+
     model.fetchAll = function(team_id, mkey) {
       return t.promise(function(fulfill, reject) {
         t.xhr.get('/'+model.type+'s', {

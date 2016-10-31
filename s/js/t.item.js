@@ -12,20 +12,20 @@ Teambo.item = (function(t){
         return t.bucket.get(self.opts.bucket_id);
       },
       url: function() {
-        return '/'+t.team.current.id+'/'+self.opts.bucket_id+'/'+self.id;
+        return '/'+t.team.current.id+'/'+self.bucket().id+'/'+self.id;
       }
     });
   };
-  
+
   model.type = 'item';
-  
+
   model.schema = new t.schema({
     name:        { type: "string", required: true,  minLength: 1, maxLength: 256 },
     description: { type: "string", required: false, maxLength: 65535 },
     bucket_id:   { type: "string", required: true,  minLength: 8, maxLength: 8 },
     status:      { type: "string", required: true,  maxLength: 16 }
   });
-  
+
   t.model.extend(model);
 
   model.getByBucket = function(bucket_id) {
@@ -53,6 +53,26 @@ Teambo.item = (function(t){
         reject(e);
       });
     });
+  };
+
+  model.hasOrphaned = function() {
+    var bucket_ids = t.bucket.ids();
+    for(var i in model.all) {
+      if(bucket_ids.indexOf(model.all[i].opts.bucket_id) < 0) {
+        return true;
+      }
+    }
+  };
+
+  model.getOrphaned = function() {
+    var bucket_ids = t.bucket.ids();
+    var ret = [];
+    for(var i in model.all) {
+      if(bucket_ids.indexOf(model.all[i].opts.bucket_id) < 0) {
+        ret.push(model.all[i]);
+      }
+    }
+    return ret;
   };
 
   model.statuses = {

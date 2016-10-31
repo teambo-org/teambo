@@ -80,7 +80,11 @@ Teambo.team = (function(t){
         return t.crypto.decrypt(ct, key);
       },
       bucket_list: function() {
-        return t.bucket.all;
+        var extra = [];
+        if(t.item.hasOrphaned()) {
+          extra.push(t.bucket.orphaned);
+        }
+        return t.bucket.all.concat(extra);
       },
       theme: function() {
         if(typeof(self.opts.theme) === "object") {
