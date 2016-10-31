@@ -90,6 +90,59 @@ Teambo.team = (function(t){
       url: function() {
         return '/'+data.id;
       },
+      receiveEvent: function(e) {
+        var parts = e.data.split('-');
+        if(parts[1]) {
+          var ts   = parts[0];
+          var type = parts[1];
+          var id   = parts[2];
+          var iv   = parts[3];
+          if(iv === 'removed') {
+            var m = t[type].get(id);
+            if(m) {
+              var bucket_id = m.opts.bucket_id;
+              m.uncache().then(function() {
+                t.view.updateSideNav();
+                // TODO: move to event listener
+                var bucket = t.view.get('bucket');
+                var item   = t.view.get('item');
+                if(type == 'bucket' && bucket && bucket.id == id) {
+                  t.gotoUrl(t.team.current.url());
+                  // show message
+                } else if(type == 'item' && bucket && bucket.id == bucket_id && (!item || item.id == id)) {
+                  t.gotoUrl(bucket.url());
+                  // show message
+                }
+              });
+            }
+          } else {
+            t[type].find(id).then(function(m) {
+              if(m && m.iv != iv) {
+                m.refresh().then(function() {
+                  t.view.updateSideNav();
+                  // TODO: move to event listener
+                  var bucket = t.view.get('bucket');
+                  var item   = t.view.get('item');
+                  if(type == 'bucket' && bucket && bucket.id == id) {
+                    if(!t.editing()) {
+                      t.refresh();
+                    } else {
+                      // show message
+                    }
+                  } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
+                    if(!t.editing()) {
+                      t.refresh();
+                    } else {
+                      // show message
+                    }
+                  }
+                });
+              }
+            });
+          }
+        }
+        console.log(e.data);
+      },
       startSocket: function(team_id) {
         var connected = null;
         var connection = null;
@@ -109,59 +162,8 @@ Teambo.team = (function(t){
               connection = null;
               t.online(false);
             }
-            connection.onmessage = function(evt) {
-              var parts = evt.data.split('-');
-              if(parts[1]) {
-                var ts   = parts[0];
-                var type = parts[1];
-                var id   = parts[2];
-                var iv   = parts[3];
-                if(iv === 'removed') {
-                  var m = t[type].get(id);
-                  if(m) {
-                    var bucket_id = m.opts.bucket_id;
-                    m.uncache().then(function() {
-                      t.view.updateSideNav();
-                      // TODO: move to event listener
-                      var bucket = t.view.get('bucket');
-                      var item   = t.view.get('item');
-                      console.log(bucket, item);
-                      if(type == 'bucket' && bucket && bucket.id == id) {
-                        t.gotoUrl(t.team.current.url());
-                        // show message
-                      } else if(type == 'item' && bucket && bucket.id == bucket_id && (!item || item.id == id)) {
-                        t.gotoUrl(bucket.url());
-                        // show message
-                      }
-                    });
-                  }
-                } else {
-                  t[type].find(id).then(function(m) {
-                    if(m && m.iv != iv) {
-                      m.refresh().then(function() {
-                        t.view.updateSideNav();
-                        // TODO: move to event listener
-                        var bucket = t.view.get('bucket');
-                        var item   = t.view.get('item');
-                        if(type == 'bucket' && bucket && bucket.id == id) {
-                          if(!t.editing()) {
-                            t.refresh();
-                          } else {
-                            // show message
-                          }
-                        } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
-                          if(!t.editing()) {
-                            t.refresh();
-                          } else {
-                            // show message
-                          }
-                        }
-                      });
-                    }
-                  });
-                }
-              }
-              console.log(evt.data);
+            connection.onmessage = function(e) {
+              self.receiveEvent(e);
             }
           }
         };
