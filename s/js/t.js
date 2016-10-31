@@ -98,7 +98,6 @@ var Teambo = (function(t){
       });
       nav_queue = [];
       editing = false;
-      console.log(data);
       var tar = document.getElementById(target);
       t.view.render(target, route.tpl, data);
       if(loaded) {
