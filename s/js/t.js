@@ -46,6 +46,7 @@ var Teambo = (function(t){
     var path = uri.path().split('..')[0];
     var route = t.router.find(path);
     data = t.extend(data || {}, uri.getQueryParams());
+    var silent = data.silent ? data.silent : false;
     if(updateready) {
       if(t.acct.current) {
         t.acct.current.cacheAuth();
@@ -70,6 +71,11 @@ var Teambo = (function(t){
         after_auth = hash;
         t.gotoUrl('/login');
         return;
+      }
+    } else if(!('team_id' in data)) {
+      if(t.team.current) {
+        t.team.current.closeSocket();
+        t.team.current = null;
       }
     }
     Promise.all(p).then(function(){
@@ -104,7 +110,7 @@ var Teambo = (function(t){
         tar.scrollTop = 0;
       }
       scrollToSub(hash, loaded);
-      if(loaded) {
+      if(loaded && !silent) {
         t.audio.play('click', 1);
       }
       last_hash = hash;
@@ -112,19 +118,19 @@ var Teambo = (function(t){
     });
   };
 
-  t.gotoUrl = function(href, replace) {
+  t.gotoUrl = function(href, replace, data) {
     if(window.location.hash == "#"+href) {
-      refresh();
+      refresh(data);
     } else if(replace) {
-      hashChange(href);
+      hashChange(href, data);
     } else {
       window.location.hash = "#"+href;
     }
   };
 
-  var refresh = function() {
+  var refresh = function(data) {
     moved = true;
-    hashChange(window.location.hash.substr(1));
+    hashChange(window.location.hash.substr(1), data);
   };
 
   t.refresh = refresh;

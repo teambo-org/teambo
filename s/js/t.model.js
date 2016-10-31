@@ -26,6 +26,7 @@ Teambo.model = (function(t){
           var iv = t.crypto.iv();
           var diff = self.diff();
           // TODO: Replace new Date() with server synced date time
+          // TODO: Add member id to history items
           self.hist.push({iv: iv, diff: diff, ts: new Date().getTime()/*, mid: member.id */});
           var new_ct = self.encrypted(iv);
           t.xhr.post('/'+model.type, {

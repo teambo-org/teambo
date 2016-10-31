@@ -4,7 +4,7 @@
         <a href="#{{bucket.url}}" data-keybind="q escape">Bucket</a>
         <span>New Item</span>
     </nav>
-    <h1><i class="icon-flag-filled"></i> {{bucket.opts.name}}</h1>
+    <h1><i class="icon-folder-open"></i> {{bucket.opts.name}}</h1>
     <form id="item-new" name="item_new" method="POST" class="std">
         <input name="bucket_id" type="hidden" value="{{bucket_id}}"/>
         {{>index/_item-form}}

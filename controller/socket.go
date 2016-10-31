@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"../model"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
@@ -116,7 +117,7 @@ func (c *connection) writer() {
 
 func Socket(w http.ResponseWriter, r *http.Request) {
 	team_id := r.FormValue("team_id")
-	// since := r.FormValue("since")
+	ts := r.FormValue("ts")
 
 	_, err := auth_team(w, r)
 	if err != nil {
@@ -140,6 +141,12 @@ func Socket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c := &connection{send: make(chan wsmessage, 256), ws: ws, team_id: team_id}
+	logs, err := model.TeamLogSince(team_id, ts)
+	if(err == nil) {
+		for _, m := range logs {
+			c.write(websocket.TextMessage, wsmessage{team_id, m})
+		}
+	}
 	SocketHub.register <- c
 	// Write log messages since last seen timestamp
 	go c.writer()

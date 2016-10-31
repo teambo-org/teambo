@@ -2,9 +2,11 @@ Teambo.team = (function(t){
   "use strict";
 
   var socket_interval = null;
+  var socket_connect = true;
 
   var team = function(data, mkey, key) {
     var self = this;
+    var connection = null;
     if(typeof data == 'string') {
       var iv = data.split(' ')[0];
       data = t.crypto.decrypt(data, key);
@@ -16,12 +18,14 @@ Teambo.team = (function(t){
       mkey: mkey,
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
+      last_seen: data.last_seen ? data.last_seen : 0,
       save: function() {
         if(!mkey) {
           return Promise.reject('No mkey');
         }
         return t.promise(function(fulfill, reject) {
-          var new_ct = self.encrypted();
+          var iv = t.crypto.iv();
+          var new_ct = self.encrypted({iv: iv});
           t.xhr.post('/team', {
             data: {
               team_id: self.id,
@@ -56,17 +60,17 @@ Teambo.team = (function(t){
       },
       cache: function() {
         var hash = t.crypto.sha(self.id+t.salt);
-        localforage.setItem(hash, self.encrypted(self.iv));
+        localforage.setItem(hash, self.encrypted({last_seen: self.last_seen}));
       },
-      encrypted: function(iv) {
+      encrypted: function(override) {
+        var override = override ? override : {};
         var data = {
           id:   self.id,
           opts: self.opts,
-          hist: self.hist
+          hist: self.hist,
+          iv:   self.iv
         };
-        if(iv) {
-          data.iv = iv;
-        }
+        t.extend(data, override);
         return self.encrypt(data);
       },
       encrypt: function(data, config) {
@@ -90,66 +94,90 @@ Teambo.team = (function(t){
       url: function() {
         return '/'+data.id;
       },
+      lastSeen: function(ts) {
+        ts = parseInt(ts);
+        if(ts && ts > self.last_seen || ts === 0) {
+          self.last_seen = ts;
+          self.cache();
+        }
+        return self.last_seen;
+      },
       receiveEvent: function(e) {
-        var parts = e.data.split('-');
-        if(parts[1]) {
-          var ts   = parts[0];
-          var type = parts[1];
-          var id   = parts[2];
-          var iv   = parts[3];
-          if(iv === 'removed') {
-            var m = t[type].get(id);
-            if(m) {
-              var bucket_id = m.opts.bucket_id;
-              m.uncache().then(function() {
-                t.view.updateSideNav();
-                // TODO: move to event listener
-                var bucket = t.view.get('bucket');
-                var item   = t.view.get('item');
-                if(type == 'bucket' && bucket && bucket.id == id) {
-                  t.gotoUrl(t.team.current.url());
-                  // show message
-                } else if(type == 'item' && bucket && bucket.id == bucket_id && (!item || item.id == id)) {
-                  t.gotoUrl(bucket.url());
-                  // show message
+        return t.promise(function(fulfill, reject) {
+          var parts = e.data.split('-');
+          if(parts[1]) {
+            var ts   = parts[0];
+            var type = parts[1];
+            var id   = parts[2];
+            var iv   = parts[3];
+            if(iv === 'removed') {
+              var m = t[type].get(id);
+              if(m) {
+                var bucket_id = m.opts.bucket_id;
+                m.uncache().then(function() {
+                  t.view.updateSideNav();
+                  // TODO: move to event listener
+                  var team = t.view.get('team');
+                  var bucket = t.view.get('bucket');
+                  var item   = t.view.get('item');
+                  if(type == 'bucket' && bucket && bucket.id == id) {
+                    t.gotoUrl(t.team.current.url(), false, {silent: true});
+                    // show message
+                  } else if(type == 'bucket' && !bucket) {
+                    t.refresh({silent: true});
+                  } else if(type == 'item' && bucket && bucket.id == bucket_id && (!item || item.id == id)) {
+                    t.gotoUrl(bucket.url(), false, {silent: true});
+                    // show message
+                  }
+                  self.lastSeen(parts[0]);
+                  fulfill();
+                });
+              } else {
+                self.lastSeen(parts[0]);
+                fulfill();
+              }
+            } else {
+              t[type].find(id).then(function(m) {
+                var p = [];
+                if(m && m.iv != iv) {
+                  p.push(m.refresh());
+                } else {
+                  p.push(m.cache());
                 }
+                Promise.all(p).then(function(){
+                  t.view.updateSideNav();
+                  // TODO: move to event listener
+                  var bucket = t.view.get('bucket');
+                  var item   = t.view.get('item');
+                  if(type == 'bucket' && bucket && bucket.id == id) {
+                    if(!t.editing()) {
+                      t.refresh({silent: true});
+                    } else {
+                      // show message
+                    }
+                  } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
+                    if(!t.editing()) {
+                      t.refresh({silent: true});
+                    } else {
+                      // show message
+                    }
+                  }
+                  self.lastSeen(parts[0]);
+                  fulfill();
+                });
               });
             }
           } else {
-            t[type].find(id).then(function(m) {
-              var p = [];
-              if(m && m.iv != iv) {
-                p.push(m.refresh());
-              } else {
-                p.push(m.cache());
-              }
-              Promise.all(p).then(function(){
-                t.view.updateSideNav();
-                // TODO: move to event listener
-                var bucket = t.view.get('bucket');
-                var item   = t.view.get('item');
-                if(type == 'bucket' && bucket && bucket.id == id) {
-                  if(!t.editing()) {
-                    t.refresh();
-                  } else {
-                    // show message
-                  }
-                } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
-                  if(!t.editing()) {
-                    t.refresh();
-                  } else {
-                    // show message
-                  }
-                }
-              });
-            });
+            self.lastSeen(parts[0]);
+            fulfill();
           }
-        }
-        console.log(e.data);
+          console.log(e.data);
+        });
       },
-      startSocket: function(team_id) {
+      startSocket: function() {
         var connected = null;
-        var connection = null;
+        var failures = 0;
+        socket_connect = true;
         var wrapperfunc = function(){
           if (typeof(WebSocket) === "function" && (!connection || connection.readyState > 0)) {
             if(connected) {
@@ -159,21 +187,68 @@ Teambo.team = (function(t){
             var uri = new Uri(window.location);
             var host = uri.host();
             var scheme = uri.protocol() == 'https' ? 'wss' : 'ws';
-            // TODO: add ts
-            connection = new WebSocket(scheme+"://"+host+"/socket?team_id="+self.id+"&mkey="+self.mkey);
+            var url = scheme+"://"+host+"/socket?team_id="+self.id+"&mkey="+self.mkey+"&ts="+self.lastSeen();
+            connection = new WebSocket(url);
             connected = true;
             connection.onclose = function(evt) {
+              failures++;
               connected = false;
               connection = null;
-              t.online(false);
+              initial_sync_complete = false;
+              if(socket_connect) {
+                t.online(false);
+              }
             }
             connection.onmessage = function(e) {
-              self.receiveEvent(e);
+              failures = 0;
+              receiveEvents(e);
             }
           }
         };
+        var initial_sync_complete = false;
+        var received_events = [];
+        var initial_sync_timeout;
+        var receiveEvents = function(evt) {
+          if(evt) {
+            received_events.push(evt);
+          }
+          if(initial_sync_complete) {
+            self.receiveEvent(evt);
+          } else {
+            clearTimeout(initial_sync_timeout);
+            initial_sync_timeout = setTimeout(processInitialSync, 200);
+          }
+        };
+        var processInitialSync = function() {
+          initial_sync_complete = true;
+          var deduped_evts = {};
+          received_events.forEach(function(e, i) {
+            var parts = e.data.split('-');
+            if(parts.length > 1) {
+              var type = parts[1];
+              var id   = parts[2];
+              deduped_evts[type+id] = e;
+            }
+          });
+          received_events = [];
+          var sorted_events = [];
+          for(var i in deduped_evts) {
+            sorted_events.push(deduped_evts[i]);
+          }
+          sorted_events.sort();
+          sorted_events.forEach(function(e) {
+            self.receiveEvent(e);
+          });
+        };
         wrapperfunc();
-        socket_interval = setInterval(wrapperfunc, 1000);
+        socket_interval = setInterval(wrapperfunc, (failures < 3 ? 1 : 5)*1000);
+      },
+      closeSocket: function() {
+        socket_connect = false;
+        clearInterval(socket_interval);
+        if(connection) {
+          connection.close();
+        }
       }
     });
   };
