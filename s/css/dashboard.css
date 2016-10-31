@@ -92,7 +92,7 @@
 #dashboard .main section.tags ul li { list-style: none; margin: 0; padding: 0; }
 #dashboard .main section.tags ul li > a { background: none; text-decoration: none; }
 #dashboard .main section.tags ul li i.nav { background: none; }
-#dashboard .main section.comments { clear: both; }
+#dashboard .main section.comments { clear: both; background: none; padding: 0; }
 #dashboard .main section.comments .comment { margin: 1em 0; }
 #dashboard .main section.comments .message { padding: 1em; }
 #dashboard .main section.comments .author {  }
@@ -141,3 +141,9 @@
 #dashboard .main nav.breadcrumbs span { float: none; display: inline-block; padding: 0 1em; line-height: 2em; font-size: 1.0em; float: left; }
 
 #dashboard .left .section { font-size: 0.9em; }
+
+#dashboard .side .bucket i { opacity: 0.6; }
+#dashboard .side .bucket.active i { opacity: 1; }
+#dashboard .side .bucket .icon-folder-open { display: none; }
+#dashboard .side .bucket.active .icon-folder { display: none; }
+#dashboard .side .bucket.active .icon-folder-open { display: inline-block; }
