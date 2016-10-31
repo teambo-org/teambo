@@ -159,7 +159,9 @@ Teambo.view = (function(t){
         return t.gotoUrl('/dashboard');
       }
     }
-    run_template_js(target);
+    if(tplname in template_js) {
+      template_js[tplname](t);
+    }
     // TODO: replace this with data binding?
     var els = document.querySelectorAll('a[data-obj^=bucket-]');
     for(var i = 0; els[i]; i++) {
@@ -173,17 +175,6 @@ Teambo.view = (function(t){
       els[i].classList.remove('active');
       if('item' in data && els[i].dataset.obj == 'item-'+data.item.id) {
         els[i].classList.add('active');
-      }
-    }
-  };
-
-  var run_template_js = function(tar) {
-    var els = tar.querySelectorAll('[data-tpljs]');
-    for(var i = 0; els[i]; i++) {
-      var el = els[i],
-        tplname = el.getAttribute('data-tpljs');
-      if(tplname in template_js) {
-        template_js[tplname](t);
       }
     }
   };

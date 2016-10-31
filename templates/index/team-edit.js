@@ -3,15 +3,15 @@ function(t){
 
   t.editing(true);
 
-  var form = new t.form(document.team_edit),
-    team_id = form.dataset.team_id;
+  var form = new t.form(document.team_edit);
+  var team_id = form.dataset.team_id;
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'theme']);
     var submit = function() {
       t.team.current.update(data).then(function(team){
-        t.updateSideNav();
+        t.view.updateSideNav();
         t.gotoUrl('/'+t.team.current.id);
       }).catch(function(xhr){
         if(xhr.status === 409) {
