@@ -116,7 +116,7 @@ Teambo.model = (function(t){
               id:      self.id
             }
           }).then(function(xhr){
-            if(xhr.status == 204) {
+            if(xhr.status == 204 || xhr.status == 404) {
               self.uncache().then(function(){
                 fulfill();
               });
