@@ -160,6 +160,7 @@ i.icon-emo-coffee:before { width: 1.5em; }
 
 /* 480 */
 @media (min-width: 480px) and (max-width: 639px) {
+    .up2l, .up2r { width: 100%; }
     .up4wwl, .up4wwr, .up4wwlr, .up4wwrl { width: 100%; }
     .up4wwrl .col, .up4wwlr .col { margin: 0; }
     .up4wl, .up4wr { width: 100%; }
@@ -170,6 +171,7 @@ i.icon-emo-coffee:before { width: 1.5em; }
 
 /* 640 */
 @media (min-width: 640px) and (max-width: 767px) {
+    .up2l, .up2r { width: 100%; }
     .up4wwl, .up4wwr, .up4wwlr, .up4wwrl { width: 100%; }
     .up4wwrl .col, .up4wwlr .col { margin: 0; }
     .up4wl, .up4wr { width: 100%; }
@@ -180,6 +182,7 @@ i.icon-emo-coffee:before { width: 1.5em; }
 
 /* 768 */
 @media (min-width: 768px) and (max-width: 999px) {
+    .up2l, .up2r { width: 100%; }
     .up4wwl, .up4wwr { width: 100%; }
     .up4wl, .up4wr { width: 66%; }
     .up4c1, .up4c2, .up4c3, .up4c4, .up4wwlr, .up4wwrl { width: 33.333%; }
@@ -198,11 +201,18 @@ i.icon-emo-coffee:before { width: 1.5em; }
 
 /* 1024 */
 @media (min-width: 1000px) and (max-width: 1259px) {
-    #page { font-size: 1.3em; }
+    .up2l, .up2r { width: 100%; }
+    #page { font-size: 1.2em; }
 }
 
 /* 1280 */
-@media (min-width: 1260px)/*  and (max-width: 1659px) */ {
+@media (min-width: 1260px)  and (max-width: 1599px) {
+    .up2l, .up2r { width: 100%; }
+    #page { font-size: 1.3em; }
+}
+
+/* 1600 */
+@media (min-width: 1600px)/*  and (max-width: 1659px) */ {
     #page { font-size: 1.3em; }
 }
 
