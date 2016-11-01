@@ -2,12 +2,19 @@
   "use strict";
 
   document.addEventListener("keydown", function(e) {
-    if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && e.key != "Escape") {
+    if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && e.key !== "Escape") {
       return;
     }
     var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
-    if(e.ctrlKey && key == 'q') {
+    if(e.ctrlKey && key === 'q') {
       window.location.hash = "";
+    }
+    if(key === "f5" || e.ctrlKey && key === 'r') {
+      e.preventDefault();
+      if(t.acct.current) {
+        t.acct.current.cacheAuth();
+      }
+      window.location.reload();
     }
     if(e.ctrlKey || e.altKey) {
       return;
