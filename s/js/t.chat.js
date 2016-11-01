@@ -38,6 +38,7 @@ Teambo.chat = (function(t){
           toggle(0);
         }
       }
+      document.getElementById('left').addEventListener('click', autoclose);
       document.getElementById('main').addEventListener('click', autoclose);
       document.getElementById('right').addEventListener('click', autoclose);
     },

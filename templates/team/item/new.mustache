@@ -7,7 +7,7 @@
     <h1><i class="icon-folder-open"></i> {{bucket.opts.name}}</h1>
     <form id="item-new" name="item_new" method="POST" class="std">
         <input name="bucket_id" type="hidden" value="{{bucket_id}}"/>
-        {{>index/_item-form}}
+        {{>team/item/_form}}
         <div class="field submit">
             <input type="submit" class="submit" value="Create Item" />
             <a class="cancel" href="#{{bucket.url}}">cancel</a>

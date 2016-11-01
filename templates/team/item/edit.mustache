@@ -7,7 +7,7 @@
     </nav>
     <h1>{{#item.status}}<i class="icon-{{icon}}"></i>{{/item.status}} {{item.opts.name}}</h1>
     <form id="item-edit" name="item_edit" method="POST" class="std" data-bucket_id="{{bucket_id}}" data-item_id="{{item.id}}">
-        {{>index/_item-form}}
+        {{>team/item/_form}}
         <div class="field">
             <label for="item_bucket">Bucket</label>
             <select id="item_bucket" name="bucket_id" class="text large"></select>

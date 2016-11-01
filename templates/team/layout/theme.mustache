@@ -1,6 +1,6 @@
 {{#team.theme}}
 
-#dashboard .right { color: rgba({{right.color}}, 0.7); }
+#dashboard .right { color: rgba({{right.color}}, 0.7); background: rgba({{right.bg}},1); }
 #dashboard .right .scrollable::-webkit-scrollbar-track { background: rgba({{right.hi}}, 0.1); }
 #dashboard .right .scrollable::-webkit-scrollbar-thumb { background: rgba({{right.hi}}, 0.2); }
 #dashboard .right ::-moz-selection { background: rgba({{right.hi}}, 0.2); }
@@ -16,9 +16,7 @@
 
 #dashboard .right .section .img { background: rgba({{right.hi}},0.1); }
 
-#dashboard .right.bg { background: rgba({{right.bg}},1); }
-
-#dashboard .main { color: rgba({{main.color}}, 0.7); }
+#dashboard .main { color: rgba({{main.color}}, 0.7); background: rgba({{main.bg}}, 1); }
 #dashboard .main .scrollable::-webkit-scrollbar-track { background: rgba({{main.hi}}, 0.05); }
 #dashboard .main .scrollable::-webkit-scrollbar-thumb { background: rgba({{main.hi}}, 0.15); }
 #dashboard .main ::-moz-selection { background: rgba({{main.hi}}, 0.2); }
@@ -53,14 +51,12 @@
 #dashboard .main ul.buckets li a:hover { background: rgba({{main.hi}}, 0.1); }
 #dashboard .main ul.items li a:hover { background: rgba({{main.hi}}, 0.1); }
 
-#dashboard .main.bg { background: rgba({{main.bg}}, 1); }
-
 #dashboard .left a.active { background: rgba({{main.hi}}, 0.15); }
 
 #dashboard .breadcrumbs a { background: rgba({{main.hi}}, 0.15); }
 #dashboard .breadcrumbs span { background: rgba({{main.hi}}, 0.10); }
 
-#dashboard .chat { color: rgba({{chat.color}}, 0.7); }
+#dashboard .chat { color: rgba({{chat.color}}, 0.7); background: rgba({{chat.bg}},1); }
 #dashboard .chat:before { box-shadow: inset 1em 1em 2em rgba({{chat.hi}}, 0.05); }
 #dashboard .chat .scrollable::-webkit-scrollbar-track { background: rgba({{chat.hi}}, 0); }
 #dashboard .chat .scrollable::-webkit-scrollbar-thumb { background: rgba({{chat.hi}}, 0.15); }
@@ -80,8 +76,6 @@
 #dashboard .chat .hi-20 { background: rgba({{chat.hi}}, 0.20); }
 #dashboard .chat .c-70 { color: rgba({{chat.color}}, 0.70); }
 #dashboard .chat form.std { background: rgba({{chat.hi}}, 0.10); box-shadow: 0 0 1em rgba({{chat.hi}},0.1); }
-
-#dashboard .chat.bg { background: rgba({{chat.bg}},1); }
 
 #dashboard .right a:focus { background: rgba({{right.hi}}, 0.15); }
 #dashboard .main .content a:focus,

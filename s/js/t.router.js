@@ -4,17 +4,17 @@ Teambo.router = (function(t){
   var routes = [];
   var plain_routes = {
     '' : 'external/index',
-    '/:team_id'                            : 'index/dashboard',
-    '/:team_id/members'                    : 'index/members',
-    '/:team_id/edit'                       : 'index/team-edit',
-    '/:team_id/new'                        : 'index/bucket-new',
-    '/:team_id/:bucket_id'                 : 'index/bucket',
-    '/:team_id/:bucket_id/remove'          : 'index/bucket-remove',
-    '/:team_id/:bucket_id/edit'            : 'index/bucket-edit',
-    '/:team_id/:bucket_id/new'             : 'index/item-new',
-    '/:team_id/:bucket_id/:item_id'        : 'index/item',
-    '/:team_id/:bucket_id/:item_id/edit'   : 'index/item-edit',
-    '/:team_id/:bucket_id/:item_id/remove' : 'index/item-remove'
+    '/:team_id'                            : 'team/dashboard',
+    '/:team_id/members'                    : 'team/members',
+    '/:team_id/edit'                       : 'team/edit',
+    '/:team_id/new'                        : 'team/bucket/new',
+    '/:team_id/:bucket_id'                 : 'team/bucket/view',
+    '/:team_id/:bucket_id/remove'          : 'team/bucket/remove',
+    '/:team_id/:bucket_id/edit'            : 'team/bucket/edit',
+    '/:team_id/:bucket_id/new'             : 'team/item/new',
+    '/:team_id/:bucket_id/:item_id'        : 'team/item/view',
+    '/:team_id/:bucket_id/:item_id/edit'   : 'team/item/edit',
+    '/:team_id/:bucket_id/:item_id/remove' : 'team/item/remove'
   };
 
   return {

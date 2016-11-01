@@ -58,14 +58,14 @@ Teambo.view = (function(t){
         };
       }
     }
-    var theme_styles = renderTemplate('dashboard/theme', {}, data);
+    var theme_styles = renderTemplate('team/layout/theme', {}, data);
     var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('theme').href = "data:text/css;base64,"+url;
   };
 
   var updateSideNav = function() {
-    render('right', 'dashboard/right');
-    render('left', 'dashboard/left');
+    render('right', 'team/layout/right');
+    render('left', 'team/layout/left');
     t.updateStatus();
   };
 

@@ -85,12 +85,12 @@ var Teambo = (function(t){
       } else {
         t.view.unset('item');
       }
-      if(route.tpl.indexOf('external') !== 0 && !document.getElementById('dash-main')) {
+      if(route.tpl.indexOf('external') !== 0 && !document.getElementById('main')) {
         if(!t.view.isset('team')) {
           t.gotoUrl('/account');
         }
-        t.view.render('page', "layout/dashboard", data);
-        target = "dash-main";
+        t.view.render('page', "team/layout", data);
+        target = "main";
       } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
         t.view.unset('team');
         target = "page";

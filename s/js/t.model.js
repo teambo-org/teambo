@@ -166,7 +166,7 @@ Teambo.model = (function(t){
     };
 
     model.cacheIds = function() {
-      return t.team.cache(model.type + 's', t.team.encrypt(model.ids()));
+      return t.team.cache(model.type + '_ids', t.team.encrypt(model.ids()));
     };
 
     model.create = function(opts) {
@@ -265,7 +265,7 @@ Teambo.model = (function(t){
           return;
         }
         var team = t.team.current;
-        t.team.findCached(model.type+'s').then(function(ct){
+        t.team.findCached(model.type+'_ids').then(function(ct){
           var ret = [];
           if(ct) {
             var ids = t.team.decrypt(ct);
@@ -284,13 +284,13 @@ Teambo.model = (function(t){
             });
           } else {
             model.fetchAll(team.id, team.mkey).then(function(data){
-              var cp = [];
+              var p = [];
               data.forEach(function(o) {
                 var m = new model(o.ct);
                 ret.push(m);
-                cp.push(m.cache());
+                p.push(m.cache());
               });
-              Promise.all(cp).then(function() {
+              Promise.all(p).then(function() {
                 model.all = ret;
                 model.cacheIds().then(function() {
                   fulfill(ret);
