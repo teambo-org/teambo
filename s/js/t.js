@@ -238,6 +238,9 @@ var Teambo = (function(t){
 
   t.promise = function(f) {
     var p = new Promise(f);
+    p.always = function(fn) {
+      return p.then(fn).catch(fn);
+    }
     if(t.debug()) {
       p.catch(function(e){
         t.trace(e);

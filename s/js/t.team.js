@@ -7,6 +7,8 @@ Teambo.team = (function(t){
   var team = function(data, mkey, key) {
     var self = this;
     var connection = null;
+    var events = [];
+    var processing = false;
     if(typeof data == 'string') {
       var iv = data.split(' ')[0];
       data = t.crypto.decrypt(data, key);
@@ -106,20 +108,13 @@ Teambo.team = (function(t){
         }
         return self.last_seen;
       },
-      receiveEvent: function(evt) {
-        return new Promise(function(fulfill, reject) {
-          var parts = evt.data.split('-');
+      receiveEvent: function(e) {
+        return t.promise(function(fulfill, reject) {
           var done = function() {
-            self.lastSeen(parts[0]);
+            self.lastSeen(e.ts);
             fulfill();
           };
-          if(parts[1]) {
-            var e = {
-              ts   : parts[0],
-              type : parts[1],
-              id   : parts[2],
-              iv   : parts[3]
-            };
+          if(e.type) {
             if(e.iv === 'removed') {
               var m = t[e.type].get(e.id);
               if(m) {
@@ -142,12 +137,36 @@ Teambo.team = (function(t){
                   t.event.emit('object-updated', e);
                   done();
                 });
+              }).catch(function() {
+                done();
               });
             }
           } else {
             done();
           }
         });
+      },
+      handleEvent: function(e) {
+        // TODO: move to t.event?
+        if(e) {
+          events.push(e);
+          if(processing) {
+            return;
+          }
+        }
+        var e = events.shift();
+        if(e) {
+          processing = true;
+          if(t.findByProperty(events, 'id', e.id)) {
+            setTimeout(self.handleEvent, 0);
+          } else {
+            self.receiveEvent(e).always(function() {
+              setTimeout(self.handleEvent, 0);
+            });
+          }
+        } else {
+          processing = false;
+        }
       },
       startSocket: function() {
         var connected = null;
@@ -174,46 +193,18 @@ Teambo.team = (function(t){
                 t.online(false);
               }
             }
-            connection.onmessage = function(e) {
+            connection.onmessage = function(evt) {
               failures = 0;
-              receiveEvents(e);
+              var parts = evt.data.split('-');
+              var e = {
+                ts   : parts[0],
+                type : parts[1],
+                id   : parts[2],
+                iv   : parts[3]
+              };
+              self.handleEvent(e);
             }
           }
-        };
-        var initial_sync_complete = false;
-        var received_events = [];
-        var initial_sync_timeout;
-        var receiveEvents = function(evt) {
-          if(evt) {
-            received_events.push(evt);
-          }
-          if(initial_sync_complete) {
-            self.receiveEvent(evt);
-          } else {
-            clearTimeout(initial_sync_timeout);
-            initial_sync_timeout = setTimeout(processInitialSync, 200);
-          }
-        };
-        var processInitialSync = function() {
-          initial_sync_complete = true;
-          var deduped_evts = {};
-          received_events.forEach(function(e, i) {
-            var parts = e.data.split('-');
-            if(parts.length > 1) {
-              var type = parts[1];
-              var id   = parts[2];
-              deduped_evts[type+id] = e;
-            }
-          });
-          received_events = [];
-          var sorted_events = [];
-          for(var i in deduped_evts) {
-            sorted_events.push(deduped_evts[i]);
-          }
-          sorted_events.sort();
-          sorted_events.forEach(function(e) {
-            self.receiveEvent(e);
-          });
         };
         wrapperfunc();
         socket_interval = setInterval(wrapperfunc, (failures < 3 ? 1 : 5)*1000);
