@@ -11,10 +11,16 @@
     }
     if(key === "f5" || e.ctrlKey && key === 'r') {
       e.preventDefault();
-      if(t.acct.current) {
-        t.acct.current.cacheAuth();
+      if(e.ctrlKey && e.altKey && e.shiftKey) {
+        localforage.clear().then(function(){
+          window.location.reload();
+        });
+      } else {
+        if(t.acct.current) {
+          t.acct.current.cacheAuth();
+        }
+        window.location.reload();
       }
-      window.location.reload();
     }
     if(e.ctrlKey || e.altKey) {
       return;
