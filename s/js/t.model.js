@@ -23,8 +23,12 @@ Teambo.model = (function(t){
               return;
             }
           }
-          var iv = t.crypto.iv();
           var diff = self.diff();
+          if(!Object.keys(diff).length) {
+            fulfill(self);
+            return;
+          }
+          var iv = t.crypto.iv();
           // TODO: Replace new Date() with server synced date time
           // TODO: Add member id to history items
           self.hist.push({iv: iv, diff: diff, ts: new Date().getTime()/*, mid: member.id */});
