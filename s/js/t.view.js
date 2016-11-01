@@ -114,6 +114,48 @@ Teambo.view = (function(t){
         window.applicationCache.update();
         startCacheCheck();
       }
+      
+      var anchorClass = function(el, classname) {
+        return (el.nodeName == 'A' && el.classList.contains(classname)) ||
+          (el.parentNode.nodeName == 'A' && el.parentNode.classList.contains(classname));
+      };
+      document.body.addEventListener('mousedown', function(e) {
+        if(e.which !== 1) {
+          return;
+        }
+        if(e.target.nodeName == 'A') {
+          e.target.click();
+        }
+        if(e.target.parentNode.nodeName == 'A') {
+          e.target.parentNode.click();
+        }
+      });
+      document.body.addEventListener('click', function(e) {
+        var el = e.target;
+        if(el.nodeName != 'A' && el.parentNode.nodeName == 'A') {
+          el = e.target.parentNode;
+        } else if(el.nodeName != 'A') {
+          return;
+        }
+        if(anchorClass(el, 'replace')) {
+          e.preventDefault();
+          t.gotoUrl(el.getAttribute('href').substr(1), true);
+          return;
+        }
+        if(anchorClass(el, 'logout')) {
+          e.preventDefault();
+          t.acct.deAuth();
+          t.gotoUrl('/login');
+          return;
+        }
+        if(anchorClass(el, 'force')) {
+          e.preventDefault();
+          hashChange(el.getAttribute('href').substr(1));
+          return;
+        }
+      });
+
+      FastClick.attach(document.body);
 
       // window.applicationCache.addEventListener('progress', function(e) {
         // console.log(e);
@@ -132,6 +174,19 @@ Teambo.view = (function(t){
       templates
     );
     return html;
+  };
+
+  var scrollToSub = function(hash, isLoaded) {
+    var parts = hash.split('..'),
+      el = document.getElementById(parts[1]),
+      tar = document.getElementById(target);
+    if(parts.length > 1 && el) {
+      var add = tar.offsetHeight - el.offsetHeight;
+      el.classList.add('hi');
+      tar.parentNode.scrollTop = Math.max(add/4, 10);
+    } else if (isLoaded){
+      tar.parentNode.scrollTop = 0;
+    }
   };
 
   var render = function(target, tplname, data, override) {
@@ -176,6 +231,9 @@ Teambo.view = (function(t){
       if('item' in data && els[i].dataset.obj == 'item-'+data.item.id) {
         els[i].classList.add('active');
       }
+    }
+    if(t.loaded()) {
+      target.scrollTop = 0;
     }
   };
 

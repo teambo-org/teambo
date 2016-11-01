@@ -23,6 +23,10 @@ var Teambo = (function(t){
     return testing;
   };
 
+  t.loaded = function(){
+    return loaded;
+  };
+
   t.updateReady = function(ready) {
     if(typeof ready === 'boolean') {
       updateready = ready;
@@ -72,6 +76,7 @@ var Teambo = (function(t){
       }
     } else if(!('team_id' in data)) {
       t.socket.stop();
+      t.view.unset('team');
       t.team.current = null;
     }
     Promise.all(p).then(function(){
@@ -92,7 +97,6 @@ var Teambo = (function(t){
         t.view.render('page', "team/layout", data);
         target = "main";
       } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
-        t.view.unset('team');
         target = "page";
       }
       nav_queue.forEach(function(fn) {
@@ -102,9 +106,6 @@ var Teambo = (function(t){
       editing = false;
       var tar = document.getElementById(target);
       t.view.render(target, route.tpl, data);
-      if(loaded) {
-        tar.scrollTop = 0;
-      }
       scrollToSub(hash, loaded);
       if(loaded && !silent) {
         t.audio.play('click', 1);
@@ -154,64 +155,15 @@ var Teambo = (function(t){
     }
     debug = opts.debug;
     testing = opts.testing;
-
     t.view.init(opts);
-
     t.router.init(opts.templates);
-
-    var anchorClass = function(el, classname) {
-      return (el.nodeName == 'A' && el.classList.contains(classname)) ||
-        (el.parentNode.nodeName == 'A' && el.parentNode.classList.contains(classname));
-    };
-
     Promise.all([
       t.getSalt(),
       t.acct.init()
     ]).then(function(){
       t.view.set('acct', t.acct.current);
-
       hashChange(window.location.hash.substr(1));
-
       window.onhashchange = refresh;
-
-      document.body.addEventListener('mousedown', function(e) {
-        if(e.which !== 1) {
-          return;
-        }
-        if(e.target.nodeName == 'A') {
-          e.target.click();
-        }
-        if(e.target.parentNode.nodeName == 'A') {
-          e.target.parentNode.click();
-        }
-      });
-      document.body.addEventListener('click', function(e) {
-        var el = e.target;
-        if(el.nodeName != 'A' && el.parentNode.nodeName == 'A') {
-          el = e.target.parentNode;
-        } else if(el.nodeName != 'A') {
-          return;
-        }
-        if(anchorClass(el, 'replace')) {
-          e.preventDefault();
-          t.gotoUrl(el.getAttribute('href').substr(1), true);
-          return;
-        }
-        if(anchorClass(el, 'logout')) {
-          e.preventDefault();
-          t.acct.deAuth();
-          t.gotoUrl('/login');
-          return;
-        }
-        if(anchorClass(el, 'force')) {
-          e.preventDefault();
-          hashChange(el.getAttribute('href').substr(1));
-          return;
-        }
-      });
-
-      FastClick.attach(document.body);
-
       t.audio.loadAll(opts.audio);
     }).catch(function() {
       t.acct.deAuth();
@@ -352,6 +304,16 @@ var Teambo = (function(t){
       node = node.parentNode;
     }
     return false;
+  };
+
+  t.findParent = function(el, selector) {
+    var parent;
+    while(parent = el.parentNode) {
+      if(parent.matches(selector)) {
+        return parent;
+      }
+      el = parent;
+    }
   };
 
   return t;
