@@ -1,14 +1,8 @@
 Teambo.team = (function(t){
   "use strict";
 
-  var socket_interval = null;
-  var socket_connect = true;
-
   var team = function(data, mkey, key) {
     var self = this;
-    var connection = null;
-    var events = [];
-    var processing = false;
     if(typeof data == 'string') {
       var iv = data.split(' ')[0];
       data = t.crypto.decrypt(data, key);
@@ -107,114 +101,6 @@ Teambo.team = (function(t){
           self.cache();
         }
         return self.last_seen;
-      },
-      receiveEvent: function(e) {
-        return t.promise(function(fulfill, reject) {
-          var done = function() {
-            self.lastSeen(e.ts);
-            fulfill();
-          };
-          if(e.type) {
-            if(e.iv === 'removed') {
-              var m = t[e.type].get(e.id);
-              if(m) {
-                m.uncache().then(function() {
-                  t.event.emit('object-removed', e);
-                  done();
-                });
-              } else {
-                done();
-              }
-            } else {
-              t[e.type].find(e.id).then(function(m) {
-                var p = [];
-                if(m && m.iv != e.iv) {
-                  p.push(m.refresh());
-                } else {
-                  p.push(m.cache());
-                }
-                Promise.all(p).then(function(){
-                  t.event.emit('object-updated', e);
-                  done();
-                });
-              }).catch(function() {
-                done();
-              });
-            }
-          } else {
-            done();
-          }
-        });
-      },
-      handleEvent: function(e) {
-        // TODO: move to t.event?
-        if(e) {
-          events.push(e);
-          if(processing) {
-            return;
-          }
-        }
-        var e = events.shift();
-        if(e) {
-          processing = true;
-          if(t.findByProperty(events, 'id', e.id)) {
-            setTimeout(self.handleEvent, 0);
-          } else {
-            self.receiveEvent(e).always(function() {
-              setTimeout(self.handleEvent, 0);
-            });
-          }
-        } else {
-          processing = false;
-        }
-      },
-      startSocket: function() {
-        var connected = null;
-        var failures = 0;
-        socket_connect = true;
-        var wrapperfunc = function(){
-          if (typeof(WebSocket) === "function" && (!connection || connection.readyState > 0)) {
-            if(connected) {
-              t.online(true);
-              return;
-            }
-            var uri = new Uri(window.location);
-            var host = uri.host();
-            var scheme = uri.protocol() == 'https' ? 'wss' : 'ws';
-            var url = scheme+"://"+host+"/socket?team_id="+self.id+"&mkey="+self.mkey+"&ts="+self.lastSeen();
-            connection = new WebSocket(url);
-            connected = true;
-            connection.onclose = function(evt) {
-              failures++;
-              connected = false;
-              connection = null;
-              initial_sync_complete = false;
-              if(socket_connect) {
-                t.online(false);
-              }
-            }
-            connection.onmessage = function(evt) {
-              failures = 0;
-              var parts = evt.data.split('-');
-              var e = {
-                ts   : parts[0],
-                type : parts[1],
-                id   : parts[2],
-                iv   : parts[3]
-              };
-              self.handleEvent(e);
-            }
-          }
-        };
-        wrapperfunc();
-        socket_interval = setInterval(wrapperfunc, (failures < 3 ? 1 : 5)*1000);
-      },
-      closeSocket: function() {
-        socket_connect = false;
-        clearInterval(socket_interval);
-        if(connection) {
-          connection.close();
-        }
       }
     });
   };
@@ -230,7 +116,7 @@ Teambo.team = (function(t){
         var p = [];
         p.push(t.bucket.findAll());
         p.push(t.item.findAll());
-        o.startSocket();
+        t.socket.start(o);
         Promise.all(p).then(function() {
           fulfill(o);
         }).catch(function(e) {

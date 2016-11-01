@@ -50,10 +50,8 @@ var Teambo = (function(t){
     if(updateready) {
       if(t.acct.current) {
         t.acct.current.cacheAuth();
-        window.location.reload();
-      } else {
-        window.location.reload();
       }
+      window.location.reload();
       return;
     }
     if(!route) {
@@ -73,10 +71,8 @@ var Teambo = (function(t){
         return;
       }
     } else if(!('team_id' in data)) {
-      if(t.team.current) {
-        t.team.current.closeSocket();
-        t.team.current = null;
-      }
+      t.socket.stop();
+      t.team.current = null;
     }
     Promise.all(p).then(function(){
       if(t.view.isset('team') && 'bucket_id' in data) {
