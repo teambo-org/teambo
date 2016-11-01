@@ -43,6 +43,7 @@ var js = []string{
 	"/js/lib/polyfills.js",
 	// "/js/lib/zxcvbn.js",
 	"/js/t.js",
+	"/js/t.event.js",
 	"/js/t.xhr.js",
 	"/js/t.router.js",
 	"/js/t.view.js",

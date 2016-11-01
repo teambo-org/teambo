@@ -141,10 +141,12 @@ func Socket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c := &connection{send: make(chan wsmessage, 256), ws: ws, team_id: team_id}
-	logs, err := model.TeamLogSince(team_id, ts)
-	if(err == nil) {
-		for _, m := range logs {
-			c.write(websocket.TextMessage, wsmessage{team_id, m})
+	if ts != "0" && ts != "" {
+		logs, err := model.TeamLogSince(team_id, ts)
+		if(err == nil) {
+			for _, m := range logs {
+				c.write(websocket.TextMessage, wsmessage{team_id, m})
+			}
 		}
 	}
 	SocketHub.register <- c

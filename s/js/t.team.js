@@ -106,76 +106,47 @@ Teambo.team = (function(t){
         }
         return self.last_seen;
       },
-      receiveEvent: function(e) {
-        return t.promise(function(fulfill, reject) {
-          var parts = e.data.split('-');
+      receiveEvent: function(evt) {
+        return new Promise(function(fulfill, reject) {
+          var parts = evt.data.split('-');
+          var done = function() {
+            self.lastSeen(parts[0]);
+            fulfill();
+          };
           if(parts[1]) {
-            var ts   = parts[0];
-            var type = parts[1];
-            var id   = parts[2];
-            var iv   = parts[3];
-            if(iv === 'removed') {
-              var m = t[type].get(id);
+            var e = {
+              ts   : parts[0],
+              type : parts[1],
+              id   : parts[2],
+              iv   : parts[3]
+            };
+            if(e.iv === 'removed') {
+              var m = t[e.type].get(e.id);
               if(m) {
-                var bucket_id = m.opts.bucket_id;
                 m.uncache().then(function() {
-                  t.view.updateSideNav();
-                  // TODO: move to event listener
-                  var team = t.view.get('team');
-                  var bucket = t.view.get('bucket');
-                  var item   = t.view.get('item');
-                  if(type == 'bucket' && bucket && bucket.id == id) {
-                    t.gotoUrl(t.team.current.url(), false, {silent: true});
-                    // show message
-                  } else if(type == 'bucket' && !bucket) {
-                    t.refresh({silent: true});
-                  } else if(type == 'item' && bucket && bucket.id == bucket_id && (!item || item.id == id)) {
-                    t.gotoUrl(bucket.url(), false, {silent: true});
-                    // show message
-                  }
-                  self.lastSeen(parts[0]);
-                  fulfill();
+                  t.event.emit('object-removed', e);
+                  done();
                 });
               } else {
-                self.lastSeen(parts[0]);
-                fulfill();
+                done();
               }
             } else {
-              t[type].find(id).then(function(m) {
+              t[e.type].find(e.id).then(function(m) {
                 var p = [];
-                if(m && m.iv != iv) {
+                if(m && m.iv != e.iv) {
                   p.push(m.refresh());
                 } else {
                   p.push(m.cache());
                 }
                 Promise.all(p).then(function(){
-                  t.view.updateSideNav();
-                  // TODO: move to event listener
-                  var bucket = t.view.get('bucket');
-                  var item   = t.view.get('item');
-                  if(type == 'bucket' && bucket && bucket.id == id) {
-                    if(!t.editing()) {
-                      t.refresh({silent: true});
-                    } else {
-                      // show message
-                    }
-                  } else if(type == 'item' && bucket && bucket.id == m.opts.bucket_id && (!item || item.id == m.id)) {
-                    if(!t.editing()) {
-                      t.refresh({silent: true});
-                    } else {
-                      // show message
-                    }
-                  }
-                  self.lastSeen(parts[0]);
-                  fulfill();
+                  t.event.emit('object-updated', e);
+                  done();
                 });
               });
             }
           } else {
-            self.lastSeen(parts[0]);
-            fulfill();
+            done();
           }
-          console.log(e.data);
         });
       },
       startSocket: function() {

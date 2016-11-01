@@ -43,8 +43,9 @@ function(t){
   }
   form.status.innerHTML = html + form.status.innerHTML;
   var html = '';
-  for(var i in t.bucket.all) {
-    var bucket = t.bucket.all[i];
+  var buckets = t.bucket.all.concat([t.bucket.orphaned]);
+  for(var i in buckets) {
+    var bucket = buckets[i];
     html +=  "<option value='"+bucket.id+"'"+(bucket.id === bucket_id ? " selected='selected'" : "")+">"+bucket.opts.name+"</option>";
   }
   form.bucket_id.innerHTML = html + form.bucket_id.innerHTML;

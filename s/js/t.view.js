@@ -58,7 +58,7 @@ Teambo.view = (function(t){
         };
       }
     }
-    var theme_styles = t.view.renderTemplate('dashboard/theme', {}, data);
+    var theme_styles = renderTemplate('dashboard/theme', {}, data);
     var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('theme').href = "data:text/css;base64,"+url;
   };
@@ -149,7 +149,7 @@ Teambo.view = (function(t){
       if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
         return t.gotoUrl('/account');
       }
-      if(class_list.contains('require-team') && !t.view.isset('team')) {
+      if(class_list.contains('require-team') && !view.isset('team')) {
         return t.gotoUrl('/account');
       }
       if(class_list.contains('require-bucket') && !data.bucket) {
@@ -179,7 +179,45 @@ Teambo.view = (function(t){
     }
   };
 
-  return {
+  t.event.on('object-removed', function(e) {
+    updateSideNav();
+    var team   = view.get('team');
+    var bucket = view.get('bucket');
+    var item   = view.get('item');
+    if(e.type == 'bucket' && bucket && bucket.id == e.id) {
+      t.gotoUrl(team.url(), false, {silent: true});
+      // show message
+    } else if(e.type == 'bucket' && !bucket) {
+      t.refresh({silent: true});
+    } else if(e.type == 'item' && bucket && (!item || item.id == e.id)) {
+      t.gotoUrl(bucket.url(), false, {silent: true});
+      // show message
+    }
+  });
+
+  t.event.on('object-updated', function(e) {
+    updateSideNav();
+    var bucket = view.get('bucket');
+    var item   = view.get('item');
+    var m = e.type in t ? t[e.type].get(e.id) : null;
+    if(e.type == 'bucket' && bucket && bucket.id == e.id) {
+      if(!t.editing()) {
+        t.refresh({silent: true});
+      } else {
+        // show message
+      }
+    } else if(e.type == 'bucket' && !bucket) {
+      t.refresh({silent: true});
+    } else if(e.type == 'item' && (m && bucket && bucket.id == m.opts.bucket_id && !item) || (item && item.id == e.id)) {
+      if(!t.editing()) {
+        t.refresh({silent: true});
+      } else {
+        // show message
+      }
+    }
+  });
+  
+  var view = {
     init: init,
     render: render,
     renderTemplate: renderTemplate,
@@ -199,5 +237,7 @@ Teambo.view = (function(t){
     updateTheme: update_theme,
     updateSideNav: updateSideNav
   };
+
+  return view;
 
 })(Teambo);
