@@ -4,7 +4,7 @@ Teambo.form = (function(t){
   return function(el) {
     var form = el,
       error = form.querySelector('.error'),
-      submit = form.querySelector('input[type=submit]');
+      submit_el = form.querySelector('input[type=submit]');
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       form.error.hide();
@@ -47,10 +47,10 @@ Teambo.form = (function(t){
         }
       },
       disable: function() {
-        submit.setAttribute('disabled', 'disabled');
+        submit_el.setAttribute('disabled', 'disabled');
       },
       enable: function() {
-        submit.removeAttribute('disabled');
+        submit_el.removeAttribute('disabled');
       },
       values: function(vals) {
         var data = {};
@@ -58,6 +58,17 @@ Teambo.form = (function(t){
           data[vals[i]] = form[vals[i]].value;
         }
         return data;
+      },
+      _submit: function() {
+        if(submit_el) {
+          submit_el.click();
+        } else {
+          var button = document.createElement('input');
+          button.style.display = 'none';
+          button.type = 'submit';
+          form.appendChild(button).click();
+          form.removeChild(button);
+        }
       }
     });
   };

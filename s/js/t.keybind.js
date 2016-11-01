@@ -2,20 +2,28 @@
   "use strict";
 
   document.addEventListener("keydown", function(e) {
-    if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && e.key !== "Escape") {
+    var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
+    if(e.ctrlKey && key === 's') {
+      var parent_form = t.findParent(e.target, 'form');
+      if(parent_form && parent_form._submit) {
+        e.preventDefault();
+        parent_form._submit();
+        return;
+      }
+    }
+    if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && key !== "escape") {
       return;
     }
-    var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
     if(e.ctrlKey && key === 'q') {
       window.location.hash = "";
     }
     if(key === "f5" || e.ctrlKey && key === 'r') {
-      e.preventDefault();
       if(e.ctrlKey && e.altKey && e.shiftKey) {
+        e.preventDefault();
         localforage.clear().then(function(){
           window.location.reload();
         });
-      } else {
+      } else if(!e.shiftKey) {
         if(t.acct.current) {
           t.acct.current.cacheAuth();
         }
