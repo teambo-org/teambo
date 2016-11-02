@@ -116,8 +116,8 @@ Teambo.team = (function(t){
         var p = [];
         p.push(t.bucket.findAll());
         p.push(t.item.findAll());
-        t.socket.start(o);
         Promise.all(p).then(function() {
+          t.socket.start(o);
           fulfill(o);
         }).catch(function(e) {
           reject(e);
