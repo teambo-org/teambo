@@ -86,13 +86,10 @@
     e.preventDefault();
     if(e.ctrlKey && e.altKey && e.shiftKey) {
       localforage.clear().then(function(){
-        window.location.reload();
+        t.reload();
       });
     } else if(!e.shiftKey) {
-      if(t.acct.current) {
-        t.acct.current.cacheAuth();
-      }
-      window.location.reload();
+      t.reload();
     }
   };
 

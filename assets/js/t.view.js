@@ -79,12 +79,7 @@ Teambo.view = (function(t){
         if(window.applicationCache.status === window.applicationCache.UPDATEREADY
         || window.applicationCache.status === window.applicationCache.CHECKING) {
           if(!t.moved() && !t.editing()) {
-            if(t.acct.current) {
-              t.acct.current.cacheAuth()
-              window.location.reload();
-            } else {
-              window.location.reload();
-            }
+            t.reload();
           } else {
             t.updateReady(true);
           }
@@ -208,29 +203,30 @@ Teambo.view = (function(t){
     var els = document.querySelectorAll('a[data-obj^=bucket-]');
     for(var i = 0; els[i]; i++) {
       els[i].classList.remove('active');
-      if('bucket' in data && els[i].dataset.obj == 'bucket-'+data.bucket.id) {
+      if('bucket' in data && data.bucket && els[i].dataset.obj == 'bucket-'+data.bucket.id) {
         els[i].classList.add('active');
       }
     }
     var els = document.querySelectorAll('a[data-obj^=item-]');
     for(var i = 0; els[i]; i++) {
       els[i].classList.remove('active');
-      if('item' in data && els[i].dataset.obj == 'item-'+data.item.id) {
+      if('item' in data && data.item && els[i].dataset.obj == 'item-'+data.item.id) {
         els[i].classList.add('active');
       }
     }
-    if(t.loaded()) {
+    if(t.loaded() && target.id === 'main') {
       target.scrollTop = 0;
     }
   };
 
   t.event.on('object-removed', function(e) {
-    updateSideNav();
-    var team   = view.get('team');
+    if(!e.batch) {
+      updateSideNav();
+    }
     var bucket = view.get('bucket');
     var item   = view.get('item');
     if(e.type == 'bucket' && bucket && bucket.id == e.id) {
-      t.gotoUrl(team.url(), false, {silent: true});
+      t.gotoUrl(view.get('team').url(), false, {silent: true});
       // show message
     } else if(e.type == 'bucket' && !bucket) {
       t.refresh({silent: true});
@@ -241,7 +237,9 @@ Teambo.view = (function(t){
   });
 
   t.event.on('object-updated', function(e) {
-    updateSideNav();
+    if(!e.batch) {
+      updateSideNav();
+    }
     var bucket = view.get('bucket');
     var item   = view.get('item');
     var m = e.type in t ? t[e.type].get(e.id) : null;

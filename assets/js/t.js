@@ -45,6 +45,14 @@ var Teambo = (function(t){
     return editing;
   };
 
+  t.reload = function() {
+    t.view.render('page', 'external/blank');
+    if(t.acct.current) {
+      t.acct.current.cacheAuth();
+    }
+    window.location.reload();
+  };
+
   var hashChange = function(hash, data){
     var uri = new Uri(hash);
     var path = uri.path().split('..')[0];
@@ -52,10 +60,7 @@ var Teambo = (function(t){
     data = t.extend(data || {}, uri.getQueryParams());
     var silent = data.silent ? data.silent : false;
     if(updateready) {
-      if(t.acct.current) {
-        t.acct.current.cacheAuth();
-      }
-      window.location.reload();
+      t.reload();
       return;
     }
     if(!route) {
