@@ -25,7 +25,7 @@ Teambo.bucket = (function(t){
         return self.item_list_incomplete().length;
       },
       progress: function() {
-        return (self.item_list_complete().length / self.item_list().length) * 100;
+        return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
       },
       url: function() {
         return '/'+t.team.current.id+'/'+self.id;
