@@ -94,20 +94,16 @@ Teambo.model = (function(t){
           if(!updated) {
             model.all.push(self);
           }
-          model.cacheIds().then(function(){
-            t.team.cache(self.id, self.encrypted(self.iv)).then(function(){
-              fulfill(self);
-            });
+          t.team.cache(self.id, self.encrypted()).then(function(){
+            fulfill(self);
           });
         });
       },
       uncache: function() {
         t.deleteByProperty(model.all, 'id', self.id);
         return t.promise(function (fulfill, reject) {
-          model.cacheIds().then(function(){
-            t.team.uncache(self.id).then(function() {
-              fulfill(self);
-            });
+          t.team.uncache(self.id).then(function() {
+            fulfill(self);
           });
         });
       },
@@ -122,7 +118,9 @@ Teambo.model = (function(t){
           }).then(function(xhr){
             if(xhr.status == 204 || xhr.status == 404) {
               self.uncache().then(function(){
-                fulfill();
+                model.cacheIds().then(function(){
+                  fulfill();
+                });
               });
             } else {
               reject(xhr);
@@ -136,7 +134,8 @@ Teambo.model = (function(t){
         var data = {
           id:   self.id,
           opts: self.opts,
-          hist: self.hist
+          hist: self.hist,
+          iv:   self.iv
         };
         var config = {};
         if(iv) {
@@ -196,7 +195,9 @@ Teambo.model = (function(t){
             });
             m.orig = {};
             m.save().then(function(xhr){
-              fulfill(m);
+              model.cacheIds().then(function(){
+                fulfill(m);
+              });
             }).catch(function(e){
               reject(e);
             });
@@ -261,7 +262,7 @@ Teambo.model = (function(t){
       });
     };
 
-    model.findAll = function() {
+    model.findAll = function(force) {
       return t.promise(function(fulfill, reject) {
         if(model.all.length) {
           fulfill(model.all);
@@ -270,7 +271,7 @@ Teambo.model = (function(t){
         var team = t.team.current;
         t.team.findCached(model.type+'_ids').then(function(ct){
           var ret = [];
-          if(ct) {
+          if(ct && !force) {
             var ids = t.team.decrypt(ct);
             var p = [];
             for(var i in ids) {
