@@ -66,6 +66,7 @@ Teambo.view = (function(t){
   var updateSideNav = function() {
     render('right', 'team/layout/right');
     render('left', 'team/layout/left');
+    render('chat', 'team/layout/chat');
     t.updateStatus();
   };
 
@@ -96,7 +97,6 @@ Teambo.view = (function(t){
       window.applicationCache.addEventListener('error', function(e) {
         t.online(false);
       }, false);
-
       var startCacheCheck = function() {
         if(!t.updateReady()) {
           setTimeout(function(){
@@ -114,53 +114,40 @@ Teambo.view = (function(t){
         window.applicationCache.update();
         startCacheCheck();
       }
-      
-      var anchorClass = function(el, classname) {
-        return (el.nodeName == 'A' && el.classList.contains(classname)) ||
-          (el.parentNode.nodeName == 'A' && el.parentNode.classList.contains(classname));
-      };
-      document.body.addEventListener('mousedown', function(e) {
-        if(e.which !== 1) {
-          return;
-        }
-        if(e.target.nodeName == 'A') {
-          e.target.click();
-        }
-        if(e.target.parentNode.nodeName == 'A') {
-          e.target.parentNode.click();
-        }
-      });
-      document.body.addEventListener('click', function(e) {
-        var el = e.target;
-        if(el.nodeName != 'A' && el.parentNode.nodeName == 'A') {
-          el = e.target.parentNode;
-        } else if(el.nodeName != 'A') {
-          return;
-        }
-        if(anchorClass(el, 'replace')) {
-          e.preventDefault();
-          t.gotoUrl(el.getAttribute('href').substr(1), true);
-          return;
-        }
-        if(anchorClass(el, 'logout')) {
-          e.preventDefault();
-          t.acct.deAuth();
-          t.gotoUrl('/login');
-          return;
-        }
-        if(anchorClass(el, 'force')) {
-          e.preventDefault();
-          hashChange(el.getAttribute('href').substr(1));
-          return;
-        }
-      });
-
-      FastClick.attach(document.body);
-
-      // window.applicationCache.addEventListener('progress', function(e) {
-        // console.log(e);
-      // }, false);
     }
+
+    document.body.addEventListener('mousedown', function(e) {
+      if(e.which !== 1) {
+        return;
+      }
+      var el = t.matchParent(e.target, 'a');
+      if(el) {
+        el.click();
+      }
+    });
+    document.body.addEventListener('click', function(e) {
+      var el = t.matchParent(e.target, 'a');
+      if(!el) {
+        return;
+      }
+      if(el.matches('.replace')) {
+        e.preventDefault();
+        t.gotoUrl(el.getAttribute('href').substr(1), true);
+        return;
+      }
+      if(el.matches('.logout')) {
+        e.preventDefault();
+        t.acct.deAuth();
+        t.gotoUrl('/login');
+        return;
+      }
+      if(el.matches('.force')) {
+        e.preventDefault();
+        hashChange(el.getAttribute('href').substr(1));
+        return;
+      }
+    });
+    FastClick.attach(document.body);
   };
 
   var renderTemplate = function(tplname, data, override) {

@@ -15,6 +15,7 @@
 #dashboard .right .color-15 { background: rgba({{right.color}}, 0.15); }
 
 #dashboard .right .section .img { background: rgba({{right.hi}},0.1); }
+#dashboard .right a:focus { background: rgba({{right.hi}}, 0.15); }
 
 #dashboard .main { color: rgba({{main.color}}, 0.7); background: rgba({{main.bg}}, 1); }
 #dashboard .main .scrollable::-webkit-scrollbar-track { background: rgba({{main.hi}}, 0.05); }
@@ -51,7 +52,20 @@
 #dashboard .main ul.buckets li a:hover { background: rgba({{main.hi}}, 0.1); }
 #dashboard .main ul.items li a:hover { background: rgba({{main.hi}}, 0.1); }
 
+#dashboard .main .content a:focus,
+#dashboard .main input:focus,
+#dashboard .main select:focus,
+#dashboard .main textarea:focus { outline: 2px solid rgba({{main.hi}}, 0.15); }
+#dashboard .main a:focus { background: rgba({{main.hi}}, 0.1); }
+#dashboard .main form.std input.text::-webkit-input-placeholder { color: rgba({{main.color}},0.5); }
+#dashboard .main form.std input.text::-moz-placeholder { color: rgba({{main.color}},0.5); }
+#dashboard .main form.std input.text::-ms-input-placeholder { color: rgba({{main.color}},0.5); }
+
+#dashboard .main form.std input.submit:focus { background: rgba({{main.hi}},0.2); outline: none; }
+
 #dashboard .left a.active { background: rgba({{main.hi}}, 0.15); }
+
+#dashboard .main .left a:focus { background: rgba({{main.hi}}, 0.20); }
 
 #dashboard .breadcrumbs a { background: rgba({{main.hi}}, 0.15); }
 #dashboard .breadcrumbs span { background: rgba({{main.hi}}, 0.10); }
@@ -77,17 +91,6 @@
 #dashboard .chat .c-70 { color: rgba({{chat.color}}, 0.70); }
 #dashboard .chat form.std { background: rgba({{chat.hi}}, 0.10); box-shadow: 0 0 1em rgba({{chat.hi}},0.1); }
 
-#dashboard .right a:focus { background: rgba({{right.hi}}, 0.15); }
-#dashboard .main .content a:focus,
-#dashboard .main input:focus,
-#dashboard .main select:focus,
-#dashboard .main textarea:focus { outline: 2px solid rgba({{main.hi}}, 0.15); } 
-#dashboard .main a:focus { background: rgba({{main.hi}}, 0.1); }
-#dashboard .main .left a:focus { background: rgba({{main.hi}}, 0.15); }
-#dashboard .main form.std input.submit:focus { background: rgba({{main.hi}},0.2); outline: none; }
 #dashboard .chat input.text:focus { outline: none; background: rgba({{chat.hi}}, 0.15); }
-#dashboard .main form.std input.text::-webkit-input-placeholder { color: rgba({{main.color}},0.5); }
-#dashboard .main form.std input.text::-moz-placeholder { color: rgba({{main.color}},0.5); }
-#dashboard .main form.std input.text::-ms-input-placeholder { color: rgba({{main.color}},0.5); }
 
 {{/team.theme}}
