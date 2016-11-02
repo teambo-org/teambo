@@ -20,7 +20,7 @@ a:hover, a:active { text-decoration: underline; }
 
 .scrollable::-webkit-scrollbar { width: 6px; }
 .scrollable::-webkit-scrollbar-track { }
-.scrollable::-webkit-scrollbar-thumb { -webkit-border-radius: 3px; border-radius: 3px; }
+.scrollable::-webkit-scrollbar-thumb {  }
 
 #bgcanvas { position: fixed; z-index: 1; top: 0; left: 0; }
 #page { z-index: 1; position: relative; }
@@ -107,7 +107,8 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .external ul.teams li.team { padding: 0; background: rgba(255,255,255,1); }
 .external ul.teams li.team a { padding: 0; line-height: 2em; display: block; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); font-size: 1.2em; }
 .external ul.teams li.team a:focus { outline: 4px solid rgba(0,0,0,0.2); }
-.external ul.teams li.team a i { width: 2em; background: rgba(255,255,255,0.2); float: left; text-align: center; margin-right: 0.5em; padding-right: 0.1em; }
+.external ul.teams li.team a .i-wrap { float: left; margin-right: 0.5em; }
+.external ul.teams li.team a i { width: 2em; background: rgba(255,255,255,0.2); float: left; text-align: center; padding-right: 0.1em; }
 .external ul.teams li.placeholder { font-size: 0.9em; }
 .external ul.teams li.placeholder h3 { margin-bottom: 0.5em; }
 .external a.team-new { display: block; text-align: center; margin-bottom: 1em; }

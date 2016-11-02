@@ -1,28 +1,59 @@
 <div class="section team hi-20">
     <a href="#{{team.url}}" class="default-focus">
-        <div class="img"><i class="icon-users"></i></div>
+        <div class="img"><i class="icon-logo"></i></div>
         <div class="name">{{team.opts.name}}</div>
     </a>
 </div>
 <div class="scrollable">
-    {{#team.bucket_list}}
-    <div class="section">
-        <a href="#{{url}}" class="hi-10 bucket" data-obj="bucket-{{id}}">
-            <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
-            <div class="name">{{opts.name}}</div>
-            <div class="progress" data-progress="{{progress}}"></div>
+    <div class="section hi-10">
+        <i class="icon-down-open-1 nav color-hi-40"></i>
+        <a href="#{{team.url}}/members">
+            <div class="img"><i class="icon-flag-filled"></i></div>
+            <div class="name">Sprints</div>
         </a>
     </div>
+    <div class="section hi-10">
+        <i class="icon-down-open-1 nav on color-hi-40"></i>
+        <a href="#{{team.url}}/members">
+            <div class="img"><i class="icon-folder"></i></div>
+            <div class="name">Folders</div>
+        </a>
+    </div>
+    <div class="section">
+    {{#team.bucket_list}}
+        <a href="#{{url}}" class="bucket" data-obj="bucket-{{id}}">
+            <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
+            <div class="name">{{opts.name}}</div>
+            <div class="progress hi-10" data-progress="{{progress}}"></div>
+        </a>
     {{/team.bucket_list}}
-</div>
-<div class="section">
-    <a href="#{{team.url}}/members">
-        <div class="img"><i class="icon-user-1"></i></div>
-        <div class="name">Members</div>
-    </a>
-    <a href="#{{team.url}}/edit">
-        <div class="img"><i class="icon-wrench"></i></div>
-        <div class="name">Settings</div>
-    </a>
+    </div>
+    <div class="section hi-10">
+        <a href="#{{team.url}}/members">
+            <div class="img"><i class="icon-users"></i></div>
+            <div class="name">Members</div>
+        </a>
+    </div>
+    <div class="section hi-10">
+        <i class="icon-down-open-1 nav color-hi-40"></i>
+        <a href="#{{team.url}}/members">
+            <div class="img"><i class="icon-tags-1"></i></div>
+            <div class="name">Tags</div>
+        </a>
+    </div>
+    <div class="section hi-10">
+        <i class="icon-down-open-1 nav color-hi-40"></i>
+        <a href="#{{team.url}}/members">
+            <div class="img"><i class="icon-edit"></i></div>
+            <div class="name">Notes</div>
+        </a>
+    </div>
+    <div class="section hi-10">
+        <i class="icon-down-open-1 nav color-hi-40"></i>
+        <a href="#{{team.url}}/edit">
+            <div class="img"><i class="icon-wrench"></i></div>
+            <div class="name">Settings</div>
+        </a>
+    </div>
 </div>
 <div id="status"></div>

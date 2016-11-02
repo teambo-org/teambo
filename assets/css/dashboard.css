@@ -17,12 +17,13 @@
 #dashboard .section { clear: both; }
 #dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
 #dashboard .section .bucket { position: relative; }
-#dashboard .progress { position: absolute; bottom: 0; left: 2em; right: 0; height: 2px; }
+#dashboard .progress { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
 #dashboard .progress > div { height: 2px; }
 #dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; overflow: hidden; position: relative; }
 #dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; display: none; }
 #dashboard .section div.totals { float: right; opacity: 0.5; font-size: 0.7em; line-height: 2.9em; padding: 0 1em; text-align: center; }
 #dashboard .section div.totals .sep { opacity: 0.5; }
+#dashboard .section i.nav.on,
 #dashboard .section:hover i.nav { display: block; }
 #dashboard .section:hover div.totals { display: none; }
 #dashboard .section > a { display: block; }
@@ -141,6 +142,7 @@
 #dashboard .main nav.breadcrumbs span { float: none; display: inline-block; padding: 0 1em; line-height: 2em; font-size: 1.0em; float: left; }
 
 #dashboard .left .section { font-size: 0.9em; }
+#dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 1.8em; left: 0; right: 0; bottom: 2em; }
 
 #dashboard .side .bucket i { opacity: 0.6; }
 #dashboard .side .bucket.active i { opacity: 1; }

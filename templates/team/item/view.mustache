@@ -15,7 +15,7 @@
         <ul>
             <li class="milestone section">
                 <a href="#{{bucket.url}}">
-                    <div class="img"><i class="icon-flag-filled"></i></div>
+                    <div class="img"><i class="icon-folder"></i></div>
                     <div class="name">{{bucket.opts.name}}</div>
                 </a>
             </li>
@@ -44,9 +44,11 @@
             </li>
         </ul>
     </section>
+    {{#item.opts.description}}
     <section class="description" role="main">
         {{#nl2br}}{{#linkify}}{{item.opts.description}}{{/linkify}}{{/nl2br}}
     </section>
+    {{/item.opts.description}}
     <section class="comments">
         <h3><a><i class="icon-comment"></i> Comments</h3>
         <div class="comment hi-10" id="comments">

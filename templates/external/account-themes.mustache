@@ -1,4 +1,7 @@
 {{#teams}}
-#team-li-{{id}} .name { background-color: rgba({{#theme}}{{right.bg}}{{/theme}}, 0.9); color: rgba({{#theme}}{{right.color}}{{/theme}}, 0.7); }
-#team-li-{{id}} i { background-color: rgba({{#theme}}{{chat.bg}}{{/theme}}, 0.9); color: rgba({{#theme}}{{chat.color}}{{/theme}}, 0.7); }
+#team-li-{{id}} a { color: rgba({{#theme}}{{main.color}}{{/theme}}, 0.9); }
+#team-li-{{id}} .i-wrap { background-color: rgba({{#theme}}{{right.bg}}{{/theme}}, 1); }
+#team-li-{{id}} i { background-color: rgba({{#theme}}{{right.hi}}{{/theme}}, 0.2); color: rgba({{#theme}}{{right.color}}{{/theme}}, 0.9); }
+#team-li-{{id}} .name { background-color: rgba({{#theme}}{{main.bg}}{{/theme}}, 1); }
+#team-li-{{id}} .name > div { background-color: rgba({{#theme}}{{main.hi}}{{/theme}}, 0.2); }
 {{/teams}}
