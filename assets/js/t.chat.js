@@ -34,13 +34,11 @@ Teambo.chat = (function(t){
         }
       });
       var autoclose = function(e) {
-        if(opts.autoclose) {
+        if(opts.autoclose && !t.matchParent(e.target, '#chat')) {
           toggle(0);
         }
       }
-      document.getElementById('left').addEventListener('click', autoclose);
-      document.getElementById('main').addEventListener('click', autoclose);
-      document.getElementById('right').addEventListener('click', autoclose);
+      document.getElementById('dashboard').addEventListener('click', autoclose);
     },
     toggle: toggle
   };
