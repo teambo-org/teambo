@@ -41,6 +41,9 @@ Teambo.socket = (function (t) {
             done();
           });
         }
+      } else if(e.ts) {
+        t.time.update(e.ts);
+        done();
       } else {
         done();
       }

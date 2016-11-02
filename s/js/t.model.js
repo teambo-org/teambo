@@ -29,9 +29,8 @@ Teambo.model = (function(t){
             return;
           }
           var iv = t.crypto.iv();
-          // TODO: Replace new Date() with server synced date time
           // TODO: Add member id to history items
-          self.hist.push({iv: iv, diff: diff, ts: new Date().getTime()/*, mid: member.id */});
+          self.hist.push({iv: iv, diff: diff, ts: t.time()/*, mid: member.id */});
           var new_ct = self.encrypted(iv);
           t.xhr.post('/'+model.type, {
             data: {
@@ -44,7 +43,7 @@ Teambo.model = (function(t){
           }).then(function(xhr){
             if(xhr.status == 200) {
               self.iv = iv;
-              self.orig = self.opts;
+              self.orig = t.clone(self.opts);
               self.cache().then(function() {
                 fulfill(self);
               });
@@ -65,7 +64,7 @@ Teambo.model = (function(t){
               fulfill(o);
             });
           }).catch(function(e) {
-            self.opts = self.orig;
+            self.opts = t.clone(self.orig);
             reject(e);
           });
         });

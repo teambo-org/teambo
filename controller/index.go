@@ -45,6 +45,7 @@ var js = []string{
 	"/js/t.js",
 	"/js/t.crypto.js",
 	"/js/t.event.js",
+	"/js/t.time.js",
 	"/js/t.socket.js",
 	"/js/t.form.js",
 	"/js/t.xhr.js",

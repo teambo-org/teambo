@@ -6,12 +6,14 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"fmt"
 )
 
 const (
 	writeWait      = 10 * time.Second
 	pongWait       = 60 * time.Second
 	pingPeriod     = (pongWait * 9) / 10
+	timeSyncPeriod = 10 * time.Second
 	maxMessageSize = 512
 )
 
@@ -92,9 +94,11 @@ func (c *connection) write(mt int, m wsmessage) error {
 }
 
 func (c *connection) writer() {
-	ticker := time.NewTicker(pingPeriod)
+	pinger   := time.NewTicker(pingPeriod)
+	timesync := time.NewTicker(timeSyncPeriod)
 	defer func() {
-		ticker.Stop()
+		pinger.Stop()
+		timesync.Stop()
 		c.ws.Close()
 	}()
 	for {
@@ -107,8 +111,12 @@ func (c *connection) writer() {
 			if err := c.write(websocket.TextMessage, message); err != nil {
 				return
 			}
-		case <-ticker.C:
+		case <-pinger.C:
 			if err := c.write(websocket.PingMessage, wsmessage{"", ""}); err != nil {
+				return
+			}
+		case <-timesync.C:
+			if err := c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond))}); err != nil {
 				return
 			}
 		}
@@ -141,6 +149,7 @@ func Socket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c := &connection{send: make(chan wsmessage, 256), ws: ws, team_id: team_id}
+	c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond))})
 	if ts != "0" && ts != "" {
 		logs, err := model.TeamLogSince(team_id, ts)
 		if(err == nil) {

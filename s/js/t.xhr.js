@@ -14,6 +14,7 @@ Teambo.xhr = (function(t){
           if(x.status === 0) {
             t.online(false);
           } else {
+            t.time.update(x.getResponseHeader('server-time'));
             t.online(true);
           }
           x.status > 0 ? fulfill(x) : reject(x);

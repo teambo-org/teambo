@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/http2"
 	"log"
 	"net/http"
-	// "time"
+	"time"
 )
 
 type Response map[string]interface{}
@@ -37,10 +37,10 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=0, must-revalidate")
-
 	// start := time.Now()
 
 	if handle, ok := routes[r.URL.Path]; ok {
+		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond)))
 		handle(w, r)
 	} else {
 		controller.Static(w, r)
