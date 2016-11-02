@@ -26,7 +26,7 @@ func Static(w http.ResponseWriter, r *http.Request) {
 		compile_css(w, r)
 		return
 	}
-	path := "s" + r.URL.Path
+	path := "assets" + r.URL.Path
 	stat, err := os.Stat(path)
 	if err != nil {
 		http.Error(w, "Not Found : "+r.URL.Path, 404)
@@ -61,7 +61,7 @@ func compile_js(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", mime.TypeByExtension(".js"))
 	for _, v := range js {
-		src, _ := os.Open("s" + v)
+		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, w)
 	}
 	append_js_init(w)
@@ -74,7 +74,7 @@ func compile_css(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", mime.TypeByExtension(".css"))
 	for _, v := range css {
-		src, _ := ioutil.ReadFile("s" + v)
+		src, _ := ioutil.ReadFile("assets" + v)
 		w.Write(src)
 	}
 }

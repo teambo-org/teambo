@@ -270,7 +270,7 @@ func append_js_init(w io.Writer) {
 func hash_version(sources []string) []string {
 	ret := []string{}
 	for _, path := range sources {
-		content, _ := ioutil.ReadFile("s" + path)
+		content, _ := ioutil.ReadFile("assets" + path)
 		hasher := md5.New()
 		hasher.Write(content)
 		ret = append(ret, path+"?v="+hex.EncodeToString(hasher.Sum(nil)))
@@ -281,7 +281,7 @@ func hash_version(sources []string) []string {
 func css_min_version() string {
 	hasher := md5.New()
 	for _, v := range css {
-		src, _ := os.Open("s" + v)
+		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, hasher)
 	}
 	return hex.EncodeToString(hasher.Sum(nil))
@@ -291,7 +291,7 @@ func js_min_version() string {
 	hasher := md5.New()
 	hasher.Write([]byte("(function(){"))
 	for _, v := range js {
-		src, _ := os.Open("s" + v)
+		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, hasher)
 	}
 	append_js_init(hasher)
@@ -330,7 +330,7 @@ func compile_templates() (map[string]string, map[string]string) {
 }
 
 func find_audio() []string {
-	dir := "s" + string(os.PathSeparator) + "audio"
+	dir := "assets" + string(os.PathSeparator) + "audio"
 	audio := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() && strings.HasSuffix(path, ".mp3") {
@@ -344,7 +344,7 @@ func find_audio() []string {
 }
 
 func find_images() []string {
-	dir := "s" + string(os.PathSeparator) + "i"
+	dir := "assets" + string(os.PathSeparator) + "i"
 	images := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {
@@ -357,7 +357,7 @@ func find_images() []string {
 }
 
 func find_fonts() []string {
-	dir := "s" + string(os.PathSeparator) + "font"
+	dir := "assets" + string(os.PathSeparator) + "font"
 	images := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {
