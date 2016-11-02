@@ -81,9 +81,3 @@ func RandStr(strlen int) string {
 	}
 	return string(result)
 }
-
-func randSha() string {
-	sha := sha256.New()
-	sha.Write([]byte(RandStr(16)))
-	return base64.StdEncoding.EncodeToString(sha.Sum(nil))
-}
