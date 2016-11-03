@@ -19,14 +19,14 @@ function(t){
 
     var anchors = el.querySelectorAll('a');
     var disabled = false;
-    for(i in anchors) {
-      anchors[i].addEventListener('click', function(e) {
+    [].forEach.call(anchors, function(el) {
+      el.addEventListener('click', function(e) {
         if(disabled) {
           e.preventDefault();
         }
         disabled = true;
       });
-    }
+    });
     var i = 0;
     anchors[0].focus();
   });
