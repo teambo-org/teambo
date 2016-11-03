@@ -106,7 +106,7 @@ var Teambo = (function(t){
       });
       nav_queue = [];
       editing = false;
-      t.view.route = route;
+      t.event.emit('pre-nav', route);
       t.view.render(target, route.tpl, data);
       scrollToSub(hash, loaded);
       if(loaded && !silent) {

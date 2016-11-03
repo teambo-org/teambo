@@ -192,7 +192,7 @@ Teambo.view = (function(t){
       var models = target.firstChild.getAttribute('require-model');
       if(models) {
         models.split(' ').forEach(function(type) {
-          if(type in view.obj && !view.obj[type].current()) {
+          if(type in view.obj && !view.obj[type].current) {
             return t.gotoUrl(t.team.current ? t.team.current.url() : '/account');
           }
         });
@@ -207,11 +207,9 @@ Teambo.view = (function(t){
   };
 
   t.event.on('object-removed', function(e) {
-    if(!e.batch) {
-      updateSideNav();
-    }
-    var bucket = view.get('bucket');
-    var item   = view.get('item');
+    updateSideNav();
+    var bucket = t.bucket.current;
+    var item   = t.item.current;
     if(e.type == 'bucket' && bucket && bucket.id == e.id) {
       t.gotoUrl(view.get('team').url(), false, {silent: true});
       // show message
@@ -224,11 +222,9 @@ Teambo.view = (function(t){
   });
 
   t.event.on('object-updated', function(e) {
-    if(!e.batch) {
-      updateSideNav();
-    }
-    var bucket = view.get('bucket');
-    var item   = view.get('item');
+    updateSideNav();
+    var bucket = t.bucket.current;
+    var item   = t.item.current;
     var m = e.type in t ? t[e.type].get(e.id) : null;
     if(e.type == 'bucket' && bucket && bucket.id == e.id) {
       if(!t.editing()) {

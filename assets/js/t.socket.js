@@ -7,6 +7,7 @@ Teambo.socket = (function (t) {
   var team;
   var events = [];
   var processing = false;
+  var ignored = [];
 
   var processEvent = function(e) {
     return t.promise(function(fulfill, reject) {
@@ -15,38 +16,10 @@ Teambo.socket = (function (t) {
         fulfill();
       };
       if(e.type) {
-        var m = t[e.type].get(e.id);
-        if(e.iv === 'removed') {
-          if(m) {
-            m.uncache().then(function() {
-              t.event.emit('object-removed', e);
-              done();
-            });
-          } else {
-            done();
-          }
-        } else {
-          if(m && m.iv == e.iv) {
-            done();
-          } else {
-            t[e.type].find(e.id).then(function(new_m) {
-              var p = [];
-              if(new_m && new_m.iv != e.iv) {
-                p.push(m.refresh());
-              } else if(new_m && !m){
-                p.push(m.cache());
-              }
-              Promise.all(p).then(function(){
-                t.event.emit('object-updated', e);
-                done();
-              }).catch(function() {
-                done();
-              });
-            }).catch(function() {
-              done();
-            });
-          }
-        }
+        var p = t.event.gather('model-event', e);
+        Promise.all(p).then(function() {
+          done();
+        });
       } else if(e.ts) {
         t.time.update(e.ts);
         done();
@@ -82,6 +55,7 @@ Teambo.socket = (function (t) {
   var stop = function() {
     connect = false;
     clearInterval(interval);
+    ignored = [];
     if(connection) {
       connection.close();
     }
@@ -125,17 +99,25 @@ Teambo.socket = (function (t) {
             id   : parts[2],
             iv   : parts[3]
           };
-          handleEvent(e);
+          if(ignored.indexOf([e.type, e.id, e.iv].join('-')) < 0) {
+            handleEvent(e);
+          }
         }
       }
     };
     wrapperfunc();
     interval = setInterval(wrapperfunc, (failures < 3 ? 1 : 5)*1000);
   };
+  
+  var ignore = function(k) {
+    ignored = ignored.slice(0, 49);
+    ignored.unshift(k);
+  };
 
   return {
     start: start,
-    stop: stop
+    stop: stop,
+    ignore: ignore
   };
 
 })(Teambo);

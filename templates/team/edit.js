@@ -9,24 +9,28 @@ function(t){
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'theme']);
+    var c = 0;
     var submit = function() {
       t.team.current.update(data).then(function(team){
         t.view.updateSideNav();
         t.gotoUrl('/'+t.team.current.id);
       }).catch(function(xhr){
         if(xhr.status === 409) {
-          form.enable();
+          if(c > 3) {
+            c = 0;
+            return;
+          }
+          c++;
           var opts = t.team.current.opts;
-          t.acct.current.team.refresh(t.team.current.id).then(function(new_team){
+          t.acct.current.team.refresh(team_id).then(function(new_team){
             for(var i in opts) {
               if(data[i] == opts[i]) {
                 data[i] = new_team.opts[i];
               }
             }
-            t.team.init(new_team.id).then(function(o){
-              t.view.set('team', t.team.current);
-              submit();
-            });
+            t.team.current = new_team;
+            t.view.set('team', t.team.current);
+            submit();
           });
         } else {
           form.enable();

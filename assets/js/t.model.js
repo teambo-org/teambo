@@ -32,6 +32,7 @@ Teambo.model = (function(t){
           // TODO: Add member id to history items
           self.hist.push({iv: iv, diff: diff, ts: t.time()/*, mid: member.id */});
           var new_ct = self.encrypted(iv);
+          t.socket.ignore([model.type, self.id, iv].join('-'));
           t.xhr.post('/'+model.type, {
             data: {
               team_id: t.team.current.id,
@@ -150,6 +151,9 @@ Teambo.model = (function(t){
           }
         }
         return diff;
+      },
+      active: function() {
+        return model.current && model.current.id == self.id ? 'active' : '';
       }
     });
   };
@@ -210,12 +214,6 @@ Teambo.model = (function(t){
       });
     };
 
-    model.current = function() {
-      if(t.view.route && model.type + '_id' in t.view.route.data) {
-        return model.get(t.view.route.data[model.type + '_id']);
-      }
-    };
-
     model.fetch = function(id, team_id, mkey) {
       return t.promise(function(fulfill, reject) {
         t.xhr.get('/'+model.type, {
@@ -231,6 +229,8 @@ Teambo.model = (function(t){
           } else {
             reject(xhr);
           }
+        }).catch(function(xhr) {
+          reject(xhr);
         });
       });
     };
@@ -259,7 +259,7 @@ Teambo.model = (function(t){
             model.fetch(id, team.id, team.mkey).then(function(ct) {
               fulfill(new model(ct));
             }).catch(function(e) {
-              reject(e);
+              fulfill();
             });
           }
         });
@@ -281,14 +281,18 @@ Teambo.model = (function(t){
             for(var i in ids) {
               if(!ids[i]) continue;
               p.push(model.find(ids[i]).then(function(o){
-                ret.push(o);
+                if(o) {
+                  ret.push(o);
+                }
               }));
             }
             Promise.all(p).then(function() {
               model.all = ret;
               fulfill(ret);
             }).catch(function(e){
-              reject(e);
+              model.all = ret;
+              fulfill(ret);
+              // reject(e);
             });
           } else {
             model.fetchAll(team.id, team.mkey).then(function(data){
@@ -331,9 +335,56 @@ Teambo.model = (function(t){
       });
     };
 
+    t.event.on('model-event', function(e) {
+      if(e.type != model.type) return Promise.resolve();
+      return t.promise(function(fulfill, reject) {
+        var m = model.get(e.id);
+        if(e.iv === 'removed') {
+          if(!m) {
+            fulfill();
+            return;
+          }
+          m.uncache().then(function() {
+            t.event.emit('object-removed', e);
+            fulfill();
+          });
+        } else {
+          if(m && m.iv == e.iv) {
+            fulfill();
+            return;
+          }
+          model.find(e.id).then(function(new_m) {
+            var p = [];
+            if(new_m && new_m.iv != e.iv) {
+              p.push(m.refresh());
+            } else if(new_m && !m){
+              p.push(m.cache());
+            }
+            Promise.all(p).then(function(){
+              t.event.emit('object-updated', e);
+              fulfill();
+            }).catch(function() {
+              fulfill();
+            });
+          }).catch(function() {
+            fulfill();
+          });
+        }
+      });
+    });
+
     t.event.on('team-init', function(e) {
       model.all = [];
       return model.findAll();
+    });
+
+    t.event.on('pre-nav', function(route) {
+      var k = model.type + '_id';
+      if(k in route.data) {
+        model.current = model.get(route.data[k]);
+      } else {
+        model.current = null;
+      }
     });
 
     t.event.on('nav', function(route) {

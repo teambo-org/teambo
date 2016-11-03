@@ -29,10 +29,6 @@ Teambo.bucket = (function(t){
       },
       url: function() {
         return '/'+t.team.current.id+'/'+self.id;
-      },
-      active: function() {
-        var route = t.view.route;
-        return route && 'bucket_id' in route.data && route.data['bucket_id'] == self.id ? 'active' : '';
       }
     });
   };

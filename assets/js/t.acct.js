@@ -133,9 +133,10 @@ Teambo.acct = (function (t) {
               return;
             }
             self.team.fetch(id, d.mkey).then(function(ct) {
-              var fetched_team = new t.team(ct, d.mkey, d.key);
-              fetched_team.cache();
-              fulfill(fetched_team);
+              var new_team = new t.team(ct, d.mkey, d.key);
+              new_team.cache().then(function(){
+                fulfill(new_team);
+              });
             }).catch(function(e) {
               reject(e);
             });
