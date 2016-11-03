@@ -71,6 +71,10 @@ var Teambo = (function(t){
     var p = [];
     if('team_id' in data && (!(t.view.isset('team')) || t.view.get('team').id != data.team_id)) {
       if(t.acct.isAuthed()) {
+        var logo = document.getElementById('logo');
+        if(logo) {
+          logo.classList.add('spinner');
+        }
         p.push(t.team.init(data.team_id).then(function(team){
           t.view.set('team', team);
         }));
