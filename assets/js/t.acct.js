@@ -165,11 +165,6 @@ Teambo.acct = (function (t) {
   acct.current = null;
 
   acct.init = function () {
-    if (t.debug()) {
-      acct.debug = function () {
-        return acct.current;
-      };
-    }
     return acct.wake();
   };
 
