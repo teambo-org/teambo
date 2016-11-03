@@ -18,13 +18,17 @@ function(t){
     document.getElementById('account-themes').href = "data:text/css;base64,"+url;
 
     var anchors = el.querySelectorAll('a');
-    var i = 0;
-    anchors[i].focus();
-  });
-  el.addEventListener('click', function(e) {
-    if(e.target.nodeName == 'A' || e.target.parentNode.nodeName == 'A') {
-      document.getElementById('logo').classList.add('spinner');
+    var disabled = false;
+    for(i in anchors) {
+      anchors[i].addEventListener('click', function(e) {
+        if(disabled) {
+          e.preventDefault();
+        }
+        disabled = true;
+      });
     }
+    var i = 0;
+    anchors[0].focus();
   });
 
 }
