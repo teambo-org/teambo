@@ -4,9 +4,13 @@ Teambo.event = (function (t) {
   
   function extend(target){
     var events = {}, empty = [];
+    var once = {};
     target = target || this;
     target.on = function(type, func, ctx){
       (events[type] = events[type] || []).push([func, ctx]);
+    };
+    target.once = function(type, func, ctx){
+      (once[type] = once[type] || []).push([func, ctx]);
     };
     target.off = function(type, func){
       type || (events = {})
@@ -15,24 +19,36 @@ Teambo.event = (function (t) {
       while(i--) func == list[i][0] && list.splice(i,1);
     };
     target.emit = function(type){
-      var e = events[type] || empty, list = e.length > 0 ? e.slice(0, e.length) : e, i=0, j;
-      while(j=list[i++]) j[0].apply(j[1], empty.slice.call(arguments, 1))
+      var e = events[type] || empty;
+      var list = e.length > 0 ? e.slice(0, e.length) : e;
+      var args = [].slice.call(arguments, 1);
+      list = list.concat(once[type] || empty);
+      list.forEach(function(e) {
+        e[0].apply(e[1], args)
+      });
+      once[type] = [];
     };
     target.gather = function(type){
-      var e = events[type] || empty, list = e.length > 0 ? e.slice(0, e.length) : e, i=0, j;
+      var e = events[type] || empty;
+      var list = e.length > 0 ? e.slice(0, e.length) : e;
+      var args = [].slice.call(arguments, 1);
       var p = [];
-      while(j=list[i++]) {
-        var res = j[0].apply(j[1], empty.slice.call(arguments, 1));
-        if(res) p.push(res);
-      }
+      list = list.concat(once[type] || empty);
+      list.forEach(function(e) {
+        var res = e[0].apply(e[1], args);
+        if(res) {
+          p.push(res);
+        }
+      });
+      once[type] = [];
       return p;
     };
+    return target;
   };
   
-  var o = {
+  var event = {
     extend: extend
   };
-  extend(o);
-  return o;
+  return extend(event);
 
 })(Teambo);

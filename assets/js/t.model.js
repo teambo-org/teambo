@@ -338,7 +338,7 @@ Teambo.model = (function(t){
     t.event.on('model-event', function(e) {
       if(e.type != model.type) return Promise.resolve();
       return t.promise(function(fulfill, reject) {
-        var m = model.get(e.id);
+        var m = model.get(e.id, true);
         if(e.iv === 'removed') {
           if(!m) {
             fulfill();
@@ -353,12 +353,15 @@ Teambo.model = (function(t){
             fulfill();
             return;
           }
+          console.log('wtf??');
           model.find(e.id).then(function(new_m) {
             var p = [];
             if(new_m && new_m.iv != e.iv) {
               p.push(m.refresh());
             } else if(new_m && !m){
-              p.push(m.cache());
+              p.push(new_m.cache().then(function() {
+                model.cacheIds();
+              }));
             }
             Promise.all(p).then(function(){
               t.event.emit('object-updated', e);
@@ -366,7 +369,7 @@ Teambo.model = (function(t){
             }).catch(function() {
               fulfill();
             });
-          }).catch(function() {
+          }).catch(function(err) {
             fulfill();
           });
         }
@@ -380,7 +383,7 @@ Teambo.model = (function(t){
 
     t.event.on('pre-nav', function(route) {
       var k = model.type + '_id';
-      if(k in route.data) {
+      if(route && route.data && k in route.data) {
         model.current = model.get(route.data[k]);
       } else {
         model.current = null;
@@ -388,7 +391,7 @@ Teambo.model = (function(t){
     });
 
     t.event.on('nav', function(route) {
-      if(!route) return;
+      if(!route || !route.data) return;
       var els = document.querySelectorAll('a[data-obj^='+model.type+'-]');
       var id = model.type + '_id' in route.data ? route.data[model.type + '_id'] : null;
       for(var i = 0; els[i]; i++) {

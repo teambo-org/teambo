@@ -11,7 +11,6 @@ var Teambo = (function(t){
   var after_auth  = null;
   var testing     = false;
   var editing     = false;
-  var nav_queue   = [];
 
   t.salt = null;
 
@@ -87,7 +86,6 @@ var Teambo = (function(t){
       }
     } else if(!('team_id' in data)) {
       t.socket.stop();
-      // t.event.off();
       t.view.unset('team');
       t.team.current = null;
     }
@@ -101,10 +99,6 @@ var Teambo = (function(t){
       } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
         target = "page";
       }
-      nav_queue.forEach(function(fn) {
-        fn();
-      });
-      nav_queue = [];
       editing = false;
       t.event.emit('pre-nav', route);
       t.view.render(target, route.tpl, data);
@@ -258,10 +252,6 @@ var Teambo = (function(t){
         });
       });
     }
-  };
-
-  t.nextNav = function(fn) {
-    nav_queue.push(fn);
   };
 
   t.findByProperty = function(a, k, v) {
