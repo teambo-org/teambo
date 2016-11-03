@@ -7,28 +7,29 @@
 <div class="scrollable">
     <div class="section hi-10">
         <i class="icon-down-open-1 nav color-hi-40"></i>
-        <a href="#{{team.url}}/members">
+        <a href="#{{team.url}}">
             <div class="img"><i class="icon-flag-filled"></i></div>
             <div class="name">Sprints</div>
         </a>
     </div>
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/members">
+        <a href="#{{team.url}}">
             <div class="img"><i class="icon-folder"></i></div>
             <div class="name">Folders</div>
         </a>
     </div>
     <div class="section">
-    {{#team.bucket_list}}
-        <a href="#{{url}}" class="bucket" data-obj="bucket-{{id}}">
+    {{#bucket.list}}
+        <a href="#{{url}}" class="bucket {{active}}" data-obj="bucket-{{id}}">
             <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress hi-10" data-progress="{{progress}}"></div>
         </a>
-    {{/team.bucket_list}}
+    {{/bucket.list}}
     </div>
     <div class="section hi-10">
+        <i class="icon-down-open-1 nav color-hi-40"></i>
         <a href="#{{team.url}}/members">
             <div class="img"><i class="icon-users"></i></div>
             <div class="name">Members</div>

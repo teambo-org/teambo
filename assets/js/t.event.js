@@ -18,6 +18,15 @@ Teambo.event = (function (t) {
       var e = events[type] || empty, list = e.length > 0 ? e.slice(0, e.length) : e, i=0, j;
       while(j=list[i++]) j[0].apply(j[1], empty.slice.call(arguments, 1))
     };
+    target.gather = function(type){
+      var e = events[type] || empty, list = e.length > 0 ? e.slice(0, e.length) : e, i=0, j;
+      var p = [];
+      while(j=list[i++]) {
+        var res = j[0].apply(j[1], empty.slice.call(arguments, 1));
+        if(res) p.push(res);
+      }
+      return p;
+    };
   };
   
   var o = {

@@ -138,7 +138,7 @@ Teambo.view = (function(t){
       }
       if(el.matches('.force')) {
         e.preventDefault();
-        hashChange(el.getAttribute('href').substr(1));
+        t.gotoUrl(el.getAttribute('href').substr(1), true);
         return;
       }
     });
@@ -189,30 +189,17 @@ Teambo.view = (function(t){
       if(class_list.contains('require-team') && !view.isset('team')) {
         return t.gotoUrl('/account');
       }
-      if(class_list.contains('require-bucket') && !data.bucket) {
-        return t.gotoUrl('/dashboard');
-      }
-      if(class_list.contains('require-item') && !data.item) {
-        return t.gotoUrl('/dashboard');
+      var models = target.firstChild.getAttribute('require-model');
+      if(models) {
+        models.split(' ').forEach(function(type) {
+          if(type in view.obj && !view.obj[type].current()) {
+            return t.gotoUrl(t.team.current ? t.team.current.url() : '/account');
+          }
+        });
       }
     }
     if(tplname in template_js) {
       template_js[tplname](t);
-    }
-    // TODO: replace this with data binding?
-    var els = document.querySelectorAll('a[data-obj^=bucket-]');
-    for(var i = 0; els[i]; i++) {
-      els[i].classList.remove('active');
-      if('bucket' in data && data.bucket && els[i].dataset.obj == 'bucket-'+data.bucket.id) {
-        els[i].classList.add('active');
-      }
-    }
-    var els = document.querySelectorAll('a[data-obj^=item-]');
-    for(var i = 0; els[i]; i++) {
-      els[i].classList.remove('active');
-      if('item' in data && data.item && els[i].dataset.obj == 'item-'+data.item.id) {
-        els[i].classList.add('active');
-      }
     }
     if(t.loaded() && target.id === 'main') {
       target.scrollTop = 0;

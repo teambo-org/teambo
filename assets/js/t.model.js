@@ -60,9 +60,7 @@ Teambo.model = (function(t){
         self.opts = t.extend(self.opts, opts);
         return t.promise(function(fulfill, reject) {
           self.save().then(function(xhr) {
-            self.cache().then(function(o){
-              fulfill(o);
-            });
+            fulfill(self);
           }).catch(function(e) {
             self.opts = t.clone(self.orig);
             reject(e);
@@ -212,6 +210,12 @@ Teambo.model = (function(t){
       });
     };
 
+    model.current = function() {
+      if(t.view.route && model.type + '_id' in t.view.route.data) {
+        return model.get(t.view.route.data[model.type + '_id']);
+      }
+    };
+
     model.fetch = function(id, team_id, mkey) {
       return t.promise(function(fulfill, reject) {
         t.xhr.get('/'+model.type, {
@@ -326,6 +330,25 @@ Teambo.model = (function(t){
 
       });
     };
+
+    t.event.on('team-init', function(e) {
+      model.all = [];
+      return model.findAll();
+    });
+
+    t.event.on('nav', function(route) {
+      if(!route) return;
+      var els = document.querySelectorAll('a[data-obj^='+model.type+'-]');
+      var id = model.type + '_id' in route.data ? route.data[model.type + '_id'] : null;
+      for(var i = 0; els[i]; i++) {
+        els[i].classList.remove('active');
+        if(id && els[i].dataset.obj == model.type+'-'+id) {
+          els[i].classList.add('active');
+        }
+      }
+    });
+
+    t.view.set(model.type, model);
   };
 
   return model;

@@ -4,7 +4,6 @@ function(t){
   t.editing(true);
 
   var form = new t.form(document.item_edit),
-    bucket_id = form.dataset.bucket_id,
     item_id = form.dataset.item_id,
     item = t.item.get(item_id);
   form.name.focus();
@@ -46,8 +45,7 @@ function(t){
   var buckets = t.bucket.all.concat([t.bucket.orphaned]);
   for(var i in buckets) {
     var bucket = buckets[i];
-    html +=  "<option value='"+bucket.id+"'"+(bucket.id === bucket_id ? " selected='selected'" : "")+">"+bucket.opts.name+"</option>";
+    html +=  "<option value='"+bucket.id+"'"+(bucket.id === item.opts.bucket_id ? " selected='selected'" : "")+">"+bucket.opts.name+"</option>";
   }
   form.bucket_id.innerHTML = html + form.bucket_id.innerHTML;
-
 }

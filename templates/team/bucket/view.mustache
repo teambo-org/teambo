@@ -1,23 +1,24 @@
-<div class="bucket require-auth require-team">
+<div class="bucket" require-model="bucket">
+{{#bucket.current}}
     <nav>
-    {{#bucket.iv}}
-        <a href="#{{bucket.url}}/remove" data-keybind="r">Remove</a>
-        <a href="#{{bucket.url}}/edit" data-keybind="e">Edit</a>
-    {{/bucket.iv}}
-        <a href="#{{bucket.url}}/new" data-keybind="c">Create Item</a>
+    {{#iv}}
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
+    {{/iv}}
+        <a href="#{{url}}/new" data-keybind="c">Create Item</a>
     </nav>
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
         <span class="active">Bucket</span>
     </nav>
-    <h1><i class="icon-folder-open"></i> {{bucket.opts.name}}</h1>
-    {{#bucket.opts.description}}
-    <p class="description hi-10">{{bucket.opts.description}}</p>
-    {{/bucket.opts.description}}
-    <a name="skipnav" class="skip-nav" href="#{{bucket.url}}"></a>
+    <h1><i class="icon-folder-open"></i> {{opts.name}}</h1>
+    {{#opts.description}}
+    <p class="description hi-10">{{opts.description}}</p>
+    {{/opts.description}}
+    <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
     <div class="up2"><div class="up2l">
         <ul class="items incomplete">
-        {{#bucket.item_list_incomplete}}
+        {{#item_list_incomplete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
                 <a href="#{{url}}" title="{{opts.status}}">
                     {{#status}}
@@ -26,11 +27,11 @@
                     <span class="name">{{opts.name}}</span>
                 </a>
             </li>
-        {{/bucket.item_list_incomplete}}
+        {{/item_list_incomplete}}
         </ul>
     </div><div class="up2r">
         <ul class="items complete">
-        {{#bucket.item_list_complete}}
+        {{#item_list_complete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
                 <a href="#{{url}}">
                     {{#status}}
@@ -39,10 +40,11 @@
                     <span class="name">{{opts.name}}</span>
                 </a>
             </li>
-        {{/bucket.item_list_complete}}
+        {{/item_list_complete}}
         </ul>
     </div></div>
-    {{^bucket.item_list}}
+    {{^item_list}}
     <p class="empty">This bucket has no items.</p>
-    {{/bucket.item_list}}
+    {{/item_list}}
+{{/bucket.current}}
 </div>

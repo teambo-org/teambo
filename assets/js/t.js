@@ -77,6 +77,8 @@ var Teambo = (function(t){
         }
         p.push(t.team.init(data.team_id).then(function(team){
           t.view.set('team', team);
+        }).catch(function(){
+          t.gotoUrl('/account');
         }));
       } else {
         after_auth = hash;
@@ -85,20 +87,11 @@ var Teambo = (function(t){
       }
     } else if(!('team_id' in data)) {
       t.socket.stop();
+      // t.event.off();
       t.view.unset('team');
       t.team.current = null;
     }
     Promise.all(p).then(function(){
-      if(t.view.isset('team') && 'bucket_id' in data) {
-        t.view.set('bucket', t.bucket.get(data.bucket_id));
-      } else {
-        t.view.unset('bucket');
-      }
-      if(t.view.isset('team') && 'item_id' in data) {
-        t.view.set('item', t.item.get(data.item_id));
-      } else {
-        t.view.unset('item');
-      }
       if(route.tpl.indexOf('external') !== 0 && !document.getElementById('main')) {
         if(!t.view.isset('team')) {
           t.gotoUrl('/account');
@@ -113,12 +106,13 @@ var Teambo = (function(t){
       });
       nav_queue = [];
       editing = false;
-      var tar = document.getElementById(target);
+      t.view.route = route;
       t.view.render(target, route.tpl, data);
       scrollToSub(hash, loaded);
       if(loaded && !silent) {
         t.audio.play('click', 1);
       }
+      t.event.emit('nav', route);
       last_hash = hash;
       loaded = true;
     });

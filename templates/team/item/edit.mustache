@@ -1,21 +1,35 @@
-<div class="item-edit">
+<div class="item-edit" require-model="bucket item">
+{{#item.current}}
     <nav class="breadcrumbs">
         <a href="#{{team.url}}">Team</a>
-        <a href="#{{bucket.url}}">Bucket</a>
-        <a href="#{{item.url}}" data-keybind="q escape">Item</a>
+        <a href="#{{#bucket}}{{url}}{{/bucket}}">Bucket</a>
+        <a href="#{{url}}" data-keybind="q escape">Item</a>
         <span>Edit</span>
     </nav>
-    <h1>{{#item.status}}<i class="icon-{{icon}}"></i>{{/item.status}} {{item.opts.name}}</h1>
-    <form id="item-edit" name="item_edit" method="POST" class="std" data-bucket_id="{{bucket_id}}" data-item_id="{{item.id}}">
-        {{>team/item/_form}}
+    <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
+    <form id="item-edit" name="item_edit" method="POST" class="std" data-item_id="{{id}}">
+        <div class="field">
+            <label for="item_name">Item Name</label>
+            <input id="item_name"type="text" class="text large required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{opts.name}}" />
+        </div>
+        <div class="field">
+            <label for="item_description">Description</label>
+            <textarea id="item_description" class="text large" name="description">{{opts.description}}</textarea>
+        </div>
+        <div class="field">
+            <label for="item_status">Status</label>
+            <select id="item_status" name="status" class="text large"></select>
+        </div>
+
         <div class="field">
             <label for="item_bucket">Bucket</label>
             <select id="item_bucket" name="bucket_id" class="text large"></select>
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Save Changes" />
-            <a class="cancel" href="#{{item.url}}">cancel</a>
+            <a class="cancel" href="#{{url}}">cancel</a>
         </div>
         <div class="error"></div>
     </form>
+{{/item.current}}
 </div>

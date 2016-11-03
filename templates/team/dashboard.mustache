@@ -8,7 +8,7 @@
     <h1>{{team.opts.name}}</h1>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="buckets" id="buckets">
-    {{#team.bucket_list}}
+    {{#bucket.list}}
     <li class="bucket" id="bucket-li-{{id}}">
         <a href="#{{url}}">
             <i class="icon-folder"></i>
@@ -16,9 +16,9 @@
             <div class="info">{{item_count}} Item{{#inf}}{{item_count}}{{/inf}}</div>
         </a>
     </li>
-    {{/team.bucket_list}}
-    {{^team.bucket_list}}
+    {{/bucket.list}}
+    {{^bucket.list}}
     <p class="empty">Team has no buckets</p>
-    {{/team.bucket_list}}
+    {{/bucket.list}}
     </ul>
 </div>

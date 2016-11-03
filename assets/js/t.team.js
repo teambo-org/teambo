@@ -75,13 +75,6 @@ Teambo.team = (function(t){
       decrypt: function(ct) {
         return t.crypto.decrypt(ct, key);
       },
-      bucket_list: function() {
-        var extra = [];
-        if(t.item.hasOrphaned()) {
-          extra.push(t.bucket.orphaned);
-        }
-        return t.bucket.all.concat(extra);
-      },
       theme: function() {
         if(typeof(self.opts.theme) === "object") {
           return self.opts.theme;
@@ -111,17 +104,15 @@ Teambo.team = (function(t){
     return t.promise(function(fulfill, reject){
       t.acct.current.team.find(id).then(function(o) {
         team.current = o;
-        t.item.all = [];
-        t.bucket.all = [];
-        var p = [];
-        p.push(t.bucket.findAll());
-        p.push(t.item.findAll());
+        var p = t.event.gather('team-init');
         Promise.all(p).then(function() {
           t.socket.start(o);
           fulfill(o);
         }).catch(function(e) {
           reject(e);
         });
+      }).catch(function() {
+        reject();
       });
     });
   };
@@ -188,22 +179,6 @@ Teambo.team = (function(t){
     if(!team.current) return null;
     return team.current.decrypt(ct);
   };
-
-  // t.event.register('bucket-create', {
-    // apply: function(events, obj) {
-      // if(events.length > 0) {
-        // return Promise.reject();
-      // }
-      // team.buckets.find(obj.id).then(function(bucket){
-        // if(!bucket) {
-          // var b = new t.bucket(obj);
-          // b.cache();
-          // team.buckets.add({id: obj.id});
-          // return Promise.resolve();
-        // }
-      // });
-    // }
-  // });
 
   return team;
 

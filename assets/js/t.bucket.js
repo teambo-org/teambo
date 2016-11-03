@@ -29,6 +29,10 @@ Teambo.bucket = (function(t){
       },
       url: function() {
         return '/'+t.team.current.id+'/'+self.id;
+      },
+      active: function() {
+        var route = t.view.route;
+        return route && 'bucket_id' in route.data && route.data['bucket_id'] == self.id ? 'active' : '';
       }
     });
   };
@@ -52,6 +56,14 @@ Teambo.bucket = (function(t){
 
   model.orphaned.item_list = function() {
     return t.item.getOrphaned();
+  };
+
+  model.list = function() {
+    var extra = [];
+    if(t.item.hasOrphaned()) {
+      extra.push(model.orphaned);
+    }
+    return model.all.concat(extra);
   };
 
   var parent_get = model.get;

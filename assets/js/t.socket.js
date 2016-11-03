@@ -7,7 +7,7 @@ Teambo.socket = (function (t) {
   var team;
   var events = [];
   var processing = false;
-  
+
   var processEvent = function(e) {
     return t.promise(function(fulfill, reject) {
       var done = function() {
@@ -15,8 +15,8 @@ Teambo.socket = (function (t) {
         fulfill();
       };
       if(e.type) {
+        var m = t[e.type].get(e.id);
         if(e.iv === 'removed') {
-          var m = t[e.type].get(e.id);
           if(m) {
             m.uncache().then(function() {
               t.event.emit('object-removed', e);
@@ -26,20 +26,26 @@ Teambo.socket = (function (t) {
             done();
           }
         } else {
-          t[e.type].find(e.id).then(function(m) {
-            var p = [];
-            if(m && m.iv != e.iv) {
-              p.push(m.refresh());
-            } else {
-              p.push(m.cache());
-            }
-            Promise.all(p).then(function(){
-              t.event.emit('object-updated', e);
+          if(m && m.iv == e.iv) {
+            done();
+          } else {
+            t[e.type].find(e.id).then(function(new_m) {
+              var p = [];
+              if(new_m && new_m.iv != e.iv) {
+                p.push(m.refresh());
+              } else if(new_m && !m){
+                p.push(m.cache());
+              }
+              Promise.all(p).then(function(){
+                t.event.emit('object-updated', e);
+                done();
+              }).catch(function() {
+                done();
+              });
+            }).catch(function() {
               done();
             });
-          }).catch(function() {
-            done();
-          });
+          }
         }
       } else if(e.ts) {
         t.time.update(e.ts);
@@ -49,7 +55,7 @@ Teambo.socket = (function (t) {
       }
     });
   };
-  
+
   var handleEvent = function(e) {
     // TODO: move to t.event?
     if(e) {
@@ -72,7 +78,7 @@ Teambo.socket = (function (t) {
       processing = false;
     }
   };
-  
+
   var stop = function() {
     connect = false;
     clearInterval(interval);
@@ -80,7 +86,7 @@ Teambo.socket = (function (t) {
       connection.close();
     }
   };
-  
+
   var start = function(o) {
     stop();
     if(!o) {
@@ -126,7 +132,7 @@ Teambo.socket = (function (t) {
     wrapperfunc();
     interval = setInterval(wrapperfunc, (failures < 3 ? 1 : 5)*1000);
   };
-  
+
   return {
     start: start,
     stop: stop
