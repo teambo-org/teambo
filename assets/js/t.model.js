@@ -353,7 +353,6 @@ Teambo.model = (function(t){
             fulfill();
             return;
           }
-          console.log('wtf??');
           model.find(e.id).then(function(new_m) {
             var p = [];
             if(new_m && new_m.iv != e.iv) {
