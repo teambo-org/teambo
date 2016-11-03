@@ -31,7 +31,7 @@ Teambo.team = (function(t){
             }
           }).then(function(xhr){
             if(xhr.status == 200) {
-              self.iv = new_ct.split(' ')[0];
+              self.iv = iv;
               self.cache();
               fulfill(xhr);
             } else {
@@ -56,7 +56,7 @@ Teambo.team = (function(t){
       },
       cache: function() {
         var hash = t.crypto.sha(self.id+t.salt);
-        localforage.setItem(hash, self.encrypted({last_seen: self.last_seen}));
+        return localforage.setItem(hash, self.encrypted({last_seen: self.last_seen}));
       },
       encrypted: function(override) {
         var override = override ? override : {};
@@ -67,7 +67,11 @@ Teambo.team = (function(t){
           iv:   self.iv
         };
         t.extend(data, override);
-        return self.encrypt(data);
+        var config = {};
+        if(override.iv) {
+          config.iv = override.iv;
+        }
+        return self.encrypt(data, config);
       },
       encrypt: function(data, config) {
         return t.crypto.encrypt(data, key, config);
@@ -152,7 +156,7 @@ Teambo.team = (function(t){
     });
   };
 
-  team.findCached = function(id, ct) {
+  team.findCached = function(id) {
     if(!team.current) return Promise.reject();
     var hash = t.crypto.sha(team.current.id+id+t.salt);
     return localforage.getItem(hash);
