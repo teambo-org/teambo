@@ -41,6 +41,7 @@ var js = []string{
 	"/js/lib/promise-7.0.4.min.js",
 	"/js/lib/classList.js",
 	"/js/lib/polyfills.js",
+	"/js/lib/color.js",
 	// "/js/lib/zxcvbn.js",
 	"/js/t.js",
 	"/js/t.crypto.js",

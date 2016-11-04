@@ -1,64 +1,69 @@
 Teambo.themes = (function(){
   "use strict";
 
+  var h2r = function(h, s, v) {
+    var rgb = hsvToRgb( h/360, s, v);
+    return [parseInt(rgb[0]), parseInt(rgb[1]), parseInt(rgb[2])].join(',');
+  };
+
+  var slate = function(h) {
+    return {
+      "chat":  {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"},
+      "main":  {"bg": "16,16,16",        "hi": h2r(h, 0.8,  1), "color": "255,255,255"},
+      "right": {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"}
+    };
+  };
+  var dark = function(h) {
+    return {
+      "chat":  {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"},
+      "main":  {"bg": h2r(h, 1, 0.1),    "hi": h2r(h, 0.8,  1), "color": "255,255,255"},
+      "right": {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"}
+    };
+  };
+  // var light = function(h) {
+    // return {
+      // "chat":  {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"},
+      // "main":  {"bg": h2r(h, 0.05,  1),  "hi": h2r(h, 0.75, 0.5), "color": h2r(h, 1, 0.05)},
+      // "right": {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"}
+    // };
+  // };
+
   return {
     Dark : {
       "chat":  {"bg": "0,0,0",  "hi": "255,255,255", "color": "255,255,255"},
       "main":  {"bg": "0,0,0",  "hi": "255,255,255", "color": "255,255,255"},
       "right": {"bg": "24,24,24", "hi": "255,255,255", "color": "255,255,255"}
     },
-    Light : {
-      "chat":  {"bg": "240,240,240", "hi": "0,0,0", "color": "0,0,0"},
-      "main":  {"bg": "255,255,255", "hi": "0,0,0", "color": "0,0,0"},
-      "right": {"bg": "224,224,224", "hi": "0,0,0", "color": "0,0,0"}
-    },
-    Rhasta : {
-      "chat":  {"bg": "0,64,0",  "hi": "0,255,0", "color": "255,255,255"},
-      "main":  {"bg": "112,0,0", "hi": "255,64,64", "color": "255,255,255"},
-      "right": {"bg": "0,0,0",   "hi": "255,255,255", "color": "255,255,255"}
-    },
-    Proton : {
-      "chat":  {"bg": "102,102,153", "hi": "0,0,80",    "color": "255,255,255"},
-      "main":  {"bg": "255,255,255", "hi": "0,0,128",   "color": "24,24,24"},
-      "right": {"bg": "51,51,51",  "hi": "255,255,255", "color": "255,255,255"}
-    },
-    Webdam : {
-      "chat":  {"bg": "243,120,17",  "hi": "255,192,64", "color": "255,255,255"},
-      "main":  {"bg": "255,255,255", "hi": "64,64,64", "color": "0,0,0"},
-      "right": {"bg": "12,80,117",   "hi": "48,142,193", "color": "255,255,255"}
-    },
-    Green : {
-      "chat":  {"bg": "0,96,0",    "hi": "255,255,255", "color": "255,255,255"},
-      "main":  {"bg": "0,64,0",    "hi": "0,255,0",   "color": "255,255,255"},
-      "right": {"bg": "0,96,0",    "hi": "255,255,255", "color": "255,255,255"}
-    },
-    Slate : {
-      "chat":  {"bg": "0,48,96",    "hi": "255,255,255", "color": "255,255,255"},
-      "main":  {"bg": "16,16,16",   "hi": "64,128,255",   "color": "255,255,255"},
-      "right": {"bg": "24,48,96",   "hi": "255,255,255", "color": "255,255,255"}
-    },
-    Grape : {
-      "chat":  {"bg": "48,0,96",    "hi": "255,255,255", "color": "255,255,255"},
-      "main":  {"bg": "16,16,16",   "hi": "192,96,255",   "color": "255,255,255"},
-      "right": {"bg": "64,32,96",    "hi": "255,255,255", "color": "255,255,255"}
-    },
+    'Dark Red'     : dark(0),
+    'Dark Orange'  : dark(30),
+    'Dark Yellow'  : dark(60),
+    'Dark Green'   : dark(120),
+    'Dark Teal'    : dark(180),
+    'Dark Blue'    : dark(210),
+    'Dark Violet'  : dark(270),
+    'Dark Magenta' : dark(300),
+    'Slate Red'     : slate(0),
+    'Slate Orange'  : slate(30),
+    'Slate Yellow'  : slate(60),
+    'Slate Green'   : slate(120),
+    'Slate Teal'    : slate(180),
+    'Slate Blue'    : slate(210),
+    'Slate Violet'  : slate(270),
+    'Slate Magenta' : slate(300),
+    // 'Light Red'     : light(0),
+    // 'Light Orange'  : light(30),
+    // 'Light Yellow'  : light(60),
+    // 'Light Green'   : light(120),
+    // 'Light Teal'    : light(180),
+    // 'Light Blue'    : light(210),
+    // 'Light Violet'  : light(270),
+    // 'Light Magenta' : light(300),
     Neon : {
-      "chat":  {"bg": "0,128,192",  "hi": "0,0,0", "color": "255,255,255"},
-      "main":  {"bg": "0,0,0",    "hi": "255,255,255", "color": "255,255,255"},
-      "right": {"bg": "128,0,128",  "hi": "0,0,0", "color": "255,255,255"}
+      "chat":  {"bg": "0,128,192", "hi": "0,0,0",       "color": "255,255,255"},
+      "main":  {"bg": "0,0,0",     "hi": "255,255,255", "color": "255,255,255"},
+      "right": {"bg": "128,0,128", "hi": "0,0,0",       "color": "255,255,255"}
     },
-    Default : {
-      "chat":  {"bg": "32,32,32", "hi": "0,160,0", "color": "255,255,255"},
-      "main": {"bg": "32,32,32", "hi": "128,192,255", "color": "255,255,255"},
-      "right": {"bg": "64,64,64", "hi": "255,128,0", "color": "255,255,255"}
-    }
-    /*,
-    Blank : {
-      "chat":  {"bg": "255,255,255", "hi": "255,255,255", "color": "255,255,255"},
-      "main":  {"bg": "255,255,255", "hi": "255,255,255", "color": "255,255,255"},
-      "right": {"bg": "255,255,255", "hi": "255,255,255", "color": "255,255,255"}
-    }
-    */
+    Default : slate(210)
   };
 
 })();
