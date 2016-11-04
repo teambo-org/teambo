@@ -83,7 +83,8 @@
 #dashboard .main .area { margin-left: 12em; height: 100%; position: relative; overflow-y: scroll; padding: 0; }
 #dashboard .main .area .content { padding: 1em; }
 
-#dashboard .main h1 { margin-bottom: 0.5em; }
+#dashboard .main h1 { margin-bottom: 0.5em; position: relative; padding-left: 1.65em; }
+#dashboard .main h1 i { position: absolute; left: 0; }
 
 #dashboard .main .item p { margin: 0; }
 #dashboard .main section { padding: 1em; margin: 0 0 1em; }
@@ -142,6 +143,7 @@
 #dashboard .main nav.breadcrumbs span { float: none; display: inline-block; padding: 0 1em; line-height: 2em; font-size: 1.0em; float: left; }
 
 #dashboard .left .section { font-size: 0.9em; }
+#dashboard .left a.nav-section { font-weight: 500; }
 #dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 1.8em; left: 0; right: 0; bottom: 2em; }
 
 #dashboard .side .bucket i { opacity: 0.6; }
