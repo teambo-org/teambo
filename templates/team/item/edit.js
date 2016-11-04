@@ -11,26 +11,12 @@ function(t){
     form.disable();
     var data = form.values(['name', 'description', 'status', 'bucket_id']);
     var submit = function() {
-      item.update(data).then(function(item){
+      item.update(data, true).then(function(item){
         t.view.updateSideNav();
         t.gotoUrl(item.url());
       }).catch(function(xhr){
-        if(xhr.status === 409) {
-          var opts = t.clone(item.opts);
-          item.refresh().then(function(new_item){
-            // Only overwrite changed properties
-            for(var i in opts) {
-              if(data[i] != opts[i]) {
-                new_item[i] = data[i];
-              }
-            }
-            item = new_item;
-            submit();
-          });
-        } else {
-          form.enable();
-          form.error.msg("Item could not be saved", "Please try again");
-        }
+        form.enable();
+        form.error.msg("Item could not be saved", "Please try again");
       });
     };
     submit();
