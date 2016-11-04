@@ -57,14 +57,24 @@ Teambo.model = (function(t){
           });
         });
       },
-      update: function(opts) {
+      update: function(opts, auto_refresh) {
         self.opts = t.extend(self.opts, opts);
         return t.promise(function(fulfill, reject) {
           self.save().then(function(xhr) {
             fulfill(self);
-          }).catch(function(e) {
-            self.opts = t.clone(self.orig);
-            reject(e);
+          }).catch(function(xhr) {
+            if(xhr.status === 409 && auto_refresh) {
+              self.refresh().then(function(new_m) {
+                new_m.update(self.diff()).then(function(){
+                  fulfill(new_m);
+                }).catch(function(){
+                  reject(xhr);
+                });
+              });
+            } else {
+              self.opts = t.clone(self.orig);
+              reject(xhr);
+            }
           });
         });
       },
