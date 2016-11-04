@@ -16,8 +16,7 @@ Teambo.socket = (function (t) {
         fulfill();
       };
       if(e.type) {
-        var p = t.event.gather('model-event', e);
-        Promise.all(p).then(function() {
+        t.event.all('model-event', e).then(function() {
           done();
         });
       } else if(e.ts) {

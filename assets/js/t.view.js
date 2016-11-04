@@ -58,15 +58,15 @@ Teambo.view = (function(t){
         };
       }
     }
-    var theme_styles = renderTemplate('team/layout/theme', {}, data);
+    var theme_styles = renderTemplate('team/theme', {}, data);
     var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('theme').href = "data:text/css;base64,"+url;
   };
 
   var updateSideNav = function() {
-    render('right', 'team/layout/right');
-    render('left', 'team/layout/left');
-    render('chat', 'team/layout/chat');
+    render('right', 'team/right');
+    render('left',  'team/left');
+    render('chat',  'team/chat');
     t.updateStatus();
   };
 
@@ -206,43 +206,6 @@ Teambo.view = (function(t){
     }
   };
 
-  t.event.on('object-removed', function(e) {
-    updateSideNav();
-    var bucket = t.bucket.current;
-    var item   = t.item.current;
-    if(e.type == 'bucket' && bucket && bucket.id == e.id) {
-      t.gotoUrl(view.get('team').url(), false, {silent: true});
-      // show message
-    } else if(e.type == 'bucket' && !bucket) {
-      t.refresh({silent: true});
-    } else if(e.type == 'item' && bucket && (!item || item.id == e.id)) {
-      t.gotoUrl(bucket.url(), false, {silent: true});
-      // show message
-    }
-  });
-
-  t.event.on('object-updated', function(e) {
-    updateSideNav();
-    var bucket = t.bucket.current;
-    var item   = t.item.current;
-    var m = e.type in t ? t[e.type].get(e.id) : null;
-    if(e.type == 'bucket' && bucket && bucket.id == e.id) {
-      if(!t.editing()) {
-        t.refresh({silent: true});
-      } else {
-        // show message
-      }
-    } else if(e.type == 'bucket' && !bucket) {
-      t.refresh({silent: true});
-    } else if(e.type == 'item' && (m && bucket && bucket.id == m.opts.bucket_id && !item) || (item && item.id == e.id)) {
-      if(!t.editing()) {
-        t.refresh({silent: true});
-      } else {
-        // show message
-      }
-    }
-  });
-  
   var view = {
     init: init,
     render: render,
@@ -263,6 +226,11 @@ Teambo.view = (function(t){
     updateTheme: update_theme,
     updateSideNav: updateSideNav
   };
+
+  t.event.extend(view);
+  t.event.on('pre-nav', function(){
+    view.off();
+  });
 
   return view;
 

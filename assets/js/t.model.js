@@ -272,7 +272,6 @@ Teambo.model = (function(t){
           fulfill(model.all);
           return;
         }
-        var team = t.team.current;
         t.team.findCached(model.type+'_ids').then(function(ct){
           var ret = [];
           if(ct && !force) {
@@ -295,6 +294,7 @@ Teambo.model = (function(t){
               // reject(e);
             });
           } else {
+            var team = t.team.current;
             model.fetchAll(team.id, team.mkey).then(function(data){
               var p = [];
               data.forEach(function(o) {
@@ -345,7 +345,10 @@ Teambo.model = (function(t){
             return;
           }
           m.uncache().then(function() {
-            t.event.emit('object-removed', e);
+            e[model.type] = m;
+            t.view.emit(model.type+'-removed', e);
+            // TODO : move updateSideNav someplace else or replace it with something better
+            t.view.updateSideNav();
             fulfill();
           });
         } else {
@@ -363,7 +366,10 @@ Teambo.model = (function(t){
               }));
             }
             Promise.all(p).then(function(){
-              t.event.emit('object-updated', e);
+              e[model.type] = new_m;
+              t.view.emit(model.type+'-updated', e);
+              // TODO : move updateSideNav someplace else or replace it with something better
+              t.view.updateSideNav();
               fulfill();
             }).catch(function() {
               fulfill();
@@ -375,7 +381,7 @@ Teambo.model = (function(t){
       });
     });
 
-    t.event.on('team-init', function(e) {
+    t.event.on('team-init', function(team) {
       model.all = [];
       return model.findAll();
     });

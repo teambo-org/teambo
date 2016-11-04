@@ -48,8 +48,12 @@ var Teambo = (function(t){
     t.view.render('page', 'external/blank');
     if(t.acct.current) {
       t.acct.current.cacheAuth();
+      setTimeout(function() {
+        window.location.reload();
+      }, 0);
+    } else {
+      window.location.reload();
     }
-    window.location.reload();
   };
 
   var hashChange = function(hash, data){
@@ -89,7 +93,7 @@ var Teambo = (function(t){
       t.view.unset('team');
       t.team.current = null;
     }
-    Promise.all(p).then(function(){
+    var nav = function() {
       if(route.tpl.indexOf('external') !== 0 && !document.getElementById('main')) {
         if(!t.view.isset('team')) {
           t.gotoUrl('/account');
@@ -109,7 +113,12 @@ var Teambo = (function(t){
       t.event.emit('nav', route);
       last_hash = hash;
       loaded = true;
-    });
+    };
+    if(p.length) {
+      Promise.all(p).then(nav);
+    } else {
+      nav();
+    }
   };
 
   t.gotoUrl = function(href, replace, data) {

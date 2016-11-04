@@ -5,4 +5,8 @@ function(t){
     document.querySelector('a[name=skipnav]').focus();
   }
 
+  t.view.on(['bucket-removed', 'bucket-updated', 'item-removed', 'item-updated'], function(e) {
+    t.refresh({silent: true});
+  });
+
 }

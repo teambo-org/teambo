@@ -108,8 +108,7 @@ Teambo.team = (function(t){
     return t.promise(function(fulfill, reject){
       t.acct.current.team.find(id).then(function(o) {
         team.current = o;
-        var p = t.event.gather('team-init');
-        Promise.all(p).then(function() {
+        t.event.all('team-init', o).then(function() {
           t.socket.start(o);
           fulfill(o);
         }).catch(function(e) {
