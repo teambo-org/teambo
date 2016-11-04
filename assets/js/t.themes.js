@@ -6,11 +6,16 @@ Teambo.themes = (function(){
     return [parseInt(rgb[0]), parseInt(rgb[1]), parseInt(rgb[2])].join(',');
   };
 
-  var slate = function(h) {
+  var slate = function(h, h2, h3) {
+    h2 = h2 || h;
+    h3 = h3 || h2;
     return {
-      "chat":  {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"},
+      "chat":  {"bg": h2r(h2, 0.75, 0.25), "hi": h2r(h2, 0.75, 1), "color": "255,255,255"},
       "main":  {"bg": "16,16,16",        "hi": h2r(h, 0.8,  1), "color": "255,255,255"},
-      "right": {"bg": h2r(h, 0.75, 0.3), "hi": h2r(h, 0.75, 1), "color": "255,255,255"}
+      "right": {"bg": h2r(h3, 0.75, 0.25), "hi": h2r(h3, 0.75, 1), "color": "255,255,255"}
+      // "chat":  {"bg": h2r(h2, 0.75, 0.3), "hi": h2r(h2, 0.75, 1), "color": "255,255,255"},
+      // "main":  {"bg": "16,16,16",        "hi": h2r(h, 0.8,  1), "color": "255,255,255"},
+      // "right": {"bg": h2r(h3, 0.75, 0.3), "hi": h2r(h3, 0.75, 1), "color": "255,255,255"}
     };
   };
   var dark = function(h) {
@@ -50,6 +55,7 @@ Teambo.themes = (function(){
     'Slate Blue'    : slate(210),
     'Slate Violet'  : slate(270),
     'Slate Magenta' : slate(300),
+    // 'Sherbert' : slate(120, 30, 300),
     // 'Light Red'     : light(0),
     // 'Light Orange'  : light(30),
     // 'Light Yellow'  : light(60),

@@ -15,11 +15,7 @@ function(t){
         t.view.updateSideNav();
         t.gotoUrl('/'+t.team.current.id);
       }).catch(function(xhr){
-        if(xhr.status === 409) {
-          if(c > 3) {
-            c = 0;
-            return;
-          }
+        if(xhr.status === 409 && c < 3) {
           c++;
           var opts = t.team.current.opts;
           t.acct.current.team.refresh(team_id).then(function(new_team){
@@ -33,6 +29,7 @@ function(t){
             submit();
           });
         } else {
+          c = 0;
           form.enable();
           form.error.msg("Team changes could not be saved", "Please try again");
         }
