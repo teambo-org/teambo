@@ -67,6 +67,7 @@ var jsinit = []string{
 }
 var css = []string{
 	"/css/font.css",
+	"/css/font-semibold.css",
 	"/css/teambo.css",
 	"/css/default.css",
 	"/css/dashboard.css",
