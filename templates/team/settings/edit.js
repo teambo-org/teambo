@@ -49,7 +49,7 @@ function(t){
   form.theme.addEventListener("change", function(e) {
     t.view.updateTheme(form.theme.value);
   });
-  t.event.once('nav', function() {
+  t.event.once('pre-nav', function() {
     t.view.updateTheme();
   });
 
