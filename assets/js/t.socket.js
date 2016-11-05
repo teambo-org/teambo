@@ -29,7 +29,6 @@ Teambo.socket = (function (t) {
   };
 
   var handleEvent = function(e) {
-    // TODO: move to t.event?
     if(e) {
       events.push(e);
       if(processing) {
