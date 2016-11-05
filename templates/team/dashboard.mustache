@@ -7,18 +7,4 @@
     </nav>
     <h1><div class="img"><i class="icon-logo"></i></div>{{team.opts.name}}</h1>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
-    <ul class="buckets" id="buckets">
-    {{#bucket.list}}
-    <li class="bucket" id="bucket-li-{{id}}">
-        <a href="#{{url}}">
-            <i class="icon-folder"></i>
-            <span class="name">{{opts.name}}</span>
-            <div class="info">{{item_count}} Item{{#inf}}{{item_count}}{{/inf}}</div>
-        </a>
-    </li>
-    {{/bucket.list}}
-    {{^bucket.list}}
-    <p class="empty">Team has no buckets</p>
-    {{/bucket.list}}
-    </ul>
 </div>

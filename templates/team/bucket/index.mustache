@@ -1,21 +1,34 @@
-<div class="dash">
+<div class="bucket-index">
     <nav>
         <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
     </nav>
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
-        <span class="active">Folders</span>
+        <span class="active">Items</span>
     </nav>
-    <h1><div class="img"><i class="icon-logo"></i></div> Folders</h1>
+    <h1><div class="img"><i class="icon-folder"></i></div> Items</h1>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="buckets" id="buckets">
     {{#bucket.list}}
-    <li class="bucket" id="bucket-li-{{id}}">
-        <a href="#{{url}}">
+    <li class="bucket hi-10 up1c" id="bucket-li-{{id}}">
+        <a href="#{{url}}" class="hi-05">
             <i class="icon-folder"></i>
-            <span class="name">{{opts.name}}</span>
             <div class="info">{{item_count}} Item{{#inf}}{{item_count}}{{/inf}}</div>
+            <span class="name">{{opts.name}}</span>
+            <div class="progress hi-15" data-progress="{{progress}}"></div>
         </a>
+        <ul class="items">
+        {{#item_list}}
+            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+                <a href="#{{url}}" title="{{opts.status}}" class="dim">
+                    {{#status}}
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
+                    {{/status}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+            </li>
+        {{/item_list}}
+        </ul>
     </li>
     {{/bucket.list}}
     {{^bucket.list}}

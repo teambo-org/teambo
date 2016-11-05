@@ -144,6 +144,12 @@ i.icon-emo-coffee:before { width: 1.5em; }
 .up4c3, .up4c4, .up4wwlr { float: right; width: 25%; margin-bottom: 0.5em; }
 .up4c1 .col, .up4c2 .col, .up4wl .col, .up4wwrl .col { margin-right: 5px; }
 .up4c3 .col, .up4c4 .col, .up4wr .col, .up4wwlr .col { margin-left: 5px; }
+.up4c { float: left; width: 25%; }
+.up4c:nth-child(4n+1) { clear: left; }
+.up3c { float: left; width: 31.333%; margin: 0 1%; }
+.up3c:nth-child(3n+1) { clear: left; }
+.up2c { float: left; width: 48%; margin: 0 1%; }
+/* .up3c:nth-child(2n+1) { clear: left; } */
 
 /* 320 */
 @media (max-width: 479px) {
