@@ -173,7 +173,9 @@ Teambo.model = (function(t){
 
     model.ids = function() {
       var ids = [];
-      model.all.forEach(function(m) {
+      model.all.sort(function(a, b) {
+        return a.opts.name > b.opts.name ? 1 : a.opts.name < b.opts.name ? -1 : 0;
+      }).forEach(function(m) {
         ids.push(m.id);
       });
       return ids;

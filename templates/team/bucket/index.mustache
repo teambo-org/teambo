@@ -10,10 +10,10 @@
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="buckets" id="buckets">
     {{#bucket.list}}
-    <li class="bucket hi-10 up1c" id="bucket-li-{{id}}">
+    <li class="bucket hi-10 up3c" id="bucket-li-{{id}}">
         <a href="#{{url}}" class="hi-05">
             <i class="icon-folder"></i>
-            <div class="info">{{item_count}} Item{{#inf}}{{item_count}}{{/inf}}</div>
+            <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
             <span class="name">{{opts.name}}</span>
             <div class="progress hi-15" data-progress="{{progress}}"></div>
         </a>

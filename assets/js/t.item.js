@@ -92,7 +92,7 @@ Teambo.item = (function(t){
     },
     complete : {
       label: 'Complete',
-      icon: 'ok-squared'
+      icon: 'check-1'
     }
   };
 

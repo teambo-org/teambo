@@ -19,15 +19,15 @@
     <div class="up2"><div class="up2l">
         <ul class="items incomplete">
         {{#item_list_incomplete}}
-            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#{{url}}" title="{{opts.status}}">
+            <li class="item status-{{opts.status}} hi-05" id="item-li-{{id}}">
+                <a href="#{{url}}" title="{{opts.status}}" class=" hi-05">
                     {{#status}}
                     <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
                     {{/status}}
                     <span class="name">{{opts.name}}</span>
                 </a>
                 {{#opts.description}}
-                <p class="description">{{.}}</p>
+                <p class="description">{{#nl2br}}{{.}}{{/nl2br}}</p>
                 {{/opts.description}}
             </li>
         {{/item_list_incomplete}}

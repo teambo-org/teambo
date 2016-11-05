@@ -126,7 +126,7 @@
 #dashboard .main ul.buckets li { list-style: none; }
 #dashboard .main ul.buckets li i { float: left; }
 #dashboard .main ul.buckets li span.name { margin-left: 1.7em; display: block; }
-#dashboard .main ul.buckets li a { display: block; padding: 0.5em; text-decoration: none; font-size: 1.3em; }
+#dashboard .main ul.buckets li > a { display: block; padding: 0.5em; text-decoration: none; font-size: 1.2em; }
 #dashboard .main ul.buckets li .info { padding: 0.25em 0.5em; font-size: 0.75em; opacity: 0.7; float: right; }
 #dashboard .main ul.items li { list-style: none; }
 #dashboard .main ul.items li i { float: left; }
@@ -138,8 +138,10 @@
 #dashboard .main .bucket-index ul.buckets > li { margin-bottom: 1em; padding: 0; }
 #dashboard .main .bucket-index ul.buckets > li > a { position: relative; }
 #dashboard .main .bucket-index ul.buckets > li > a .name { font-weight: 500; }
+#dashboard .main ul.buckets ul.items li.status-complete a { }
 
-#dashboard .main .bucket p.description { padding: 0.5em 0.8em; margin-top: 0; }
+#dashboard .main .bucket p.description { padding: 0.5em 0.8em; margin-top: 0; font-size: 0.9em; }
+#dashboard .main .bucket ul.items li { margin-bottom: 0.5em;  }
 
 #dashboard .main .dash ul.buckets ul.items li { list-style: none; }
 #dashboard .main nav { float: right; margin-top: 0.5em; }
