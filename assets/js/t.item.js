@@ -42,13 +42,11 @@ Teambo.item = (function(t){
   model.findByBucket = function(bucket_id) {
     return t.promise(function(fulfill, reject) {
       model.findAll().then(function(items){
-        var ret = [];
-        for(var i in items) {
-          if(items[i].opts.bucket_id == bucket_id) {
-            ret.push(items[i]);
+        fulfill(items.reduce(function(p, c) {
+          if(c.opts.bucket_id == bucket_id) {
+            p.push(c); return p;
           }
-        }
-        fulfill(ret);
+        }, []));
       }).catch(function(e){
         reject(e);
       });
