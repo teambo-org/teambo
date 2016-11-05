@@ -98,7 +98,7 @@ var Teambo = (function(t){
         if(!t.view.isset('team')) {
           t.gotoUrl('/account');
         }
-        t.view.render('page', "team/layout", data);
+        t.view.render('page', "layout/team", data);
         target = "main";
       } else if (route.tpl.indexOf('external') === 0 && loaded && target != "page") {
         target = "page";

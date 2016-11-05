@@ -58,15 +58,15 @@ Teambo.view = (function(t){
         };
       }
     }
-    var theme_styles = renderTemplate('team/theme', {}, data);
+    var theme_styles = renderTemplate('layout/theme', {}, data);
     var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('theme').href = "data:text/css;base64,"+url;
   };
 
   var updateSideNav = function() {
-    render('right', 'team/right');
-    render('left',  'team/left');
-    render('chat',  'team/chat');
+    render('right', 'layout/right');
+    render('left',  'layout/left');
+    render('chat',  'layout/chat');
     t.updateStatus();
   };
 

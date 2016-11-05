@@ -1,0 +1,25 @@
+<div class="dash">
+    <nav>
+        <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
+    </nav>
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
+        <span class="active">Folders</span>
+    </nav>
+    <h1><div class="img"><i class="icon-logo"></i></div> Folders</h1>
+    <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
+    <ul class="buckets" id="buckets">
+    {{#bucket.list}}
+    <li class="bucket" id="bucket-li-{{id}}">
+        <a href="#{{url}}">
+            <i class="icon-folder"></i>
+            <span class="name">{{opts.name}}</span>
+            <div class="info">{{item_count}} Item{{#inf}}{{item_count}}{{/inf}}</div>
+        </a>
+    </li>
+    {{/bucket.list}}
+    {{^bucket.list}}
+    <p class="empty">Team has no buckets</p>
+    {{/bucket.list}}
+    </ul>
+</div>
