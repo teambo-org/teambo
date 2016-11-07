@@ -1,12 +1,11 @@
 package model
 
 import (
-	// "time"
 	"../util"
 	"bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
-	// "errors"
+	"time"
 )
 
 type Team struct {
@@ -53,6 +52,25 @@ func (t Team) NewBucket() TeamObject {
 func (t Team) NewItem() TeamObject {
 	items := TeamBucket{"item"}
 	return items.NewObject(t.Id)
+}
+
+func (t Team) Log(iv string) (log string, err error) {
+	db_team_update(t.Id, func(tx *bolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists([]byte("log"))
+		ts := time.Now().UnixNano()
+		k := fmt.Sprintf("%d-%s-%s", ts, "team", t.Id)
+		err = b.Put([]byte(k), []byte(iv))
+		if err != nil {
+			return err
+		}
+		log = k + "-" + iv
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return log, err
+	}
+	return log, nil
 }
 
 func NewTeam() Team {

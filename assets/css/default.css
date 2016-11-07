@@ -216,6 +216,9 @@ i.icon-emo-coffee:before { width: 1.5em; }
 @media (min-width: 1260px)  and (max-width: 1599px) {
     .up2l, .up2r { width: 100%; }
     #page { font-size: 1.3em; }
+    .up3c { float: left; width: 48%; margin: 0 1%; }
+    .up3c:nth-child(3n+1) { clear: none; }
+    .up3c:nth-child(2n+1) { clear: left; }
 }
 
 /* 1600 */

@@ -12,6 +12,7 @@ Teambo.team = (function(t){
       id: data.id,
       iv: data.iv,
       mkey: mkey,
+      orig: data.opts ? t.clone(data.opts) : {},
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
       last_seen: data.last_seen ? data.last_seen : 0,
@@ -22,6 +23,7 @@ Teambo.team = (function(t){
         return t.promise(function(fulfill, reject) {
           var iv = t.crypto.iv();
           var new_ct = self.encrypted({iv: iv});
+          t.socket.ignore(['team', self.id, iv].join('-'));
           t.xhr.post('/team', {
             data: {
               team_id: self.id,
@@ -32,6 +34,7 @@ Teambo.team = (function(t){
           }).then(function(xhr){
             if(xhr.status == 200) {
               self.iv = iv;
+              self.orig = t.clone(self.opts);
               self.cache();
               fulfill(xhr);
             } else {
@@ -43,14 +46,29 @@ Teambo.team = (function(t){
         });
       },
       update: function(opts) {
-        var orig_opts = t.clone(self.opts);
         self.opts = t.extend(self.opts, opts);
         return t.promise(function(fulfill, reject) {
           self.save().then(function(xhr) {
             fulfill(self)
-          }).catch(function(e) {
-            self.opts = orig_opts;
-            reject(e);
+          }).catch(function(xhr) {
+            if(xhr.status === 409) {
+              var opts = t.team.current.opts;
+              team.refresh(self.id).then(function(new_m){
+                new_m.update(self.diff()).then(function(){
+                  fulfill(new_m);
+                }).catch(function(){
+                  reject(xhr);
+                });
+                for(var i in opts) {
+                  if(data[i] == opts[i]) {
+                    data[i] = new_team.opts[i];
+                  }
+                }
+              });
+            } else {
+              self.opts = t.clone(self.orig);
+              reject(e);
+            }
           });
         });
       },
@@ -79,6 +97,15 @@ Teambo.team = (function(t){
       decrypt: function(ct) {
         return t.crypto.decrypt(ct, key);
       },
+      diff: function() {
+        var diff = {};
+        for(var i in self.opts) {
+          if(self.orig[i] != self.opts[i]) {
+            diff[i] = self.opts[i];
+          }
+        }
+        return diff;
+      },
       theme: function() {
         if(typeof(self.opts.theme) === "object") {
           return self.opts.theme;
@@ -106,7 +133,7 @@ Teambo.team = (function(t){
 
   team.init = function(id) {
     return t.promise(function(fulfill, reject){
-      t.acct.current.team.find(id).then(function(o) {
+      team.find(id).then(function(o) {
         team.current = o;
         t.event.all('team-init', o).then(function() {
           t.socket.start(o);
@@ -135,15 +162,16 @@ Teambo.team = (function(t){
               theme: 'Default'
             }
           }, data.mkey, key);
+          new_team.orig = {};
           new_team.save().then(function(){
-            acct.team.add(new_team.id, data.mkey, key);
+            acct.teams.push({id: new_team.id, mkey: data.mkey, key: key});
             acct.save().then(function(){
               fulfill(new_team);
             }).catch(function(e){
               reject(e);
             });
           }).catch(function(e){
-            acct.team.remove(new_team.id);
+            t.deleteByProperty(acct.teams, 'id', new_team.id)
             reject(e);
           });
         } else {
@@ -151,6 +179,89 @@ Teambo.team = (function(t){
         }
       }).catch(function(e){
         reject(e);
+      });
+    });
+  };
+
+  team.find = function (id) {
+    return t.promise(function (fulfill, reject) {
+      var d = t.findByProperty(t.acct.current.teams, 'id', id);
+      if (!d) {
+        reject();
+        return;
+      }
+      localforage.getItem(t.crypto.sha(id + t.salt)).then(function (ct) {
+        if (ct) {
+          fulfill(new team(ct, d.mkey, d.key));
+        } else {
+          team.fetch(id, d.mkey).then(function(ct) {
+            var fetched_team = new team(ct, d.mkey, d.key);
+            fetched_team.cache();
+            fulfill(fetched_team);
+          }).catch(function(e) {
+            reject(e);
+          });
+        }
+      });
+    });
+  };
+
+  team.findAll = function () {
+    var acct = t.acct.current;
+    if(!acct) return Promise.reject();
+    return t.promise(function (fulfill, reject) {
+      var ret = [],
+        p = [];
+      acct.teams.forEach(function (v) {
+        p.push(t.promise(function(fulfill, reject) {
+          team.find(v.id).then(function(found_team) {
+            ret.push(found_team);
+            fulfill();
+          }).catch(function(e) {
+            reject(e);
+          });
+        }));
+      });
+      Promise.all(p).then(function() {
+        fulfill(ret);
+      });
+    });
+  };
+
+  team.fetch = function(id, mkey) {
+    return t.promise(function(fulfill, reject) {
+      t.xhr.get('/team', {
+        data: {
+          team_id: id,
+          mkey: mkey
+        }
+      }).then(function(xhr) {
+        if (xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          fulfill(data.team.ct);
+        } else {
+          reject("Failed to retrieve team " + id);
+        }
+      });
+    });
+  };
+  
+  team.refresh = function(id) {
+    var acct = t.acct.current;
+    if(!acct) return Promise.reject();
+    return t.promise(function (fulfill, reject) {
+      var d = t.findByProperty(acct.teams, 'id', id);
+      if (!d) {
+        reject();
+        return;
+      }
+      team.fetch(id, d.mkey).then(function(ct) {
+        var new_team = new team(ct, d.mkey, d.key);
+        new_team.cache().then(function(){
+          fulfill(new_team);
+        });
+      }).catch(function(xhr) {
+        reject(xhr);
       });
     });
   };
@@ -182,6 +293,44 @@ Teambo.team = (function(t){
     if(!team.current) return null;
     return team.current.decrypt(ct);
   };
+  
+  t.event.on('model-event', function(e) {
+    if(e.type != 'team') return Promise.resolve();
+    return t.promise(function(fulfill, reject) {
+      var m = team.find(e.id, true);
+      if(e.iv === 'removed') {
+        if(!m) {
+          fulfill();
+          return;
+        }
+        m.uncache().then(function() {
+          e['team'] = m;
+          t.view.emit('team-removed', e);
+          if(t.team.current && e.id == t.team.current.id) {
+            t.gotoUrl("/account");
+          }
+        });
+      } else {
+        if(m && m.iv == e.iv) {
+          fulfill();
+          return;
+        }
+        team.refresh(e.id).then(function(new_m) {
+          e['team'] = new_m;
+          t.view.emit('team-updated', e);
+          if(t.team.current && e.id == t.team.current.id) {
+            t.team.current = new_m;
+            t.view.set('team', new_m);
+            t.view.updateSideNav();
+            t.view.updateTheme();
+          }
+          fulfill();
+        }).catch(function(err) {
+          fulfill();
+        });
+      }
+    });
+  });
 
   return team;
 

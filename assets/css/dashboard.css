@@ -140,8 +140,8 @@
 #dashboard .main .bucket-index ul.buckets > li > a .name { font-weight: 500; }
 #dashboard .main ul.buckets ul.items li.status-complete a { }
 
-#dashboard .main .bucket p.description { padding: 0.5em 0.8em; margin-top: 0; font-size: 0.9em; }
-#dashboard .main .bucket ul.items li { margin-bottom: 0.5em;  }
+#dashboard .main .bucket-view p.description { padding: 0.5em 0.8em; margin-top: 0; font-size: 0.9em; }
+#dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em;  }
 
 #dashboard .main .dash ul.buckets ul.items li { list-style: none; }
 #dashboard .main nav { float: right; margin-top: 0.5em; }

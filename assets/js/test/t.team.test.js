@@ -11,8 +11,8 @@ describe("Team", function() {
   });
 
   it("Can be found", function(done) {
-    var t = Teambo.acct.current.teams[0];
-    Teambo.acct.current.team.find(t.id).then(function(team){
+    var d = Teambo.acct.current.teams[0];
+    Teambo.team.find(d.id).then(function(team){
       expect(team.opts.name).toBe("New Test Team");
       Teambo.team.current = team;
       done();

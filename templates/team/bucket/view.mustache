@@ -1,4 +1,4 @@
-<div class="bucket" require-model="bucket">
+<div class="bucket-view" require-model="bucket">
 {{#bucket.current}}
     <nav>
     {{#iv}}
@@ -20,7 +20,7 @@
         <ul class="items incomplete">
         {{#item_list_incomplete}}
             <li class="item status-{{opts.status}} hi-05" id="item-li-{{id}}">
-                <a href="#{{url}}" title="{{opts.status}}" class=" hi-05">
+                <a href="#{{url}}" title="{{opts.status}}" class=" hi-10">
                     {{#status}}
                     <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
                     {{/status}}

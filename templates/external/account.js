@@ -4,7 +4,7 @@ function(t){
   t.editing(true);
 
   var el = document.getElementById('teams');
-  t.acct.current.team.all().then(function(teams) {
+  t.team.findAll().then(function(teams) {
     if(!teams.length) {
       return;
     }

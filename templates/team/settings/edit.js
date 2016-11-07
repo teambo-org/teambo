@@ -9,30 +9,13 @@ function(t){
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'theme']);
-    var c = 0;
     var submit = function() {
-      t.team.current.update(data).then(function(team){
+      t.team.current.update(data, true).then(function(team){
         t.view.updateSideNav();
         t.gotoUrl('/'+t.team.current.id);
       }).catch(function(xhr){
-        if(xhr.status === 409 && c < 3) {
-          c++;
-          var opts = t.team.current.opts;
-          t.acct.current.team.refresh(team_id).then(function(new_team){
-            for(var i in opts) {
-              if(data[i] == opts[i]) {
-                data[i] = new_team.opts[i];
-              }
-            }
-            t.team.current = new_team;
-            t.view.set('team', t.team.current);
-            submit();
-          });
-        } else {
-          c = 0;
-          form.enable();
-          form.error.msg("Team changes could not be saved", "Please try again");
-        }
+        form.enable();
+        form.error.msg("Team changes could not be saved", "Please try again");
       });
     };
     submit();

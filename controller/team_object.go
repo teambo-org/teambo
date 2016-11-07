@@ -8,13 +8,13 @@ import (
 	// "log"
 )
 
-func HandleTeamObject(bucket_name string) func(http.ResponseWriter, *http.Request) {
+func HandleTeamObject(bucket_name string, log_changes bool) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		TeamObject(bucket_name, w, r)
+		TeamObject(bucket_name, log_changes, w, r)
 	}
 }
 
-func TeamObject(bucket_name string, w http.ResponseWriter, r *http.Request) {
+func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
@@ -54,11 +54,10 @@ func TeamObject(bucket_name string, w http.ResponseWriter, r *http.Request) {
 
 			parts := strings.Split(ct, " ")
 			new_iv := parts[0]
-			if new_iv != "new" {
+			if log_changes && new_iv != "new" {
 				log, _ := obj.Log(team_id, new_iv)
 				SocketHub.broadcast <- wsmessage{team_id, log}
 			}
-
 		} else {
 			error_out(w, "Invalid Request", 400)
 			return
@@ -79,13 +78,13 @@ func TeamObject(bucket_name string, w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(string(res)))
 }
 
-func HandleTeamObjectRemove(bucket_name string) func(http.ResponseWriter, *http.Request) {
+func HandleTeamObjectRemove(bucket_name string, log_changes bool) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		TeamObjectRemove(bucket_name, w, r)
+		TeamObjectRemove(bucket_name, log_changes, w, r)
 	}
 }
 
-func TeamObjectRemove(bucket_name string, w http.ResponseWriter, r *http.Request) {
+func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
@@ -114,9 +113,10 @@ func TeamObjectRemove(bucket_name string, w http.ResponseWriter, r *http.Request
 				error_out(w, strings.Title(bucket_name)+" could not be removed", 500)
 				return
 			}
-
-			log, _ := obj.Log(team_id, "removed")
-			SocketHub.broadcast <- wsmessage{team_id, log}
+			if log_changes {
+				log, _ := obj.Log(team_id, "removed")
+				SocketHub.broadcast <- wsmessage{team_id, log}
+			}
 		} else {
 			error_out(w, "Invalid Request", 400)
 			return

@@ -53,6 +53,12 @@ func Team(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Team could not be saved", 500)
 				return
 			}
+			parts := strings.Split(ct, " ")
+			new_iv := parts[0]
+			if new_iv != "new" {
+				log, _ := team.Log(new_iv)
+				SocketHub.broadcast <- wsmessage{team_id, log}
+			}
 		} else {
 			error_out(w, "Invalid Request", 400)
 			return
