@@ -262,7 +262,6 @@ Teambo.team = (function(t){
         return;
       }
       team.fetch(id, d.mkey).then(function(ct) {
-        console.log(ct);
         var new_team = new team(ct, d.mkey, d.key);
         new_team.cache().then(function(){
           fulfill(new_team);
