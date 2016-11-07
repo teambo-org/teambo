@@ -68,6 +68,7 @@ var Teambo = (function(t){
     }
     if(!route) {
       t.log('route not found ' + hash);
+      t.gotoUrl('/login');
       return;
     }
     t.extend(data, route.data);

@@ -59,11 +59,6 @@ Teambo.team = (function(t){
                 }).catch(function(){
                   reject(xhr);
                 });
-                for(var i in opts) {
-                  if(data[i] == opts[i]) {
-                    data[i] = new_team.opts[i];
-                  }
-                }
               });
             } else {
               self.opts = t.clone(self.orig);
@@ -73,6 +68,7 @@ Teambo.team = (function(t){
         });
       },
       cache: function() {
+        t.trace(self.iv);
         var hash = t.crypto.sha(self.id+t.salt);
         return localforage.setItem(hash, self.encrypted({last_seen: self.last_seen}));
       },
@@ -196,8 +192,9 @@ Teambo.team = (function(t){
         } else {
           team.fetch(id, d.mkey).then(function(ct) {
             var fetched_team = new team(ct, d.mkey, d.key);
-            fetched_team.cache();
-            fulfill(fetched_team);
+            fetched_team.cache().then(function() {
+              fulfill(fetched_team);
+            });
           }).catch(function(e) {
             reject(e);
           });
@@ -256,6 +253,7 @@ Teambo.team = (function(t){
         return;
       }
       team.fetch(id, d.mkey).then(function(ct) {
+        console.log(ct);
         var new_team = new team(ct, d.mkey, d.key);
         new_team.cache().then(function(){
           fulfill(new_team);
@@ -317,13 +315,13 @@ Teambo.team = (function(t){
         }
         team.refresh(e.id).then(function(new_m) {
           e['team'] = new_m;
-          t.view.emit('team-updated', e);
           if(t.team.current && e.id == t.team.current.id) {
             t.team.current = new_m;
             t.view.set('team', new_m);
             t.view.updateSideNav();
             t.view.updateTheme();
           }
+          t.view.emit('team-updated', e);
           fulfill();
         }).catch(function(err) {
           fulfill();

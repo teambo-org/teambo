@@ -4,7 +4,6 @@ Teambo.socket = (function (t) {
   var interval;
   var connect;
   var connection;
-  var team;
   var events = [];
   var processing = false;
   var ignored = [];
@@ -12,7 +11,7 @@ Teambo.socket = (function (t) {
   var processEvent = function(e) {
     return t.promise(function(fulfill, reject) {
       var done = function() {
-        team.lastSeen(e.ts);
+        t.team.current.lastSeen(e.ts);
         fulfill();
       };
       if(e.type) {
@@ -21,9 +20,9 @@ Teambo.socket = (function (t) {
         });
       } else if(e.ts) {
         t.time.update(e.ts);
-        done();
+        fulfill();
       } else {
-        done();
+        fulfill();
       }
     });
   };
@@ -59,12 +58,11 @@ Teambo.socket = (function (t) {
     }
   };
 
-  var start = function(o) {
+  var start = function(team) {
     stop();
-    if(!o) {
+    if(!team) {
       return;
     }
-    team = o;
     var connected = null;
     var failures = 0;
     connect = true;

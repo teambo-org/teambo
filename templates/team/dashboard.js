@@ -5,8 +5,10 @@ function(t){
     document.querySelector('a[name=skipnav]').focus();
   }
 
-  t.view.on(['bucket-removed', 'bucket-updated', 'item-removed', 'item-updated'], function(e) {
-    t.refresh({silent: true});
+  t.view.on('team-updated', function(e) {
+    if(e.id == t.team.current.id) {
+      t.refresh({silent: true});
+    }
   });
 
 }
