@@ -21,6 +21,11 @@ Teambo.team = (function(t){
           return Promise.reject('No mkey');
         }
         return t.promise(function(fulfill, reject) {
+          var errs = team.schema.validate(data.opts);
+          if(errs.length) {
+            reject(errs);
+            return;
+          }
           var iv = t.crypto.iv();
           var new_ct = self.encrypted({iv: iv});
           t.socket.ignore(['team', self.id, iv].join('-'));
@@ -68,7 +73,6 @@ Teambo.team = (function(t){
         });
       },
       cache: function() {
-        t.trace(self.iv);
         var hash = t.crypto.sha(self.id+t.salt);
         return localforage.setItem(hash, self.encrypted({last_seen: self.last_seen}));
       },
@@ -126,6 +130,11 @@ Teambo.team = (function(t){
   };
 
   team.current = null;
+
+  team.schema = new t.schema({
+    name:  { type: "string", required: true,  minLength: 1, maxLength: 256 },
+    theme: { type: "string", required: false, maxLength: 32 }
+  });
 
   team.init = function(id) {
     return t.promise(function(fulfill, reject){
@@ -242,7 +251,7 @@ Teambo.team = (function(t){
       });
     });
   };
-  
+
   team.refresh = function(id) {
     var acct = t.acct.current;
     if(!acct) return Promise.reject();
@@ -291,7 +300,7 @@ Teambo.team = (function(t){
     if(!team.current) return null;
     return team.current.decrypt(ct);
   };
-  
+
   t.event.on('model-event', function(e) {
     if(e.type != 'team') return Promise.resolve();
     return t.promise(function(fulfill, reject) {
