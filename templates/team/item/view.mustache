@@ -11,45 +11,49 @@
     </nav>
     
     <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
-    <section class="tags">
-        <ul>
-            <li class="milestone section">
-                <a href="#{{#bucket}}{{url}}{{/bucket}}">
-                    <div class="img"><i class="icon-folder"></i></div>
-                    <div class="name">{{#bucket}}{{opts.name}}{{/bucket}}</div>
-                </a>
-            </li>
-            <li class="state section">
-                <a>
-                {{#status}}
-                <!--
-                    <i class="icon-down-open-1 nav"></i>
-                -->
-                    <div class="img"><i class="icon-{{icon}}"></i></div>
-                    <div class="name">{{label}}</div>
-                {{/status}}
-                </a>
-            </li>
-            <li class="user section">
-                <a>
-                    <div class="img"><i class="icon-user-1"></i></div>
-                    <div class="name">Kev</div>
-                </a>
-            </li>
-            <li class="section">
-                <a>
-                    <div class="img"><i class="icon-tag-1"></i></div>
-                    <div class="name">UI</div>
-                </a>
-            </li>
-        </ul>
-    </section>
+    <div class="up4c3">
     {{#opts.description}}
-    <section class="description" role="main">
-        {{#nl2br}}{{#linkify}}{{opts.description}}{{/linkify}}{{/nl2br}}
-    </section>
+        <section class="description" role="main">
+            {{#nl2br}}{{#linkify}}{{opts.description}}{{/linkify}}{{/nl2br}}
+        </section>
     {{/opts.description}}
-    <section class="comments">
+    </div>
+    <div class="up4c up4c3b">
+        <section class="tags">
+            <ul>
+                <li class="milestone section">
+                    <a href="#{{#bucket}}{{url}}{{/bucket}}">
+                        <div class="img"><i class="icon-folder"></i></div>
+                        <div class="name">{{#bucket}}{{opts.name}}{{/bucket}}</div>
+                    </a>
+                </li>
+                <li class="state section">
+                    <a>
+                    {{#status}}
+                    <!--
+                        <i class="icon-down-open-1 nav"></i>
+                    -->
+                        <div class="img"><i class="icon-{{icon}}"></i></div>
+                        <div class="name">{{label}}</div>
+                    {{/status}}
+                    </a>
+                </li>
+                <li class="user section">
+                    <a>
+                        <div class="img"><i class="icon-user-1"></i></div>
+                        <div class="name">Kev</div>
+                    </a>
+                </li>
+                <li class="section">
+                    <a>
+                        <div class="img"><i class="icon-tag-1"></i></div>
+                        <div class="name">UI</div>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <section class="comments up1c">
         <h2><a><i class="icon-comment"></i> Comments</h2>
         <div class="comment hi-10" id="comments">
             <div class="author section">

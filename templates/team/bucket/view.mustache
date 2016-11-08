@@ -13,10 +13,12 @@
     </nav>
     <h1><i class="icon-folder-open"></i> {{opts.name}}</h1>
     {{#opts.description}}
-    <p class="description hi-10">{{opts.description}}</p>
+    <div class="up1c">
+        <section class="description">{{opts.description}}</section>
+    </div>
     {{/opts.description}}
     <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
-    <div class="up2"><div class="up2l">
+    <div class="up2c">
         <ul class="items incomplete">
         {{#item_list_incomplete}}
             <li class="item status-{{opts.status}} hi-05" id="item-li-{{id}}">
@@ -32,7 +34,8 @@
             </li>
         {{/item_list_incomplete}}
         </ul>
-    </div><div class="up2r">
+    </div>
+    <div class="up2c">
         <ul class="items complete">
         {{#item_list_complete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
@@ -45,7 +48,7 @@
             </li>
         {{/item_list_complete}}
         </ul>
-    </div></div>
+    </div>
     {{^item_list}}
     <p class="empty">This bucket has no items.</p>
     {{/item_list}}
