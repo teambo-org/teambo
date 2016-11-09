@@ -180,3 +180,12 @@
     #dashboard .chat .nav ul.channels .name { display: none; }
     #dashboard .chat .area { left: 2em; }
 }
+
+@media print {
+    #dashboard { overflow: visible; }
+    #dashboard .right { display: none; }
+    #dashboard .main { position: relative; left: 0; top: 0; right: auto; bottom: auto; width: 100%; }
+    #dashboard .main .left { display: none; }
+    #dashboard .main nav { display: none; }
+    #dashboard .chat { display: none; }
+}
