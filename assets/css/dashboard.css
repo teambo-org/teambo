@@ -87,7 +87,7 @@
 #dashboard .main h1 i { position: absolute; left: 0; }
 
 #dashboard .main .item p { margin: 0; }
-#dashboard .main section { padding: 1em; }
+#dashboard .main section { }
 #dashboard .main section.description { padding: 0.8em 1em; }
 #dashboard .main section.tags { padding: 0; }
 #dashboard .main section.tags ul { margin: 0; padding: 0; }
@@ -161,6 +161,13 @@
 #dashboard .side .bucket .icon-folder-open { display: none; }
 #dashboard .side .bucket.active .icon-folder { display: none; }
 #dashboard .side .bucket.active .icon-folder-open { display: inline-block; }
+
+#dashboard .main section.history > .c { padding: 1em; }
+#dashboard .main section.history h2 { margin-bottom: 0.5em; }
+#dashboard .main ul.history { padding: 0; }
+#dashboard .main ul.history li { list-style: none; margin-bottom: 0.5em; }
+#dashboard .main ul.history li span.date { display: inline-block; padding-right: 0.5em; font-size: 0.9em; opacity: 0.7; float: right; }
+#dashboard .main ul.history li div.diff { font-size: 0.9em; padding: 0.5em; }
 
 @media (max-width: 600px) {
     #dashboard .right { width: 2em; }

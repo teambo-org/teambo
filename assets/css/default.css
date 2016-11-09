@@ -126,8 +126,6 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
 .spinner { animation: 1s linear infinite spin; }
 
-i.icon-emo-coffee:before { width: 1.5em; }
-
 /* -= Layout =- */
 .up1, .up2l, .up2r { float: left; width: 50%; }
 .up1 { width: 100%; clear: both; }
@@ -146,26 +144,21 @@ i.icon-emo-coffee:before { width: 1.5em; }
 
 /* 320 */
 @media (max-width: 479px) {
-    nav.primary { display: none; }
-
     #page { font-size: 0.9em; }
 }
 
 /* 480 */
 @media (min-width: 480px) and (max-width: 639px) {
-    
     #page { font-size: 0.9em; }
 }
 
 /* 640 */
 @media (min-width: 640px) and (max-width: 767px) {
-    
     #page { font-size: 0.97em; }
 }
 
 /* 768 */
 @media (min-width: 768px) and (max-width: 999px) {
-    
     #page { font-size: 1.1em; }
 }
 

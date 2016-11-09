@@ -26,6 +26,11 @@ Teambo.view = (function(t){
       return function(text, render) {
         return parseInt(render(text)) === 1 ? '' : 's';
       };
+    },
+    localTime : function() {
+      return function(text, render) {
+        return new Date(parseInt(render(text))).toISOString().slice(0, 16).replace('T', '&nbsp;&nbsp;');
+      };
     }
   };
 
