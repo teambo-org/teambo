@@ -1,4 +1,4 @@
-Teambo.bucket = (function(t){
+Teambo.model.bucket = (function(t){
   "use strict";
 
   var model = function(data) {
@@ -6,7 +6,7 @@ Teambo.bucket = (function(t){
     t.model.apply(this, [data, model]);
     t.extend(this, {
       item_list: function() {
-        return t.item.getByBucket(self.id);
+        return t.model.item.getByBucket(self.id);
       },
       item_list_incomplete: function() {
         return self.item_list().filter(function(o) {
@@ -51,12 +51,12 @@ Teambo.bucket = (function(t){
   });
 
   model.orphaned.item_list = function() {
-    return t.item.getOrphaned();
+    return t.model.item.getOrphaned();
   };
 
   model.list = function() {
     var extra = [];
-    if(t.item.hasOrphaned()) {
+    if(t.model.item.hasOrphaned()) {
       extra.push(model.orphaned);
     }
     return model.all.concat(extra);

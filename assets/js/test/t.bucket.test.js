@@ -1,7 +1,7 @@
 describe("Bucket", function() {
 
   it("Can be created", function(done) {
-    Teambo.bucket.create({name: 'New Test Bucket'}).then(function(b){
+    Teambo.model.bucket.create({name: 'New Test Bucket'}).then(function(b){
       expect(b.opts.name).toBe("New Test Bucket");
       done();
     }).catch(function(e){
@@ -11,7 +11,7 @@ describe("Bucket", function() {
   });
 
   it("Can be edited", function(done) {
-    Teambo.bucket.findAll().then(function(buckets) {
+    Teambo.model.bucket.findAll().then(function(buckets) {
       var bucket = buckets[0];
       bucket.update({name: 'Test Bucket'}).then(function(b){
         expect(b.opts.name).toBe("Test Bucket");
@@ -24,9 +24,9 @@ describe("Bucket", function() {
   });
 
   it("Can be deleted", function(done) {
-    Teambo.bucket.create({name: 'Bucket to Delete'}).then(function(b){
+    Teambo.model.bucket.create({name: 'Bucket to Delete'}).then(function(b){
       b.remove().then(function(){
-        Teambo.bucket.findAll().then(function(buckets) {
+        Teambo.model.bucket.findAll().then(function(buckets) {
           expect(buckets.length).toBe(1);
           done();
         });
@@ -41,7 +41,7 @@ describe("Bucket", function() {
   });
 
   it("Can have description", function(done) {
-    Teambo.bucket.create({name: 'Test Bucket With Description', description: 'Hello, World.'}).then(function(b){
+    Teambo.model.bucket.create({name: 'Test Bucket With Description', description: 'Hello, World.'}).then(function(b){
       expect(b.opts.description).toBe("Hello, World.");
       done();
     }).catch(function(e){
@@ -51,7 +51,7 @@ describe("Bucket", function() {
   });
 
   it("Cannot have undefined properties", function(done) {
-    Teambo.bucket.create({name: 'Test Bucket without undefined properties', description: 'Hello, World.', asdf: 'asdasdfasdfasdfasdf'}).then(function(b){
+    Teambo.model.bucket.create({name: 'Test Bucket without undefined properties', description: 'Hello, World.', asdf: 'asdasdfasdfasdfasdf'}).then(function(b){
       expect(b.opts.asdf).toBe(undefined);
       done();
     }).catch(function(e){

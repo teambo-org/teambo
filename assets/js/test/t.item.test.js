@@ -1,9 +1,9 @@
 describe("Item", function() {
 
   it("Can be created", function(done) {
-    Teambo.bucket.findAll().then(function(buckets) {
+    Teambo.model.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
-      Teambo.item.create({name: 'New Test Item', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
+      Teambo.model.item.create({name: 'New Test Item', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
         expect(item.opts.name).toBe("New Test Item");
         done();
       }).catch(function(e){
@@ -14,7 +14,7 @@ describe("Item", function() {
   });
 
   it("Can be edited", function(done) {
-    Teambo.item.findAll().then(function(items) {
+    Teambo.model.item.findAll().then(function(items) {
       item = items[0];
       item.update({name: 'Test Item'}).then(function(new_item){
         expect(new_item.opts.name).toBe("Test Item");
@@ -27,11 +27,11 @@ describe("Item", function() {
   });
 
   it("Can be deleted", function(done) {
-    Teambo.bucket.findAll().then(function(buckets) {
+    Teambo.model.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
-      Teambo.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
+      Teambo.model.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
         item.remove().then(function(){
-          Teambo.item.findAll().then(function(items){
+          Teambo.model.item.findAll().then(function(items){
             expect(items.length).toBe(1);
             done();
           });
@@ -47,12 +47,12 @@ describe("Item", function() {
   });
 
   it("Is removed from cache upon deletion", function(done) {
-    Teambo.bucket.findAll().then(function(buckets) {
+    Teambo.model.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
-      Teambo.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
+      Teambo.model.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
         var item_id = item.id;
         item.remove().then(function(b){
-          Teambo.item.findAll().then(function(items) {
+          Teambo.model.item.findAll().then(function(items) {
             expect(items.length).toBe(1);
             var hash = Teambo.crypto.sha(Teambo.team.current.id+item_id+Teambo.salt);
             localforage.getItem(hash).then(function(val){
@@ -72,9 +72,9 @@ describe("Item", function() {
   });
 
   it("Can have a status", function(done) {
-    Teambo.bucket.findAll().then(function(buckets) {
+    Teambo.model.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
-      Teambo.item.create({name: 'In Progress Item', status: 'inprogress', description: 'This is an in progress item', bucket_id: bucket_id}).then(function(item){
+      Teambo.model.item.create({name: 'In Progress Item', status: 'inprogress', description: 'This is an in progress item', bucket_id: bucket_id}).then(function(item){
         expect(item.opts.status).toBe("inprogress");
         done();
       }).catch(function(e){
@@ -85,10 +85,10 @@ describe("Item", function() {
   });
   
   it("Can be moved between buckets", function(done) {
-    Teambo.bucket.findAll().then(function(buckets) {
+    Teambo.model.bucket.findAll().then(function(buckets) {
       bucket_id = buckets[0].id;
       bucket2 = buckets[1];
-      Teambo.item.create({name: 'Moved Item', status: 'ready', description: 'This is a test item for move', bucket_id: bucket_id}).then(function(item){
+      Teambo.model.item.create({name: 'Moved Item', status: 'ready', description: 'This is a test item for move', bucket_id: bucket_id}).then(function(item){
         var item_id = item.id;
         item.update({bucket_id: bucket2.id}).then(function(new_item){
           expect(new_item.opts.bucket_id).toBe(bucket2.id);

@@ -424,24 +424,4 @@ Teambo.model = (function(t){
 
   return model;
 
-  // t.event.register('item-create', {
-    // apply: function(events, obj) {
-      // if(events.length > 0) {
-        // return Promise.reject();
-      // }
-      // t.items.find(obj.id).then(function(item){
-        // if(!item) {
-          // var b = new t.item(obj);
-          // b.cache();
-          // t.items.add({id: obj.id});
-          // return Promise.resolve();
-        // }
-      // });
-    // }
-  // });
-
-  // Create event
-  // Apply event
-  // Persist event
-
 })(Teambo);

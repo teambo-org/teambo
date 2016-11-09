@@ -3,7 +3,7 @@ function(t){
 
   var form = new t.form(document.item_remove);
   var item_id = form.item_id.value;
-  var item = t.item.get(item_id);
+  var item = t.model.item.get(item_id);
   var bucket = item.bucket();
   form.addEventListener("submit", function(e) {
     form.disable();

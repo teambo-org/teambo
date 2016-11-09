@@ -8,7 +8,7 @@ describe("Stress", function() {
     var j = 0;
     var create_buckets = function() {
       return new Promise(function(fulfill, reject) {
-        Teambo.bucket.create({name: 'Test Bucket '+i}).then(function(bucket) {
+        Teambo.model.bucket.create({name: 'Test Bucket '+i}).then(function(bucket) {
           j = 0;
           create_items(bucket).then(function() {
             i++;
@@ -25,7 +25,7 @@ describe("Stress", function() {
     };
     var create_items = function(bucket) {
       return new Promise(function(fulfill, reject) {
-        Teambo.item.create({name: 'Test Item ' + j, status: 'ready', description: 'This is a test item', bucket_id: bucket.id}).then(function() {
+        Teambo.model.item.create({name: 'Test Item ' + j, status: 'ready', description: 'This is a test item', bucket_id: bucket.id}).then(function() {
           j++;
           if(j < factor) {
             create_items(bucket).then(function(){

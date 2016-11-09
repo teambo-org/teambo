@@ -8,7 +8,7 @@ function(t){
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'description', 'status', 'bucket_id']);
-    t.item.create(data).then(function(item){
+    t.model.item.create(data).then(function(item){
       t.view.updateSideNav();
       t.gotoUrl(item.url());
     }).catch(function(e){
@@ -17,8 +17,8 @@ function(t){
     });
   });
   var html = '';
-  for(var status in t.item.statuses) {
-    var opt = t.item.statuses[status];
+  for(var status in t.model.item.statuses) {
+    var opt = t.model.item.statuses[status];
     html +=  "<option value='"+status+"'>"+opt.label+"</option>";
   }
   form.status.innerHTML = html + form.status.innerHTML;

@@ -59,8 +59,8 @@ var js = []string{
 	"/js/t.schema.js",
 	"/js/t.team.js",
 	"/js/t.model.js",
-	"/js/t.bucket.js",
-	"/js/t.item.js",
+	"/js/t.model.bucket.js",
+	"/js/t.model.item.js",
 	"/js/t.keybind.js",
 }
 var jsinit = []string{

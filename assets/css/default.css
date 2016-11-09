@@ -180,7 +180,7 @@ i.icon-emo-coffee:before { width: 1.5em; }
     .up4c3b { width: 98%; }
 }
 
-@media (max-width: 1259px) {   
+@media (max-width: 1259px) {
     #dashboard .main section.tags { width: 100%; float: left; }
     #dashboard .main section.tags ul { width: 100%; float: left; }
     #dashboard .main section.tags ul li { width: 49%; float: left; clear: none; }

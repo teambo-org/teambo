@@ -5,7 +5,7 @@ function(t){
 
   var form = new t.form(document.bucket_edit),
     bucket_id = form.dataset.bucket_id,
-    bucket = t.bucket.get(bucket_id);
+    bucket = t.model.bucket.get(bucket_id);
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();

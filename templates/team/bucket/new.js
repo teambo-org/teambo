@@ -8,7 +8,7 @@ function(t){
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'description']);
-    t.bucket.create(data).then(function(bucket){
+    t.model.bucket.create(data).then(function(bucket){
       t.view.updateSideNav();
       t.gotoUrl(bucket.url());
     }).catch(function(e){

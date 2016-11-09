@@ -1,4 +1,4 @@
-Teambo.item = (function(t){
+Teambo.model.item = (function(t){
   "use strict";
 
   var model = function(data) {
@@ -9,7 +9,7 @@ Teambo.item = (function(t){
         return model.statuses[self.opts.status];
       },
       bucket: function() {
-        return t.bucket.get(self.opts.bucket_id);
+        return t.model.bucket.get(self.opts.bucket_id);
       },
       url: function() {
         return '/'+t.team.current.id+'/'+self.bucket().id+'/'+self.id;
@@ -54,7 +54,7 @@ Teambo.item = (function(t){
   };
 
   model.hasOrphaned = function() {
-    var bucket_ids = t.bucket.ids();
+    var bucket_ids = t.model.bucket.ids();
     for(var i in model.all) {
       if(bucket_ids.indexOf(model.all[i].opts.bucket_id) < 0) {
         return true;
@@ -63,7 +63,7 @@ Teambo.item = (function(t){
   };
 
   model.getOrphaned = function() {
-    var bucket_ids = t.bucket.ids();
+    var bucket_ids = t.model.bucket.ids();
     var ret = [];
     for(var i in model.all) {
       if(bucket_ids.indexOf(model.all[i].opts.bucket_id) < 0) {
