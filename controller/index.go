@@ -114,7 +114,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		ws_scheme = "wss"
 		port = ":" + util.Config("port.https")
 	}
-	log.Println(port)
 	ws_url := ws_scheme + "://" + util.Config("app.host")
 	if port != ":" && port != ":80" && port != ":443" {
 		ws_url = ws_url + port
