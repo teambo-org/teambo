@@ -127,6 +127,7 @@ Teambo.team = (function(t){
         return self.last_seen;
       }
     });
+    this.queue = new t.offline.queue(this);
   };
 
   team.current = null;
@@ -140,6 +141,7 @@ Teambo.team = (function(t){
     return t.promise(function(fulfill, reject){
       team.find(id).then(function(o) {
         team.current = o;
+
         t.event.all('team-init', o).then(function() {
           t.socket.start(o);
           fulfill(o);
@@ -229,6 +231,9 @@ Teambo.team = (function(t){
         }));
       });
       Promise.all(p).then(function() {
+        ret = ret.sort(function(a, b) {
+          return a.opts.name > b.opts.name ? 1 : (a.opts.name === b.opts.name ? 0 : -1);
+        });
         fulfill(ret);
       });
     });

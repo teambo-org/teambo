@@ -57,6 +57,7 @@ var js = []string{
 	"/js/t.themes.js",
 	"/js/t.chat.js",
 	"/js/t.schema.js",
+	"/js/t.offline.js",
 	"/js/t.team.js",
 	"/js/t.model.js",
 	"/js/t.model.bucket.js",

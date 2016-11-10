@@ -50,6 +50,8 @@ Teambo.model.bucket = (function(t){
     }
   });
 
+  model.orphaned.fake = true;
+
   model.orphaned.item_list = function() {
     return t.model.item.getOrphaned();
   };

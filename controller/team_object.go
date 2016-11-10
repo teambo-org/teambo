@@ -155,27 +155,22 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 		obj := model.TeamObject{}
 
 		if id == "" {
-			obj = bucket.NewObject(team_id)
+			obj = bucket.NewObject(team_id, "")
 			err = obj.Save(team_id)
 			if err != nil {
-				error_out(w, "Bucket could not be created", 500)
+				error_out(w, "Object could not be created", 500)
 				return
 			}
 		} else {
-			obj, err = bucket.Find(team_id, id)
-			if err != nil {
-				error_out(w, "Database error", 500)
+			obj = bucket.NewObject(team_id, id)
+			if obj.Id != id {
+				error_out(w, "Object already exists", 409)
 				return
 			}
-			if obj.Id == id {
-				error_out(w, "Bucket already exists", 409)
-				return
-			}
-			obj.Id = id
 			obj.Ciphertext = "new"
 			err = obj.Save(team_id)
 			if err != nil {
-				error_out(w, "Bucket could not be saved", 500)
+				error_out(w, "Object could not be saved", 500)
 				return
 			}
 		}
@@ -185,7 +180,7 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 		objs, err := bucket.All(team_id)
 
 		if err != nil {
-			error_out(w, "Bucket could not be found", 500)
+			error_out(w, "Object could not be found", 500)
 			return
 		}
 

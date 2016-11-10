@@ -32,6 +32,13 @@ function(t){
       } else if(xhr.status === 403) {
         password_reset();
       }
+    }).catch(function() {
+      if(t.online()) {
+        form.error.msg('Unknown error', "Please try again in a few minutes.");
+      } else {
+        form.error.msg('You are offline', "You must log in once from this device while online<br/>before accessing your account in offline mode.");
+      }
+      form.enable();
     });
   };
 

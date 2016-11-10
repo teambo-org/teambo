@@ -79,7 +79,7 @@
 #dashboard .right .workload { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 0; }
 #dashboard .right .workload i.nav { opacity: 0.2; }
 
-#dashboard .main div.left { float: left; width: 12em; height: 100%; position: relative; }
+#dashboard .main div.left { float: left; width: 12em; height: 100%; position: relative; overflow: hidden; }
 #dashboard .main .area { margin-left: 12em; height: 100%; position: relative; overflow-y: scroll; padding: 0; }
 #dashboard .main .area .content { padding: 1em; }
 

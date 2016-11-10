@@ -7,6 +7,7 @@ Teambo.socket = (function (t) {
   var events = [];
   var processing = false;
   var ignored = [];
+  var team;
 
   var processEvent = function(e) {
     return t.promise(function(fulfill, reject) {
@@ -45,7 +46,9 @@ Teambo.socket = (function (t) {
         });
       }
     } else {
-      processing = false;
+      team.queue.process().then(function() {
+        processing = false;
+      });
     }
   };
 
@@ -53,13 +56,15 @@ Teambo.socket = (function (t) {
     connect = false;
     clearInterval(interval);
     ignored = [];
+    team = null;
     if(connection) {
       connection.close();
     }
   };
 
-  var start = function(team) {
+  var start = function(o) {
     stop();
+    team = o;
     if(!team) {
       return;
     }
@@ -69,7 +74,6 @@ Teambo.socket = (function (t) {
     var wrapperfunc = function(){
       if (typeof(WebSocket) === "function" && (!connection || connection.readyState > 0)) {
         if(connected) {
-          t.online(true);
           return;
         }
         var uri = new Uri(window.location);
@@ -87,6 +91,7 @@ Teambo.socket = (function (t) {
           }
         }
         connection.onmessage = function(evt) {
+          t.online(true);
           failures = 0;
           var parts = evt.data.split('-');
           var e = {

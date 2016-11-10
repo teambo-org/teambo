@@ -158,7 +158,7 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 }
 
 /* 768 */
-@media (min-width: 768px) and (max-width: 999px) {
+@media (min-width: 768px) and (max-width: 1025px) {
     #page { font-size: 1.1em; }
 }
 
@@ -167,10 +167,11 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 }
 
 /* < 1000 */
-@media (max-width: 1000px) {
+@media (max-width: 1025px) {
     .up3c { float: left; width: 100%; margin: 0; font-size: 1em; }
     .up4c3 { width: 98%; }
     .up4c3b { width: 98%; }
+    h1 { font-size: 1.4em }
 }
 
 @media (max-width: 1259px) {
@@ -180,8 +181,13 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
     #dashboard .main section.tags ul li:nth-child(2n) { float: right; }
 }
 
+@media (max-width: 1599px) {
+    h1 { font-size: 1.5em }
+    .up2c { width: 98%; }
+}
+
 /* 1024 */
-@media (min-width: 1000px) and (max-width: 1259px) {
+@media (min-width: 1025px) and (max-width: 1259px) {
     #page { font-size: 1.2em; }
     .up3c { float: left; width: 100%; margin: 0; }
     .up4c3 { width: 98%; }

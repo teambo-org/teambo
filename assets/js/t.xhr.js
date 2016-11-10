@@ -4,6 +4,10 @@ Teambo.xhr = (function(t){
   var xhr = function(method, url, opts) {
     return t.promise(function(fulfill, reject) {
       var x = new(window.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
+      if(!t.online()) {
+        reject(x);
+        return;
+      }
       x.open(method, url, 1);
       x.timeout = 'timeout' in opts ? opts.timeout : 5000;
       for(var i in opts.headers) {

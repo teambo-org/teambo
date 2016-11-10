@@ -13,7 +13,7 @@ const (
 	writeWait      = 10 * time.Second
 	pongWait       = 60 * time.Second
 	pingPeriod     = (pongWait * 9) / 10
-	timeSyncPeriod = 10 * time.Second
+	timeSyncPeriod = 60 * time.Second
 	maxMessageSize = 512
 )
 
@@ -149,7 +149,6 @@ func Socket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c := &connection{send: make(chan wsmessage, 256), ws: ws, team_id: team_id}
-	c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond))})
 	if ts != "0" && ts != "" {
 		logs, err := model.TeamLogSince(team_id, ts)
 		if(err == nil) {
@@ -158,6 +157,7 @@ func Socket(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond))})
 	SocketHub.register <- c
 	// Write log messages since last seen timestamp
 	go c.writer()

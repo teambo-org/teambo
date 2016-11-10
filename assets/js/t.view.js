@@ -75,6 +75,13 @@ Teambo.view = (function(t){
     t.updateStatus();
   };
 
+  var updateOutbox = function() {
+    render('right', 'layout/right');
+    render('left',  'layout/left');
+    render('chat',  'layout/chat');
+    t.updateStatus();
+  };
+
   var init = function(opts) {
     templates = opts.templates;
     template_js = opts.template_js;
@@ -229,7 +236,8 @@ Teambo.view = (function(t){
     },
     obj: obj,
     updateTheme: update_theme,
-    updateSideNav: updateSideNav
+    updateSideNav: updateSideNav,
+    updateOutbox: updateOutbox
   };
 
   t.event.extend(view);

@@ -9,8 +9,9 @@ Teambo.model = (function(t){
       data.iv = data.iv ? data.iv : iv;
     }
     t.extend(this, {
-      id: data.id,
-      iv: data.iv,
+      type: model.type,
+      id:   data.id,
+      iv:   data.iv,
       orig: data.opts ? t.clone(data.opts) : {},
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
@@ -53,6 +54,7 @@ Teambo.model = (function(t){
               reject(xhr);
             }
           }).catch(function(e){
+            // Queue for later
             reject(e);
           });
         });
@@ -70,6 +72,13 @@ Teambo.model = (function(t){
                 }).catch(function(){
                   reject(xhr);
                 });
+              });
+            } else if(xhr.status === 0) {
+              var diff = self.diff();
+              self.orig = t.clone(self.opts);
+              self.cache().then(function() {
+                t.team.current.queue.process({type: model.type + '.offline.update', opts: diff, id: self.id});
+                fulfill(self);
               });
             } else {
               self.opts = t.clone(self.orig);
@@ -135,7 +144,10 @@ Teambo.model = (function(t){
               reject(xhr);
             }
           }).catch(function(e){
-            reject(e);
+            self.uncache().then(function() {
+              t.team.current.queue.process({type: model.type + '.offline.remove', id: self.id});
+              fulfill();
+            });
           });
         });
       },
@@ -185,7 +197,7 @@ Teambo.model = (function(t){
       return t.team.cache(model.type + '_ids', t.team.encrypt(model.ids()));
     };
 
-    model.create = function(opts) {
+    model.create = function(opts, id) {
       return t.promise(function(fulfill, reject) {
         if('schema' in model) {
           var errs = model.schema.validate(opts);
@@ -194,11 +206,15 @@ Teambo.model = (function(t){
             return;
           }
         }
+        var data = {
+          team_id: t.team.current.id,
+          mkey:    t.team.current.mkey
+        };
+        if(id) {
+          data.id = id;
+        }
         t.xhr.post('/'+model.type+'s', {
-          data: {
-            team_id: t.team.current.id,
-            mkey:    t.team.current.mkey
-          }
+          data: data
         }).then(function(xhr){
           if(xhr.status == 200) {
             var data = JSON.parse(xhr.responseText);
@@ -208,20 +224,30 @@ Teambo.model = (function(t){
               iv:  'new'
             });
             m.orig = {};
-            m.save().then(function(xhr){
-              model.cacheIds().then(function(){
+            m.save().then(function() {
+              model.cacheIds().then(function() {
                 fulfill(m);
               });
-            }).catch(function(e){
+            }).catch(function(e) {
               reject(e);
             });
           } else {
             reject(xhr);
           }
-        }).catch(function(e){
-          // Save model create event
-          // Apply model create event
-          reject(e);
+        }).catch(function(e) {
+          if(!id) {
+            var id = t.crypto.tempKey();
+            var m = new model({id: id, opts: opts});
+            m.orig = {};
+            m.cache().then(function() {
+              model.cacheIds().then(function() {
+                t.team.current.queue.process({type: model.type + '.offline.create', opts: opts, id: id});
+                fulfill(m);
+              });
+            });
+          } else {
+            reject(e);
+          }
         });
       });
     };
@@ -417,6 +443,66 @@ Teambo.model = (function(t){
           els[i].classList.add('active');
         }
       }
+    });
+
+    t.event.on(model.type + '.offline.create', function(e) {
+      return t.promise(function(fulfill, reject) {
+        model.create(e.opts, e.id).then(function(new_m) {
+          new_m.cache().then(function() {
+            model.cacheIds();
+            e[model.type] = new_m;
+            t.view.emit(model.type+'-updated', e);
+            fulfill(new_m);
+          });
+        }).catch(function(e) {
+          reject(e);
+        });
+      });
+    });
+
+    t.event.on(model.type + '.offline.update', function(e) {
+      return t.promise(function(fulfill, reject) {
+        model.find(e.id).then(function(m) {
+          if(m) {
+            m.refresh().then(function(m) {
+              m.update(e.opts, true).then(function(new_m) {
+                e[model.type] = new_m;
+                t.view.emit(model.type+'-updated', e);
+                // TODO : move updateSideNav someplace else or replace it with something better
+                t.view.updateSideNav();
+                fulfill();
+              }).catch(function(e) {
+                reject(e);
+              });
+            });
+          } else {
+            fulfill();
+          }
+        }).catch(function(e) {
+          reject(e);
+        });
+      });
+    });
+
+    t.event.on(model.type + '.offline.remove', function(e) {
+      return t.promise(function(fulfill, reject) {
+        model.find(e.id).then(function(m) {
+          if(m) {
+            m.remove().then(function() {
+              e[model.type] = m;
+              t.view.emit(model.type+'-removed', e);
+              // TODO : move updateSideNav someplace else or replace it with something better
+              t.view.updateSideNav();
+              fulfill();
+            }).catch(function(e) {
+              t.view.updateSideNav();
+              fulfill();
+            });
+          } else {
+            fulfill();
+          }
+        });
+      });
     });
 
     t.view.set(model.type, model);

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/boltdb/bolt"
 	"time"
-	// "errors"
+	// "log"
 )
 
 type TeamBucket struct {
@@ -22,7 +22,6 @@ type TeamObject struct {
 func (o TeamObject) Save(team_id string) (err error) {
 	db_team_update(team_id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(o.Bucket))
-
 		err = b.Put([]byte(o.Id), []byte(o.Ciphertext))
 		if err != nil {
 			return err
@@ -76,8 +75,10 @@ func (o TeamObject) Log(team_id string, iv string) (log string, err error) {
 	return log, nil
 }
 
-func (tb TeamBucket) NewObject(team_id string) TeamObject {
-	id := util.RandStr(8)
+func (tb TeamBucket) NewObject(team_id string, id string) TeamObject {
+	if id == "" {
+		id = util.RandStr(8)
+	}
 	for {
 		exists, _ := tb.Exists(team_id, id)
 		if exists {

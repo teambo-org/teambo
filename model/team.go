@@ -41,17 +41,7 @@ func (t Team) Remove() (err error) {
 
 func (t Team) NewMember() TeamObject {
 	members := TeamBucket{"member"}
-	return members.NewObject(t.Id)
-}
-
-func (t Team) NewBucket() TeamObject {
-	buckets := TeamBucket{"bucket"}
-	return buckets.NewObject(t.Id)
-}
-
-func (t Team) NewItem() TeamObject {
-	items := TeamBucket{"item"}
-	return items.NewObject(t.Id)
+	return members.NewObject(t.Id, "")
 }
 
 func (t Team) Log(iv string) (log string, err error) {

@@ -1,4 +1,3 @@
-// Based on https://github.com/allouis/minivents
 Teambo.event = (function (t) {
   "use strict";
 
@@ -46,7 +45,6 @@ Teambo.event = (function (t) {
     target.all = function(type, arg) {
       return Promise.all(target.emit(type, arg));
     };
-    target.events = events;
     return target;
   };
 
