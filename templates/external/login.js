@@ -23,6 +23,7 @@ function(t){
     }
     t.acct.auth(email, pass).then(function(xhr){
       if(xhr === true || xhr.status === 200) {
+        t.view.set('acct', t.acct.current);
         t.gotoUrl(t.afterAuth());
       } else if(xhr.status === 404) {
         t.replace('/verification', {
@@ -44,6 +45,7 @@ function(t){
 
   var form_submit_verification = function(email, pass) {
     t.acct.verification.confirm(vkey, email, pass).then(function(xhr) {
+      t.view.set('acct', t.acct.current);
       t.gotoUrl('/account');
     }).catch(function(e){
       form.enable();
@@ -74,6 +76,7 @@ function(t){
 
   if(vkey != '') {
     t.acct.verification.confirm(vkey).then(function(xhr) {
+      t.view.set('acct', t.acct.current);
       t.gotoUrl('/account');
     }).catch(function(e){
       form.error.msg('', '<br/>Enter your email address and password<br/>to complete verification');

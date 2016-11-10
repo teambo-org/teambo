@@ -7,8 +7,8 @@ function(t){
     reset = form.getAttribute('data-reset');
 
   form.addEventListener('submit', function(e){
-    var email = form.getAttribute('data-email'),
-      pass  = form.getAttribute('data-pass');
+    var email = form.getAttribute('data-email');
+    var pass  = form.getAttribute('data-pass');
     t.acct.verification.send(email, pass).then(function(xhr) {
       form.disable();
       if(xhr.status == 201) {

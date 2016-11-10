@@ -137,13 +137,11 @@ Teambo.acct = (function (t) {
           }
           acct.current = new acct(data.ct, akey, key);
           acct.current.cache();
-          t.view.set('acct', acct.current);
         }
         fulfill(xhr);
       }).catch(function (xhr) {
         acct.auth.offline(email, pass).then(function (a) {
           acct.current = a;
-          t.view.set('acct', acct.current);
           fulfill(true);
         }).catch(function () {
           reject(xhr);
