@@ -30,7 +30,7 @@ Teambo.crypto = (function(t, sjcl){
       return sjcl.codec.base64.fromBits(sjcl.random.randomWords(8, 0)).slice(0,-2);
     },
     tempKey: function() {
-      return this.randomKey().replace(/[^0-9a-zA-Z]/, '').substr(0,8);
+      return this.randomKey().replace(/[^0-9a-zA-Z]/g, '').substr(0,8);
     },
     iv: function() {
       return sjcl.codec.base64.fromBits(sjcl.random.randomWords(4, 0)).slice(0,-2);
