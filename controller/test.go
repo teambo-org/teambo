@@ -58,10 +58,16 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ws_scheme := "ws"
+	port := ":" + util.Config("port.http")
 	if util.Config("ssl.active") == "true" {
 		ws_scheme = "wss"
+		port = ":" + util.Config("port.https")
 	}
+	log.Println(port)
 	ws_url := ws_scheme + "://" + util.Config("app.host")
+	if port != ":" && port != ":80" && port != ":443" {
+		ws_url = ws_url + port
+	}
 
 	w.Header().Set("X-Frame-Options", "DENY")
 	w.Header().Set("X-XSS-Protection", "1; mode=block")
