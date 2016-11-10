@@ -85,6 +85,9 @@ Teambo.offline = (function (t) {
       },
       length: function() {
         return events.length;
+      },
+      processing: function() {
+        return processing;
       }
     });
   };
@@ -94,7 +97,7 @@ Teambo.offline = (function (t) {
   });
   
   return {
-    queue: queue,
+    queue: queue
   };
 
 })(Teambo);
