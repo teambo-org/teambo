@@ -1,0 +1,16 @@
+{{#team}}
+    {{#queue.length}}
+        <span class="outbox hi-10"><i class="icon-upload-1"></i><span>{{queue.length}}</span></span>
+    {{/queue.length}}
+{{/team}}
+{{#online}}
+    {{#updateready}}
+        Update Ready
+    {{/updateready}}
+    {{^updateready}}
+        Online
+    {{/updateready}}
+{{/online}}
+{{^online}}
+    Offline
+{{/online}}

@@ -88,6 +88,6 @@ function(t){
     t.gotoUrl('/account');
   }
 
-  t.updateStatus();
+  t.view.updateStatus();
 
 }

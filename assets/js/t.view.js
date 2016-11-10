@@ -72,14 +72,19 @@ Teambo.view = (function(t){
     render('right', 'layout/right');
     render('left',  'layout/left');
     render('chat',  'layout/chat');
-    t.updateStatus();
+    updateStatus();
   };
 
-  var updateOutbox = function() {
-    render('right', 'layout/right');
-    render('left',  'layout/left');
-    render('chat',  'layout/chat');
-    t.updateStatus();
+  var updateStatus = function() {
+    var el = document.getElementById('status');
+    if(el) {
+      var online = t.online();
+      el.innerHTML = renderTemplate('layout/status', {
+        online: online,
+        updateready: t.updateReady()
+      });
+      el.classList.value = online ? 'online' : 'offline';
+    }
   };
 
   var init = function(opts) {
@@ -189,8 +194,11 @@ Teambo.view = (function(t){
     if(typeof target === "string") {
       target = document.getElementById(target);
     }
+    if(!target) {
+      return;
+    }
     target.innerHTML = renderTemplate(tplname, data, override);
-    if(target.firstChild) {
+    if(target.firstChild && target.firstChild.classList) {
       var class_list = target.firstChild.classList;
       if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
         return t.gotoUrl('/login');
@@ -235,9 +243,9 @@ Teambo.view = (function(t){
       delete obj[k];
     },
     obj: obj,
-    updateTheme: update_theme,
+    updateTheme:   update_theme,
     updateSideNav: updateSideNav,
-    updateOutbox: updateOutbox
+    updateStatus:  updateStatus
   };
 
   t.event.extend(view);

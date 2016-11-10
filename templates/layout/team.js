@@ -3,7 +3,7 @@ function(t){
 
   t.view.updateTheme();
   t.view.updateSideNav();
-  t.updateStatus();
+  t.view.updateStatus();
 
   t.chat.init({
       autoclose: document.getElementById('chat').getAttribute('data-autoclose') === "true"

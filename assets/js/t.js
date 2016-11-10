@@ -27,8 +27,9 @@ var Teambo = (function(t){
   };
 
   t.updateReady = function(ready) {
-    if(typeof ready === 'boolean') {
+    if(typeof ready === 'boolean' && updateready != ready) {
       updateready = ready;
+      t.view.updateStatus();
     }
     return updateready;
   };
@@ -226,9 +227,9 @@ var Teambo = (function(t){
   };
 
   t.online = function(status) {
-    if(typeof status === 'boolean') {
+    if(typeof status === 'boolean' && online != status) {
       online = status;
-      t.updateStatus();
+      t.view.updateStatus();
     }
     return online;
   };
@@ -237,14 +238,6 @@ var Teambo = (function(t){
     var val = after_auth;
     after_auth = null;
     return val ? val : '/account';
-  };
-
-  t.updateStatus = function() {
-    var el = document.getElementById('status');
-    if (el) {
-      el.className = online ? 'online' : 'offline';
-      el.innerHTML = online ? (updateready ? 'update ready' : 'online') : 'offline';
-    }
   };
 
   t.getSalt = function() {

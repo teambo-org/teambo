@@ -43,6 +43,7 @@ Teambo.offline = (function (t) {
         return t.promise(function(fulfill, reject) {
           if(evt) {
             events.push(evt);
+            t.view.updateStatus();
             if(processing) {
               fulfill();
               return;
@@ -60,9 +61,11 @@ Teambo.offline = (function (t) {
             if(e) {
               processing = true;
               self.processEvent(e).then(function() {
+                t.view.updateStatus();
                 process();
               }).catch(function() {
                 events.unshift(e);
+                t.view.updateStatus();
                 self.cache().then(function() {
                   processing = false;
                   fulfill();
@@ -71,6 +74,7 @@ Teambo.offline = (function (t) {
             } else {
               // Mark queue as processed
               self.cache().then(function() {
+                t.view.updateStatus();
                 processing = false;
                 fulfill();
               });
