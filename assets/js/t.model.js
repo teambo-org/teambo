@@ -231,10 +231,17 @@ Teambo.model = (function(t){
             }).catch(function(e) {
               reject(e);
             });
+          } else if(xhr.status === 409) {
+            id = t.crypto.tempKey();
+            model.create(opts, id).then(function(m) {
+              fulfill(m);
+            }).catch(function(e){
+              reject(e);
+            });
           } else {
             reject(xhr);
           }
-        }).catch(function(e) {
+        }).catch(function(xhr) {
           if(!id) {
             var id = t.crypto.tempKey();
             var m = new model({id: id, opts: opts});
