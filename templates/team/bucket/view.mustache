@@ -18,7 +18,7 @@
     </div>
     {{/opts.description}}
     <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
-    <div class="up2c">
+    <div class="up1c">
         <ul class="items incomplete">
         {{#item_list_incomplete}}
             <li class="item status-{{opts.status}} hi-05" id="item-li-{{id}}">
@@ -29,13 +29,13 @@
                     <span class="name">{{opts.name}}</span>
                 </a>
                 {{#opts.description}}
-                <p class="description">{{#nl2br}}{{.}}{{/nl2br}}</p>
+                <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
                 {{/opts.description}}
             </li>
         {{/item_list_incomplete}}
         </ul>
     </div>
-    <div class="up2c">
+    <div class="up1c">
         <ul class="items complete">
         {{#item_list_complete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
