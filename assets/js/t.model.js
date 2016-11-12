@@ -245,7 +245,8 @@ Teambo.model = (function(t){
           if(!id) {
             var id = t.crypto.tempKey();
             var m = new model({id: id, opts: opts});
-            m.orig = {};
+            // TODO: Add member id to history items
+            m.hist.push({iv: t.crypto.iv(), diff: opts, ts: t.time()/*, mid: member.id */});
             m.cache().then(function() {
               model.cacheIds().then(function() {
                 t.team.current.queue.process({type: model.type + '.offline.create', opts: opts, id: id});
