@@ -11,7 +11,6 @@ function(t){
       }).catch(function(e){
         form.enable();
         form.error.msg("Comment could not be saved", "Please try again");
-        t.log(e);
       });
     };
     submit();
