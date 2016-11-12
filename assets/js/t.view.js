@@ -29,7 +29,8 @@ Teambo.view = (function(t){
     },
     localTime : function() {
       return function(text, render) {
-        return new Date(parseInt(render(text))).toISOString().slice(0, 16).replace('T', '&nbsp;&nbsp;');
+        var ts = parseInt(render(text)) - new Date().getTimezoneOffset() * 60 * 1000;
+        return new Date(ts).toISOString().slice(0, 16).replace('T', '&nbsp;&nbsp;');
       };
     }
   };

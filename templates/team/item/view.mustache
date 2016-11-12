@@ -54,29 +54,40 @@
         </section>
     </div>
     <section class="comments up1c">
-        <h2><a><i class="icon-comment"></i> Comments</h2>
-        <div class="comment hi-10" id="comments">
-            <div class="author section">
-                <div class="control section">
+        <h2><i class="icon-comment"></i> Comments</h2>
+        <div id="comments">
+        {{#comments}}
+            <div class="comment hi-05">
+                <div class="author section hi-05">
+                    <div class="control section">
+                        <a>
+                            <div class="img"><i class="icon-pencil"></i></div>
+                        </a>
+                        <a href="#{{url}}/remove" title="Remove">
+                            <div class="img"><i class="icon-cancel"></i></div>
+                        </a>
+                    </div>
                     <a>
-                        <div class="img"><i class="icon-pencil"></i></div>
+                        <div class="img"><i class="icon-user-1"></i></div>
+                        <div class="name">{{opts.mid}}<span class="date">{{#localTime}}{{ts}}{{/localTime}}</span></div>
                     </a>
                 </div>
-                <a>
-                    <div class="img"><i class="icon-user-1"></i></div>
-                    <div class="name">Kev</div>
-                </a>
+                <div class="message">{{opts.text}}</div>
             </div>
-            <div class="message">Sounds good.</div>
+        {{/comments}}
         </div>
-        <form id="comment" method="POST" class="std">
+        <form id="comment" name="comment" method="POST" class="std">
+            <input type="hidden" name="pid" value="{{id}}" />
+            <input type="hidden" name="ptype" value="item" />
+            <input type="hidden" name="mid" value="{{acct.id}}" />
             <h4>Reply</h4>
             <div class="field">
-                <textarea class="text" name="message"></textarea>
+                <textarea class="text" name="text"></textarea>
             </div>
             <div class="field submit">
                 <input type="submit" class="submit" value="Submit" />
             </div>
+            <div class="error"></div>
         </form>
     </section>
     <section class="history up1c"><div class="c">

@@ -19,12 +19,13 @@ var tcss = append(css, []string{
 }...)
 var tests = []string{
 	"/js/test/boot.js",
-	"/js/test/t.test.js",
-	"/js/test/t.acct.test.js",
-	"/js/test/t.team.test.js",
-	"/js/test/t.bucket.test.js",
-	"/js/test/t.item.test.js",
-	"/js/test/stress.test.js",
+	// "/js/test/t.test.js",
+	"/js/test/t.schema.test.js",
+	// "/js/test/t.acct.test.js",
+	// "/js/test/t.team.test.js",
+	// "/js/test/t.bucket.test.js",
+	// "/js/test/t.item.test.js",
+	// "/js/test/stress.test.js",
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {

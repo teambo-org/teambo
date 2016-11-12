@@ -29,6 +29,12 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/items":             controller.HandleTeamObjects("item"),
 	"/item":              controller.HandleTeamObject("item", true),
 	"/item/remove":       controller.HandleTeamObjectRemove("item", true),
+	"/comments":          controller.HandleTeamObjects("comment"),
+	"/comment":           controller.HandleTeamObject("comment", true),
+	"/comment/remove":    controller.HandleTeamObjectRemove("comment", true),
+	"/members":           controller.HandleTeamObjects("member"),
+	"/member":            controller.HandleTeamObject("member", true),
+	"/member/remove":     controller.HandleTeamObjectRemove("member", true),
 	"/app.manifest":      controller.Manifest,
 	"/app.manifestweb":   controller.WebManifest,
 	"/init.js":           controller.Initjs,
@@ -40,7 +46,7 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// start := time.Now()
 
 	if handle, ok := routes[r.URL.Path]; ok {
-		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond)))
+		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond)))
 		handle(w, r)
 	} else {
 		controller.Static(w, r)

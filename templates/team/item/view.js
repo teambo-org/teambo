@@ -1,5 +1,21 @@
 function(t){
   "use strict";
+
+  var form = new t.form(document.comment);
+  form.addEventListener("submit", function(e) {
+    form.disable();
+    var data = form.values(['text', 'pid', 'ptype', 'mid']);
+    var submit = function() {
+      t.model.comment.create(data).then(function(comment){
+        t.refresh();
+      }).catch(function(e){
+        form.enable();
+        form.error.msg("Comment could not be saved", "Please try again");
+        t.log(e);
+      });
+    };
+    submit();
+  });
   
   t.view.on('item-removed', function(e) {
     if(e.id == t.model.item.current.id) {
@@ -8,6 +24,11 @@ function(t){
   });
   t.view.on('item-updated', function(e) {
     if(e.id == t.model.item.current.id) {
+      t.refresh({silent: true});
+    }
+  });
+  t.view.on('comment-updated', function(e) {
+    if(e.comment.opts.pid == t.model.item.current.id) {
       t.refresh({silent: true});
     }
   });

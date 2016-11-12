@@ -60,6 +60,7 @@ var js = []string{
 	"/js/t.offline.js",
 	"/js/t.team.js",
 	"/js/t.model.js",
+	"/js/t.model.comment.js",
 	"/js/t.model.bucket.js",
 	"/js/t.model.item.js",
 	"/js/t.keybind.js",

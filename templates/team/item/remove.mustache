@@ -7,7 +7,7 @@
         <span>Remove</span>
     </nav>
     <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
-    <form id="item-remove" name="item_remove" method="POST" class="std ext">
+    <form id="item-remove" name="item_remove" method="POST" class="std ext remove">
         <input type="hidden" class="hidden" name="item_id" value="{{id}}"/>
         <input type="hidden" class="hidden" name="bucket_id" value="{{#bucket}}{{id}}{{/bucket}}"/>
         <p>Are you sure you want to remove this item?</p>

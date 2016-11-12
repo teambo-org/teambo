@@ -1,51 +1,73 @@
 Teambo.schema = (function(t){
   "use strict";
   
-  var validate_property = function(rules, k, data) {
-    var err = null;
+  var validate_property = function(rules, prop, key) {
+    var errs = [];
+    var type = typeof prop;
+    if(type === 'object') {
+      type = Array.isArray(prop) ? 'array' : type;
+    }
     for(var r in rules) {
-      if(r == 'type' && typeof data[k] != rules[r]) {
-        err = k + " does not match expected type: " + rules[r];
+      if(r === 'values') {
+        if(type !== 'object') {
+          errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by " + r);
+          break;
+        }
+        if(type !== 'object') {
+          errs.push("Schema error: "+ key +" - properties of type " + rules['type'] + " cannot be constrained by " + r);
+          break;
+        }
+        Object.keys(prop).forEach(function (k) {
+          errs = errs.concat(validate_schema(rules[r], prop[k], key));
+        });
         break;
       }
-      if(r == 'required' && rules[r] && !(k in data) || data[k] == null) {
-        err = k + " does not match expected type: " + rules[r];
+      if(r == 'type' && type != rules[r]) {
+        errs.push(key + " does not match expected type: " + rules[r]);
+        break;
+      }
+      if(r == 'required' && rules[r] && !prop || prop === null) {
+        errs.push(key + " does not match expected type: " + rules[r]);
         break;
       }
       if(r == 'minLength' || r == 'maxLength') {
-        if(['string', 'array'].indexOf(typeof data[k]) < 0) {
-          err = "Schema error: "+ k +" - properties of type " + (typeof data[k]) + " cannot my constrained by " + r;
-          break;          
-        }
-        if(r == 'minLength' && data[k].length < rules[r]) {
-          err = k + " must have minimum length of " + rules[r];
+        if(type !== 'string' && type !== 'array') {
+          errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by " + r);
           break;
         }
-        if(r == 'maxLength' && data[k].length > rules[r]) {
-          err = k + " must have maximum length of " + rules[r];
+        if(r == 'minLength' && prop.length < rules[r]) {
+          errs.push(key + " must have minimum length of " + rules[r]);
+          break;
+        }
+        if(r == 'maxLength' && prop.length > rules[r]) {
+          errs.push(key + " must have maximum length of " + rules[r]);
           break;
         }
       }
     }
-    return err;
+    return errs;
+  };
+  
+  var validate_schema = function(rules, data, prefix) {
+    prefix = prefix ? prefix + '.' : '';
+    var errs = [];
+    for(var k in data) {
+      if(!(k in rules)) {
+        delete(data[k]);
+        continue;
+      }
+      errs = errs.concat(validate_property(rules[k], data[k], prefix + k));
+    }
+    return errs;
   };
   
   var schema = function(rules) {
     t.extend(this, {
       validate: function(data) {
-        var errs = [];
-        for(var k in data) {
-          if(!(k in rules)) {
-            delete(data[k]);
-            continue;
-          }
-          var err = validate_property(rules[k], k, data);
-          if(err) {
-            errs.push(err);
-          }
-        }
-        return errs;
+        return validate_schema(rules, data);
       }
+      // diff
+      // merge
     });
   };
   

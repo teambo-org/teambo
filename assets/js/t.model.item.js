@@ -11,6 +11,9 @@ Teambo.model.item = (function(t){
       bucket: function() {
         return t.model.bucket.get(self.opts.bucket_id);
       },
+      comments: function() {
+        return t.model.comment.allByModel(model.type, self.id);
+      },
       url: function() {
         return '/'+t.team.current.id+'/'+self.bucket().id+'/'+self.id;
       }
@@ -37,20 +40,6 @@ Teambo.model.item = (function(t){
       }
     }
     return ret;
-  };
-
-  model.findByBucket = function(bucket_id) {
-    return t.promise(function(fulfill, reject) {
-      model.findAll().then(function(items){
-        fulfill(items.reduce(function(p, c) {
-          if(c.opts.bucket_id == bucket_id) {
-            p.push(c); return p;
-          }
-        }, []));
-      }).catch(function(e){
-        reject(e);
-      });
-    });
   };
 
   model.hasOrphaned = function() {

@@ -2,11 +2,11 @@ package controller
 
 import (
 	"../model"
+	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"time"
-	"fmt"
 )
 
 const (
@@ -94,7 +94,7 @@ func (c *connection) write(mt int, m wsmessage) error {
 }
 
 func (c *connection) writer() {
-	pinger   := time.NewTicker(pingPeriod)
+	pinger := time.NewTicker(pingPeriod)
 	timesync := time.NewTicker(timeSyncPeriod)
 	defer func() {
 		pinger.Stop()
@@ -116,7 +116,7 @@ func (c *connection) writer() {
 				return
 			}
 		case <-timesync.C:
-			if err := c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond))}); err != nil {
+			if err := c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))}); err != nil {
 				return
 			}
 		}
@@ -151,13 +151,13 @@ func Socket(w http.ResponseWriter, r *http.Request) {
 	c := &connection{send: make(chan wsmessage, 256), ws: ws, team_id: team_id}
 	if ts != "0" && ts != "" {
 		logs, err := model.TeamLogSince(team_id, ts)
-		if(err == nil) {
+		if err == nil {
 			for _, m := range logs {
 				c.write(websocket.TextMessage, wsmessage{team_id, m})
 			}
 		}
 	}
-	c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano() / int64(time.Millisecond))})
+	c.write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))})
 	SocketHub.register <- c
 	// Write log messages since last seen timestamp
 	go c.writer()

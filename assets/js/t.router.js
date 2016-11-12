@@ -12,6 +12,7 @@ Teambo.router = (function(t){
     '/:team_id/notes'                      : 'team/note/index',
     '/:team_id/edit'                       : 'team/settings/edit',
     '/:team_id/new'                        : 'team/bucket/new',
+    '/:team_id/comment/:comment_id/remove' : 'team/comment/remove',
     '/:team_id/:bucket_id'                 : 'team/bucket/view',
     '/:team_id/:bucket_id/remove'          : 'team/bucket/remove',
     '/:team_id/:bucket_id/edit'            : 'team/bucket/edit',

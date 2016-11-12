@@ -1,0 +1,20 @@
+<div class="comment-remove" require-model="comment">
+{{#comment.current}}
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{#parentModel}}{{url}}{{/parentModel}}">Comment</a>
+        <span>Remove</span>
+    </nav>
+    <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
+    <form id="remove" name="remove" method="POST" class="std ext remove">
+        <input type="hidden" class="hidden" name="comment_id" value="{{id}}"/>
+        <p>Are you sure you want to remove this comment?</p>
+        <div class="field submit">
+            <input type="submit" class="submit" id="delete_submit" value="Remove Comment" />
+            <br/>
+            <a class="cancel" href="#{{#parentModel}}{{url}}{{/parentModel}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+{{/comment.current}}
+</div>
