@@ -22,7 +22,7 @@ Teambo.model.comment = (function(t){
   model.type = 'comment';
 
   model.schema = new t.schema({
-    pid:   { type: 'string', required: true },
+    pid:   { type: 'string', required: false, minLength: 8, maxLength: 8 },
     ptype: { type: 'string', required: true },
     text:  { type: 'string', required: true },
     mid:   { type: 'string', required: true }

@@ -11,6 +11,9 @@ Teambo.model.item = (function(t){
       bucket: function() {
         return t.model.bucket.get(self.opts.bucket_id);
       },
+      plan: function() {
+        return t.model.plan.get(self.opts.plan_id);
+      },
       comments: function() {
         return t.model.comment.allByModel(model.type, self.id);
       },
@@ -23,9 +26,10 @@ Teambo.model.item = (function(t){
   model.type = 'item';
 
   model.schema = new t.schema({
-    name:        { type: "string", required: true,  minLength: 1, maxLength: 256 },
+    name:        { type: "string", required: true,  maxLength: 256 },
     description: { type: "string", required: false, maxLength: 65535 },
-    bucket_id:   { type: "string", required: true,  minLength: 8, maxLength: 8 },
+    bucket_id:   { type: "string", required: false, minLength: 8, maxLength: 8 },
+    plan_id:     { type: "string", required: false, minLength: 8, maxLength: 8 },
     status:      { type: "string", required: true,  maxLength: 16 }
   });
 
@@ -36,6 +40,17 @@ Teambo.model.item = (function(t){
     for(var i in model.all) {
       var o = model.all[i];
       if(o.opts.bucket_id == bucket_id) {
+        ret.push(o);
+      }
+    }
+    return ret;
+  };
+
+  model.getByPlan = function(plan_id) {
+    var ret = [];
+    for(var i in model.all) {
+      var o = model.all[i];
+      if(o.opts.plan_id === plan_id) {
         ret.push(o);
       }
     }

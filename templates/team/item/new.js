@@ -7,7 +7,7 @@ function(t){
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = form.values(['name', 'description', 'status', 'bucket_id']);
+    var data = form.values(['name', 'description', 'status', 'bucket_id', 'plan_id']);
     t.model.item.create(data).then(function(item){
       t.view.updateSideNav();
       t.gotoUrl(item.url());
@@ -21,5 +21,11 @@ function(t){
     html +=  "<option value='"+opt.key+"'>"+opt.label+"</option>";
   });
   form.status.innerHTML = html + form.status.innerHTML;
+  
+  var html = '';
+  t.model.plan.all.forEach(function(plan) {
+    html +=  "<option value='"+plan.id+"'>"+plan.opts.name+"</option>";
+  });
+  form.plan_id.innerHTML = form.plan_id.innerHTML + html;
 
 }

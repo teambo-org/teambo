@@ -20,7 +20,12 @@
             <label for="item_status">Status</label>
             <select id="item_status" name="status" class="text large"></select>
         </div>
-
+        <div class="field">
+            <label for="item_plan">Plan</label>
+            <select id="item_plan" name="plan_id" class="text large">
+                <option value="">(none)</option>
+            </select>
+        </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Create Item" />
             <a class="cancel" href="#{{url}}">cancel</a>

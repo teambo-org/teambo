@@ -112,6 +112,9 @@
                     {{#diff.bucket_id}}
                     <div class="bucket_id">Moved to bucket <span class="value color-70">{{diff.bucket_id}}</span></div>
                     {{/diff.bucket_id}}
+                    {{#diff.plan_id}}
+                    <div class="plan_id">Moved to plan <a class="value color-70" href="#{{#plan}}{{url}}{{/plan}}">{{diff.plan_id}}</a></div>
+                    {{/diff.plan_id}}
                 </div>
             </li>
         {{/hist}}

@@ -1,0 +1,25 @@
+<div class="plan-edit" require-model="plan">
+{{#plan.current}}
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{url}}" data-keybind="q escape">Plan</a>
+        <span>Edit</span>
+    </nav>
+    <h1><i class="icon-flag-filled"></i> {{opts.name}}</h1>
+    <form id="plan-edit" name="plan_edit" method="POST" class="std" data-plan_id="{{id}}">
+        <div class="field">
+            <label for="plan_name">Name</label>
+            <input id="plan_name" type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Plan Name" value="{{opts.name}}" />
+        </div>
+        <div class="field">
+            <label for="plan_desc">Description</label>
+            <textarea id="plan_desc" class="text" name="desc">{{opts.desc}}</textarea>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Save" />
+            <a class="cancel" href="#{{url}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+{{/plan.current}}
+</div>

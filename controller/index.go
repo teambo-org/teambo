@@ -63,6 +63,7 @@ var js = []string{
 	"/js/t.model.comment.js",
 	"/js/t.model.bucket.js",
 	"/js/t.model.item.js",
+	"/js/t.model.plan.js",
 	"/js/t.keybind.js",
 }
 var jsinit = []string{

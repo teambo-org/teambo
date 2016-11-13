@@ -1,0 +1,56 @@
+<div class="plan-view bucket-view" require-model="plan">
+{{#plan.current}}
+    <nav>
+    {{^fake}}
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
+    {{/fake}}
+        <a href="#{{url}}/new" data-keybind="c">Create Item</a>
+    </nav>
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
+        <span class="active">Plan</span>
+    </nav>
+    <h1><i class="icon-flag-filled"></i> {{opts.name}}</h1>
+    {{#opts.description}}
+    <div class="up1c">
+        <section class="description color-bg">{{opts.description}}</section>
+    </div>
+    {{/opts.description}}
+    <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
+    <div class="up1c">
+        <ul class="items incomplete">
+        {{#item_list_incomplete}}
+            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+                <a href="#{{url}}" title="{{opts.status}}" class=" hi-05">
+                    {{#status}}
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
+                    {{/status}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+                {{#opts.description}}
+                <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
+                {{/opts.description}}
+            </li>
+        {{/item_list_incomplete}}
+        </ul>
+    </div>
+    <div class="up1c">
+        <ul class="items complete">
+        {{#item_list_complete}}
+            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+                <a href="#{{url}}">
+                    {{#status}}
+                    <i class="icon-{{icon}}"></i>
+                    {{/status}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+            </li>
+        {{/item_list_complete}}
+        </ul>
+    </div>
+    {{^item_list}}
+    <p class="empty">This plan has no items.</p>
+    {{/item_list}}
+{{/plan.current}}
+</div>

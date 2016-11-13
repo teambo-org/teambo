@@ -1,0 +1,22 @@
+<div class="plan-new">
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
+        <span class="active">Create Plan</span>
+    </nav>
+    <h1><i class="icon-flag-filled"></i> Create Plan</h1>
+    <form id="plan-new" name="plan_new" method="POST" class="std">
+        <div class="field">
+            <label for="plan_name">Name</label>
+            <input id="plan_name" type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Plan Name" />
+        </div>
+        <div class="field">
+            <label for="plan_description">Description</label>
+            <textarea id="plan_description" class="text" name="description"></textarea>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Create Plan" />
+            <a class="cancel" href="#{{team.url}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>

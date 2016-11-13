@@ -36,8 +36,9 @@ Teambo.model.bucket = (function(t){
   model.type = 'bucket';
 
   model.schema = new t.schema({
-    name:        { type: "string", required: true,  minLength: 1, maxLength: 256 },
-    description: { type: "string", required: false, maxLength: 65535 }
+    pid:         { type: 'string', required: false, minLength: 8, maxLength: 8 },
+    name:        { type: 'string', required: true,  maxLength: 256 },
+    description: { type: 'string', required: false, maxLength: 65535 }
   });
 
   t.model.extend(model);

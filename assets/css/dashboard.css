@@ -162,6 +162,7 @@
 #dashboard .left a.nav-section { font-weight: 500; }
 #dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 1.8em; left: 0; right: 0; bottom: 2em; }
 
+#dashboard .side .subsection i { opacity: 0.6; }
 #dashboard .side .bucket i { opacity: 0.6; }
 #dashboard .side .bucket.active i { opacity: 1; }
 #dashboard .side .bucket .icon-folder-open { display: none; }

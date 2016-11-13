@@ -1,0 +1,38 @@
+<div class="plan-index bucket-index" id="plan-index">
+    <nav>
+        <a href="#{{team.url}}/plan/new" data-keybind="c">Create plan</a>
+    </nav>
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}" class="active" data-keybind="q escape">Team</a>
+        <span class="active">Plan</span>
+    </nav>
+    <h1><div class="img"><i class="icon-calendar-check-o"></i></div> Plan</h1>
+    <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
+    <ul class="plans buckets" id="plans">
+    {{#plan.all}}
+    <li class="plan bucket hi-10 up3c" id="plan-li-{{id}}">
+        <a href="#{{url}}" class="hi-05">
+            <i class="icon-flag-filled"></i>
+            <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
+            <span class="name">{{opts.name}}</span>
+            <div class="progress hi-15" data-progress="{{progress}}"></div>
+        </a>
+        <ul class="items">
+        {{#item_list}}
+            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+                <a href="#{{url}}" title="{{opts.status}}" class="dim">
+                    {{#status}}
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
+                    {{/status}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+            </li>
+        {{/item_list}}
+        </ul>
+    </li>
+    {{/plan.all}}
+    {{^plan.all}}
+    <p class="empty">Team has no plans</p>
+    {{/plan.all}}
+    </ul>
+</div>

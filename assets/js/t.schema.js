@@ -22,24 +22,25 @@ Teambo.schema = (function(t){
         });
         break;
       }
-      if(r == 'type' && type != rules[r]) {
+      if(r === 'type' && type !== rules[r]) {
+        console.log(key, rules[r]);
         errs.push(key + " does not match expected type: " + rules[r]);
         break;
       }
-      if(r == 'required' && rules[r] && !prop || prop === null) {
-        errs.push(key + " does not match expected type: " + rules[r]);
+      if(r === 'required' && rules[r] && !prop || prop === null) {
+        errs.push(key + " is required and is not present.");
         break;
       }
-      if(r == 'minLength' || r == 'maxLength') {
+      if(r === 'minLength' || r === 'maxLength') {
         if(type !== 'string' && type !== 'array') {
           errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by " + r);
           break;
         }
-        if(r == 'minLength' && prop.length < rules[r]) {
+        if(r === 'minLength' && prop.length > 0 &&  prop.length < rules[r]) {
           errs.push(key + " must have minimum length of " + rules[r]);
           break;
         }
-        if(r == 'maxLength' && prop.length > rules[r]) {
+        if(r === 'maxLength' && prop.length > rules[r]) {
           errs.push(key + " must have maximum length of " + rules[r]);
           break;
         }

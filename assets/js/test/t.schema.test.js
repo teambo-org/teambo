@@ -35,6 +35,20 @@ describe("t.schema.js", function() {
     var errs = s.validate({name: null});
     expect(errs.length).toBe(1);
   });
+  xit("constrains numbers by required", function() {
+    var s = new Teambo.schema({
+      size: { type: 'number', required: true }
+    });
+    var errs = s.validate({size: 0});
+    expect(errs.length).toBe(0);
+  });
+  xit("constrains by required for missing parameters", function() {
+    var s = new Teambo.schema({
+      size: { type: 'number', required: true }
+    });
+    var errs = s.validate({});
+    expect(errs.length).toBe(1);
+  });
   it("constrains by minLength", function() {
     var s = new Teambo.schema({
       name: { minLength: 3 }
@@ -49,6 +63,11 @@ describe("t.schema.js", function() {
     expect(errs.length).toBe(1);
     var errs = s.validate({name: 123});
     expect(errs.length).toBe(1);
+    var s = new Teambo.schema({
+      name: { minLength: 3, required: false }
+    });
+    var errs = s.validate({name: ''});
+    expect(errs.length).toBe(0);
   });
   it("constrains by maxLength", function() {
     var s = new Teambo.schema({
