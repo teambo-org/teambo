@@ -3,9 +3,6 @@ function(t){
 
   t.view.progress('#main .progress');
 
-  var filter = t.form(document.filter);
-  filter.autofilter('plan-index', true);
-
   t.view.on(['plan-removed', 'plan-updated'], function(e) {
     t.refresh({silent: true});
   });
