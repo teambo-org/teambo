@@ -44,7 +44,7 @@ Teambo.form = (function(t){
       var uri = new Uri(window.location.hash.slice(1));
       var path = uri.path().split('..')[0];
       var cacheKey = 'filter-'+path
-      var submit_fn = function(e) {
+      var submit_fn = function() {
         var query = form.serialize();
         t.team.cache('filter-'+path, query.getQueryParams());
         window.location.hash = '#' + path + query;
@@ -79,7 +79,6 @@ Teambo.form = (function(t){
       } else {
         filter(data);
       }
-
       return form;
     };
 

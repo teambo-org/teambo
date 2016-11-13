@@ -13,18 +13,20 @@ Teambo.themes = (function(){
     var h2 = h;
     var h3 = h;
     return {
-      "chat":  {"bg": h2r(h2, 0.75*s, 0.25*v), "hi": h2r(h2, 0.75*s, 1*v), "color": "255,255,255"},
-      "main":  {"bg": "16,16,16",              "hi": h2r(h,  0.8*s,  1*v), "color": "255,255,255"},
-      "right": {"bg": h2r(h3, 0.75*s, 0.25*v), "hi": h2r(h3, 0.75*s, 1*v), "color": "255,255,255"}
+      "chat":  {"bg": h2r(h3, 0.5*s, 0.1*v), "hi": h2r(h3, 0.8*s, 1*v), "color": "255,255,255"},
+      "main":  {"bg": "16,16,16",            "hi": h2r(h,  0.8*s, 1*v), "color": "255,255,255"},
+      "right": {"bg": h2r(h2, 0.8*s, 0.2*v), "hi": h2r(h2, 0.8*s, 1*v), "color": "255,255,255"}
     };
   };
   var dark = function(h, s, v) {
     s = s || 1;
     v = v || 1;
+    var h2 = h;
+    var h3 = h;
     return {
-      "chat":  {"bg": h2r(h, 0.75*s, 0.3*v), "hi": h2r(h, 0.75*s, 1*v), "color": "255,255,255"},
-      "main":  {"bg": h2r(h, 1*s, 0.1*v),    "hi": h2r(h, 0.8*s,  1*v), "color": "255,255,255"},
-      "right": {"bg": h2r(h, 0.75*s, 0.3*v), "hi": h2r(h, 0.75*s, 1*v), "color": "255,255,255"}
+      "chat":  {"bg": h2r(h3, 0.75*s, 0.3*v), "hi": h2r(h3, 0.75*s, 1*v), "color": "255,255,255"},
+      "main":  {"bg": h2r(h, 1*s, 0.1*v),     "hi": h2r(h, 0.8*s,  1*v),  "color": "255,255,255"},
+      "right": {"bg": h2r(h2, 0.8*s, 0.2*v),  "hi": h2r(h2, 0.8*s,  1*v), "color": "255,255,255"}
     };
   };
 
@@ -43,7 +45,7 @@ Teambo.themes = (function(){
     'Slate Green'   : slate(120, 0.9),
     'Slate Teal'    : slate(180),
     'Slate Blue'    : slate(210, 0.9),
-    'Slate Violet'  : slate(270, 0.8),
+    'Slate Violet'  : slate(270, 0.7),
     'Slate Magenta' : slate(300, 0.9),
     Default : slate(180)
   };
