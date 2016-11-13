@@ -188,6 +188,10 @@ var Teambo = (function(t){
     return target;
   };
 
+  t.pageTarget = function() {
+    return target;
+  };
+
   t.clone = function(obj) {
     return t.extend({}, obj);
   };

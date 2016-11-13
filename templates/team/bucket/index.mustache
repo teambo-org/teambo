@@ -1,4 +1,4 @@
-<div class="bucket-index">
+<div class="bucket-index" id="bucket-index">
     <nav>
         <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
     </nav>
@@ -7,6 +7,17 @@
         <span class="active">Items</span>
     </nav>
     <h1><div class="img"><i class="icon-folder"></i></div> Items</h1>
+    <nav class="up1c">
+        <form class="std horizontal" name="filter">
+            <select name="status" class="text">
+                <option value="">All</option>
+                <option value="incomplete" selected="selected">Incomplete</option>
+                {{#item.statuses}}
+                <option value="{{key}}">{{label}}</option>
+                {{/item.statuses}}
+            </select>
+        </form>
+    </nav>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="buckets" id="buckets">
     {{#bucket.list}}

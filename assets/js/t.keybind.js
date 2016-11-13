@@ -97,7 +97,7 @@
     e.preventDefault();
     var el = e.target;
     var pane = t.findParent(el, '#left, #main, #right, #chat');
-    var targets = (pane || document).querySelectorAll('a[href], input.submit');
+    var targets = (pane || document).querySelectorAll('a[href], input.submit, select');
     for(var i in targets) {
       if(targets[i] === el) {
         i = parseInt(i);

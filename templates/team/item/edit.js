@@ -22,10 +22,9 @@ function(t){
     submit();
   });
   var html = '';
-  for(var status in t.model.item.statuses) {
-    var opt = t.model.item.statuses[status];
-    html +=  "<option value='"+status+"'"+(item.opts.status === status ? " selected='selected'" : "")+">"+opt.label+"</option>";
-  }
+  t.model.item.statuses.forEach(function(opt) {
+    html +=  "<option value='"+opt.key+"'"+(item.opts.status === opt.key ? " selected='selected'" : "")+">"+opt.label+"</option>";
+  });
   form.status.innerHTML = html + form.status.innerHTML;
   var html = '';
   var buckets = t.model.bucket.all.concat([t.model.bucket.orphaned]);

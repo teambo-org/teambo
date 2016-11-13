@@ -10,16 +10,13 @@ function(t){
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'description']);
-    var submit = function() {
-      bucket.update(data, true).then(function(bucket){
-        t.view.updateSideNav();
-        t.gotoUrl(bucket.url());
-      }).catch(function(xhr){
-        form.enable();
-        form.error.msg("Bucket could not be saved", "Please try again");
-      });
-    };
-    submit();
+    bucket.update(data, true).then(function(bucket){
+      t.view.updateSideNav();
+      t.gotoUrl(bucket.url());
+    }).catch(function(xhr){
+      form.enable();
+      form.error.msg("Bucket could not be saved", "Please try again");
+    });
   });
 
 }

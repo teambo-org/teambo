@@ -6,7 +6,7 @@ Teambo.model.item = (function(t){
     t.model.apply(this, [data, model]);
     t.extend(this, {
       status: function() {
-        return model.statuses[self.opts.status];
+        return t.findByProperty(model.statuses, 'key', self.opts.status);
       },
       bucket: function() {
         return t.model.bucket.get(self.opts.bucket_id);
@@ -62,28 +62,13 @@ Teambo.model.item = (function(t){
     return ret;
   };
 
-  model.statuses = {
-    ready : {
-      label: 'Ready',
-      icon: 'check-empty'
-    },
-    blocked : {
-      label: 'Blocked',
-      icon: 'attention'
-    },
-    inprogress : {
-      label: 'In Progress',
-      icon: 'child'
-    },
-    qa: {
-      label: 'Under QA',
-      icon: 'sliders'
-    },
-    complete : {
-      label: 'Complete',
-      icon: 'check-1'
-    }
-  };
+  model.statuses = [
+    { key: 'ready',      label: 'Ready',       icon: 'check-empty' },
+    { key: 'blocked',    label: 'Blocked',     icon: 'attention' },
+    { key: 'inprogress', label: 'In Progress', icon: 'child' },
+    { key: 'qa',         label: 'Under QA',    icon: 'sliders' },
+    { key: 'complete',   label: 'Complete',    icon: 'check-1' }
+  ];
 
   return model;
 

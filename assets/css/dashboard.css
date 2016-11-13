@@ -173,6 +173,8 @@
 #dashboard .main .item .name span.date { display: inline-block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; }
 #dashboard .main ul.history li div.diff { font-size: 0.9em; padding: 0.5em; }
 
+#dashboard .main .filter-status-incomplete .status-complete { display: none; }
+
 form.std.remove p { text-align: center; }
 
 @media (max-width: 600px) {

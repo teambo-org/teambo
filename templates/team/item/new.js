@@ -17,10 +17,9 @@ function(t){
     });
   });
   var html = '';
-  for(var status in t.model.item.statuses) {
-    var opt = t.model.item.statuses[status];
-    html +=  "<option value='"+status+"'>"+opt.label+"</option>";
-  }
+  t.model.item.statuses.forEach(function(opt) {
+    html +=  "<option value='"+opt.key+"'>"+opt.label+"</option>";
+  });
   form.status.innerHTML = html + form.status.innerHTML;
 
 }
