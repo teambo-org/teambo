@@ -23,7 +23,6 @@ Teambo.schema = (function(t){
         break;
       }
       if(r === 'type' && type !== rules[r]) {
-        console.log(key, rules[r]);
         errs.push(key + " does not match expected type: " + rules[r]);
         break;
       }
