@@ -24,6 +24,9 @@ Teambo.model.plan = (function(t){
       item_count_incomplete: function() {
         return self.item_list_incomplete().length;
       },
+      progress: function() {
+        return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
+      },
       parentModel: function() {
         return model.get(self.opts.parid);
       },
@@ -33,6 +36,9 @@ Teambo.model.plan = (function(t){
       },
       url: function() {
         return '/'+t.team.current.id+'/plan/'+self.id;
+      },
+      icon: function() {
+        return 'flag-filled';
       }
     });
   };

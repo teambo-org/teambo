@@ -21,23 +21,31 @@
     <div class="up4c up4c3b">
         <section class="tags">
             <ul>
+                {{#bucket}}
                 <li class="milestone section">
-                    <a href="#{{#bucket}}{{url}}{{/bucket}}">
-                        <div class="img"><i class="icon-folder"></i></div>
-                        <div class="name">{{#bucket}}{{opts.name}}{{/bucket}}</div>
+                    <a href="#{{url}}">
+                        <div class="img"><i class="icon-{{icon}}"></i></div>
+                        <div class="name">{{opts.name}}</div>
                     </a>
                 </li>
+                {{/bucket}}
+                {{#plan}}
+                <li class="user section">
+                    <a>
+                        <div class="img"><i class="icon-{{icon}}"></i></div>
+                        <div class="name">{{opts.name}}</div>
+                    </a>
+                </li>
+                {{/plan}}
+                {{#status}}
                 <li class="state section">
                     <a>
-                    {{#status}}
-                    <!--
-                        <i class="icon-down-open-1 nav"></i>
-                    -->
+                        <!-- <i class="icon-down-open-1 nav"></i> -->
                         <div class="img"><i class="icon-{{icon}}"></i></div>
                         <div class="name">{{label}}</div>
-                    {{/status}}
                     </a>
                 </li>
+                {{/status}}
                 <li class="user section">
                     <a>
                         <div class="img"><i class="icon-user-1"></i></div>
@@ -69,7 +77,7 @@
                     </div>
                     <a>
                         <div class="img"><i class="icon-user-1"></i></div>
-                        <div class="name">{{opts.mid}}<span class="date">{{#localTime}}{{ts}}{{/localTime}}</span></div>
+                        <div class="name">{{opts.mid}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
                     </a>
                 </div>
                 <div class="message">{{opts.text}}</div>

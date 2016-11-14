@@ -8,8 +8,8 @@ Teambo.model.comment = (function(t){
       parentModel: function() {
         return t.model[self.opts.ptype].get(self.opts.pid);
       },
-      ts: function() {
-        var h = self.hist.slice(-1)[0];
+      created: function() {
+        var h = self.hist[0];
         return h ? h.ts : null;
       },
       url: function() {
