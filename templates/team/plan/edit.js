@@ -9,7 +9,7 @@ function(t){
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = form.values(['name', 'desc']);
+    var data = form.values(['name', 'desc', 'start', 'end']);
     plan.update(data, true).then(function(plan){
       t.view.updateSideNav();
       t.gotoUrl(plan.url());
@@ -18,5 +18,8 @@ function(t){
       form.error.msg("Plan could not be saved", "Please try again");
     });
   });
+
+  t.view.calendar.init('plan_start');
+  t.view.calendar.init('plan_end');
 
 }

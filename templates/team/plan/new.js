@@ -7,7 +7,7 @@ function(t){
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = form.values(['name', 'description', 'plan_id']);
+    var data = form.values(['name', 'description', 'start', 'end']);
     t.model.plan.create(data).then(function(plan){
       t.view.updateSideNav();
       t.gotoUrl(plan.url());
@@ -16,5 +16,8 @@ function(t){
       form.error.msg("Plan could not be created", "Please try again");
     });
   });
+  
+  t.view.calendar.init('plan_start');
+  t.view.calendar.init('plan_end');
 
 }

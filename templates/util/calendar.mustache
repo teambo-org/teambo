@@ -1,0 +1,26 @@
+<table data-active="{{active}}" data-today="{{today}}">
+    <tr class="nav">
+        <th colspan="7">
+            <a class="prev nav" data-month="{{next}}"><i class="icon-angle-left"></i></a>
+            <span>{{month}} {{year}}</span>
+            <a class="next nav" data-month="{{prev}}"><i class="icon-angle-right"></i></a>
+        </th>
+    </tr>
+    <tr class="days">
+        {{#days}}
+        <td>{{.}}</td>
+        {{/days}}
+    </tr>
+    {{#weeks}}
+    <tr class="week">
+        {{#.}}
+            {{#.}}
+            <td><a class="day hi-05" data-date="{{iso}}">{{n}}</a></td>
+            {{/.}}
+            {{^.}}
+            <td></td>
+            {{/.}}
+        {{/.}}
+    </tr>
+    {{/weeks}}
+</table>

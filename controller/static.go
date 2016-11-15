@@ -60,7 +60,7 @@ func compile_js(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
 	w.Header().Set("Content-Type", mime.TypeByExtension(".js"))
-	for _, v := range js {
+	for _, v := range jsapp {
 		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, w)
 	}

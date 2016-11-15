@@ -56,7 +56,9 @@ Teambo.form = (function(t){
         autofilter_cache[cacheKey] = data;
         var els = form.querySelectorAll('select');
         [].forEach.call(els, function(el, i) {
-          el.value = data[el.name];
+          if(el.name in data) {
+            el.value = data[el.name];
+          }
           tar.classList.add('filter-' + el.name + '-' + el.value);
           el.addEventListener('change', function() {
             t.event.once('nav', function() {
@@ -73,6 +75,8 @@ Teambo.form = (function(t){
           t.team.findCached(cacheKey).then(function(val) {
             if(val) {
               filter(val);
+            } else {
+              filter(data);
             }
           });
         }

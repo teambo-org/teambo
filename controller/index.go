@@ -21,7 +21,9 @@ import (
 )
 
 type Page struct {
-	JS       []string
+	JSLIB    []string
+	JSAPP    []string
+	JSASYNC  []string
 	JSINIT   []string
 	CSS      []string
 	AUDIO    []string
@@ -31,18 +33,18 @@ type Page struct {
 	DEBUG    bool
 }
 
-var js = []string{
+var jslib = []string{
 	"/js/lib/sjcl.js",
 	"/js/lib/jsuri-1.1.1.js",
 	"/js/lib/fastclick.js",
-	// "/js/lib/mustache.2.2.1.min.js",
 	"/js/lib/mustache.2.2.1.js",
 	"/js/lib/localforage.min.js",
 	"/js/lib/promise-7.0.4.min.js",
 	"/js/lib/classList.js",
 	"/js/lib/polyfills.js",
 	"/js/lib/color.js",
-	// "/js/lib/zxcvbn.js",
+}
+var jsapp = []string{
 	"/js/t.js",
 	"/js/t.crypto.js",
 	"/js/t.event.js",
@@ -60,11 +62,15 @@ var js = []string{
 	"/js/t.offline.js",
 	"/js/t.team.js",
 	"/js/t.model.js",
-	"/js/t.model.comment.js",
-	"/js/t.model.bucket.js",
-	"/js/t.model.item.js",
-	"/js/t.model.plan.js",
 	"/js/t.keybind.js",
+	"/js/view/calendar.js",
+	"/js/model/comment.js",
+	"/js/model/bucket.js",
+	"/js/model/item.js",
+	"/js/model/plan.js",
+}
+var jsasync = []string{
+	"/js/lib/zxcvbn.js",
 }
 var jsinit = []string{
 	"/init.js",
@@ -94,7 +100,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	p := Page{}
 	if util.Config("static.min") == "true" && min != "0" {
 		p = Page{
-			JS:       []string{"/min.js?v=" + js_min_version()},
+			JSLIB:    jslib,
+			JSASYNC:  jsasync,
+			JSAPP:    []string{"/min.js?v=" + js_min_version(jsapp)},
 			JSINIT:   []string{},
 			CSS:      []string{"/min.css?v=" + css_min_version()},
 			DEBUG:    util.Config("debug") == "true",
@@ -102,7 +110,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		p = Page{
-			JS:       hash_version(js),
+			JSLIB:    hash_version(jslib),
+			JSAPP:    hash_version(jsapp),
+			JSASYNC:  hash_version(jsasync),
 			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
 			CSS:      hash_version(css),
 			DEBUG:    util.Config("debug") == "true",
@@ -179,21 +189,25 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 	p := Page{}
 	if util.Config("static.min") == "true" {
 		p = Page{
-			JS:     []string{"/min.js?v=" + js_min_version()},
-			JSINIT: []string{},
-			CSS:    []string{"/min.css?v=" + css_min_version()},
-			AUDIO:  find_audio(),
-			IMAGE:  find_images(),
-			FONT:   find_fonts(),
+			JSLIB:   hash_version(jslib),
+			JSASYNC: hash_version(jsasync),
+			JSAPP:   []string{"/min.js?v=" + js_min_version(jsapp)},
+			JSINIT:  []string{},
+			CSS:     []string{"/min.css?v=" + css_min_version()},
+			AUDIO:   find_audio(),
+			IMAGE:   find_images(),
+			FONT:    find_fonts(),
 		}
 	} else {
 		p = Page{
-			JS:     hash_version(js),
-			JSINIT: []string{"/init.js?v=" + jsinit_version()},
-			CSS:    hash_version(css),
-			AUDIO:  find_audio(),
-			IMAGE:  find_images(),
-			FONT:   find_fonts(),
+			JSLIB:    hash_version(jslib),
+			JSAPP:    hash_version(jsapp),
+			JSASYNC:  hash_version(jsasync),
+			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
+			CSS:      hash_version(css),
+			AUDIO:    find_audio(),
+			IMAGE:    find_images(),
+			FONT:     find_fonts(),
 		}
 	}
 	var b bytes.Buffer
@@ -297,7 +311,7 @@ func css_min_version() string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func js_min_version() string {
+func js_min_version(js []string) string {
 	hasher := md5.New()
 	hasher.Write([]byte("(function(){"))
 	for _, v := range js {
@@ -368,13 +382,13 @@ func find_images() []string {
 
 func find_fonts() []string {
 	dir := "assets" + string(os.PathSeparator) + "font"
-	images := []string{}
+	files := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {
-			images = append(images, strings.TrimPrefix(path, dir+string(os.PathSeparator)))
+			files = append(files, strings.TrimPrefix(path, dir+string(os.PathSeparator)))
 		}
 		return nil
 	}
 	filepath.Walk(dir, scan)
-	return images
+	return files
 }

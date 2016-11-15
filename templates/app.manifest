@@ -2,7 +2,11 @@ CACHE MANIFEST
 
 CACHE:
 
-{{range .JS}}{{.}}
+{{range .JSLIB}}{{.}}
+{{end}}
+{{range .JSASYNC}}{{.}}
+{{end}}
+{{range .JSAPP}}{{.}}
 {{end}}{{range .JSINIT}}
 {{.}}
 {{end}}

@@ -10,7 +10,7 @@ import (
 	// "fmt"
 )
 
-var tjs = append(js, []string{
+var tjs = append(jslib, []string{
 	"/js/lib/jasmine.2.5.js",
 	"/js/lib/jasmine-html.2.5.js",
 }...)
@@ -44,17 +44,21 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	p := Page{}
 	if util.Config("static.min") == "true" && min != "0" {
 		p = Page{
-			JS:     []string{"/min.js?v=" + js_min_version()},
-			JSINIT: []string{},
-			CSS:    []string{"/min.css?v=" + css_min_version()},
-			DEBUG:  util.Config("debug") == "true",
+			JSLIB:   hash_version(tjs),
+			JSASYNC: hash_version(jsasync),
+			JSAPP:   []string{"/min.js?v=" + js_min_version(jsapp)},
+			JSINIT:  []string{},
+			CSS:     []string{"/min.css?v=" + css_min_version()},
+			DEBUG:   util.Config("debug") == "true",
 		}
 	} else {
 		p = Page{
-			JS:     hash_version(tjs),
-			JSINIT: append([]string{"/init.js?v=" + jsinit_version()}, hash_version(tests)...),
-			CSS:    hash_version(tcss),
-			DEBUG:  util.Config("debug") == "true",
+			JSLIB:   hash_version(tjs),
+			JSASYNC: hash_version(jsasync),
+			JSAPP:   hash_version(jsapp),
+			JSINIT:  append([]string{"/init.js?v=" + jsinit_version()}, hash_version(tests)...),
+			CSS:     hash_version(tcss),
+			DEBUG:   util.Config("debug") == "true",
 		}
 	}
 

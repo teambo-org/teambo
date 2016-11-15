@@ -96,7 +96,7 @@ Teambo.view = (function(t){
       window.applicationCache.addEventListener('updateready', function(e) {
         if(window.applicationCache.status === window.applicationCache.UPDATEREADY
         || window.applicationCache.status === window.applicationCache.CHECKING) {
-          if(!t.moved() && !t.editing() && !t.team.current || !t.team.current.queue.processing) {
+          if(!t.moved() && !t.editing() && (!t.team.current || !t.team.current.queue || !t.team.current.queue.processing)) {
             t.reload();
           } else {
             t.updateReady(true);
@@ -110,7 +110,7 @@ Teambo.view = (function(t){
       window.applicationCache.addEventListener('error', function(e) {
         t.online(false);
       }, false);
-      var startCacheCheck = function() {
+      var startCacheCheck = function() { 
         if(!t.updateReady()) {
           setTimeout(function(){
             window.applicationCache.update();

@@ -108,4 +108,12 @@
 #dashboard .main .filter-status-{{key}} .status-{{key}} { display: block; }
 {{/item.statuses}}
 
+#date_selector { background: rgba({{main.bg}}, 1); color: rgba({{main.color}}, 0.7); }
+#date_selector a { color: rgba({{main.color}}, 0.8); }
+#date_selector a.active { color: rgba({{main.color}}, 0.9); background: rgba({{main.hi}}, 0.15); }
+#date_selector a.today { color: rgba({{main.color}}, 0.9); background: rgba({{main.color}}, 0.1); }
+#date_selector a:hover { color: rgba({{main.color}}, 0.9); background: rgba({{main.hi}}, 0.15); text-decoration: none; }
+#date_selector .hi-05 { background: rgba({{main.hi}}, 0.05); }
+#date_selector .hi-10 { background: rgba({{main.hi}}, 0.10); }
+
 {{/team.theme}}

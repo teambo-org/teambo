@@ -80,6 +80,12 @@ form.std textarea.text { border: none; padding: 0.4em 0.5em; width: 20em; font-s
 form.std input.large,
 form.std textarea.large,
 form.std select.large { width: 24em; }
+form.std input.small,
+form.std textarea.small,
+form.std select.small { width: 12em; }
+form.std input.date,
+form.std textarea.date,
+form.std select.date { width: 6em; }
 form.std textarea.large { height: 8em; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; opacity: 0.5; }
@@ -121,6 +127,13 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .external form.ext.std #status.offline { position: absolute; right: 0; top: -1.7em; padding: 0.2em 0.6em 0; line-height: 1.6em; 
     background: rgba(0,0,0,0.1); text-transform: uppercase; font-size: 0.8em; }
 .external form.ext.std #status.online { display: none; }
+
+#date_selector { position: absolute; z-index: 1000; padding: 0.2em; }
+#date_selector tr.days td { font-size: 0.8em; text-align: center; }
+#date_selector a { line-height: 1.5em; min-width: 1.8em; display: block; text-align: center; font-size: 0.9em; }
+#date_selector a.prev,
+#date_selector a.next { float: left; }
+#date_selector a.next { float: right; }
 
 .logo { background-image: url('/i/logo.svg'); background-repeat: no-repeat; background-size: 100%; }
 #logo { opacity: 0.2; width: 11em; height: 11em; margin: 2em auto; }

@@ -1,11 +1,8 @@
 <div class="plan-view bucket-view" require-model="plan">
 {{#plan.current}}
     <nav>
-    {{^fake}}
         <a href="#{{url}}/remove" data-keybind="r">Remove</a>
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
-    {{/fake}}
-        <a href="#{{url}}/new" data-keybind="c">Create Item</a>
     </nav>
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
