@@ -16,6 +16,8 @@ function(t){
     submit();
   });
   
+  t.view.autoselect.init('#main .autoselect', t.model.item.current);
+  
   t.view.on('item-removed', function(e) {
     if(e.id == t.model.item.current.id) {
       t.gotoUrl((t.model.bucket.current || t.team.current).url());

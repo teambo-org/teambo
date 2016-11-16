@@ -135,6 +135,12 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 #date_selector a.next { float: left; }
 #date_selector a.next { float: right; }
 
+.autoselect { position: relative; }
+.autoselect .options { position: absolute; top: 0; left: 0; display: none; width: 100%; z-index: 1000; background: black; }
+.autoselect.open .trigger { display: none; }
+.autoselect.open .options { display: block; }
+#dashboard .main .autoselect .trigger:focus { outline: none; }
+
 .logo { background-image: url('/i/logo.svg'); background-repeat: no-repeat; background-size: 100%; }
 #logo { opacity: 0.2; width: 11em; height: 11em; margin: 2em auto; }
 @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }

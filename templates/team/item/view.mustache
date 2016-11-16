@@ -31,19 +31,27 @@
                 {{/bucket}}
                 {{#plan}}
                 <li class="user section">
-                    <a>
+                    <a href="#{{url}}">
                         <div class="img"><i class="icon-{{icon}}"></i></div>
                         <div class="name">{{opts.name}}</div>
                     </a>
                 </li>
                 {{/plan}}
                 {{#status}}
-                <li class="state section">
-                    <a>
-                        <!-- <i class="icon-down-open-1 nav"></i> -->
+                <li class="state section autoselect" data-opt="status">
+                    <a href="#{{url}}/edit" class="trigger">
+                        <i class="icon-down-open-1 nav"></i>
                         <div class="img"><i class="icon-{{icon}}"></i></div>
                         <div class="name">{{label}}</div>
                     </a>
+                    <div class="options">
+                    {{#item.statuses}}
+                        <a data-value="{{key}}">
+                            <div class="img"><i class="icon-{{icon}}"></i></div>
+                            <div class="name">{{label}}</div>
+                        </a>
+                    {{/item.statuses}}
+                    </div>
                 </li>
                 {{/status}}
                 <li class="user section">

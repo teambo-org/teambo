@@ -158,12 +158,14 @@
 #dashboard .main nav.breadcrumbs a,
 #dashboard .main nav.breadcrumbs span { float: none; display: inline-block; padding: 0 1em; line-height: 2em; font-size: 1.0em; float: left; }
 
-#dashboard .left .section { font-size: 0.9em; }
+#dashboard .left .section { font-size: 1em; }
 #dashboard .left a.nav-section { font-weight: 500; }
-#dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 1.8em; left: 0; right: 0; bottom: 2em; }
+#dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 2em; }
 
-#dashboard .side .subsection i { opacity: 0.6; }
-#dashboard .side .bucket i { opacity: 0.6; }
+#dashboard .side .subsection { font-size: 0.9em; }
+#dashboard .side .subsection i { opacity: 0.3; }
+#dashboard .side .subsection .img { background: none; }
+#dashboard .side .subsection .name { margin: 0; padding: 0; }
 #dashboard .side .bucket.active i { opacity: 1; }
 #dashboard .side .bucket .icon-folder-open { display: none; }
 #dashboard .side .bucket.active .icon-folder { display: none; }

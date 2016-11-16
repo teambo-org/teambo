@@ -64,6 +64,7 @@ var jsapp = []string{
 	"/js/t.model.js",
 	"/js/t.keybind.js",
 	"/js/view/calendar.js",
+	"/js/view/autoselect.js",
 	"/js/model/comment.js",
 	"/js/model/bucket.js",
 	"/js/model/item.js",

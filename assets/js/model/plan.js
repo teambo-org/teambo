@@ -38,7 +38,7 @@ Teambo.model.plan = (function(t){
         return '/'+t.team.current.id+'/plan/'+self.id;
       },
       icon: function() {
-        return 'flag-filled';
+        return 'flag-1';
       }
     });
   };
