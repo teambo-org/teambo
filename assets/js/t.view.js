@@ -91,6 +91,8 @@ Teambo.view = (function(t){
   var init = function(opts) {
     templates = opts.templates;
     template_js = opts.template_js;
+    
+    obj.model = t.model;
 
     if(window.applicationCache.status !== 0) {
       window.applicationCache.addEventListener('updateready', function(e) {

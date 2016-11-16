@@ -1,5 +1,5 @@
 <div class="bucket-view" require-model="bucket">
-{{#bucket.current}}
+{{#model.bucket.current}}
     <nav>
     {{^fake}}
         <a href="#{{url}}/remove" data-keybind="r">Remove</a>
@@ -52,5 +52,5 @@
     {{^item_list}}
     <p class="empty">This bucket has no items.</p>
     {{/item_list}}
-{{/bucket.current}}
+{{/model.bucket.current}}
 </div>

@@ -1,5 +1,5 @@
 <div class="plan-view bucket-view" require-model="plan">
-{{#plan.current}}
+{{#model.plan.current}}
     <nav>
         <a href="#{{url}}/remove" data-keybind="r">Remove</a>
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
@@ -49,5 +49,5 @@
     {{^item_list}}
     <p class="empty">This plan has no items.</p>
     {{/item_list}}
-{{/plan.current}}
+{{/model.plan.current}}
 </div>

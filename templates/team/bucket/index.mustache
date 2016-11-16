@@ -12,15 +12,23 @@
             <select name="status" class="text">
                 <option value="">All</option>
                 <option value="incomplete" selected="selected">Incomplete</option>
-                {{#item.statuses}}
+                {{#model.item.statuses}}
                 <option value="{{key}}">{{label}}</option>
-                {{/item.statuses}}
+                {{/model.item.statuses}}
             </select>
+            <!--
+            <select name="plan_id" class="text">
+                <option value="">All</option>
+                {{#model.plan.all}}
+                <option value="{{id}}">{{opts.name}}</option>
+                {{/model.plan.all}}
+            </select>
+            -->
         </form>
     </nav>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="buckets" id="buckets">
-    {{#bucket.list}}
+    {{#model.bucket.list}}
     <li class="bucket hi-10 up3c" id="bucket-li-{{id}}">
         <a href="#{{url}}" class="hi-05">
             <i class="icon-folder"></i>
@@ -30,7 +38,7 @@
         </a>
         <ul class="items">
         {{#item_list}}
-            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+            <li class="item status-{{opts.status}} plan_id-{{opts.plan_id}}" id="item-li-{{id}}">
                 <a href="#{{url}}" title="{{opts.status}}" class="dim">
                     {{#status}}
                     <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
@@ -41,9 +49,9 @@
         {{/item_list}}
         </ul>
     </li>
-    {{/bucket.list}}
-    {{^bucket.list}}
+    {{/model.bucket.list}}
+    {{^model.bucket.list}}
     <p class="empty">Team has no buckets</p>
-    {{/bucket.list}}
+    {{/model.bucket.list}}
     </ul>
 </div>

@@ -5,14 +5,14 @@
     </a>
 </div>
 <div class="workload scrollable">
-    {{#bucket.list}}
+    {{#plan.all}}
     <div class="section">
         <i class="icon-minus nav"></i>
         <div class="totals">
             {{item_count}}
         </div>
-        <a href="#{{url}}" class="hi-10 bucket {{active}}" data-obj="bucket-{{id}}">
-            <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
+        <a href="#{{url}}" class="hi-10 bucket {{active}}" data-obj="plan-{{id}}">
+            <div class="img"><i class="icon-{{icon}}"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress hi-15" data-progress="{{progress}}"></div>
         </a>
@@ -26,6 +26,6 @@
         </ul>
         {{/item_count_incomplete}}
     </div>
-    {{/bucket.list}}
+    {{/plan.all}}
 </div>
 <div class="call"></div>
