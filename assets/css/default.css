@@ -86,6 +86,9 @@ form.std select.small { width: 12em; }
 form.std input.date,
 form.std textarea.date,
 form.std select.date { width: 6em; }
+form.std input.full,
+form.std textarea.full,
+form.std select.full { width: 100%; box-sizing: border-box; }
 form.std textarea.large { height: 8em; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; opacity: 0.5; }

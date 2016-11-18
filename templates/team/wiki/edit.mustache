@@ -1,0 +1,25 @@
+<div class="wiki-edit" require-model="wiki">
+{{#model.wiki.current}}
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{team.url}}/wiki">Wiki</a>
+        <a href="#{{url}}" data-keybind="q escape `">Page</a>
+        <span>Edit</span>
+    </nav>
+    <h1><i class="icon-{{icon}}"></i> {{opts.title}}</h1>
+    <form id="wiki-edit" name="wiki_edit" method="POST" class="std" data-wiki_id="{{id}}">
+        <div class="field">
+            <label for="wiki_title">Title</label>
+            <input id="wiki_title" type="text" class="text large required min-len-2" name="title" autocomplete="off" placeholder="Page Title" value="{{opts.title}}" />
+        </div>
+        <div class="field">
+            <textarea id="wiki_text" class="text large full" name="text">{{opts.text}}</textarea>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Save Changes" />
+            <a class="cancel" href="#{{url}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+{{/model.wiki.current}}
+</div>

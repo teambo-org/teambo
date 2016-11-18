@@ -1,0 +1,11 @@
+<ul class="children">
+{{#children}}
+    <li id="wiki-li-{{id}}">
+        <a href="#{{url}}">
+            <i class="icon-angle-right"></i>
+            <span class="name">{{opts.title}}</span>
+        </a>
+        {{>team/wiki/_children}}
+    </li>
+{{/children}}
+</ul>

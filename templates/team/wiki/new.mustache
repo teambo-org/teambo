@@ -1,0 +1,23 @@
+<div class="wiki-new">
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{team.url}}/wiki" data-keybind="q escape `">Wiki</a>
+        <span>New Page</span>
+    </nav>
+    <h1><i class="icon-book"></i> New Wiki Page</h1>
+    <form id="wiki-new" name="wiki_new" method="POST" class="std">
+        <input name="parid" type="hidden" value="{{wiki_id}}"/>
+        <div class="field">
+            <label for="wiki_title">Title</label>
+            <input id="wiki_title" type="text" class="text large required min-len-2" name="title" autocomplete="off" placeholder="Item Name" value="{{opts.title}}" />
+        </div>
+        <div class="field"> 
+            <textarea id="wiki_text" class="text large full" name="text">{{opts.text}}</textarea>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Create Page" />
+            <a class="cancel" href="#{{#model.wiki.current}}{{url}}{{/model.wiki.current}}{{^model.wiki.current}}{{team.url}}/wiki{{/model.wiki.current}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>

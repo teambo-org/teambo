@@ -13,13 +13,13 @@
         </a>
     </div>
     <div class="section plans subsection">
-    {{#plan.all}}
+    {{#model.plan.all}}
         <a href="#{{url}}" class="bucket {{active}}" data-obj="plan-{{id}}">
             <div class="img"><i class="icon-flag-1"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress hi-10" data-progress="{{progress}}"></div>
         </a>
-    {{/plan.all}}
+    {{/model.plan.all}}
     </div>
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
@@ -29,37 +29,29 @@
         </a>
     </div>
     <div class="section buckets subsection">
-    {{#bucket.list}}
+    {{#model.bucket.list}}
         <a href="#{{url}}" class="bucket {{active}}" data-obj="bucket-{{id}}">
             <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress hi-10" data-progress="{{progress}}"></div>
         </a>
-    {{/bucket.list}}
+    {{/model.bucket.list}}
     </div>
     <div class="section hi-10">
-        <i class="icon-down-open-1 nav color-hi-40"></i>
-        <a href="#{{team.url}}/tags" class="nav-section">
+        <i class="icon-down-open-1 nav on color-hi-40"></i>
+        <a href="#{{team.url}}/wiki" class="nav-section">
             <div class="img"><i class="icon-book"></i></div>
             <div class="name">Wiki</div>
         </a>
     </div>
-    <!--
-    <div class="section hi-10">
-        <i class="icon-down-open-1 nav color-hi-40"></i>
-        <a href="#{{team.url}}/members" class="nav-section">
-            <div class="img"><i class="icon-database-1"></i></div>
-            <div class="name">Files</div>
+    <div class="section wiki subsection">
+    {{#model.wiki.top}}
+        <a href="#{{url}}" class="bucket {{active}}" data-obj="wiki-{{id}}">
+            <div class="img"><i class="icon-{{icon}}"></i></div>
+            <div class="name">{{opts.title}}</div>
         </a>
+    {{/model.wiki.top}}
     </div>
-    <div class="section hi-10">
-        <i class="icon-down-open-1 nav color-hi-40"></i>
-        <a href="#{{team.url}}/members" class="nav-section">
-            <div class="img"><i class="icon-lock-open-alt"></i></div>
-            <div class="name">Vault</div>
-        </a>
-    </div>
-    -->
     <div class="section hi-10">
         <i class="icon-down-open-1 nav color-hi-40"></i>
         <a href="#{{team.url}}/members" class="nav-section">

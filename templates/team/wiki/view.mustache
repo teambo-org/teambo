@@ -1,0 +1,79 @@
+<div class="wiki" require-model="wiki">
+{{#model.wiki.current}}
+    <nav>
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
+        <a href="#{{url}}/new" data-keybind="c">Create Page</a>
+    </nav>
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{team.url}}/wiki" data-keybind="q escape `">Wiki</a>
+        <span>Page</span>
+    </nav>
+    
+    <h1><i class="icon-{{icon}}"></i> {{opts.title}}</h1>
+    <div class="up4c3">
+    {{#opts.text}}
+        <section class="description color-bg" role="main">
+            {{#nl2br}}{{#linkify}}{{opts.text}}{{/linkify}}{{/nl2br}}
+        </section>
+    {{/opts.text}}
+    </div><div class="up4c up4c3b">
+        <section class="tags">
+            <ul>
+            {{#parents}}
+                <li class="section parent">
+                    <a href="#{{url}}">
+                        <i class="icon-down-open-1 nav color-hi-40"></i>
+                        <div class="img"><i class="icon-angle-up"></i></div>
+                        <div class="name">{{opts.title}}</div>
+                    </a>
+                </li>
+            {{/parents}}
+            {{#siblings}}
+                <li class="section sibling">
+                    <a href="#{{url}}" class="{{#active}}hi-10 active{{/active}}">
+                        <div class="img"><i class="icon-{{icon}}"></i></div> 
+                        <div class="name">{{opts.title}}</div>
+                    </a>
+                </li>
+                {{#active}}
+                {{#children}}
+                <li class="section child">
+                    <a href="#{{url}}">
+                        <div class="img"><i class="icon-angle-right"></i></div>
+                        <div class="name">{{opts.title}}</div>
+                    </a>
+                </li>
+                {{/children}}
+                {{/active}}
+            {{/siblings}}
+            </ul>
+        </section>
+    </div>
+    <section class="history up1c"><div class="c">
+        <h2><i class="icon-clock"></i> History</h2>
+        <ul class="history">
+        {{#hist}}
+            <li data-iv="{{iv}}" class="hi-05 color-50">
+                <div class="hi-05 color-70 section">
+                    <div class="img"><i class="icon-user-1"></i></div>
+                    <div class="name">Kev<span class="date">{{#localTime}}{{ts}}{{/localTime}}</span></div>
+                </div>
+                <div class="diff">
+                    {{#diff.parid}}
+                    <div class="parid"><span class="k">Parent</span> changed to <span class="value color-70">{{diff.parid}}</span></div>
+                    {{/diff.parid}}
+                    {{#diff.title}}
+                    <div class="title"><span class="k">Title</span> changed to <span class="value color-70">{{diff.title}}</span></div>
+                    {{/diff.title}}
+                    {{#diff.text}}
+                    <div class="text"><span class="k">Text</span> changed to <span class="value color-70">{{diff.title}}</span></div>
+                    {{/diff.text}}
+                </div>
+            </li>
+        {{/hist}}
+        </ul>
+    </div></section>
+{{/model.wiki.current}}
+</div>

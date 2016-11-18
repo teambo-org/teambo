@@ -1,0 +1,24 @@
+<div class="wiki-index">
+    <nav>
+        <a href="#{{team.url}}/wiki/new" data-keybind="c">Create Page</a>
+    </nav>
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
+        <span class="active">Wiki</span>
+    </nav>
+    <h1><i class="icon-book"></i> Wiki</h1>
+    <ul class="wiki">
+    {{#model.wiki.top}}
+        <li id="wiki-li-{{id}}">
+            <a href="#{{url}}">
+                <i class="icon-book"></i>
+                <span class="name">{{opts.title}}</span>
+            </a>
+            {{>team/wiki/_children}}
+        </li>
+    {{/model.wiki.top}}
+    {{^model.wiki.top}}
+        <p class="empty">Team has no wiki pages</p>
+    {{/model.wiki.top}}
+    </ul>
+</div>

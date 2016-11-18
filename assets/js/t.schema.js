@@ -30,7 +30,7 @@ Teambo.schema = (function(t){
         errs.push(key + " is required and is not present.");
         break;
       }
-      if(r === 'minLength' || r === 'maxLength') {
+      if(r === 'minLength' || r === 'maxLength' && !(rules['empty'] && !prop)) {
         if(type !== 'string' && type !== 'array') {
           errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by " + r);
           break;

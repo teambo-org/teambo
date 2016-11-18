@@ -476,7 +476,6 @@ Teambo.model = (function(t){
               m.update(e.opts, true).then(function(new_m) {
                 e[model.type] = new_m;
                 t.view.emit(model.type+'-updated', e);
-                // TODO : move updateSideNav someplace else or replace it with something better to avoid duplicate calls
                 t.view.updateSideNav();
                 fulfill();
               }).catch(function(e) {
@@ -499,7 +498,6 @@ Teambo.model = (function(t){
             m.remove().then(function() {
               e[model.type] = m;
               t.view.emit(model.type+'-removed', e);
-              // TODO : move updateSideNav someplace else or replace it with something better to avoid duplicate calls
               t.view.updateSideNav();
               fulfill();
             }).catch(function(e) {

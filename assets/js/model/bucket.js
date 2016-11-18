@@ -31,7 +31,7 @@ Teambo.model.bucket = (function(t){
         return '/'+t.team.current.id+'/'+self.id;
       },
       icon: function() {
-        return self.active ? 'folder-open' : 'folder';
+        return self.active() ? 'folder-open' : 'folder';
       }
     });
   };

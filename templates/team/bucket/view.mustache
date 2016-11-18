@@ -26,10 +26,17 @@
                     {{#status}}
                     <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
                     {{/status}}
+                    {{#plan}}
+                    <span class="plan color-50">
+                        <i class="icon-{{icon}}"></i> {{opts.name}}<br/>
+                    </span>
+                    {{/plan}}
                     <span class="name">{{opts.name}}</span>
                 </a>
                 {{#opts.description}}
-                <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
+                <p class="description color-50">
+                    {{#nl2br}}{{.}}{{/nl2br}}
+                </p>
                 {{/opts.description}}
             </li>
         {{/item_list_incomplete}}

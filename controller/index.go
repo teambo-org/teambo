@@ -65,10 +65,12 @@ var jsapp = []string{
 	"/js/t.keybind.js",
 	"/js/view/calendar.js",
 	"/js/view/autoselect.js",
+	"/js/view/autofilter.js",
 	"/js/model/comment.js",
 	"/js/model/bucket.js",
 	"/js/model/item.js",
 	"/js/model/plan.js",
+	"/js/model/wiki.js",
 }
 var jsasync = []string{
 	"/js/lib/zxcvbn.js",
