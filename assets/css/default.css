@@ -200,7 +200,7 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 @media (max-width: 1259px) {
     #dashboard .main section.tags { width: 100%; float: left; }
     #dashboard .main section.tags ul { width: 100%; float: left; }
-    #dashboard .main section.tags ul li { width: 49%; float: left; clear: none; }
+    #dashboard .main section.tags ul li { width: 50%; float: left; clear: none; }
     #dashboard .main section.tags ul li:nth-child(2n) { float: right; }
 }
 

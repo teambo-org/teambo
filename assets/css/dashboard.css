@@ -144,7 +144,7 @@
 #dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; }
 
 #dashboard .main ul.buckets ul.items { padding: 0.5em; font-size: 0.8em; }
-#dashboard .main ul.items.complete { opacity: 0.7; }
+#dashboard .main ul.items.complete { opacity: 0.7; padding: 0.5em 0.5em 0.2em; }
 #dashboard .main ul.buckets ul.items li span.name { margin-left: 1.6em; }
 #dashboard .main ul.buckets ul.items li a { padding: 0.3em 0.2em; }
 #dashboard .main ul.buckets ul.items i.plan-icon { float: right; margin-left: 0.1em; opacity: 0.5; }
