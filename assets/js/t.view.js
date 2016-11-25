@@ -229,13 +229,6 @@ Teambo.view = (function(t){
     }
   };
 
-  var progress = function(selector) {
-    var els = document.querySelectorAll(selector);
-    for(var i = 0; els[i]; i++) {
-      els[i].style.width = Math.abs(100-parseFloat(els[i].dataset.progress)) + "%";
-    }
-  };
-
   var view = {
     init: init,
     render: render,
@@ -255,8 +248,7 @@ Teambo.view = (function(t){
     obj: obj,
     updateTheme:   update_theme,
     updateSideNav: updateSideNav,
-    updateStatus:  updateStatus,
-    progress: progress
+    updateStatus:  updateStatus
   };
 
   t.event.extend(view);

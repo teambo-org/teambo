@@ -1,14 +1,14 @@
 <div class="wiki" require-model="wiki">
 {{#model.wiki.current}}
-    <nav>
-        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
-        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
-        <a href="#{{url}}/new" data-keybind="c">Create Page</a>
-    </nav>
     <nav class="breadcrumbs">
         <a href="#{{team.url}}">Team</a>
         <a href="#{{team.url}}/wiki" data-keybind="q escape `">Wiki</a>
         <span>Page</span>
+    </nav>
+    <nav>
+        <a href="#{{url}}/remove" data-keybind="r"><i class="icon-trash"></i> <span class="name">Remove</span></a>
+        <a href="#{{url}}/edit" data-keybind="e"><i class="icon-edit"></i> <span class="name">Edit</span></a>
+        <a href="#{{url}}/new" data-keybind="c"><i class="icon-plus-1"></i> <span class="name">New Page</span></a>
     </nav>
     
     <h1><i class="icon-{{icon}}"></i> {{opts.title}}</h1>

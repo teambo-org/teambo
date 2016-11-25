@@ -83,7 +83,7 @@
 #dashboard .main .area { margin-left: 12em; height: 100%; position: relative; overflow-y: scroll; padding: 0; }
 #dashboard .main .area .content { padding: 1em; }
 
-#dashboard .main h1 { margin-bottom: 0.5em; position: relative; padding-left: 1.65em; }
+#dashboard .main h1 { margin-bottom: 0.5em; position: relative; padding-left: 1.65em; clear: both; }
 #dashboard .main h1 i { position: absolute; left: 0; }
 
 #dashboard .main .item p { margin: 0; }
@@ -161,9 +161,10 @@
 #dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em;  }
 
 #dashboard .main .dash ul.buckets ul.items li { list-style: none; }
-#dashboard .main nav { float: right; margin-top: 0.5em; }
-#dashboard .main nav a { float: left; padding: 0 1em; line-height: 2em; }
-#dashboard .main nav.breadcrumbs { float: none; margin: -1.1em 0 1em -1.1em; height: 2em; font-size: 0.9em; }
+#dashboard .main nav { float: right; margin: -0.5em -0.5em 0 0; }
+#dashboard .main nav a { float: left; padding: 0 0.75em; line-height: 2em; }
+#dashboard .main nav .name { display: none; }
+#dashboard .main nav.breadcrumbs { float: left; margin: -1em 0 1em -1em; height: 2em; }
 #dashboard .main nav.breadcrumbs a,
 #dashboard .main nav.breadcrumbs span { float: none; display: inline-block; padding: 0 1em; line-height: 2em; font-size: 1.0em; float: left; }
 
@@ -187,7 +188,7 @@
 #dashboard .main section.history h2 { margin-bottom: 0.5em; }
 #dashboard .main ul.history { padding: 0; }
 #dashboard .main ul.history li { list-style: none; margin-bottom: 0.5em; }
-#dashboard .main .item .name span.date { display: inline-block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; }
+#dashboard .main .history span.date { display: inline-block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; }
 #dashboard .main ul.history li div.diff { font-size: 0.9em; padding: 0.5em; }
 
 #dashboard .main .filter-status-incomplete .status-complete { display: none; }
@@ -200,6 +201,7 @@ form.std.remove p { text-align: center; }
 @media (max-width: 600px) {
     #dashboard .right { width: 2em; }
     #dashboard .main { right: 2em; }
+    #dashboard .chat { right: 2em; }
 }
 /* < 900 */
 @media (max-width: 900px) {
@@ -209,7 +211,7 @@ form.std.remove p { text-align: center; }
     #dashboard .main div.left .section { font-size: 1em; }
     #dashboard .main div.left .name { display: none; }
     #dashboard .main div.left i.nav { display: none; }
-    #dashboard .main div.left .section.buckets { display: none; }
+    #dashboard .main div.left .subsection { display: none; }
     #dashboard .chat .nav { width: 2em; }
     #dashboard .chat .nav ul.channels li a { display: block; padding: 0; width: 2em; text-align: center; }
     #dashboard .chat .nav ul.channels .name { display: none; }

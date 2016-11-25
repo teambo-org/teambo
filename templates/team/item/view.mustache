@@ -1,15 +1,14 @@
 <div class="item" require-model="bucket item">
 {{#model.item.current}}
-    <nav>
-        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
-        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
-    </nav>
     <nav class="breadcrumbs">
         <a href="#{{team.url}}">Team</a>
         <a href="#{{#bucket}}{{url}}{{/bucket}}" data-keybind="q escape `">Bucket</a>
         <span>Item</span>
     </nav>
-    
+    <nav>
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
+    </nav>
     <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
     <div class="up4c3">
     {{#opts.description}}
@@ -40,17 +39,10 @@
                 {{/status}}
                 <li class="state section autoselect" data-opt="bucket_id">
                     {{#bucket}}
-                    <a href="#{{url}}/edit" class="trigger">
+                    <a href="#{{url}}/edit" class="trigger {{#fake}}color-30{{/fake}}">
                         <i class="icon-down-open-1 nav color-hi-40"></i>
                         <div class="img"><i class="icon-{{icon}}"></i></div>
                         <div class="name">{{opts.name}}</div>
-                    </a>
-                    {{/bucket}}
-                    {{^bucket}}
-                    <a href="#{{url}}" class="trigger">
-                        <i class="icon-down-open-1 nav color-hi-40"></i>
-                        <div class="img"><i class="icon-folder"></i></div>
-                        <div class="name">(none)</div>
                     </a>
                     {{/bucket}}
                     <div class="options">
@@ -75,7 +67,7 @@
                     </a>
                     {{/plan}}
                     {{^plan}}
-                    <a href="#{{url}}" class="trigger">
+                    <a href="#{{url}}" class="trigger color-30">
                         <i class="icon-down-open-1 nav"></i>
                         <div class="img"><i class="icon-flag-1"></i></div>
                         <div class="name">(none)</div>

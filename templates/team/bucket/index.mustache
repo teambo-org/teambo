@@ -1,31 +1,29 @@
 <div class="bucket-index" id="bucket-index">
-    <nav>
-        <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
-    </nav>
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
         <span class="active">Items</span>
     </nav>
-    <h1><div class="img"><i class="icon-folder"></i></div> Items</h1>
-    <nav class="up1c">
-        <form class="std horizontal color-bg" name="filter">
-            <select name="status" class="text">
-                <option value="">All</option>
-                <option value="incomplete" selected="selected">Incomplete</option>
-                {{#model.item.statuses}}
-                <option value="{{key}}">{{label}}</option>
-                {{/model.item.statuses}}
-            </select>
-            <!--
-            <select name="plan_id" class="text">
-                <option value="">All</option>
-                {{#model.plan.all}}
-                <option value="{{id}}">{{opts.name}}</option>
-                {{/model.plan.all}}
-            </select>
-            -->
-        </form>
+    <nav>
+        <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
     </nav>
+    <h1><div class="img"><i class="icon-folder"></i></div> Items</h1>
+    <form class="std horizontal color-bg" name="filter">
+        <select name="status" class="text">
+            <option value="">All</option>
+            <option value="incomplete" selected="selected">Incomplete</option>
+            {{#model.item.statuses}}
+            <option value="{{key}}">{{label}}</option>
+            {{/model.item.statuses}}
+        </select>
+        <!--
+        <select name="plan_id" class="text">
+            <option value="">All</option>
+            {{#model.plan.all}}
+            <option value="{{id}}">{{opts.name}}</option>
+            {{/model.plan.all}}
+        </select>
+        -->
+    </form>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="buckets" id="buckets">
     {{#model.bucket.list}}
