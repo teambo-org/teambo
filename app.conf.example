@@ -1,5 +1,6 @@
 env            dev
 debug          true
+app.procs      4
 app.host       dev.teambo.com
 app.data       /var/lib/teambo
 ssl.active     true

@@ -10,6 +10,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"runtime"
+	"strconv"
 )
 
 type Response map[string]interface{}
@@ -68,7 +70,12 @@ func main() {
 
 	config := util.ParseConfig(*config_path)
 
-	err := model.GlobalInit()
+	procs, err := strconv.Atoi(config["app.procs"])
+	if err != nil {
+		runtime.GOMAXPROCS(procs)
+	}
+
+	err = model.GlobalInit()
 	if err != nil {
 		log.Println(err.Error())
 		log.Fatal("Could not open Bolt DB for writing")
