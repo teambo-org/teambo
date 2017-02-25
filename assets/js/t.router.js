@@ -5,6 +5,7 @@ Teambo.router = (function(t){
   var plain_routes = {
     '' : 'external/index',
     '/:team_id'                            : 'team/dashboard',
+    '/:team_id/outbox'                     : 'team/outbox',
     '/:team_id/buckets'                    : 'team/bucket/index',
     '/:team_id/members'                    : 'team/member/index',
     '/:team_id/edit'                       : 'team/settings/edit',

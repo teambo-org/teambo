@@ -62,7 +62,9 @@ Teambo.offline = (function (t) {
               processing = true;
               self.processEvent(e).then(function() {
                 t.view.updateStatus();
-                process();
+                self.cache().then(function() {
+                  process();
+                });
               }).catch(function() {
                 events.unshift(e);
                 t.view.updateStatus();
@@ -72,7 +74,6 @@ Teambo.offline = (function (t) {
                 });
               });
             } else {
-              // Mark queue as processed
               self.cache().then(function() {
                 t.view.updateStatus();
                 processing = false;
@@ -88,6 +89,17 @@ Teambo.offline = (function (t) {
       },
       processing: function() {
         return processing;
+      },
+      debug: function() {
+        return events;
+      },
+      all: function() {
+        var ret = [];
+        events.forEach(function(item) {
+          
+          ret.push(item);
+        });
+        return ret;
       }
     });
   };

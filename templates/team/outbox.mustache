@@ -1,0 +1,11 @@
+<div class="dash">
+    <nav class="breadcrumbs">
+        <span>Outbox</span>
+    </nav>
+    <h1><div class="img"><i class="icon-upload"></i></div>{{team.queue.length}}</h1>
+    <ul class="queue">
+    {{#team.queue.all}}
+        <li>{{type}} - {{id}} - {{opts.name}}</li>
+    {{/team.queue.all}}
+    </ul>
+</div>
