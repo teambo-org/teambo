@@ -49,8 +49,8 @@ Teambo.model.plan = (function(t){
     parid: { type: 'string', required: true,  minLength: 8, maxLength: 8 },
     name:  { type: 'string', required: true,  maxLength: 256 },
     desc:  { type: 'string', required: false, maxLength: 65535 },
-    start: { type: 'string', required: false, minLength: 10, maxLength: 10 },
-    end:   { type: 'string', required: false, minLength: 10, maxLength: 10 }
+    start: { type: 'string', required: false, minLength: 10, maxLength: 10, empty: true },
+    end:   { type: 'string', required: false, minLength: 10, maxLength: 10, empty: true }
   });
 
   t.model.extend(model);

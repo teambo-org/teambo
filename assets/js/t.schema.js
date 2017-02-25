@@ -35,7 +35,7 @@ Teambo.schema = (function(t){
           errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by " + r);
           break;
         }
-        if(r === 'minLength' && prop.length > 0 &&  prop.length < rules[r]) {
+        if(r === 'minLength' && prop.length > 0 && prop.length < rules[r]) {
           errs.push(key + " must have minimum length of " + rules[r]);
           break;
         }
