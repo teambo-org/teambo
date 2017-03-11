@@ -40,7 +40,7 @@ Teambo.form = (function(t){
     return t.extend(el, {
       error: {
         msg: function(msg, ex) {
-          error.innerHTML = (msg ? '<div class="msg">'+msg+'</div>' : '')+(ex ? '<div class="ex">'+ex+'</div>' : '');
+          error.innerHTML = t.view.renderTemplate('util/error', {msg: msg, ex: ex});
           error.style.display = 'block';
         },
         hide: function() {
