@@ -135,13 +135,13 @@ Teambo.view = (function(t){
       if(e.which !== 1) {
         return;
       }
-      var el = t.matchParent(e.target, 'a');
+      var el = t.dom.matchParent(e.target, 'a');
       if(el) {
         el.click();
       }
     });
     document.body.addEventListener('click', function(e) {
-      var el = t.matchParent(e.target, 'a');
+      var el = t.dom.matchParent(e.target, 'a');
       if(!el) {
         return;
       }

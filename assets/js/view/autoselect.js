@@ -19,7 +19,7 @@ Teambo.view.autoselect = (function(t){
       options.addEventListener('mousedown', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        var a = t.matchParent(e.target, 'a');
+        var a = t.dom.matchParent(e.target, 'a');
         if(!a) return;
         var val = a.dataset.value;
         var data = {};

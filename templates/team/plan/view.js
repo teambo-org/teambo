@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  if(!t.isChild('right', document.activeElement) && !t.isChild('left', document.activeElement)) {
+  if(!t.dom.isChild('right', document.activeElement) && !t.dom.isChild('left', document.activeElement)) {
     document.querySelector('a[name=skipnav]').focus();
   }
 

@@ -34,7 +34,7 @@ Teambo.chat = (function(t){
         }
       });
       var autoclose = function(e) {
-        if(opts.autoclose && !t.matchParent(e.target, '#chat')) {
+        if(opts.autoclose && !t.dom.matchParent(e.target, '#chat')) {
           toggle(0);
         }
       }

@@ -52,6 +52,7 @@ var jsapp = []string{
 	"/js/t.socket.js",
 	"/js/t.form.js",
 	"/js/t.xhr.js",
+	"/js/t.dom.js",
 	"/js/t.router.js",
 	"/js/t.view.js",
 	"/js/t.acct.js",

@@ -291,38 +291,6 @@ var Teambo = (function(t){
     }
   };
 
-  t.isChild = function(parent, child) {
-    if(child == null) {
-      return false;
-    }
-    var p = document.getElementById(parent);
-    var node = child.parentNode;
-    while (node != null) {
-      if (node == p) {
-        return true;
-      }
-      node = node.parentNode;
-    }
-    return false;
-  };
-
-  t.findParent = function(el, selector) {
-    var parent;
-    while(parent = el.parentNode) {
-      if(!parent.matches) {
-        return;
-      }
-      if(parent.matches(selector)) {
-        return parent;
-      }
-      el = parent;
-    }
-  };
-
-  t.matchParent = function(el, selector) {
-    return el.matches(selector) ? el : t.findParent(el, selector);
-  };
-
   return t;
 
 })(Teambo || {});

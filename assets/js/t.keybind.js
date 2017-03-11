@@ -46,7 +46,7 @@
   }, false);
 
   var submitParentForm = function(e) {
-    var parent_form = t.findParent(e.target, 'form');
+    var parent_form = t.dom.findParent(e.target, 'form');
     if(parent_form && parent_form._submit) {
       e.preventDefault();
       parent_form._submit();
@@ -56,7 +56,7 @@
 
   var switchPane = function(e, dir) {
     e.preventDefault();
-    var pane = t.findParent(e.target, '#left, #main, #right, #chat');
+    var pane = t.dom.findParent(e.target, '#left, #main, #right, #chat');
     var pane_id = pane ? pane.id : 'main';
     switch(pane_id) {
       case 'main':
@@ -96,7 +96,7 @@
   var moveFocus = function(e, dir) {
     e.preventDefault();
     var el = e.target;
-    var pane = t.findParent(el, '#left, #main, #right, #chat');
+    var pane = t.dom.findParent(el, '#left, #main, #right, #chat');
     var targets = (pane || document).querySelectorAll('a[href], input.submit, select');
     for(var i in targets) {
       if(targets[i] === el) {
