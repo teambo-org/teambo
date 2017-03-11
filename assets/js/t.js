@@ -166,7 +166,7 @@ var Teambo = (function(t){
     t.view.init(opts);
     t.router.init(opts.templates);
     Promise.all([
-      t.getSalt(),
+      t.device.init(),
       t.acct.init()
     ]).then(function(){
       t.view.set('acct', t.acct.current);
@@ -244,22 +244,6 @@ var Teambo = (function(t){
     return val ? val : '/account';
   };
 
-  t.getSalt = function() {
-    if(t.salt) {
-      return Promise.resolve(t.salt);
-    } else {
-      return t.promise(function(fulfill, reject) {
-        localforage.getItem('salt').then(function(salt){
-          if(!salt) {
-            salt = t.crypto.randomKey();
-            localforage.setItem('salt', salt);
-          }
-          t.salt = salt;
-          fulfill(salt);
-        });
-      });
-    }
-  };
 
   t.findByProperty = function(a, k, v) {
     var ret = null;
