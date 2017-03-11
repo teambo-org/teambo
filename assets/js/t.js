@@ -45,6 +45,18 @@ var Teambo = (function(t){
     return editing;
   };
 
+  t.online = function(status) {
+    if(typeof status === 'boolean' && online != status) {
+      online = status;
+      t.view.updateStatus();
+    }
+    return online;
+  };
+
+  t.pageTarget = function() {
+    return target;
+  };
+
   t.reload = function() {
     t.view.render('page', 'external/blank');
     if(t.acct.current) {
@@ -57,7 +69,7 @@ var Teambo = (function(t){
     }
   };
 
-  var hashChange = function(hash, data){
+  var hashChange = function(hash, data) {
     var uri = new Uri(hash);
     var path = uri.path().split('..')[0];
     var route = t.router.find(path);
@@ -125,7 +137,7 @@ var Teambo = (function(t){
 
   t.gotoUrl = function(href, replace, data) {
     if(window.location.hash == "#"+href) {
-      refresh(data);
+      t.refresh(data);
     } else if(replace) {
       hashChange(href, data);
     } else {
@@ -133,15 +145,19 @@ var Teambo = (function(t){
     }
   };
 
-  var refresh = function(data) {
+  t.refresh = function(data) {
     moved = true;
     hashChange(window.location.hash.substr(1), data);
   };
 
-  t.refresh = refresh;
-
   t.replace = function(url, data) {
     hashChange(url, data);
+  };
+
+  t.afterAuth = function() {
+    var val = after_auth;
+    after_auth = null;
+    return val ? val : '/account';
   };
 
   var scrollToSub = function(hash, isLoaded) {
@@ -171,7 +187,7 @@ var Teambo = (function(t){
     ]).then(function(){
       t.view.set('acct', t.acct.current);
       hashChange(window.location.hash.substr(1));
-      window.onhashchange = refresh;
+      window.onhashchange = t.refresh;
       t.audio.loadAll(opts.audio);
     }).catch(function() {
       t.acct.deAuth();
@@ -185,10 +201,6 @@ var Teambo = (function(t){
         target[i] = obj[i];
       }
     }
-    return target;
-  };
-
-  t.pageTarget = function() {
     return target;
   };
 
@@ -224,26 +236,6 @@ var Teambo = (function(t){
       window.console.trace(e);
     }
   };
-
-  t.alert = function(msg) {
-    delete window.alert;
-    window.alert(msg);
-  };
-
-  t.online = function(status) {
-    if(typeof status === 'boolean' && online != status) {
-      online = status;
-      t.view.updateStatus();
-    }
-    return online;
-  };
-
-  t.afterAuth = function() {
-    var val = after_auth;
-    after_auth = null;
-    return val ? val : '/account';
-  };
-
 
   t.findByProperty = function(a, k, v) {
     var ret = null;
