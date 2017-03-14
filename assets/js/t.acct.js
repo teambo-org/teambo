@@ -11,6 +11,7 @@ Teambo.acct = (function (t) {
     t.extend(this, {
       id:    data.id,
       email: data.email,
+      rsa:   data.rsa ? (new RSAKey()).fromPrivTPO(data.rsa) : null,
       opts:  data.opts  || {},
       hist:  data.hist  || [],
       teams: data.teams || [],
@@ -53,6 +54,7 @@ Teambo.acct = (function (t) {
         var data = {
           email: self.email,
           id:    self.id,
+          rsa:   self.rsa ? self.rsa.privTPO() : null,
           key:   key,
           akey:  akey,
           teams: self.teams,
@@ -76,6 +78,15 @@ Teambo.acct = (function (t) {
           ret.push(self.teams[k]);
         }
         return ret;
+      },
+      genrsa: function (progress) {
+        return t.promise(function(fulfill, reject) {
+          var key = new RSAKey();
+          key.generateAsync(2048, (65537).toString(16), function() {
+            self.rsa = key;
+            fulfill(key);
+          }, progress);
+        });
       }
     });
   };

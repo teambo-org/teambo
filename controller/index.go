@@ -34,6 +34,14 @@ type Page struct {
 }
 
 var jslib = []string{
+	"/js/lib/RSA/jsbn.js",
+	"/js/lib/RSA/jsbn2.js",
+	"/js/lib/RSA/prng4.js",
+	"/js/lib/RSA/rng.js",
+	"/js/lib/RSA/rsa.js",
+	"/js/lib/RSA/rsa2.js",
+	"/js/lib/RSA/base64.js",
+	"/js/lib/RSA/rsasync.js",
 	"/js/lib/sjcl.js",
 	"/js/lib/jsuri-1.1.1.js",
 	"/js/lib/fastclick.js",

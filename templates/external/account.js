@@ -1,6 +1,11 @@
 function(t){
   "use strict";
 
+  if(!t.acct.current.rsa) {
+    t.gotoUrl('/keygen');
+    return;
+  }
+
   t.editing(true);
 
   var el = document.getElementById('teams');
