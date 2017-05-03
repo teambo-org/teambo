@@ -84,7 +84,7 @@
 
   var pageReload = function(e) {
     e.preventDefault();
-    if(e.shiftKey) {
+    if(e.shiftKey && t.online()) {
       localforage.clear().then(function(){
         t.reload();
       });
