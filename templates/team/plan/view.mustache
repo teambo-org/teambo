@@ -9,6 +9,11 @@
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
     </nav>
     <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
+    {{#opts.start}}
+    <div class="up1c">
+        {{opts.start}} - {{opts.end}}
+    </div>
+    {{/opts.start}}
     {{#opts.desc}}
     <div class="up1c">
         <section class="description color-bg">{{opts.desc}}</section>
