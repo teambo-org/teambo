@@ -8,10 +8,10 @@ import (
 
 var team_id *string = flag.String("t", "", "Team ID")
 
-func list_buckets() error {
+func list_buckets() (buckets []string, err error) {
 	db, err := bolt.Open("/var/lib/teambo/teams/"+*team_id+".db", 0644, nil)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer db.Close()
 
@@ -19,10 +19,11 @@ func list_buckets() error {
 	err = db.View(func(tx *bolt.Tx) error {
 		return tx.ForEach(func(name []byte, _ *bolt.Bucket) error {
 			fmt.Println(string(name))
+			buckets = append(buckets, string(name))
 			return nil
 		})
 	})
-	return nil
+	return buckets, nil
 }
 
 func list_keys(bucket_name string) error {
@@ -32,12 +33,16 @@ func list_keys(bucket_name string) error {
 	}
 	defer db.Close()
 	db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucket_name)).Cursor()
 		fmt.Println("--- " + bucket_name + " ---")
+		b := tx.Bucket([]byte(bucket_name))
+		if b == nil {
+			fmt.Println("[EMPTY]")
+			return nil
+		}
+		c := b.Cursor()
 		prefix := []byte("")
-		for k, v := b.Seek(prefix); len(k) > 0; k, v = b.Next() {
-			fmt.Println(string(k))
-			fmt.Println(string(v))
+		for k, v := c.Seek(prefix); len(k) > 0; k, v = c.Next() {
+			fmt.Println(string(k) + ": " + string(v))
 		}
 		return nil
 	})
@@ -48,9 +53,12 @@ func main() {
 	flag.Parse()
 	fmt.Println("--- team ---")
 	fmt.Println("/var/lib/teambo/teams/" + *team_id + ".db")
-	list_buckets()
-	list_keys("bucket")
-	list_keys("item")
-	list_keys("member")
-	// list_keys("xz6tg5pF")
+	buckets, err := list_buckets()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for _, bucket_name := range buckets {
+		list_keys(bucket_name)
+	}
 }
