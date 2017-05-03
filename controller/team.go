@@ -30,7 +30,7 @@ func Team(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			member := team.NewMember()
-			err = member.Save(team.Id)
+			err = member.Save()
 			if err != nil {
 				team.Remove()
 				error_out(w, "Team member could not be saved", 500)

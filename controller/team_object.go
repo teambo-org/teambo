@@ -27,12 +27,12 @@ func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *
 		return
 	}
 
-	bucket := model.TeamBucket{bucket_name}
+	bucket := model.TeamBucket{team_id, bucket_name}
 	obj := model.TeamObject{}
 
 	if r.Method == "POST" {
 		if len(id) > 0 && len(ct) > 0 {
-			obj, err = bucket.Find(team_id, id)
+			obj, err = bucket.Find(id)
 			if err != nil {
 				error_out(w, strings.Title(bucket_name)+" could not be found", 500)
 				return
@@ -46,7 +46,7 @@ func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *
 				return
 			}
 			obj.Ciphertext = ct
-			err = obj.Save(team_id)
+			err = obj.Save()
 			if err != nil {
 				error_out(w, strings.Title(bucket_name)+" could not be saved", 500)
 				return
@@ -55,7 +55,7 @@ func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *
 			parts := strings.Split(ct, " ")
 			new_iv := parts[0]
 			if log_changes && new_iv != "new" {
-				log, _ := obj.Log(team_id, new_iv)
+				log, _ := obj.Log(new_iv)
 				SocketHub.broadcast <- wsmessage{team_id, log}
 			}
 		} else {
@@ -63,7 +63,7 @@ func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *
 			return
 		}
 	} else {
-		obj, err = bucket.Find(team_id, id)
+		obj, err = bucket.Find(id)
 		if err != nil {
 			error_out(w, strings.Title(bucket_name)+" could not be found", 500)
 			return
@@ -96,13 +96,13 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 		return
 	}
 
-	bucket := model.TeamBucket{bucket_name}
+	bucket := model.TeamBucket{team_id, bucket_name}
 
-	comments := model.TeamBucket{"comment"}
+	comments := model.TeamBucket{team_id, "comment"}
 
 	if r.Method == "POST" {
 		if len(id) > 0 {
-			obj, err := bucket.Find(team_id, id)
+			obj, err := bucket.Find(id)
 			if err != nil {
 				error_out(w, strings.Title(bucket_name)+" could not be found", 500)
 				return
@@ -111,7 +111,7 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 				error_out(w, strings.Title(bucket_name)+" does not exist", 404)
 				return
 			}
-			err = obj.Remove(team_id)
+			err = obj.Remove()
 			if err != nil {
 				error_out(w, strings.Title(bucket_name)+" could not be removed", 500)
 				return
@@ -119,18 +119,18 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 			if comment_ids != "" {
 				ids := strings.Split(comment_ids, ",")
 				for _, comment_id := range ids {
-					comment, err := comments.Find(team_id, comment_id)
+					comment, err := comments.Find(comment_id)
 					if err == nil {
-						err = comment.Remove(team_id)
+						err = comment.Remove()
 						if err == nil && log_changes {
-							log, _ := comment.Log(team_id, "removed")
+							log, _ := comment.Log("removed")
 							SocketHub.broadcast <- wsmessage{team_id, log}
 						}
 					}
 				}
 			}
 			if log_changes {
-				log, _ := obj.Log(team_id, "removed")
+				log, _ := obj.Log("removed")
 				SocketHub.broadcast <- wsmessage{team_id, log}
 			}
 		} else {
@@ -163,7 +163,7 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bucket := model.TeamBucket{bucket_name}
+	bucket := model.TeamBucket{team_id, bucket_name}
 
 	res := []byte{}
 
@@ -171,20 +171,20 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 		obj := model.TeamObject{}
 
 		if id == "" {
-			obj = bucket.NewObject(team_id, "")
-			err = obj.Save(team_id)
+			obj = bucket.NewObject("")
+			err = obj.Save()
 			if err != nil {
 				error_out(w, "Object could not be created", 500)
 				return
 			}
 		} else {
-			obj = bucket.NewObject(team_id, id)
+			obj = bucket.NewObject(id)
 			if obj.Id != id {
 				error_out(w, "Object already exists", 409)
 				return
 			}
 			obj.Ciphertext = "new"
-			err = obj.Save(team_id)
+			err = obj.Save()
 			if err != nil {
 				error_out(w, "Object could not be saved", 500)
 				return
@@ -193,7 +193,7 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 
 		res, _ = json.Marshal(obj)
 	} else {
-		objs, err := bucket.All(team_id)
+		objs, err := bucket.All()
 
 		if err != nil {
 			error_out(w, "Object could not be found", 500)

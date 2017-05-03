@@ -40,8 +40,8 @@ func (t Team) Remove() (err error) {
 }
 
 func (t Team) NewMember() TeamObject {
-	members := TeamBucket{"member_key"}
-	return members.NewObject(t.Id, "")
+	members := TeamBucket{t.Id, "member_key"}
+	return members.NewObject("")
 }
 
 func (t Team) Log(iv string) (log string, err error) {

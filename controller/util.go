@@ -30,9 +30,9 @@ func auth_team(w http.ResponseWriter, r *http.Request) (team model.Team, err err
 		return team, errors.New("")
 	}
 
-	member_key := model.TeamBucket{"member_key"}
+	member_key := model.TeamBucket{team_id, "member_key"}
 
-	exists, err := member_key.Exists(team_id, mkey)
+	exists, err := member_key.Exists(mkey)
 	if err != nil || !exists {
 		error_out(w, "Team member not found", 403)
 		return team, errors.New("")
