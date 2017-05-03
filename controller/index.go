@@ -84,7 +84,7 @@ var jsapp = []string{
 	"/js/model/wiki.js",
 }
 var jsasync = []string{
-	"/js/lib/zxcvbn.js",
+	// "/js/lib/zxcvbn.js",
 }
 var jsinit = []string{
 	"/init.js",
