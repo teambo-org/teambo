@@ -31,10 +31,14 @@ Teambo.model.bucket = (function(t){
         return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
       },
       url: function() {
-        return '/'+t.team.current.id+'/'+self.id;
+        return '/'+t.team.current.id+'/bucket/'+self.id;
       },
       icon: function() {
         return self.active() ? 'folder-open' : 'folder';
+      },
+      active: function() {
+        return ((model.current && model.current.id == self.id)
+            || (t.model.item.current && t.model.item.current.opts.bucket_id == self.id)) ? 'active' : '';
       }
     });
   };
@@ -48,6 +52,10 @@ Teambo.model.bucket = (function(t){
   });
 
   t.model.extend(model);
+
+  model.getActiveId = function() {
+    return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.bucket_id : null);
+  };
 
   model.orphaned = new model({
     id: "orphaned",

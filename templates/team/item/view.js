@@ -1,9 +1,5 @@
 function(t){
   "use strict";
-
-  if(t.model.item.current.opts.bucket_id && t.model.item.current.opts.bucket_id != t.model.bucket.current.id) {
-    t.gotoUrl(t.model.item.current.url());
-  }
   
   var form = new t.form(document.comment);
   form.addEventListener("submit", function(e) {

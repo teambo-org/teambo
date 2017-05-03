@@ -193,6 +193,10 @@ Teambo.model = (function(t){
       return ids;
     };
 
+    model.getActiveId = function() {
+      return model.current ? model.current.id : null;
+    };
+
     model.cacheIds = function() {
       return t.team.cache(model.type + '_ids', t.team.encrypt(model.ids()));
     };
@@ -443,8 +447,8 @@ Teambo.model = (function(t){
 
     t.event.on('nav', function(route) {
       if(!route || !route.data) return;
+      var id = model.getActiveId();
       var els = document.querySelectorAll('a[data-obj^='+model.type+'-]');
-      var id = model.type + '_id' in route.data ? route.data[model.type + '_id'] : null;
       for(var i = 0; els[i]; i++) {
         els[i].classList.remove('active');
         if(id && els[i].dataset.obj == model.type+'-'+id) {

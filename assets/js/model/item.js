@@ -18,7 +18,7 @@ Teambo.model.item = (function(t){
         return t.model.comment.allByModel(model.type, self.id);
       },
       url: function() {
-        return '/'+t.team.current.id+'/'+self.bucket().id+'/'+self.id;
+        return '/'+t.team.current.id+'/item/'+self.id;
       }
     });
   };

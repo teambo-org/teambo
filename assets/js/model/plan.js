@@ -39,6 +39,10 @@ Teambo.model.plan = (function(t){
       },
       icon: function() {
         return 'flag-1';
+      },
+      active: function() {
+        return ((model.current && model.current.id == self.id)
+            || (t.model.item.current && t.model.item.current.opts.plan_id == self.id)) ? 'active' : '';
       }
     });
   };
@@ -54,6 +58,10 @@ Teambo.model.plan = (function(t){
   });
 
   t.model.extend(model);
+
+  model.getActiveId = function() {
+    return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.plan_id : null);
+  };
 
   return model;
 
