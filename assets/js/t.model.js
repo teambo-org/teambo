@@ -127,12 +127,18 @@ Teambo.model = (function(t){
       },
       remove: function() {
         return t.promise(function(fulfill, reject) {
+          var data = {
+            team_id: t.team.current.id,
+            mkey:    t.team.current.mkey,
+            id:      self.id
+          };
+          if(self.comments) {
+            data['comment_ids'] = self.comments().reduce(function(a, b) {
+              return a.concat([b.id]);
+            }, []);
+          }
           t.xhr.post('/'+model.type+'/remove', {
-            data: {
-              team_id: t.team.current.id,
-              mkey:    t.team.current.mkey,
-              id:      self.id
-            }
+            data: data
           }).then(function(xhr){
             if(xhr.status == 204 || xhr.status == 404) {
               self.uncache().then(function(){

@@ -89,6 +89,7 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 
 	team_id := r.FormValue("team_id")
 	id := r.FormValue("id")
+	comment_ids := r.FormValue("comment_ids")
 
 	_, err := auth_team(w, r)
 	if err != nil {
@@ -96,6 +97,8 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 	}
 
 	bucket := model.TeamBucket{bucket_name}
+
+	comments := model.TeamBucket{"comment"}
 
 	if r.Method == "POST" {
 		if len(id) > 0 {
@@ -112,6 +115,19 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 			if err != nil {
 				error_out(w, strings.Title(bucket_name)+" could not be removed", 500)
 				return
+			}
+			if comment_ids != "" {
+				ids := strings.Split(comment_ids, ",")
+				for _, comment_id := range ids {
+					comment, err := comments.Find(team_id, comment_id)
+					if err == nil {
+						err = comment.Remove(team_id)
+						if err == nil && log_changes {
+							log, _ := comment.Log(team_id, "removed")
+							SocketHub.broadcast <- wsmessage{team_id, log}
+						}
+					}
+				}
 			}
 			if log_changes {
 				log, _ := obj.Log(team_id, "removed")
