@@ -43,6 +43,7 @@
         </ul>
     </div>
     <div class="up1c">
+    {{#item_count_complete}}
         <ul class="items complete bg-color-05">
         {{#item_list_complete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
@@ -55,6 +56,7 @@
             </li>
         {{/item_list_complete}}
         </ul>
+    {{/item_count_complete}}
     </div>
     {{^item_list}}
     <p class="empty">This bucket has no items.</p>

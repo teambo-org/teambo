@@ -24,6 +24,9 @@ Teambo.model.bucket = (function(t){
       item_count_incomplete: function() {
         return self.item_list_incomplete().length;
       },
+      item_count_complete: function() {
+        return self.item_list_complete().length;
+      },
       progress: function() {
         return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
       },
