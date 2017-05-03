@@ -76,7 +76,7 @@
                     <div class="options">
                         {{#model.plan.all}}
                         <a data-value="{{id}}">
-                            <div class="img"><i class="icon-{{icon}}"></i></div>
+                            <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
                             <div class="name">{{opts.name}}</div>
                         </a>
                         {{/model.plan.all}}
