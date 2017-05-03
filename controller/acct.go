@@ -46,7 +46,8 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check authentication failure limit and disallow authentication
+	// TODO: Check authentication failure limit and disallow authentication
+	
 	acct, err := model.FindAcct(id, akey)
 	if err != nil {
 		error_out(w, "Account could not be retrieved", 500)

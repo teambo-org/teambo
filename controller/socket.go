@@ -39,7 +39,7 @@ var SocketHub = hub{
 func (h *hub) Run() {
 	// go func() {
 	// for {
-	// statsd.Counter(1.0, "gmob.sockets.open", len(h.connections))
+	// statsd.Counter(1.0, "sockets.open", len(h.connections))
 	// time.Sleep(10 * time.Second)
 	// }
 	// }()

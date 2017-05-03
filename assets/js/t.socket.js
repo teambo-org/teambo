@@ -38,6 +38,7 @@ Teambo.socket = (function (t) {
     var e = events.shift();
     if(e) {
       processing = true;
+      // TODO: Check event type as well as id
       if(t.findByProperty(events, 'id', e.id)) {
         setTimeout(handleEvent, 0);
       } else {
