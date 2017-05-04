@@ -3,7 +3,7 @@
 
   document.addEventListener("keydown", function(e) {
     var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
-    if(e.ctrlKey && key === 's') {
+    if((e.ctrlKey && key === 's') || (e.ctrlKey && key === 'enter')) {
       return submitParentForm(e);
     }
     if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && key !== "escape") {
