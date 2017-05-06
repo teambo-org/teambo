@@ -197,6 +197,9 @@
 #dashboard .main ul.history p.toggle-target.open { padding: 0.4em 0.8em 0.5em; margin: 0.3em 0; }
 
 #dashboard .main .filter-status-incomplete .status-complete { display: none; }
+#dashboard .main form.filter select { margin-right: 0.5em; }
+#dashboard .main form.filter.default-options a.clear { display: none; }
+
 
 ul.member-details blockquote { word-break: break-all; word-wrap: break-word; font-size: 0.8em; }
 

@@ -113,6 +113,16 @@
 #dashboard .main .filter-status-{{key}} .status-{{key}} { display: block; }
 {{/item.statuses}}
 
+{{#plan.all}}
+#dashboard .main .filter-plan_id-{{id}} ul ul li:not(.plan_id-{{id}}) { display: none; }
+{{/plan.all}}
+#dashboard .main .filter-plan_id-none ul ul li:not(.plan_id-) { display: none; }
+
+{{#member.all}}
+#dashboard .main .filter-member_id-{{id}} ul ul li:not(.member_id-{{id}}) { display: none; }
+{{/member.all}}
+#dashboard .main .filter-member_id-none ul ul li:not(.member_id-) { display: none; }
+
 #date_selector { background: rgba({{main.bg}}, 1); color: rgba({{main.color}}, 0.7); }
 #date_selector a { color: rgba({{main.color}}, 0.8); }
 #date_selector a.active { color: rgba({{main.color}}, 0.9); background: rgba({{main.hi}}, 0.15); }

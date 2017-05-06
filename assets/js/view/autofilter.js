@@ -17,10 +17,14 @@ Teambo.view.autofilter = (function(t){
     var p = [];
     var data = uri.getQueryParams();
     var filter = function(data) {
+      var default_options = true;
       autofilter_cache[cacheKey] = data;
       var els = form.querySelectorAll('select');
       [].forEach.call(els, function(el, i) {
         if(el.name in data) {
+          if(el.value != data[el.name]) {
+            default_options = false;
+          }
           el.value = data[el.name];
         }
         tar.classList.add('filter-' + el.name + '-' + el.value);
@@ -31,6 +35,9 @@ Teambo.view.autofilter = (function(t){
           submit_fn();
         });
       });
+      if(default_options) {
+        form.classList.add('default-options');
+      }
     };
     if(sticky && Object.keys(data).length === 0) {
       if(cacheKey in autofilter_cache) {
