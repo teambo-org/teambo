@@ -74,3 +74,41 @@ func Team(w http.ResponseWriter, r *http.Request) {
 	res_json, _ := json.Marshal(res)
 	w.Write([]byte(string(res_json)))
 }
+
+
+func TeamRemove(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	id := r.FormValue("team_id")
+
+	// TODO: Confirm admin auth prior to team removal
+
+	team, err := auth_team(w, r)
+	if err != nil {
+		error_out(w, "Team could not be found", 500)
+		return
+	}
+
+	if r.Method == "POST" {
+		if len(id) > 0 {
+			if team.Id != id {
+				error_out(w, "Team does not exist", 404)
+				return
+			}
+			err = team.Remove()
+			if err != nil {
+				error_out(w, "Team could not be removed", 500)
+				return
+			}
+		} else {
+			error_out(w, "Invalid Request", 400)
+			return
+		}
+	} else {
+		error_out(w, "Method not allowed.", 405)
+		return
+	}
+
+	w.WriteHeader(204)
+	return
+}

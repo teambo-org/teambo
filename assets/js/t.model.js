@@ -1,6 +1,8 @@
 Teambo.model = (function(t){
   "use strict";
 
+  var types = [];
+
   var model = function(data, model) {
     var self = this;
     if(typeof data == 'string') {
@@ -136,7 +138,7 @@ Teambo.model = (function(t){
             data['comment_ids'] = self.comments().reduce(function(a, b) {
               return a.concat([b.id]);
             }, []);
-          }
+          };
           t.xhr.post('/'+model.type+'/remove', {
             data: data
           }).then(function(xhr){
@@ -187,6 +189,8 @@ Teambo.model = (function(t){
   };
 
   model.extend = function(model) {
+    types.push(model.type);
+
     model.all = [];
 
     model.ids = function() {
@@ -387,6 +391,14 @@ Teambo.model = (function(t){
       });
     };
 
+    model.uncacheAll = function() {
+      var p = [];
+      model.all.forEach(function(m){
+        p.push(m.uncache());
+      });
+      return Promise.all(p);
+    };
+
     t.event.on('model-event', function(e) {
       if(e.type != model.type) return Promise.resolve();
       return t.promise(function(fulfill, reject) {
@@ -519,6 +531,8 @@ Teambo.model = (function(t){
 
     t.view.set(model.type, model);
   };
+
+  model.types = types;
 
   return model;
 

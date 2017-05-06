@@ -70,6 +70,37 @@ Teambo.team = (function(t){
           });
         });
       },
+      remove: function(name) {
+        if(name != self.opts.name || !t.online()) {
+          return Promise.reject();
+        }
+        return t.promise(function(fulfill, reject) {
+          var data = {
+            team_id: t.team.current.id,
+            mkey:    t.team.current.mkey
+          };
+          t.xhr.post('/team/remove', {
+            data: data
+          }).then(function(xhr){
+            if(xhr.status == 204) {
+              var p = [];
+              t.model.types.forEach(function(type){
+                p.push(t.model[type].uncacheAll());
+              });
+              Promise.all(p).then(function() {
+                uncacheTeam().then(function(){
+                  t.deleteByProperty(t.acct.current.teams, 'id', self.id);
+                  t.acct.current.save().then(function(){
+                    fulfill();
+                  });
+                });
+              });
+            } else {
+              reject(xhr);
+            }
+          }).catch(reject);
+        });
+      },
       cache: function() {
         var hash = t.crypto.sha(self.id+t.salt);
         return localforage.setItem(hash, self.encrypted({last_seen: self.last_seen}));
@@ -125,6 +156,10 @@ Teambo.team = (function(t){
         return self.last_seen;
       }
     });
+    var uncacheTeam = function() {
+      var hash = t.crypto.sha(self.id+t.salt);
+      return localforage.removeItem(hash);
+    };
     this.queue = new t.offline.queue(this);
   };
 
@@ -192,10 +227,12 @@ Teambo.team = (function(t){
           fulfill(new team(ct, d.mkey, d.key));
         } else {
           team.fetch(id, d.mkey).then(function(ct) {
-            var fetched_team = new team(ct, d.mkey, d.key);
-            fetched_team.cache().then(function() {
-              fulfill(fetched_team);
-            });
+            if(ct) {
+              var fetched_team = new team(ct, d.mkey, d.key);
+              fetched_team.cache().then(function() {
+                fulfill(fetched_team);
+              });
+            }
           }).catch(reject);
         }
       });
@@ -213,7 +250,7 @@ Teambo.team = (function(t){
           team.find(v.id).then(function(found_team) {
             ret.push(found_team);
             fulfill();
-          }).catch(reject);
+          }).catch(fulfill);
         }));
       });
       Promise.all(p).then(function() {

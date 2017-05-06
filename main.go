@@ -24,6 +24,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/acct/auth":         controller.AcctAuth,
 	"/acct/verification": controller.AcctVerification,
 	"/team":              controller.Team,
+	"/team/remove":       controller.TeamRemove,
 	"/socket":            controller.Socket,
 	"/buckets":           controller.HandleTeamObjects("bucket"),
 	"/bucket":            controller.HandleTeamObject("bucket", true),

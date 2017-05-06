@@ -36,6 +36,11 @@ func (t Team) Remove() (err error) {
 		fmt.Println(err)
 		return err
 	}
+	err = db_team_delete(t.Id)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
 	return nil
 }
 
