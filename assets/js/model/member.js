@@ -33,6 +33,10 @@ Teambo.model.member = (function(t){
 
   t.model.extend(model);
 
+  model.getActiveId = function() {
+    return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.member_id : null);
+  };
+
   t.event.on('team-post-init', function(team) {
     return t.acct.current.createMember();
   });
