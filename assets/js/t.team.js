@@ -45,9 +45,7 @@ Teambo.team = (function(t){
             } else {
               reject(xhr);
             }
-          }).catch(function(e){
-            reject(e);
-          });
+          }).catch(reject);
         });
       },
       update: function(opts) {
@@ -141,16 +139,12 @@ Teambo.team = (function(t){
     return t.promise(function(fulfill, reject){
       team.find(id).then(function(o) {
         team.current = o;
-
         t.event.all('team-init', o).then(function() {
-          t.socket.start(o);
-          fulfill(o);
-        }).catch(function(e) {
-          reject(e);
-        });
-      }).catch(function() {
-        reject();
-      });
+          t.event.all('team-post-init', o).then(function() {
+            fulfill(o);
+          });
+        }).catch(reject);
+      }).catch(reject);
     });
   };
 
@@ -174,9 +168,7 @@ Teambo.team = (function(t){
             acct.teams.push({id: new_team.id, mkey: data.mkey, key: key});
             acct.save().then(function(){
               fulfill(new_team);
-            }).catch(function(e){
-              reject(e);
-            });
+            }).catch(reject);
           }).catch(function(e){
             t.deleteByProperty(acct.teams, 'id', new_team.id)
             reject(e);
@@ -184,9 +176,7 @@ Teambo.team = (function(t){
         } else {
           reject(xhr);
         }
-      }).catch(function(e){
-        reject(e);
-      });
+      }).catch(reject);
     });
   };
 
@@ -206,9 +196,7 @@ Teambo.team = (function(t){
             fetched_team.cache().then(function() {
               fulfill(fetched_team);
             });
-          }).catch(function(e) {
-            reject(e);
-          });
+          }).catch(reject);
         }
       });
     });
@@ -225,9 +213,7 @@ Teambo.team = (function(t){
           team.find(v.id).then(function(found_team) {
             ret.push(found_team);
             fulfill();
-          }).catch(function(e) {
-            reject(e);
-          });
+          }).catch(reject);
         }));
       });
       Promise.all(p).then(function() {

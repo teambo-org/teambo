@@ -1,0 +1,27 @@
+<div class="member-view" require-model="member">
+{{#model.member.current}}
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
+        <span class="active">Member</span>
+    </nav>
+    <nav>
+    <!--
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+    -->
+        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
+    </nav>
+    <h1><i class="{{icon}}"></i> {{opts.name}}</h1>
+    {{#opts.description}}
+    <div class="up1c">
+        <section class="description color-bg">{{#nl2br}}{{opts.description}}{{/nl2br}}</section>
+    </div>
+    {{/opts.description}}
+    <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
+    <div class="up1c">
+        <ul class="member-details">
+            <li>Email: {{opts.email}}</li>
+            <li>RSA Public Key: <blockquote>{{opts.pubKey}}</blockquote></li>
+        </ul>
+    </div>
+{{/model.member.current}}
+</div>

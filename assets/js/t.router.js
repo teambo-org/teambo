@@ -29,7 +29,9 @@ Teambo.router = (function(t){
     '/:team_id/bucket/:bucket_id/new'      : 'team/item/new',
     '/:team_id/item/:item_id'              : 'team/item/view',
     '/:team_id/item/:item_id/edit'         : 'team/item/edit',
-    '/:team_id/item/:item_id/remove'       : 'team/item/remove'
+    '/:team_id/item/:item_id/remove'       : 'team/item/remove',
+    '/:team_id/member/:member_id'          : 'team/member/view',
+    '/:team_id/member/:member_id/edit'     : 'team/member/edit'
   };
 
   return {

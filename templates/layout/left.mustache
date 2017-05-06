@@ -53,12 +53,21 @@
     {{/model.wiki.top}}
     </div>
     <div class="section hi-10">
-        <i class="icon-down-open-1 nav color-hi-40"></i>
+        <i class="icon-down-open-1 nav on color-hi-40"></i>
         <a href="#{{team.url}}/members" class="nav-section">
             <div class="img"><i class="icon-users"></i></div>
             <div class="name">Members</div>
         </a>
     </div>
+    <div class="section members subsection">
+    {{#model.member.all}}
+        <a href="#{{url}}" class="member {{active}}" data-obj="member-{{id}}">
+            <div class="img"><i class="{{icon}}"></i></div>
+            <div class="name">{{opts.name}}</div>
+        </a>
+    {{/model.member.all}}
+    </div>
+    <!--
     <div class="section hi-10">
         <i class="icon-down-open-1 nav color-hi-40"></i>
         <a href="#{{team.url}}/members" class="nav-section">
@@ -66,6 +75,7 @@
             <div class="name">Archive</div>
         </a>
     </div>
+    -->
     <div class="section hi-10">
         <i class="icon-down-open-1 nav color-hi-40"></i>
         <a href="#{{team.url}}/edit" class="nav-section">

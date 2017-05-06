@@ -245,9 +245,7 @@ Teambo.model = (function(t){
             id = t.crypto.tempKey();
             model.create(opts, id).then(function(m) {
               fulfill(m);
-            }).catch(function(e){
-              reject(e);
-            });
+            }).catch(reject);
           } else {
             reject(xhr);
           }
@@ -364,9 +362,7 @@ Teambo.model = (function(t){
                   fulfill(ret);
                 });
               });
-            }).catch(function(e){
-              reject(e);
-            });
+            }).catch(reject);
           }
         });
       });

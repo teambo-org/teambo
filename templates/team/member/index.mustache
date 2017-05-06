@@ -1,7 +1,20 @@
-<div class="bucket">
+<div class="member-index">
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
         <span class="active">Members</span>
     </nav>
     <h1><i class="icon-flag-filled"></i> Members</h1>
+    <ul class="buckets" id="buckets">
+    {{#model.member.all}}
+    <li class="member hi-10 up1c" id="member-li-{{id}}">
+        <a href="#{{url}}" class="hi-05">
+            <div class="img"><i class="{{icon}}"></i></div>
+            <span class="name">{{opts.name}}</span>
+        </a>
+    </li>
+    {{/model.member.all}}
+    {{^model.member.all}}
+    <p class="empty">Team has no members</p>
+    {{/model.member.all}}
+    </ul>
 </div>

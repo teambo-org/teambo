@@ -18,8 +18,7 @@ Teambo.form = (function(t){
           return;
         }
       }
-      var min_len_fields = form.querySelectorAll("input[class*='min-len-']"),
-        min_len = [];
+      var min_len_fields = form.querySelectorAll("input[class*='min-len-']");
       for(i = 0; field = min_len_fields[i]; i++) {
         var minlen = 0,
           classname = '';
@@ -31,6 +30,22 @@ Teambo.form = (function(t){
         }
         if(minlen && field.value.length < minlen) {
           form.error.msg(field.getAttribute('placeholder') + " must be at least "+minlen+" characters");
+          e.stopImmediatePropagation();
+          return;
+        }
+      }
+      var max_len_fields = form.querySelectorAll("input[class*='max-len-'],textarea[class*='max-len-']");
+      for(i = 0; field = max_len_fields[i]; i++) {
+        var maxlen = 0,
+          classname = '';
+        for(j = 0; classname = field.classList[j]; j++) {
+          if(classname.indexOf('max-len-') === 0) {
+            maxlen = parseInt(classname.substr(8));
+            break;
+          }
+        }
+        if(maxlen && field.value.length > maxlen) {
+          form.error.msg(field.getAttribute('placeholder') + " must be fewer than "+maxlen+" characters");
           e.stopImmediatePropagation();
           return;
         }

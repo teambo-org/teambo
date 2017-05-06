@@ -1,0 +1,29 @@
+<div class="member-edit" require-model="member">
+{{#model.member.current}}
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{url}}" data-keybind="q escape `">Member</a>
+        <span>Edit</span>
+    </nav>
+    <h1><i class="{{icon}}"></i>{{opts.name}}</h1>
+    <form id="member-edit" name="member_edit" method="POST" class="std" data-member_id="{{id}}">
+        <div class="field">
+            <label for="member_email">Email</label>
+            <p>{{opts.email}}</p>
+        </div>
+        <div class="field">
+            <label for="member_name">Name</label>
+            <input id="member_name"type="text" class="text large required min-len-1" name="name" autocomplete="off" placeholder="Member Name" value="{{opts.name}}" />
+        </div>
+        <div class="field">
+            <label for="member_description">Bio</label>
+            <textarea id="member_description" class="text large max-len-2048" placeholder="Member Bio" name="description">{{opts.description}}</textarea>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Save Changes" />
+            <a class="cancel" href="#{{url}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+{{/model.member.current}}
+</div>

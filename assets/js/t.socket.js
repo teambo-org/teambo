@@ -111,11 +111,15 @@ Teambo.socket = (function (t) {
     wrapperfunc();
     interval = setInterval(wrapperfunc, (failures < 3 ? 1 : 5)*1000);
   };
-  
+
   var ignore = function(k) {
     ignored = ignored.slice(0, 49);
     ignored.unshift(k);
   };
+
+  t.event.on('team-post-init', function(team) {
+    t.socket.start(team);
+  });
 
   return {
     start: start,

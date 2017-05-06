@@ -36,4 +36,6 @@ function(t){
     anchors[0].focus();
   });
 
+  t.view.updateStatus();
+
 }

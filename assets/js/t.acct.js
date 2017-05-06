@@ -87,6 +87,26 @@ Teambo.acct = (function (t) {
             fulfill(key);
           }, progress);
         });
+      },
+      createMember: function() {
+        if(self.member()) {
+          return Promise.resolve();
+        }
+        return t.model.member.create({
+          pubKey: self.rsa.pubTPO().n,
+          email:  self.email,
+          name:   self.email
+        });
+      },
+      member: function() {
+        var pubKey = self.rsa.pubTPO().n;
+        var r = null;
+        t.model.member.all.forEach(function(m){
+          if(m.opts.pubKey === pubKey) {
+            r = m;
+          }
+        });
+        return r;
       }
     });
   };

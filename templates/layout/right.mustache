@@ -1,7 +1,9 @@
 <div class="section account hi-20">
     <a href="#/account" class="default-focus">
-        <div class="img"><i class="icon-user-1"></i></div>
-        <div class="name">{{acct.email}}</div>
+    {{#acct.member}}
+        <div class="img"><i class="{{icon}}"></i></div>
+        <div class="name">{{opts.name}}</div>
+    {{/acct.member}}
     </a>
 </div>
 <div class="workload scrollable">
@@ -17,7 +19,7 @@
             <div class="progress hi-15" data-progress="{{progress}}"></div>
         </a>
         {{#item_count_incomplete}}
-        <ul class="items">
+        <ul class="items subsection">
         {{#item_list_incomplete}}
             <li class="item-{{opts.status}}">
                 <a href="#{{url}}" data-obj="item-{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>

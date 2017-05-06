@@ -194,6 +194,8 @@
 
 #dashboard .main .filter-status-incomplete .status-complete { display: none; }
 
+ul.member-details blockquote { word-break: break-all; word-wrap: break-word; font-size: 0.8em; }
+
 i.icon-check-empty { opacity: 0.5; }
 h1 i.icon-check-empty { opacity: 1; }
 

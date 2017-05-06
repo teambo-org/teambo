@@ -58,7 +58,7 @@
                         </a>
                     </div>
                 </li>
-                <li class="user section autoselect" data-opt="plan_id">
+                <li class="plan section autoselect" data-opt="plan_id">
                     {{#plan}}
                     <a href="#{{url}}" class="trigger">
                         <i class="icon-down-open-1 nav color-hi-40"></i>
@@ -86,11 +86,33 @@
                         </a>
                     </div>
                 </li>
-                <li class="user section">
-                    <a>
-                        <div class="img"><i class="icon-user-1"></i></div>
-                        <div class="name">Kev</div>
+                <li class="member section autoselect" data-opt="member_id">
+                    {{#member}}
+                    <a href="#{{url}}" class="trigger">
+                        <i class="icon-down-open-1 nav color-hi-40"></i>
+                        <div class="img"><i class="{{icon}}"></i></div>
+                        <div class="name">{{opts.name}}</div>
                     </a>
+                    {{/member}}
+                    {{^member}}
+                    <a href="#{{url}}" class="trigger color-30">
+                        <i class="icon-down-open-1 nav"></i>
+                        <div class="img"><i class="icon-user-1"></i></div>
+                        <div class="name">(none)</div>
+                    </a>
+                    {{/member}}
+                    <div class="options">
+                        {{#model.member.all}}
+                        <a data-value="{{id}}">
+                            <div class="img {{^active}}color-30{{/active}}"><i class="{{icon}}"></i></div>
+                            <div class="name">{{opts.name}}</div>
+                        </a>
+                        {{/model.member.all}}
+                        <a data-value="">
+                            <div class="img {{#member}}color-30{{/member}}"><i class="icon-user-1"></i></div>
+                            <div class="name">(none)</div>
+                        </a>
+                    </div>
                 </li>
                 <li class="section">
                     <a>

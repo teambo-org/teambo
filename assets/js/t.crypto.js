@@ -73,7 +73,8 @@ Teambo.crypto = (function(t, sjcl){
       } catch(e) {
         return null;
       }
-    }
+    },
+    hextob64: hextob64
   };
 
 })(Teambo, sjcl);
