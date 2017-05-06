@@ -1,12 +1,29 @@
 <div class="plan-index bucket-index" id="plan-index">
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
-        <span class="active">Plan</span>
+        <span class="active">Planning</span>
     </nav>
     <nav>
         <a href="#{{team.url}}/plan/new" data-keybind="c">Create plan</a>
     </nav>
-    <h1><div class="img"><i class="icon-calendar-check-o"></i></div> Plan</h1>
+    <h1><div class="img"><i class="icon-calendar-check-o"></i></div> Planning</h1>
+    <form class="std horizontal color-bg filter" name="filter">
+        <select name="status" class="text">
+            <option value="">All Statuses</option>
+            <option value="incomplete" selected="selected">Incomplete</option>
+            {{#model.item.statuses}}
+            <option value="{{key}}">{{label}}</option>
+            {{/model.item.statuses}}
+        </select>
+        <select name="member_id" class="text">
+            <option value="" selected="selected">All Members</option>
+            {{#model.member.all}}
+            <option value="{{id}}">{{opts.name}}</option>
+            {{/model.member.all}}
+            <option value="none">(unassigned)</option>
+        </select>
+        <a class="clear" href="#{{team.url}}/buckets?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
+    </form>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="plans buckets" id="plans">
     {{#model.plan.all}}
@@ -19,7 +36,7 @@
         </a>
         <ul class="items">
         {{#item_list}}
-            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
+            <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
                 <a href="#{{url}}" title="{{opts.status}}" class="dim">
                     {{#status}}
                     <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>

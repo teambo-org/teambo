@@ -6,7 +6,7 @@
     <nav>
         <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
     </nav>
-    <h1><div class="img"><i class="icon-folder"></i></div> Items</h1>
+    <h1><div class="img"><i class="icon-archive"></i></div> Items</h1>
     <form class="std horizontal color-bg filter" name="filter">
         <select name="status" class="text">
             <option value="">All Statuses</option>
@@ -20,14 +20,14 @@
             {{#model.plan.all}}
             <option value="{{id}}">{{opts.name}}</option>
             {{/model.plan.all}}
-            <option value="none">(none)</option>
+            <option value="none">(unplanned)</option>
         </select>
         <select name="member_id" class="text">
             <option value="" selected="selected">All Members</option>
             {{#model.member.all}}
             <option value="{{id}}">{{opts.name}}</option>
             {{/model.member.all}}
-            <option value="none">(none)</option>
+            <option value="none">(unassigned)</option>
         </select>
         <a class="clear" href="#{{team.url}}/buckets?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
     </form>
@@ -44,12 +44,12 @@
         <ul class="items">
         {{#item_list}}
             <li class="item status-{{opts.status}} plan_id-{{opts.plan_id}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
-                <a href="#{{url}}" title="{{opts.status}}" class="dim">
+                <a href="#{{url}}" class="dim">
                     {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
+                    <i class="icon-{{icon}}" role="img" title="{{label}}"></i>
                     {{/status}}
                     {{#plan}}
-                    <i class="icon-{{icon}} plan-icon"></i>
+                    <i class="icon-{{icon}} plan-icon" title="{{opts.name}}"></i>
                     {{/plan}}
                     <span class="name">{{opts.name}}</span>
                 </a>
