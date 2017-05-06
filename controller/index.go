@@ -77,6 +77,7 @@ var jsapp = []string{
 	"/js/view/autoselect.js",
 	"/js/view/autofilter.js",
 	"/js/view/progress.js",
+	"/js/view/toggle.js",
 	"/js/model/comment.js",
 	"/js/model/bucket.js",
 	"/js/model/item.js",

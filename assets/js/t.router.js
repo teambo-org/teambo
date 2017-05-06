@@ -23,6 +23,7 @@ Teambo.router = (function(t){
     '/:team_id/plan/:plan_id'              : 'team/plan/view',
     '/:team_id/plan/:plan_id/remove'       : 'team/plan/remove',
     '/:team_id/plan/:plan_id/edit'         : 'team/plan/edit',
+    '/:team_id/comment/:comment_id/edit'   : 'team/comment/edit',
     '/:team_id/comment/:comment_id/remove' : 'team/comment/remove',
     '/:team_id/bucket/:bucket_id'          : 'team/bucket/view',
     '/:team_id/bucket/:bucket_id/remove'   : 'team/bucket/remove',

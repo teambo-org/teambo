@@ -129,18 +129,28 @@
         {{#comments}}
             <div class="comment hi-05">
                 <div class="author section hi-05">
+                    {{#editable}}
                     <div class="control section">
-                        <a>
+                        <a href="#{{url}}/edit" title="Edit">
                             <div class="img"><i class="icon-pencil"></i></div>
                         </a>
                         <a href="#{{url}}/remove" title="Remove">
                             <div class="img"><i class="icon-cancel"></i></div>
                         </a>
                     </div>
+                    {{/editable}}
+                    {{#member}}
+                    <a>
+                        <div class="img"><i class="{{icon}}"></i></div>
+                        <div class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+                    </a>
+                    {{/member}}
+                    {{^member}}
                     <a>
                         <div class="img"><i class="icon-user-1"></i></div>
-                        <div class="name">{{opts.mid}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+                        <div class="name">{{opts.member_id}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
                     </a>
+                    {{/member}}
                 </div>
                 <div class="message">{{opts.text}}</div>
             </div>
@@ -149,7 +159,7 @@
         <form id="comment" name="comment" method="POST" class="std">
             <input type="hidden" name="pid" value="{{id}}" />
             <input type="hidden" name="ptype" value="item" />
-            <input type="hidden" name="mid" value="{{acct.id}}" />
+            <input type="hidden" name="member_id" value="{{#acct.member}}{{id}}{{/acct.member}}" />
             <h4>Add Comment</h4>
             <div class="field">
                 <textarea class="text" name="text"></textarea>
@@ -174,17 +184,23 @@
                     <div class="name"><span class="k">Name</span> changed to <span class="value color-70">{{diff.name}}</span></div>
                     {{/diff.name}}
                     {{#diff.description}}
-                    <div class="description text"><span class="k">Description</span> changed to <span class="value color-70">{{diff.description}}</span></div>
+                    <div class="description text">
+                        <span class="k">Description</span> changed <a data-toggle="history-description-{{iv}}">view</a>
+                        <p class="value color-70 description toggle-target hi-05" data-toggle-target="history-description-{{iv}}">{{#nl2br}}{{diff.description}}{{/nl2br}}</p>
+                    </div>
                     {{/diff.description}}
                     {{#diff.status}}
                     <div class="status"><span class="k">Status</span> changed to <span class="value color-70">{{diff.status}}</span></div>
                     {{/diff.status}}
                     {{#diff.bucket_id}}
-                    <div class="bucket_id">Moved to bucket <span class="value color-70">{{diff.bucket_id}}</span></div>
+                    <div class="bucket_id">Moved to {{#bucket}}bucket <a class="value color-70" href="#{{url}}">{{opts.name}}</a>{{/bucket}}{{^bucket}}deleted bucket {{diff.bucket_id}}{{/bucket}}</div>
                     {{/diff.bucket_id}}
                     {{#diff.plan_id}}
-                    <div class="plan_id">Moved to plan <a class="value color-70" href="#{{#plan}}{{url}}{{/plan}}">{{diff.plan_id}}</a></div>
+                    <div class="plan_id">Moved to {{#plan}}plan <a class="value color-70" href="#{{url}}">{{opts.name}}</a>{{/plan}}{{^plan}}deleted plan {{diff.plan_id}}{{/plan}}</div>
                     {{/diff.plan_id}}
+                    {{#diff.member_id}}
+                    <div class="member_id">Assigned to {{#member}}<a class="value color-70" href="#{{url}}">{{opts.name}}</a>{{/member}}{{^member}}deleted member {{diff.member_id}}{{/member}}</div>
+                    {{/diff.member_id}}
                 </div>
             </li>
         {{/hist}}

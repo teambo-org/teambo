@@ -12,20 +12,25 @@ Teambo.model.comment = (function(t){
         var h = self.hist[0];
         return h ? h.ts : null;
       },
+      member: function() {
+        return t.model.member.get(self.opts.member_id);
+      },
       url: function() {
         return '/'+t.team.current.id+'/comment/'+self.id;
+      },
+      editable: function() {
+        return self.opts.member_id == t.acct.current.member().id;
       }
-      // member
     });
   };
 
   model.type = 'comment';
 
   model.schema = new t.schema({
-    pid:   { type: 'string', required: false, minLength: 8, maxLength: 8 },
-    ptype: { type: 'string', required: true },
-    text:  { type: 'string', required: true },
-    mid:   { type: 'string', required: true }
+    pid:       { type: 'string', required: true, minLength: 8, maxLength: 8 },
+    ptype:     { type: 'string', required: true },
+    text:      { type: 'string', required: true },
+    member_id: { type: 'string', required: true, minLength: 8, maxLength: 8 }
   });
 
   t.model.extend(model);

@@ -22,6 +22,10 @@ describe("Team", function() {
     });
   });
 
+  // it("Member profile is created when team is created", function(done) {
+    // expect(Teambo.model.member.all.length).toBe(1);
+  // });
+
   it("Can be edited", function(done) {
     Teambo.team.current.update({name: "Test Team"}).then(function(team){
       expect(team.opts.name).toBe("Test Team");

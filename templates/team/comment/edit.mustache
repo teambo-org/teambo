@@ -1,0 +1,30 @@
+<div class="comment-edit" require-model="comment">
+{{#comment.current}}
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{#parentModel}}{{url}}{{/parentModel}}">Comment</a>
+        <span>Edit</span>
+    </nav>
+    <h1>{{#parentModel}}{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}{{/parentModel}}</h1>
+    <form id="comment_edit" name="comment_edit" method="POST" class="std ext">
+        <div class="section comments hi-05">
+            {{#member}}
+            <a>
+                <div class="img"><i class="{{icon}}"></i></div>
+                <div class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+            </a>
+            {{/member}}
+        </div>
+        <input type="hidden" class="hidden" name="comment_id" value="{{id}}"/>
+        <div class="field">
+            <textarea id="comment_text" class="text large" name="text">{{opts.text}}</textarea>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" id="delete_submit" value="Save Comment" />
+            <br/>
+            <a class="cancel" href="#{{#parentModel}}{{url}}{{/parentModel}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+{{/comment.current}}
+</div>

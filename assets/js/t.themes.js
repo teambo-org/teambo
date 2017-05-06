@@ -50,8 +50,8 @@ Teambo.themes = (function(){
     'Slate Azure'      : slate(155, 0.9),
     'Slate Teal'       : slate(180, 1),
     'Slate Aqua'       : slate(210, 0.9),
-    'Slate Blue'       : slate(240, 0.7),
-    'Slate Violet'     : slate(270, 0.75),
+    'Slate Blue'       : slate(240, 0.75),
+    'Slate Violet'     : slate(270, 1),
     'Slate Magenta'    : slate(300, 0.9),
     'Slate Crimson'    : slate(330, 1),
 

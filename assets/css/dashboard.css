@@ -88,7 +88,7 @@
 
 #dashboard .main .item p { margin: 0; }
 #dashboard .main section { }
-#dashboard .main section.description { padding: 0.8em 1em; }
+#dashboard .main section.description { padding: 0.8em 1em; word-break: break-word; }
 #dashboard .main section.tags { padding: 0; }
 #dashboard .main section.tags ul { margin: 0; padding: 0; }
 #dashboard .main section.tags ul li { list-style: none; margin: 0; padding: 0; }
@@ -100,12 +100,15 @@
 #dashboard .main section.comments .message { padding: 1em; }
 #dashboard .main section.comments .author {  }
 #dashboard .main section.comments .author .name {  }
+#dashboard .main section.comments span.date { display: inline-block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; }
 #dashboard .main section.comments .comment .control { display: none; float: right; }
 #dashboard .main section.comments .comment .control a { float: left; }
 #dashboard .main section.comments .comment:hover .control { display: block; }
 #dashboard .main section.comments form .field { padding: 0.5em 0 0; }
 #dashboard .main section.comments form textarea.text { border: none; width: 100%; padding: 0.5em;
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+#dashboard .comment-edit form .section { margin: -2em 0 1em; }
+#dashboard .comment-edit form .section span.date { display: block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; min-width: 10em; text-align: right; }
 
 #dashboard .main section.tags .child { font-size: 0.9em; }
 #dashboard .main section.tags .child i { opacity: 0.3; }
@@ -157,7 +160,7 @@
 #dashboard .main .bucket-view p.plan { padding: 0.8em 1em 0; margin-top: 0; font-size: 0.8em; }
 #dashboard .main .bucket-view span.plan { float: right; font-size: 0.8em; line-height: 1.7em; padding-right: 0.4em; }
 #dashboard .main .bucket-view span.plan i { margin-top: -0.1em; margin-right: 0.2em; }
-#dashboard .main .bucket-view p.description { padding: 0.8em 1em 0.7em; margin-top: 0; font-size: 0.8em; }
+#dashboard .main .bucket-view p.description { padding: 0.3em 0.4em 0.2em; margin-top: 0; font-size: 0.8em; max-height: 4.9em; overflow: hidden; clear: both; word-break: break-word; }
 #dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em;  }
 #dashboard .main .bucket-view ul.items.complete li { margin-bottom: 0; }
 
@@ -185,12 +188,13 @@
 #dashboard .side .bucket.active .icon-folder { display: none; }
 #dashboard .side .bucket.active .icon-folder-open { display: inline-block; }
 
-#dashboard .main section.history > .c { padding: 1em; }
+#dashboard .main section.history { background: none; }
 #dashboard .main section.history h2 { margin-bottom: 0.5em; }
 #dashboard .main ul.history { padding: 0; }
-#dashboard .main ul.history li { list-style: none; margin-bottom: 0.5em; }
+#dashboard .main ul.history li { list-style: none; margin-bottom: 0.5em; word-break: break-word; }
 #dashboard .main .history span.date { display: inline-block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; }
 #dashboard .main ul.history li div.diff { font-size: 0.9em; padding: 0.5em; }
+#dashboard .main ul.history p.toggle-target.open { padding: 0.4em 0.8em 0.5em; margin: 0.3em 0; }
 
 #dashboard .main .filter-status-incomplete .status-complete { display: none; }
 

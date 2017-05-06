@@ -1,10 +1,10 @@
 function(t){
   "use strict";
-  
+
   var form = new t.form(document.comment);
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = form.values(['text', 'pid', 'ptype', 'mid']);
+    var data = form.values(['text', 'pid', 'ptype', 'member_id']);
     var submit = function() {
       t.model.comment.create(data).then(function(comment){
         t.refresh();
@@ -15,9 +15,11 @@ function(t){
     };
     submit();
   });
-  
+
   t.view.autoselect.init('#main .autoselect', t.model.item.current);
-  
+
+  t.view.toggle.init('ul.history');
+
   t.view.on('item-removed', function(e) {
     if(e.id == t.model.item.current.id) {
       t.gotoUrl((t.model.bucket.current || t.team.current).url());
