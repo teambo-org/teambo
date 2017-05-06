@@ -205,6 +205,10 @@ form.std.remove p { text-align: center; }
     #dashboard .right { width: 2em; }
     #dashboard .main { right: 2em; }
     #dashboard .chat { right: 2em; }
+    #dashboard .right .section { font-size: 1em; }
+    #dashboard .right .name { display: none; }
+    #dashboard .right .subsection { display: none; }
+    #dashboard .right .totals { display: none; }
 }
 /* < 900 */
 @media (max-width: 900px) {
