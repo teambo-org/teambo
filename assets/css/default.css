@@ -66,7 +66,7 @@ figure { margin: 0; }
 table { border-collapse: collapse; border-spacing: 0; }
 td { vertical-align: top; }
 
-form.ext.std { margin: 0 auto; max-width: 30em; background: rgba(0,0,0,0.2); padding: 2em 0 1em; box-shadow: 0 0 1em rgba(0,0,0,0.1); max-width: 100%; }
+form.ext.std { margin: 0 auto; max-width: 30em; background: rgba(0,0,0,0.2); padding: 2em 0 1em; box-shadow: 0 0 1em rgba(0,0,0,0.1); }
 form.ext.std .field { text-align: center; }
 form.ext.std .field.submit { text-align: center; }
 form.std { padding: 1em; box-shadow: 0 0 1em rgba(0,0,0,0.1); }
