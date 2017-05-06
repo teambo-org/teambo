@@ -66,7 +66,7 @@ Teambo.themes = (function(){
     'Soft Blue'     : soft(210, 0.9),
     'Soft Violet'   : soft(270, 0.7),
     'Soft Magenta'  : soft(300, 0.8),
-    Default : dark(180)
+    Default : slate(180)
   };
 
 })();
