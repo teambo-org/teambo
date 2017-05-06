@@ -8,7 +8,9 @@
     <!--
         <a href="#{{url}}/remove" data-keybind="r">Remove</a>
     -->
+    {{#editable}}
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
+    {{/editable}}
     </nav>
     <h1><i class="{{icon}}"></i> {{opts.name}}</h1>
     {{#opts.description}}

@@ -14,6 +14,9 @@ Teambo.model.member = (function(t){
       active: function() {
         return ((model.current && model.current.id == self.id)
             || (t.model.item.current && t.model.item.current.opts.member_id == self.id)) ? 'active' : '';
+      },
+      editable: function() {
+        return self.id == t.acct.current.member().id;
       }
     });
   };

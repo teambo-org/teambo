@@ -8,6 +8,10 @@ function(t){
     member = t.model.member.get(member_id);
   form.name.focus();
   form.addEventListener("submit", function(e) {
+    if(!member.editable()) {
+      form.error.msg("Not allowed", "Members may only edit their own profiles");
+      return;
+    }
     form.disable();
     var data = form.values(['name', 'description']);
     member.update(data, true).then(function(member){
