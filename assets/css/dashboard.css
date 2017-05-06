@@ -187,6 +187,7 @@
 #dashboard .side .bucket .icon-folder-open { display: none; }
 #dashboard .side .bucket.active .icon-folder { display: none; }
 #dashboard .side .bucket.active .icon-folder-open { display: inline-block; }
+#dashboard .side .member.active i { opacity: 1; }
 
 #dashboard .main section.history { background: none; }
 #dashboard .main section.history h2 { margin-bottom: 0.5em; }

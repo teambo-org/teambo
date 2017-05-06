@@ -32,8 +32,8 @@ Teambo.model = (function(t){
             return;
           }
           var iv = t.crypto.iv();
-          // TODO: Add member id to history items
-          self.hist.push({iv: iv, diff: diff, ts: t.time()/*, mid: member.id */});
+          var member_id = t.acct.current.member().id;
+          self.hist.push({iv: iv, diff: diff, ts: t.time(), member_id: member_id});
           var new_ct = self.encrypted(iv);
           t.socket.ignore([model.type, self.id, iv].join('-'));
           t.xhr.post('/'+model.type, {
@@ -184,6 +184,14 @@ Teambo.model = (function(t){
       },
       active: function() {
         return model.current && model.current.id == self.id ? 'active' : '';
+      },
+      history: function() {
+        var h = [];
+        self.hist.forEach(function(data) {
+          h.push(t.model.history.create(data));
+        });
+        console.log(h);
+        return h;
       }
     });
   };
@@ -257,8 +265,8 @@ Teambo.model = (function(t){
           if(!id) {
             var id = t.crypto.tempKey();
             var m = new model({id: id, opts: opts});
-            // TODO: Add member id to history items
-            m.hist.push({iv: t.crypto.iv(), diff: opts, ts: t.time()/*, mid: member.id */});
+            var member_id = t.acct.current.member().id;
+            m.hist.push({iv: t.crypto.iv(), diff: opts, ts: t.time(), member_id: member_id});
             m.cache().then(function() {
               model.cacheIds().then(function() {
                 t.team.current.queue.process({type: model.type + '.offline.create', opts: opts, id: id});
