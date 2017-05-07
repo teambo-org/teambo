@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'teambo';
-  src: url('../font/teambo.eot?83264957');
-  src: url('../font/teambo.eot?83264957#iefix') format('embedded-opentype'),
-       url('../font/teambo.woff2?83264957') format('woff2'),
-       url('../font/teambo.woff?83264957') format('woff'),
-       url('../font/teambo.ttf?83264957') format('truetype'),
-       url('../font/teambo.svg?83264957#teambo') format('svg');
+  src: url('../font/teambo.eot?32647400');
+  src: url('../font/teambo.eot?32647400#iefix') format('embedded-opentype'),
+       url('../font/teambo.woff2?32647400') format('woff2'),
+       url('../font/teambo.woff?32647400') format('woff'),
+       url('../font/teambo.ttf?32647400') format('truetype'),
+       url('../font/teambo.svg?32647400#teambo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'teambo';
-    src: url('../font/teambo.svg?83264957#teambo') format('svg');
+    src: url('../font/teambo.svg?32647400#teambo') format('svg');
   }
 }
 */
@@ -77,7 +77,7 @@
 .icon-database-1:before { content: '\e813'; } /* '' */
 .icon-basketball:before { content: '\e814'; } /* '' */
 .icon-circle-thin:before { content: '\e815'; } /* '' */
-.icon-record-outline:before { content: '\e816'; } /* '' */
+.icon-garden:before { content: '\e816'; } /* '' */
 .icon-dot:before { content: '\e817'; } /* '' */
 .icon-clock:before { content: '\e818'; } /* '' */
 .icon-left-open:before { content: '\e819'; } /* '' */
@@ -121,22 +121,28 @@
 .icon-check-1:before { content: '\e83f'; } /* '' */
 .icon-check-empty:before { content: '\e840'; } /* '' */
 .icon-minus-1:before { content: '\e841'; } /* '' */
-.icon-linkedin:before { content: '\e842'; } /* '' */
 .icon-adult:before { content: '\e843'; } /* '' */
 .icon-heart:before { content: '\e844'; } /* '' */
 .icon-plus-1:before { content: '\e845'; } /* '' */
 .icon-logo:before { content: '\e846'; } /* '' */
 .icon-edit:before { content: '\e847'; } /* '' */
 .icon-pencil:before { content: '\e848'; } /* '' */
-.icon-lightbulb:before { content: '\e849'; } /* '' */
+.icon-flight:before { content: '\e849'; } /* '' */
+.icon-emo-sunglasses:before { content: '\e84a'; } /* '' */
+.icon-user-secret:before { content: '\e84b'; } /* '' */
+.icon-suit:before { content: '\e84c'; } /* '' */
+.icon-floppy:before { content: '\e84f'; } /* '' */
+.icon-giraffe:before { content: '\e850'; } /* '' */
 .icon-lock-open-alt:before { content: '\f075'; } /* '' */
 .icon-twitter:before { content: '\f099'; } /* '' */
+.icon-coffee:before { content: '\f0f4'; } /* '' */
 .icon-angle-left:before { content: '\f104'; } /* '' */
 .icon-angle-right:before { content: '\f105'; } /* '' */
 .icon-angle-up:before { content: '\f106'; } /* '' */
 .icon-angle-down:before { content: '\f107'; } /* '' */
 .icon-circle-empty:before { content: '\f10c'; } /* '' */
 .icon-circle:before { content: '\f111'; } /* '' */
+.icon-rocket:before { content: '\f135'; } /* '' */
 .icon-html5:before { content: '\f13b'; } /* '' */
 .icon-ellipsis:before { content: '\f141'; } /* '' */
 .icon-ellipsis-vert:before { content: '\f142'; } /* '' */
@@ -144,9 +150,14 @@
 .icon-apple:before { content: '\f179'; } /* '' */
 .icon-windows:before { content: '\f17a'; } /* '' */
 .icon-android:before { content: '\f17b'; } /* '' */
+.icon-graduation-cap:before { content: '\f19d'; } /* '' */
+.icon-paw:before { content: '\f1b0'; } /* '' */
+.icon-cube:before { content: '\f1b2'; } /* '' */
 .icon-steam:before { content: '\f1b6'; } /* '' */
 .icon-database:before { content: '\f1c0'; } /* '' */
+.icon-rebel:before { content: '\f1d0'; } /* '' */
 .icon-chart-area:before { content: '\f1fe'; } /* '' */
+.icon-heartbeat:before { content: '\f21e'; } /* '' */
 .icon-battery-4:before { content: '\f240'; } /* '' */
 .icon-battery-3:before { content: '\f241'; } /* '' */
 .icon-battery-2:before { content: '\f242'; } /* '' */
@@ -156,7 +167,6 @@
 .icon-firefox-1:before { content: '\f269'; } /* '' */
 .icon-calendar-check-o:before { content: '\f274'; } /* '' */
 .icon-reddit-alien:before { content: '\f281'; } /* '' */
-.icon-universal-access:before { content: '\f29a'; } /* '' */
 .icon-snapchat-ghost:before { content: '\f2ac'; } /* '' */
 .icon-user-circle-o:before { content: '\f2be'; } /* '' */
 .icon-lock:before { content: '\f512'; } /* '' */
