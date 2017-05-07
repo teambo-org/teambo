@@ -187,10 +187,13 @@ Teambo.model = (function(t){
       },
       history: function() {
         var h = [];
-        self.hist.forEach(function(data) {
-          h.push(t.model.history.create(data));
+        self.hist.forEach(function(data, i) {
+          var d = t.model.history.create(data);
+          if(i == 0) {
+            d.first = true;
+          }
+          h.push(d);
         });
-        console.log(h);
         return h;
       }
     });

@@ -4,7 +4,7 @@
         <span class="active">Planning</span>
     </nav>
     <nav>
-        <a href="#{{team.url}}/plan/new" data-keybind="c">Create plan</a>
+        <a href="#{{team.url}}/plan/new" data-keybind="c">Create Plan</a>
     </nav>
     <h1><div class="img"><i class="icon-calendar-check-o"></i></div> Planning</h1>
     <form class="std horizontal color-bg filter" name="filter">
@@ -22,7 +22,7 @@
             {{/model.member.all}}
             <option value="none">(unassigned)</option>
         </select>
-        <a class="clear" href="#{{team.url}}/buckets?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
+        <a class="clear" href="#{{team.url}}/plan?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
     </form>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="plans buckets" id="plans">
@@ -37,10 +37,18 @@
         <ul class="items">
         {{#item_list}}
             <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
-                <a href="#{{url}}" title="{{opts.status}}" class="dim">
+                <a href="#{{url}}" class="{{#complete}}color-30{{/complete}}{{^complete}}dim{{/complete}}">
                     {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
                     {{/status}}
+                    {{#member}}
+                        {{#isMe}}
+                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                        {{^isMe}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                    {{/member}}
                     <span class="name">{{opts.name}}</span>
                 </a>
             </li>

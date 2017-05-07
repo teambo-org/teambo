@@ -10,6 +10,7 @@ function(t){
     var data = form.values(['name', 'description', 'start', 'end']);
     t.model.plan.create(data).then(function(plan){
       t.view.updateSideNav();
+      t.view.updateTheme();
       t.gotoUrl(plan.url());
     }).catch(function(e){
       form.enable();

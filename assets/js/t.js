@@ -63,7 +63,7 @@ var Teambo = (function(t){
       t.acct.current.cacheAuth();
       setTimeout(function() {
         window.location.reload();
-      }, 100);
+      }, 500);
     } else {
       window.location.reload();
     }

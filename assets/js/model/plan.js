@@ -18,11 +18,24 @@ Teambo.model.plan = (function(t){
           return o.opts.status === 'complete';
         });
       },
+      item_list_mine_complete: function() {
+        return self.item_list().filter(function(o) {
+          return o.opts.status === 'complete' && o.assignedToMe();
+        });
+      },
+      item_list_mine_incomplete: function() {
+        return self.item_list().filter(function(o) {
+          return o.opts.status !== 'complete' && o.assignedToMe();
+        });
+      },
       item_count: function() {
         return self.item_list().length;
       },
       item_count_incomplete: function() {
         return self.item_list_incomplete().length;
+      },
+      item_count_mine_incomplete: function() {
+        return self.item_list_mine_incomplete().length;
       },
       progress: function() {
         return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;

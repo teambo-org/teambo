@@ -13,7 +13,7 @@ function(t){
       return;
     }
     form.disable();
-    var data = form.values(['name', 'description']);
+    var data = form.values(['name', 'description', 'icon']);
     member.update(data, true).then(function(member){
       t.view.updateSideNav();
       t.gotoUrl(member.url());
@@ -22,5 +22,6 @@ function(t){
       form.error.msg("member could not be saved", "Please try again");
     });
   });
+  form.icon.value = form.icon.dataset.value;
 
 }

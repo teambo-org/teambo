@@ -50,8 +50,8 @@ Teambo.themes = (function(){
     'Slate Azure'      : slate(155, 0.9),
     'Slate Teal'       : slate(180, 1),
     'Slate Aqua'       : slate(210, 0.9),
-    'Slate Blue'       : slate(240, 0.75),
-    'Slate Violet'     : slate(270, 1),
+    'Slate Blue'       : slate(240, 0.7),
+    'Slate Violet'     : slate(270, 0.8),
     'Slate Magenta'    : slate(300, 0.9),
     'Slate Crimson'    : slate(330, 1),
 
@@ -63,8 +63,8 @@ Teambo.themes = (function(){
     'Deep Azure'      : deep(155, 1),
     'Deep Teal'       : deep(180, 1),
     'Deep Aqua'       : deep(210, 1),
-    'Deep Blue'       : deep(240, 0.8),
-    'Deep Violet'     : deep(270, 0.9),
+    'Deep Blue'       : deep(240, 0.7),
+    'Deep Violet'     : deep(270, 0.8),
     'Deep Magenta'    : deep(300, 1),
     'Deep Crimson'    : deep(330, 1),
 
@@ -76,8 +76,8 @@ Teambo.themes = (function(){
     'Soft Azure'      : soft(155, 1,    0.8),
     'Soft Teal'       : soft(180, 1,    0.8),
     'Soft Aqua'       : soft(210, 0.9,  0.8),
-    'Soft Blue'       : soft(240, 0.75, 0.8),
-    'Soft Violet'     : soft(270, 0.9,  0.8),
+    'Soft Blue'       : soft(240, 0.7, 0.8),
+    'Soft Violet'     : soft(270, 0.8,  0.8),
     'Soft Magenta'    : soft(300, 0.8,  0.8),
     'Soft Crimson'    : soft(330, 0.8,  0.8),
 

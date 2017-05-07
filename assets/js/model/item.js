@@ -22,6 +22,13 @@ Teambo.model.item = (function(t){
       },
       url: function() {
         return '/'+t.team.current.id+'/item/'+self.id;
+      },
+      assignedToMe: function() {
+        var member = self.member();
+        return member && member.isMe();
+      },
+      complete: function() {
+        return self.opts.status === 'complete';
       }
     });
   };
@@ -92,13 +99,21 @@ Teambo.model.item = (function(t){
     return ret;
   };
 
-  model.statuses = [
+  var wrap_statuses = function(statuses) {
+    statuses.forEach(function(el) {
+      el.active = function() {
+        return model.current && model.current.opts.status == el.key;
+      };
+    });
+    return statuses
+  };
+  model.statuses = wrap_statuses([
     { key: 'ready',      label: 'Ready',       icon: 'check-empty' },
     { key: 'blocked',    label: 'Blocked',     icon: 'attention' },
     { key: 'inprogress', label: 'In Progress', icon: 'child' },
     { key: 'qa',         label: 'Under QA',    icon: 'sliders' },
     { key: 'complete',   label: 'Complete',    icon: 'check-1' }
-  ];
+  ]);
 
   return model;
 

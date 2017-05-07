@@ -5,7 +5,6 @@
         <span class="active">Plan</span>
     </nav>
     <nav>
-        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
     </nav>
     <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
@@ -24,10 +23,18 @@
         <ul class="items incomplete">
         {{#item_list_incomplete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#{{url}}" title="{{opts.status}}" class="hi-05">
+                <a href="#{{url}}" class="hi-05">
                     {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
                     {{/status}}
+                    {{#member}}
+                        {{#isMe}}
+                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                        {{^isMe}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                    {{/member}}
                     <span class="name">{{opts.name}}</span>
                     {{#opts.description}}
                     <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
@@ -43,8 +50,16 @@
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
                 <a href="#{{url}}">
                     {{#status}}
-                    <i class="icon-{{icon}}"></i>
+                    <i class="icon-{{icon}}" title="{{label}}"></i>
                     {{/status}}
+                    {{#member}}
+                        {{#isMe}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                        {{^isMe}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                    {{/member}}
                     <span class="name">{{opts.name}}</span>
                 </a>
             </li>

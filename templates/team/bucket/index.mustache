@@ -51,6 +51,14 @@
                     {{#plan}}
                     <i class="icon-{{icon}} plan-icon" title="{{opts.name}}"></i>
                     {{/plan}}
+                    {{#member}}
+                        {{#isMe}}
+                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                        {{^isMe}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                    {{/member}}
                     <span class="name">{{opts.name}}</span>
                 </a>
             </li>

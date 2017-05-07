@@ -12,6 +12,29 @@
             <p>{{opts.email}}</p>
         </div>
         <div class="field">
+            <label for="member_icon">Icon</label>
+            <select id="member_icon" name="icon" class="text demo-icon" data-value="{{opts.icon}}">
+                <option value=""></option>
+                <option value="icon-apple"></option>
+                <option value="icon-windows"></option>
+                <option value="icon-android"></option>
+                <option value="icon-asl"></option>
+                <option value="icon-github-circled"></option>
+                <option value="icon-reddit-alien"></option>
+                <option value="icon-child-1"></option>
+                <option value="icon-grooveshark"></option>
+                <option value="icon-heart"></option>
+                <option value="icon-chrome-1"></option>
+                <option value="icon-firefox-1"></option>
+                <option value="icon-theatre"></option>
+                <option value="icon-linkedin"></option>
+                <option value="icon-html5"></option>
+                <option value="icon-snapchat-ghost"></option>
+                <option value="icon-twitter"></option>
+                <option value="icon-user-circle-o"></option>
+            </select>
+        </div>
+        <div class="field">
             <label for="member_name">Name</label>
             <input id="member_name"type="text" class="text large required min-len-1" name="name" autocomplete="off" placeholder="Member Name" value="{{opts.name}}" />
         </div>
