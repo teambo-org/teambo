@@ -22,15 +22,23 @@
         <ul class="items incomplete">
         {{#item_list_incomplete}}
             <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#{{url}}" title="{{opts.status}}" class="hi-05">
+                <a href="#{{url}}" class="hi-05">
                     {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}"></i>
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
                     {{/status}}
                     {{#plan}}
-                    <span class="plan color-50">
+                    <span class="plan" title="{{opts.name}}">
                         <i class="icon-{{icon}}"></i> {{opts.name}}<br/>
                     </span>
                     {{/plan}}
+                    {{#member}}
+                        {{#isMe}}
+                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                        {{^isMe}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                        {{/isMe}}
+                    {{/member}}
                     <span class="name">{{opts.name}}</span>
                     {{#opts.description}}
                     <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
@@ -49,6 +57,14 @@
                     {{#status}}
                     <i class="icon-{{icon}}"></i>
                     {{/status}}
+                    {{#plan}}
+                    <span class="plan color-30" title="{{opts.name}}">
+                        <i class="icon-{{icon}}"></i> {{opts.name}}<br/>
+                    </span>
+                    {{/plan}}
+                    {{#member}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                    {{/member}}
                     <span class="name">{{opts.name}}</span>
                 </a>
             </li>

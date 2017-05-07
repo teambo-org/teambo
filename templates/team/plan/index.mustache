@@ -9,8 +9,8 @@
     <h1><div class="img"><i class="icon-calendar-check-o"></i></div> Planning</h1>
     <form class="std horizontal color-bg filter" name="filter">
         <select name="status" class="text">
-            <option value="">All Statuses</option>
-            <option value="incomplete" selected="selected">Incomplete</option>
+            <option value="" selected="selected">All Statuses</option>
+            <option value="incomplete">Incomplete</option>
             {{#model.item.statuses}}
             <option value="{{key}}">{{label}}</option>
             {{/model.item.statuses}}
@@ -22,7 +22,7 @@
             {{/model.member.all}}
             <option value="none">(unassigned)</option>
         </select>
-        <a class="clear" href="#{{team.url}}/plan?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
+        <a class="clear" href="#{{team.url}}/plan?status=&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
     </form>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="plans buckets" id="plans">

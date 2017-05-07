@@ -175,6 +175,7 @@
 
 #dashboard .main .wiki-index ul li { list-style: none; }
 #dashboard .main .wiki-index ul.children { padding: 0.2em 1em; }
+#dashboard .main .wiki section.description { font-size: 0.9em; }
 
 #dashboard .left .section { font-size: 1em; }
 #dashboard .left a.nav-section { font-weight: 500; }
@@ -184,7 +185,7 @@
 #dashboard .side .subsection i { opacity: 0.3; }
 #dashboard .side .subsection .img { background: none; }
 #dashboard .side .subsection .name { margin: 0; padding: 0; }
-#dashboard .side .bucket.active i { opacity: 1; }
+#dashboard .side .active i { opacity: 1; }
 #dashboard .side .bucket .icon-folder-open { display: none; }
 #dashboard .side .bucket.active .icon-folder { display: none; }
 #dashboard .side .bucket.active .icon-folder-open { display: inline-block; }
