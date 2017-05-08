@@ -164,8 +164,9 @@ form.filter { clear: both; }
 .up2c { float: left; width: 48%; margin: 0 1% 2%; }
 
 /* 4 col layout with wide right and left */
-.up4c3 { float: left; width: 73%; margin: 0 1% 2%; }
 .up4c { float: left; width: 23%; margin: 0 1% 2%; }
+.up4c3 { float: left; width: 73%; margin: 0 1% 2%; }
+.up4c3b { float: right; }
 .up3c { float: left; width: 31.333%; margin: 0 1% 2%; font-size: 0.9em; }
 .up3c:nth-child(3n+1) { clear: left; }
 
