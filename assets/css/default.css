@@ -39,7 +39,7 @@ h4 { font-size: 1.2em; }
 h5 { font-size: 1.1em; }
 h6 { font-size: 1em; }
 h1 a, h2 a {  }
-h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub { font-size: 0.8em; margin-left: 0.5em; }
+h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub { font-size: 0.5em; margin-left: 0.5em; opacity: 0.5; font-weight: normal; }
 
 abbr[title] { border-bottom: 1px dotted; }
 b, strong { font-weight: 500; }
@@ -150,6 +150,8 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 #logo { opacity: 0.2; width: 11em; height: 11em; margin: 2em auto; }
 @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
 .spinner { animation: 1s linear infinite spin; }
+
+form.filter { clear: both; }
 
 /* -= Layout =- */
 .up1, .up2l, .up2r { float: left; width: 50%; }

@@ -1,29 +1,63 @@
-<div class="member-view" require-model="member">
+<div class="member-view" require-model="member" id="member-view">
 {{#model.member.current}}
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
         <span class="active">Member</span>
     </nav>
     <nav>
-    <!--
-        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
-    -->
     {{#editable}}
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
     {{/editable}}
     </nav>
-    <h1><i class="{{icon}}"></i> {{opts.name}}</h1>
+    <h1><i class="{{icon}}"></i> {{opts.name}} <span class="sub">{{opts.email}}</span></h1>
     {{#opts.description}}
     <div class="up1c">
         <section class="description color-bg">{{#nl2br}}{{opts.description}}{{/nl2br}}</section>
     </div>
     {{/opts.description}}
     <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
-    <div class="up1c">
-        <ul class="member-details">
-            <li>Email: {{opts.email}}</li>
-            <li>RSA Public Key: <blockquote>{{opts.pubKey}}</blockquote></li>
+    <ul class="plans buckets" id="plans">
+    {{#model.plan.all}}
+    <li class="plan bucket hi-10 up3c" id="plan-li-{{id}}">
+        <a href="#{{url}}" class="hi-05">
+            <i class="icon-{{icon}}"></i>
+            <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
+            <span class="name">{{opts.name}}</span>
+            <div class="progress hi-15" data-progress="{{progress}}"></div>
+        </a>
+        <ul class="items">
+        {{#item_list_mine_incomplete}}
+            <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
+                <a href="#{{url}}" class="dim">
+                    {{#status}}
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
+                    {{/status}}
+                    {{#member}}
+                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
+                    {{/member}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+            </li>
+        {{/item_list_mine_incomplete}}
+        {{#item_list_mine_complete}}
+            <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
+                <a href="#{{url}}" class="color-30">
+                    {{#status}}
+                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
+                    {{/status}}
+                    {{#member}}
+                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                    {{/member}}
+                    <span class="name">{{opts.name}}</span>
+                </a>
+            </li>
+        {{/item_list_mine_complete}}
         </ul>
-    </div>
+    </li>
+    {{/model.plan.all}}
+    {{^model.plan.all}}
+    <p class="empty">No plans</p>
+    {{/model.plan.all}}
+    </ul>
 {{/model.member.current}}
 </div>

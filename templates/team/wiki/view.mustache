@@ -53,25 +53,47 @@
     <section class="history up1c"><div class="c">
         <h2><i class="icon-clock"></i> History</h2>
         <ul class="history">
-        {{#hist}}
+        {{#history}}
             <li data-iv="{{iv}}" class="hi-05 color-50">
                 <div class="hi-05 color-70 section">
+                {{#member}}
+                    <div class="img"><i class="{{icon}}"></i></div>
+                    <div class="name">
+                        <a class="value color-70" href="#{{url}}">{{opts.name}}</a>
+                        <span class="date">{{#localTime}}{{ts}}{{/localTime}}</span>
+                    </div>
+                {{/member}}
+                {{^member}}
                     <div class="img"><i class="icon-user-1"></i></div>
-                    <div class="name">Kev<span class="date">{{#localTime}}{{ts}}{{/localTime}}</span></div>
+                    <div class="name">
+                        (unknown member) {{diff.member_id}}
+                        <span class="date">{{#localTime}}{{ts}}{{/localTime}}</span>
+                    </div>
+                {{/member}}
                 </div>
                 <div class="diff">
                     {{#diff.parid}}
-                    <div class="parid"><span class="k">Parent</span> changed to <span class="value color-70">{{diff.parid}}</span></div>
+                    <div class="parid"><span class="k">Parent</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.parid}}</span></div>
                     {{/diff.parid}}
                     {{#diff.title}}
-                    <div class="title"><span class="k">Title</span> changed to <span class="value color-70">{{diff.title}}</span></div>
+                    <div class="title"><span class="k">Title</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.title}}</span></div>
                     {{/diff.title}}
-                    {{#diff.text}}
-                    <div class="text"><span class="k">Text</span> changed to <span class="value color-70">{{diff.title}}</span></div>
-                    {{/diff.text}}
+                    {{#diff_text}}
+                        {{#diff.text}}
+                        <div class="description text">
+                            <span class="k">Text</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} <a data-toggle="history-text-{{iv}}"><i class="icon-angle-down"></i></a>
+                            <p class="value color-70 description toggle-target hi-05" data-toggle-target="history-text-{{iv}}">{{#nl2br}}{{diff.text}}{{/nl2br}}</p>
+                        </div>
+                        {{/diff.text}}
+                        {{^diff.text}}{{^first}}
+                        <div class="description text">
+                            <span class="k">Text</span> removed
+                        </div>
+                        {{/first}}{{/diff.text}}
+                    {{/diff_text}}
                 </div>
             </li>
-        {{/hist}}
+        {{/history}}
         </ul>
     </div></section>
 {{/model.wiki.current}}

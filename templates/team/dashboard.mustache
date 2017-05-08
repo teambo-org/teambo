@@ -4,47 +4,4 @@
     </nav>
     <h1><div class="img"><i class="icon-logo"></i></div>{{team.opts.name}}</h1>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
-    <ul class="plans buckets" id="plans">
-    {{#model.plan.all}}
-    <li class="plan bucket hi-10 up3c" id="plan-li-{{id}}">
-        <a href="#{{url}}" class="hi-05">
-            <i class="icon-{{icon}}"></i>
-            <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
-            <span class="name">{{opts.name}}</span>
-            <div class="progress hi-15" data-progress="{{progress}}"></div>
-        </a>
-        <ul class="items">
-        {{#item_list_mine_incomplete}}
-            <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
-                <a href="#{{url}}" class="dim">
-                    {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
-                    {{/status}}
-                    {{#member}}
-                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
-                    {{/member}}
-                    <span class="name">{{opts.name}}</span>
-                </a>
-            </li>
-        {{/item_list_mine_incomplete}}
-        {{#item_list_mine_complete}}
-            <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
-                <a href="#{{url}}" class="color-30">
-                    {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
-                    {{/status}}
-                    {{#member}}
-                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                    {{/member}}
-                    <span class="name">{{opts.name}}</span>
-                </a>
-            </li>
-        {{/item_list_mine_complete}}
-        </ul>
-    </li>
-    {{/model.plan.all}}
-    {{^model.plan.all}}
-    <p class="empty">Team has no plans</p>
-    {{/model.plan.all}}
-    </ul>
 </div>

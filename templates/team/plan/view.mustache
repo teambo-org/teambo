@@ -7,7 +7,7 @@
     <nav>
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
     </nav>
-    <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
+    <h1><i class="icon-{{icon}}"></i> {{opts.name}} <span class="sub">{{item_count_incomplete}} / {{item_count}}</span></h1>
     {{#opts.start}}
     <div class="up1c">
         {{opts.start}} - {{opts.end}}
@@ -61,6 +61,9 @@
                         {{/isMe}}
                     {{/member}}
                     <span class="name">{{opts.name}}</span>
+                    {{#opts.description}}
+                    <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
+                    {{/opts.description}}
                 </a>
             </li>
         {{/item_list_complete}}

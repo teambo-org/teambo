@@ -1,0 +1,35 @@
+<ul class="buckets" id="buckets">
+{{#model.bucket.list}}
+<li class="bucket hi-10 up3c" id="bucket-li-{{id}}">
+    <a href="#{{url}}" class="hi-05">
+        <i class="icon-folder"></i>
+        <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
+        <span class="name">{{opts.name}}</span>
+        <div class="progress hi-15" data-progress="{{progress}}"></div>
+    </a>
+    <ul class="items">
+    {{#item_list}}
+        <li class="item status-{{opts.status}} plan_id-{{opts.plan_id}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
+            <a href="#{{url}}" class="dim">
+                {{#status}}
+                <i class="icon-{{icon}}" role="img" title="{{label}}"></i>
+                {{/status}}
+                {{#plan}}
+                <i class="icon-{{icon}} plan-icon" title="{{opts.name}}"></i>
+                {{/plan}}
+                {{#member}}
+                    {{#isMe}}
+                    <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
+                    {{/isMe}}
+                    {{^isMe}}
+                    <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                    {{/isMe}}
+                {{/member}}
+                <span class="name">{{opts.name}}</span>
+            </a>
+        </li>
+    {{/item_list}}
+    </ul>
+</li>
+{{/model.bucket.list}}
+</ul>

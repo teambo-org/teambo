@@ -37,6 +37,9 @@ Teambo.model.history = (function(t){
       },
       diff_status: function() {
         return 'status' in self.diff;
+      },
+      diff_text: function() {
+        return 'text' in self.diff;
       }
     });
   };

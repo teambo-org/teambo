@@ -5,6 +5,13 @@
         <a href="#{{url}}" data-keybind="q escape `">Member</a>
         <span>Edit</span>
     </nav>
+    <nav>
+    {{#editable}}
+    <!--
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+    -->
+    {{/editable}}
+    </nav>
     <h1><i class="{{icon}}"></i>{{opts.name}}</h1>
     <form id="member-edit" name="member_edit" method="POST" class="std" data-member_id="{{id}}">
         <div class="field">
@@ -22,14 +29,12 @@
                 <option value="icon-github-circled"></option>
                 <option value="icon-reddit-alien"></option>
                 <option value="icon-child-1"></option>
-                <option value="icon-grooveshark"></option>
                 <option value="icon-heart"></option>
                 <option value="icon-chrome-1"></option>
                 <option value="icon-firefox-1"></option>
                 <option value="icon-theatre"></option>
                 <option value="icon-html5"></option>
                 <option value="icon-snapchat-ghost"></option>
-                <option value="icon-twitter"></option>
                 <option value="icon-user-circle-o"></option>
                 <option value="icon-basketball"></option>
                 <option value="icon-steam"></option>
