@@ -1,0 +1,104 @@
+<section class="tags">
+    <ul>
+        {{#status}}
+        <li class="state section autoselect" data-opt="status">
+            <a href="#{{url}}/edit" class="trigger">
+                <i class="icon-down-open-1 nav color-hi-40"></i>
+                <div class="img"><i class="icon-{{icon}}"></i></div>
+                <div class="name">{{label}}</div>
+            </a>
+            <div class="options">
+                {{#model.item.statuses}}
+                <a data-value="{{key}}">
+                    <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
+                    <div class="name">{{label}}</div>
+                </a>
+                {{/model.item.statuses}}
+            </div>
+        </li>
+        {{/status}}
+        <li class="state section autoselect" data-opt="bucket_id">
+            {{#bucket}}
+            <a href="#{{url}}/edit" class="trigger {{#fake}}color-30{{/fake}}">
+                <i class="icon-down-open-1 nav color-hi-40"></i>
+                <div class="img"><i class="icon-{{icon}}"></i></div>
+                <div class="name">{{opts.name}}</div>
+            </a>
+            {{/bucket}}
+            <div class="options">
+                {{#model.bucket.all}}
+                <a data-value="{{id}}">
+                    <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
+                    <div class="name">{{opts.name}}</div>
+                </a>
+                {{/model.bucket.all}}
+                <a data-value="">
+                    <div class="img {{#bucket}}color-30{{/bucket}}"><i class="icon-folder"></i></div>
+                    <div class="name">(none)</div>
+                </a>
+            </div>
+        </li>
+        <li class="plan section autoselect" data-opt="plan_id">
+            {{#plan}}
+            <a href="#{{url}}" class="trigger">
+                <i class="icon-down-open-1 nav color-hi-40"></i>
+                <div class="img"><i class="icon-{{icon}}"></i></div>
+                <div class="name">{{opts.name}}</div>
+            </a>
+            {{/plan}}
+            {{^plan}}
+            <a href="#{{url}}" class="trigger color-30">
+                <i class="icon-down-open-1 nav"></i>
+                <div class="img"><i class="icon-flag-1"></i></div>
+                <div class="name">(none)</div>
+            </a>
+            {{/plan}}
+            <div class="options">
+                {{#model.plan.all}}
+                <a data-value="{{id}}">
+                    <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
+                    <div class="name">{{opts.name}}</div>
+                </a>
+                {{/model.plan.all}}
+                <a data-value="">
+                    <div class="img {{#plan}}color-30{{/plan}}"><i class="icon-flag-1"></i></div>
+                    <div class="name">(none)</div>
+                </a>
+            </div>
+        </li>
+        <li class="member section autoselect" data-opt="member_id">
+            {{#member}}
+            <a href="#{{url}}" class="trigger">
+                <i class="icon-down-open-1 nav color-hi-40"></i>
+                <div class="img"><i class="{{icon}}"></i></div>
+                <div class="name">{{opts.name}}</div>
+            </a>
+            {{/member}}
+            {{^member}}
+            <a href="#{{url}}" class="trigger color-30">
+                <i class="icon-down-open-1 nav"></i>
+                <div class="img"><i class="icon-user-1"></i></div>
+                <div class="name">(none)</div>
+            </a>
+            {{/member}}
+            <div class="options">
+                {{#model.member.all}}
+                <a data-value="{{id}}">
+                    <div class="img {{^active}}color-30{{/active}}"><i class="{{icon}}"></i></div>
+                    <div class="name">{{opts.name}}</div>
+                </a>
+                {{/model.member.all}}
+                <a data-value="">
+                    <div class="img {{#member}}color-30{{/member}}"><i class="icon-user-1"></i></div>
+                    <div class="name">(none)</div>
+                </a>
+            </div>
+        </li>
+        <li class="section">
+            <a>
+                <div class="img"><i class="icon-tag-1"></i></div>
+                <div class="name">UI</div>
+            </a>
+        </li>
+    </ul>
+</section>
