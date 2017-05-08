@@ -108,10 +108,10 @@ Teambo.team = (function(t){
       encrypted: function(override) {
         var override = override ? override : {};
         var data = {
-          id:   self.id,
-          opts: self.opts,
-          hist: self.hist,
-          iv:   self.iv
+          id:    self.id,
+          opts:  self.opts,
+          hist:  self.hist,
+          iv:    self.iv
         };
         t.extend(data, override);
         var config = {};
@@ -154,6 +154,9 @@ Teambo.team = (function(t){
           self.cache();
         }
         return self.last_seen;
+      },
+      isAdmin: function() {
+        return t.findByProperty(t.acct.current.teams, 'id', self.id).admin || false;
       }
     });
     var uncacheTeam = function() {
@@ -200,7 +203,7 @@ Teambo.team = (function(t){
           }, data.mkey, key);
           new_team.orig = {};
           new_team.save().then(function(){
-            acct.teams.push({id: new_team.id, mkey: data.mkey, key: key});
+            acct.teams.push({id: new_team.id, mkey: data.mkey, key: key, admin: true});
             acct.save().then(function(){
               fulfill(new_team);
             }).catch(reject);
@@ -226,9 +229,9 @@ Teambo.team = (function(t){
         if (ct) {
           fulfill(new team(ct, d.mkey, d.key));
         } else {
-          team.fetch(id, d.mkey).then(function(ct) {
+          team.fetch(id, d.mkey).then(function(data) {
             if(ct) {
-              var fetched_team = new team(ct, d.mkey, d.key);
+              var fetched_team = new team(data.team.ct, d.mkey, d.key);
               fetched_team.cache().then(function() {
                 fulfill(fetched_team);
               });
@@ -272,7 +275,7 @@ Teambo.team = (function(t){
       }).then(function(xhr) {
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
-          fulfill(data.team.ct);
+          fulfill(data);
         } else {
           reject("Failed to retrieve team " + id);
         }

@@ -35,6 +35,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/comments":          controller.HandleTeamObjects("comment"),
 	"/comment":           controller.HandleTeamObject("comment", true),
 	"/comment/remove":    controller.HandleTeamObjectRemove("comment", true),
+	"/member/invite":     controller.MemberInvite,
 	"/members":           controller.HandleTeamObjects("member"),
 	"/member":            controller.HandleTeamObject("member", true),
 	"/member/remove":     controller.HandleTeamObjectRemove("member", true),

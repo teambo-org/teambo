@@ -49,6 +49,49 @@ func (t Team) NewMember() TeamObject {
 	return members.NewObject("")
 }
 
+func (t Team) NewAdmin(mkey string) TeamObject {
+	admins := TeamBucket{t.Id, "member_admin"}
+	admin := admins.NewObject("")
+	admin.Id = mkey
+	return admin
+}
+
+func (t Team) IsAdmin(mkey string) bool {
+	member_admin := TeamBucket{t.Id, "member_admin"}
+	exists, err := member_admin.Exists(mkey)
+	if err == nil && exists {
+		return true
+	}
+	return false
+}
+
+func (t Team) InviteCreate(ikey string) (invite TeamObject) {
+	invites := TeamBucket{t.Id, "member_invite"}
+	invite = invites.NewObject("")
+	invite.Id = ikey
+	return invite
+}
+
+func (t Team) InviteFind(ikey string) (invite TeamObject, err error) {
+	invites := TeamBucket{t.Id, "member_invite"}
+	invite, err = invites.Find(ikey)
+	return invites.Find(ikey)
+}
+
+func (t Team) InviteResponseCreate(ikey string, pubKey string) (inviteResponse TeamObject) {
+	invites := TeamBucket{t.Id, "member_invite_response"}
+	inviteResponse = invites.NewObject("")
+	inviteResponse.Id = ikey
+	inviteResponse.Ciphertext = pubKey
+	return inviteResponse
+}
+
+func (t Team) InviteResponseFind(ikey string) (inviteResponse TeamObject, err error) {
+	invites := TeamBucket{t.Id, "member_invite_response"}
+	inviteResponse, err = invites.Find(ikey)
+	return inviteResponse, err
+}
+
 func (t Team) Log(iv string) (log string, err error) {
 	db_team_update(t.Id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("log"))

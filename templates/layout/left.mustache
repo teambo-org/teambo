@@ -61,18 +61,20 @@
     </div>
     <div class="section members subsection">
     {{#model.member.all}}
+    {{#opts.pubKey}}
         <a href="#{{url}}" class="member {{active}}" data-obj="member-{{id}}">
             <div class="img"><i class="{{icon}}"></i></div>
             <div class="name">{{opts.name}}</div>
         </a>
+    {{/opts.pubKey}}
     {{/model.member.all}}
     </div>
     <!--
     <div class="section hi-10">
         <i class="icon-down-open-1 nav color-hi-40"></i>
-        <a href="#{{team.url}}/members" class="nav-section">
+        <a href="#{{team.url}}/archives" class="nav-section">
             <div class="img"><i class="icon-trash"></i></div>
-            <div class="name">Archive</div>
+            <div class="name">Archives</div>
         </a>
     </div>
     -->

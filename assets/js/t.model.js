@@ -32,8 +32,10 @@ Teambo.model = (function(t){
             return;
           }
           var iv = t.crypto.iv();
-          var member_id = t.acct.current.member().id;
-          self.hist.push({iv: iv, diff: diff, ts: t.time(), member_id: member_id});
+          var member = t.acct.current.member();
+          if(member) {
+            self.hist.push({iv: iv, diff: diff, ts: t.time(), member_id: member.id});
+          }
           var new_ct = self.encrypted(iv);
           t.socket.ignore([model.type, self.id, iv].join('-'));
           t.xhr.post('/'+model.type, {

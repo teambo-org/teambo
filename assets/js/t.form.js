@@ -71,7 +71,11 @@ Teambo.form = (function(t){
       values: function(vals) {
         var data = {};
         for(var i in vals) {
-          data[vals[i]] = form[vals[i]].value;
+          if(form[vals[i]].type === "checkbox") {
+            data[vals[i]] = form[vals[i]].checked;
+          } else {
+            data[vals[i]] = form[vals[i]].value;
+          }
         }
         return data;
       },
