@@ -30,7 +30,6 @@ Teambo.model.plan = (function(t){
       },
       item_list_member_complete: function() {
         return self.item_list().filter(function(o) {
-          console.log(o.opts.status === 'complete', t.model.member.current, o.assignedTo(t.model.member.current.id));
           return o.opts.status === 'complete' && t.model.member.current && o.assignedTo(t.model.member.current.id);
         });
       },

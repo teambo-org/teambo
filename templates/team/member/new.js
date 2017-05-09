@@ -16,7 +16,6 @@ function(t){
       t.view.updateSideNav();
       t.gotoUrl('/'+t.team.current.id+'/members');
     }).catch(function(xhr){
-      console.log(xhr);
       form.enable();
       form.error.msg("Member could not be saved", "Please try again");
     });
