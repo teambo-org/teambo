@@ -10,7 +10,7 @@ body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; fo
 ::-moz-selection { background: rgba(0,0,0,0.2); text-shadow: none; }
 ::selection { background: rgba(0,0,0,0.2); text-shadow: none; }
 
-a { color:rgba(0,0,0,0.7); cursor: pointer; }
+a { color:rgba(0,0,0,0.7); cursor: pointer; -webkit-app-region: no-drag; }
 a:visited { color: rgba(0,0,0,0.9); }
 a:hover, .active a { color: rgba(0,0,0,0.8); }
 *:focus { outline: none; }
@@ -151,7 +151,7 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .toggle-target.open { display: block; }
 
 .logo { background-image: url('/i/logo.svg'); background-repeat: no-repeat; background-size: 100%; }
-#logo { opacity: 0.2; width: 11em; height: 11em; margin: 2em auto; }
+#logo { opacity: 0.2; width: 11em; height: 11em; margin: 2em auto; -webkit-app-region: drag; }
 @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
 .spinner { animation: 1s linear infinite spin; }
 

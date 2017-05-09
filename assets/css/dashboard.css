@@ -6,6 +6,9 @@
 #dashboard .theme { display: none; }
 #dashboard .audio { display: none; }
 
+#dashboard #main { -webkit-app-region: drag; }
+#dashboard #main > div { -webkit-app-region: no-drag; }
+
 #dashboard.chat-collapsed .main { bottom: 2em; }
 #dashboard.chat-collapsed .chat { height: 2em; }
 
