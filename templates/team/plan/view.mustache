@@ -19,58 +19,40 @@
     </div>
     {{/opts.desc}}
     <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
-    <div class="up2c">
-        <ul class="items incomplete">
-        {{#item_list_incomplete}}
-            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#{{url}}" class="hi-05">
-                    {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
-                    {{/status}}
-                    {{#member}}
-                        {{#isMe}}
-                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                        {{^isMe}}
-                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                    {{/member}}
-                    <span class="name">{{opts.name}}</span>
-                    {{#opts.description}}
-                    <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
-                    {{/opts.description}}
-                </a>
-            </li>
-        {{/item_list_incomplete}}
-        </ul>
+    <div>
+        <div class="up3c">
+            <h4>Unassigned</h4>
+            <ul class="items incomplete">
+            {{#item_list_incomplete_unassigned}}
+                {{>team/plan/_item-li}}
+            {{/item_list_incomplete_unassigned}}
+            {{^item_list_incomplete_unassigned}}
+                <p class="empty bg-color-05 color-30">None</p>
+            {{/item_list_incomplete_unassigned}}
+            </ul>
+        </div>
+        <div class="up3c">
+            <h4>Assigned</h4>
+            <ul class="items incomplete">
+            {{#item_list_incomplete_assigned}}
+                {{>team/plan/_item-li}}
+            {{/item_list_incomplete_assigned}}
+            {{^item_list_incomplete_assigned}}
+                <p class="empty bg-color-05 color-30">None</p>
+            {{/item_list_incomplete_assigned}}
+            </ul>
+        </div>
+        <div class="up3c">
+            <h4>Complete</h4>
+            <ul class="items complete">
+            {{#item_list_complete}}
+                {{>team/plan/_item-li}}
+            {{/item_list_complete}}
+            {{^item_list_complete}}
+                <p class="empty bg-color-05 color-30">None</p>
+            {{/item_list_complete}}
+            </ul>
+        </div>
     </div>
-    <div class="up2c">
-        <ul class="items complete">
-        {{#item_list_complete}}
-            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#{{url}}">
-                    {{#status}}
-                    <i class="icon-{{icon}}" title="{{label}}"></i>
-                    {{/status}}
-                    {{#member}}
-                        {{#isMe}}
-                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                        {{^isMe}}
-                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                    {{/member}}
-                    <span class="name">{{opts.name}}</span>
-                    {{#opts.description}}
-                    <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
-                    {{/opts.description}}
-                </a>
-            </li>
-        {{/item_list_complete}}
-        </ul>
-    </div>
-    {{^item_list}}
-    <p class="empty">This plan has no items.</p>
-    {{/item_list}}
 {{/model.plan.current}}
 </div>

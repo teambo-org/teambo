@@ -13,6 +13,16 @@ Teambo.model.plan = (function(t){
           return o.opts.status !== 'complete';
         });
       },
+      item_list_incomplete_assigned: function() {
+        return self.item_list().filter(function(o) {
+          return o.opts.status !== 'complete' && o.assigned();
+        });
+      },
+      item_list_incomplete_unassigned: function() {
+        return self.item_list().filter(function(o) {
+          return o.opts.status !== 'complete' && !o.assigned();
+        });
+      },
       item_list_complete: function() {
         return self.item_list().filter(function(o) {
           return o.opts.status === 'complete';

@@ -10,7 +10,7 @@
         <a href="#{{url}}/edit" data-keybind="e">Edit</a>
     </nav>
     <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
-    <div class="up4c3">
+    <div class="up4c3 {{^opts.description}}c-empty{{/opts.description}}">
     {{#opts.description}}
         <section class="description color-bg" role="main">
             {{#nl2br}}{{#linkify}}{{opts.description}}{{/linkify}}{{/nl2br}}

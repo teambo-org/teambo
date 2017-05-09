@@ -91,14 +91,14 @@
 
 #dashboard .main .item p { margin: 0; }
 #dashboard .main section { }
-#dashboard .main section.description { padding: 0.8em 1em; word-break: break-word; }
+#dashboard .main section.description { padding: 0.8em 1em; word-break: break-word; margin-bottom: 0.5em; }
 #dashboard .main section.tags { padding: 0; }
 #dashboard .main section.tags ul { margin: 0; padding: 0; }
 #dashboard .main section.tags ul li { list-style: none; margin: 0; padding: 0; }
 #dashboard .main section.tags ul li > a { text-decoration: none; }
 #dashboard .main section.tags ul li i.nav { background: none; }
 #dashboard .main section.comments { clear: both; background: none; padding: 0; }
-#dashboard .main section.comments h2 { margin: 0 0 0.5em; }
+#dashboard .main section.comments h2 { margin: 0 0 0.4em; }
 #dashboard .main section.comments .comment { margin: 0 0 1em; }
 #dashboard .main section.comments .message { padding: 1em; }
 #dashboard .main section.comments .author {  }
@@ -164,7 +164,7 @@
 #dashboard .main .bucket-view p.plan { padding: 0.8em 1em 0; margin-top: 0; font-size: 0.8em; }
 #dashboard .main .bucket-view span.plan { float: right; font-size: 0.8em; line-height: 1.7em; padding-right: 0.4em; }
 #dashboard .main .bucket-view span.plan i { margin-top: -0.1em; margin-right: 0.2em; }
-#dashboard .main .bucket-view p.description { padding: 0.3em 0.4em 0.2em; margin-top: 0; font-size: 0.8em; max-height: 4.9em; overflow: hidden; clear: both; word-break: break-word; }
+#dashboard .main .bucket-view p.description { padding: 0.3em 0.4em 0.2em 2.15em; margin-top: 0; font-size: 0.8em; max-height: 4.8em; overflow: hidden; clear: both; word-break: break-word; }
 #dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em;  }
 #dashboard .main .bucket-view ul.items.complete li { margin-bottom: 0; }
 
@@ -195,7 +195,7 @@
 #dashboard .side .member.active i { opacity: 1; }
 
 #dashboard .main section.history { background: none; }
-#dashboard .main section.history h2 { margin-bottom: 0.5em; }
+#dashboard .main section.history h2 { margin-bottom: 0.4em; }
 #dashboard .main ul.history { padding: 0; }
 #dashboard .main ul.history li { list-style: none; margin-bottom: 0.5em; word-break: break-word; }
 #dashboard .main .history span.date { display: inline-block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; }
@@ -205,6 +205,9 @@
 #dashboard .main .filter-status-incomplete .status-complete { display: none; }
 #dashboard .main form.filter select { margin-right: 0.5em; }
 #dashboard .main form.filter.default-options a.clear { display: none; }
+
+#dashboard .plan-view h4 { margin-bottom: 0.5em; }
+#dashboard .plan-view p.empty { padding: 0.5em 0; margin: 0 0 0.5em; }
 
 #dashboard .main ul.member li span.pending { float: right; font-size: 0.9em; padding: 0 0.5em; }
 
