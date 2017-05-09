@@ -186,6 +186,21 @@ Teambo.team = (function(t){
     });
   };
 
+  var createFirstMember = function(team) {
+    return t.promise(function(fulfill, resolve) {
+      t.team.current = team;
+      t.model.member.create({
+        pubKey: t.acct.current.rsa.pubTPO().n,
+        email:  t.acct.current.email
+      }).then(function(m) {
+        t.model.member.uncacheAll().then(function() {
+          t.team.current = null;
+          fulfill(m);
+        });
+      });
+    });
+  };
+
   team.create = function(name) {
     return t.promise(function(fulfill, reject) {
       t.xhr.post('/team').then(function(xhr){
@@ -205,7 +220,9 @@ Teambo.team = (function(t){
           new_team.save().then(function(){
             acct.teams.push({id: new_team.id, mkey: data.mkey, key: key, admin: true});
             acct.save().then(function(){
-              fulfill(new_team);
+              createFirstMember(new_team).then(function() {
+                fulfill(new_team);
+              });
             }).catch(reject);
           }).catch(function(e){
             t.deleteByProperty(acct.teams, 'id', new_team.id)
@@ -230,11 +247,13 @@ Teambo.team = (function(t){
           fulfill(new team(ct, d.mkey, d.key));
         } else {
           team.fetch(id, d.mkey).then(function(data) {
-            if(ct) {
+            if(data.team) {
               var fetched_team = new team(data.team.ct, d.mkey, d.key);
               fetched_team.cache().then(function() {
                 fulfill(fetched_team);
               });
+            } else {
+              reject();
             }
           }).catch(reject);
         }
@@ -246,8 +265,8 @@ Teambo.team = (function(t){
     var acct = t.acct.current;
     if(!acct) return Promise.reject();
     return t.promise(function (fulfill, reject) {
-      var ret = [],
-        p = [];
+      var ret = [];
+      var p = [];
       acct.teams.forEach(function (v) {
         p.push(t.promise(function(fulfill, reject) {
           team.find(v.id).then(function(found_team) {
@@ -261,7 +280,7 @@ Teambo.team = (function(t){
           return a.opts.name > b.opts.name ? 1 : (a.opts.name === b.opts.name ? 0 : -1);
         });
         fulfill(ret);
-      });
+      }).catch(reject);
     });
   };
 
@@ -279,7 +298,7 @@ Teambo.team = (function(t){
         } else {
           reject("Failed to retrieve team " + id);
         }
-      });
+      }).catch(reject);
     });
   };
 

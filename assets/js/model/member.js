@@ -16,12 +16,15 @@ Teambo.model.member = (function(t){
             || (t.model.item.current && t.model.item.current.opts.member_id == self.id)) ? 'active' : '';
       },
       editable: function() {
-        return self.isMe();
+        return self.isMe() || t.team.current.isAdmin();
       },
       isMe: function() {
         return self.id == t.acct.current.member().id;
       }
     });
+    if(!self.opts.name) {
+      self.opts.name = self.opts.email;
+    }
   };
 
   model.type = 'member';
@@ -36,6 +39,8 @@ Teambo.model.member = (function(t){
   });
 
   t.model.extend(model);
+
+  model.track_history = false;
 
   model.getActiveId = function() {
     return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.member_id : null);
@@ -59,7 +64,7 @@ Teambo.model.member = (function(t){
         xhrdata.sender_email = member.opts.email;
         xhrdata.sender_name  = member.opts.name;
       }
-      t.xhr.post('/member/invite', {
+      t.xhr.post('/invite', {
         data: xhrdata
       }).then(function (xhr) {
         var d = JSON.parse(xhr.responseText);
@@ -77,10 +82,6 @@ Teambo.model.member = (function(t){
       });
     });
   };
-
-  t.event.on('team-post-init', function(team) {
-    return t.acct.current.createMember();
-  });
 
   return model;
 

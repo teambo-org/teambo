@@ -12,8 +12,8 @@ function(t){
       form.error.msg("Not allowed", "Members may only edit their own profiles");
       return;
     }
-    form.disable();
     var data = form.values(['name', 'description', 'icon']);
+    form.disable();
     member.update(data, true).then(function(member){
       t.view.updateSideNav();
       t.gotoUrl(member.url());

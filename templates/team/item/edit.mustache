@@ -10,11 +10,11 @@
     <form id="item-edit" name="item_edit" method="POST" class="std" data-item_id="{{id}}">
         <div class="field">
             <label for="item_name">Item Name</label>
-            <input id="item_name"type="text" class="text large required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{opts.name}}" />
+            <input id="item_name"type="text" class="text large full required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{opts.name}}" />
         </div>
         <div class="field">
             <label for="item_description">Description</label>
-            <textarea id="item_description" class="text large" name="description">{{opts.description}}</textarea>
+            <textarea id="item_description" class="text large full" name="description">{{opts.description}}</textarea>
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Save Changes" />

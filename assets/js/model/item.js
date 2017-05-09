@@ -23,6 +23,9 @@ Teambo.model.item = (function(t){
       url: function() {
         return '/'+t.team.current.id+'/item/'+self.id;
       },
+      assignedTo: function(member_id) {
+        return self.opts.member_id == member_id;
+      },
       assignedToMe: function() {
         var member = self.member();
         return member && member.isMe();

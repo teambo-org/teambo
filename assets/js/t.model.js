@@ -38,7 +38,7 @@ Teambo.model = (function(t){
           }
           var new_ct = self.encrypted(iv);
           t.socket.ignore([model.type, self.id, iv].join('-'));
-          t.xhr.post('/'+model.type, {
+          t.xhr.post('/team/'+model.type, {
             data: {
               team_id: t.team.current.id,
               mkey: t.team.current.mkey,
@@ -141,7 +141,7 @@ Teambo.model = (function(t){
               return a.concat([b.id]);
             }, []);
           };
-          t.xhr.post('/'+model.type+'/remove', {
+          t.xhr.post('/team/'+model.type+'/remove', {
             data: data
           }).then(function(xhr){
             if(xhr.status == 204 || xhr.status == 404) {
@@ -165,9 +165,11 @@ Teambo.model = (function(t){
         var data = {
           id:   self.id,
           opts: self.opts,
-          hist: self.hist,
           iv:   self.iv
         };
+        if(model.track_history) {
+          data.hist = self.hist;
+        }
         var config = {};
         if(iv) {
           data.iv = iv;
@@ -206,6 +208,8 @@ Teambo.model = (function(t){
 
     model.all = [];
 
+    model.track_history = true;
+
     model.ids = function() {
       var ids = [];
       model.all.sort(function(a, b) {
@@ -240,7 +244,7 @@ Teambo.model = (function(t){
         if(id) {
           data.id = id;
         }
-        t.xhr.post('/'+model.type+'s', {
+        t.xhr.post('/team/'+model.type+'s', {
           data: data
         }).then(function(xhr){
           if(xhr.status == 200) {
@@ -287,7 +291,7 @@ Teambo.model = (function(t){
 
     model.fetch = function(id, team_id, mkey) {
       return t.promise(function(fulfill, reject) {
-        t.xhr.get('/'+model.type, {
+        t.xhr.get('/team/'+model.type, {
           data: {
             team_id: team_id,
             mkey: mkey,
@@ -387,7 +391,7 @@ Teambo.model = (function(t){
 
     model.fetchAll = function(team_id, mkey) {
       return t.promise(function(fulfill, reject) {
-        t.xhr.get('/'+model.type+'s', {
+        t.xhr.get('/team/'+model.type+'s', {
           data: {
             team_id: team_id,
             mkey: mkey
@@ -409,6 +413,7 @@ Teambo.model = (function(t){
       model.all.forEach(function(m){
         p.push(m.uncache());
       });
+      p.push(t.team.uncache(model.type+"_ids"));
       return Promise.all(p);
     };
 

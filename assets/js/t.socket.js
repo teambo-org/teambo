@@ -81,7 +81,7 @@ Teambo.socket = (function (t) {
         var host = uri.host();
         var scheme = uri.protocol() == 'https' ? 'wss' : 'ws';
         var port = uri.port() ? ':' + uri.port() : '';
-        var url = scheme+"://"+host+port+"/socket?team_id="+team.id+"&mkey="+team.mkey+"&ts="+team.lastSeen();
+        var url = scheme+"://"+host+port+"/team/socket?team_id="+team.id+"&mkey="+team.mkey+"&ts="+team.lastSeen();
         connection = new WebSocket(url);
         connected = true;
         connection.onclose = function(evt) {

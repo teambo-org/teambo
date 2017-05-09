@@ -11,10 +11,20 @@ func GlobalInit() error {
 		tx.CreateBucketIfNotExists([]byte("acct"))
 		tx.CreateBucketIfNotExists([]byte("verification"))
 		tx.CreateBucketIfNotExists([]byte("team"))
-		// tx.CreateBucketIfNotExists([]byte("invite"))
 		return nil
 	})
-	return err
+	if err != nil {
+		return err
+	}
+	err = db_invite_update(func(tx *bolt.Tx) error {
+		tx.CreateBucketIfNotExists([]byte("invite"))
+		tx.CreateBucketIfNotExists([]byte("invite_response"))
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func db_update(fn func(*bolt.Tx) error) error {
@@ -28,6 +38,24 @@ func db_update(fn func(*bolt.Tx) error) error {
 
 func db_view(fn func(*bolt.Tx) error) error {
 	db, err := bolt.Open(util.Config("app.data")+"/global.db", 0644, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	return db.View(fn)
+}
+
+func db_invite_update(fn func(*bolt.Tx) error) error {
+	db, err := bolt.Open(util.Config("app.data")+"/invite.db", 0644, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	return db.Update(fn)
+}
+
+func db_invite_view(fn func(*bolt.Tx) error) error {
+	db, err := bolt.Open(util.Config("app.data")+"/invite.db", 0644, nil)
 	if err != nil {
 		return err
 	}

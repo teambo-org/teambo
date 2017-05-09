@@ -203,7 +203,7 @@
 #dashboard .main form.filter select { margin-right: 0.5em; }
 #dashboard .main form.filter.default-options a.clear { display: none; }
 
-#dashboard .main ul.member li span.pending { float: right; font-size: 0.9em; padding: 0 0.5em; font-weight: bold; }
+#dashboard .main ul.member li span.pending { float: right; font-size: 0.9em; padding: 0 0.5em; }
 
 ul.member-details blockquote { word-break: break-all; word-wrap: break-word; font-size: 0.8em; }
 
