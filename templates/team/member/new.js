@@ -12,7 +12,7 @@ function(t){
     }
     form.disable();
     var data = form.values(['member_email', 'name', 'include_team_name', 'include_sender_details']);
-    t.model.member.invite(data).then(function(member){
+    t.model.invite.create(data).then(function(member){
       t.view.updateSideNav();
       t.gotoUrl('/'+t.team.current.id+'/members');
     }).catch(function(xhr){

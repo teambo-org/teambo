@@ -204,12 +204,15 @@ Teambo.view = (function(t){
     if(target.firstChild && target.firstChild.classList) {
       var class_list = target.firstChild.classList;
       if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
+        t.afterAuth(window.location.hash.substr(1));
         return t.gotoUrl('/login');
       }
       if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
+        t.afterAuth(window.location.hash.substr(1));
         return t.gotoUrl('/account');
       }
       if(class_list.contains('require-team') && !view.isset('team')) {
+        t.afterAuth(window.location.hash.substr(1));
         return t.gotoUrl('/account');
       }
       var models = target.firstChild.getAttribute('require-model');

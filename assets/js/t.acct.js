@@ -15,6 +15,7 @@ Teambo.acct = (function (t) {
       opts:  data.opts  || {},
       hist:  data.hist  || [],
       teams: data.teams || [],
+      invites: data.invites || [],
       save: function () {
         if (!akey) {
           return Promise.reject('No akey');
@@ -58,6 +59,7 @@ Teambo.acct = (function (t) {
           key:   key,
           akey:  akey,
           teams: self.teams,
+          invites: self.invites,
           opts:  self.opts
         };
         if(iv) {

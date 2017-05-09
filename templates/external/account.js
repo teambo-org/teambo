@@ -10,15 +10,15 @@ function(t){
 
   var el = document.getElementById('teams');
   t.team.findAll().then(function(teams) {
-    if(!teams.length) {
-      return;
-    }
     var html = '';
     teams.forEach(function(team) {
       html += t.view.renderTemplate('external/_team-li', team);
     });
-    el.innerHTML = html + el.innerHTML;
-    var theme_styles = t.view.renderTemplate('external/account-themes', {teams: teams}),
+    t.acct.current.invites.forEach(function(invite) {
+      html += t.view.renderTemplate('external/_invite-li', invite);
+    });
+    el.innerHTML = el.innerHTML + html;
+    var theme_styles = t.view.renderTemplate('external/account-themes', {teams: teams, default_theme: t.themes["Default"]}),
       url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('account-themes').href = "data:text/css;base64,"+url;
 

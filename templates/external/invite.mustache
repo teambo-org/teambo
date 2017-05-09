@@ -1,0 +1,20 @@
+<div class="external require-auth c">
+    <div id="logo" class="logo"></div>
+    <form name="invite_respond" method="POST" class="std ext verification"
+        data-ikey="{{ikey}}" data-chk="{{chk}}">
+        <div class="field first">
+            <p>
+                You have been invited to join a team.<br/><br/>
+            </p>
+            <p class="exc">
+                Clicking the button below will indicate<br/>to the admin that you are ready to join.
+            </p>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Accept Invite" />
+            <br/><br/>
+            <a class="cancel force" href="#/account" data-keybind="escape q">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+</div>

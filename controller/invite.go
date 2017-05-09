@@ -67,7 +67,6 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 func InviteResponse(w http.ResponseWriter, r *http.Request) {
 	ikey := r.FormValue("ikey")
 	hash := r.FormValue("hash")
-	email := r.FormValue("email")
 	pubKey := r.FormValue("pubKey")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -89,26 +88,15 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	inviteResponse, err := model.InviteResponseCreate(ikey, pubKey)
+	_, err = model.InviteResponseCreate(ikey, pubKey)
 	if err != nil {
 		error_out(w, "Invite could not be accepted", 500)
-		return
-	}
-
-	subject := "Teambo Invite Response"
-	body := "Your team invite response has been received.<br/>"
-	body = body + "You can expect to receive another email to finalize the invite process as soon as an admin from the team to which you have been invited accepts your response.<br/>"
-	body = body + "This extra step is necessary in order to ensure that your team remains highly secure."
-	err = util.SendMail(email, subject, body)
-	if err != nil {
-		inviteResponse.Delete()
-		error_out(w, "Invite could not be sent", 500)
 		return
 	}
 
 	msg, _ := json.Marshal(map[string]bool{
 		"success": true,
 	})
-	http.Error(w, string(msg), 200)
+	http.Error(w, string(msg), 201)
 
 }

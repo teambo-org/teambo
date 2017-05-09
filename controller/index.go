@@ -85,6 +85,7 @@ var jsapp = []string{
 	"/js/model/wiki.js",
 	"/js/model/member.js",
 	"/js/model/history.js",
+	"/js/model/invite.js",
 }
 var jsasync = []string{
 	// "/js/lib/zxcvbn.js",

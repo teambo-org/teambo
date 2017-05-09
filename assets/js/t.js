@@ -154,9 +154,13 @@ var Teambo = (function(t){
     hashChange(url, data);
   };
 
-  t.afterAuth = function() {
+  t.afterAuth = function(hash) {
     var val = after_auth;
-    after_auth = null;
+    if(hash) {
+      after_auth = hash;
+    } else {
+      after_auth = null;
+    }
     return val ? val : '/account';
   };
 
