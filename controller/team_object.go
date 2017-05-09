@@ -8,6 +8,10 @@ import (
 	// "log"
 )
 
+var only_admins_can_create = map[string]bool{
+	"member": true,
+}
+
 func HandleTeamObject(bucket_name string, log_changes bool) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		TeamObject(bucket_name, log_changes, w, r)
@@ -156,9 +160,10 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
+	mkey := r.FormValue("mkey")
 	id := r.FormValue("id")
 
-	_, err := auth_team(w, r)
+	team, err := auth_team(w, r)
 	if err != nil {
 		return
 	}
@@ -171,6 +176,10 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 		obj := model.TeamObject{}
 
 		if id == "" {
+			if only_admins_can_create[bucket_name] && !team.IsAdmin(mkey) {
+				error_out(w, "Only a team admin can create a new "+bucket_name, 403)
+				return
+			}
 			obj = bucket.NewObject("")
 			err = obj.Save()
 			if err != nil {
