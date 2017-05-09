@@ -14,13 +14,13 @@ Teambo.model.plan = (function(t){
         });
       },
       item_list_incomplete_assigned: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status !== 'complete' && o.assigned();
+        return self.item_list_incomplete().filter(function(o) {
+          return o.assigned();
         });
       },
       item_list_incomplete_unassigned: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status !== 'complete' && !o.assigned();
+        return self.item_list_incomplete().filter(function(o) {
+          return !o.assigned();
         });
       },
       item_list_complete: function() {
@@ -29,13 +29,13 @@ Teambo.model.plan = (function(t){
         });
       },
       item_list_mine_complete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status === 'complete' && o.assignedToMe();
+        return self.item_list_complete().filter(function(o) {
+          return o.assignedToMe();
         });
       },
       item_list_mine_incomplete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status !== 'complete' && o.assignedToMe();
+        return self.item_list_incomplete().filter(function(o) {
+          return o.assignedToMe();
         });
       },
       member_has_items: function() {
@@ -44,13 +44,13 @@ Teambo.model.plan = (function(t){
         }).length;
       },
       member_item_list_complete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status === 'complete' && t.model.member.current && o.assignedTo(t.model.member.current.id);
+        return self.item_list_complete().filter(function(o) {
+          return t.model.member.current && o.assignedTo(t.model.member.current.id);
         });
       },
       member_item_list_incomplete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status !== 'complete' && t.model.member.current && o.assignedTo(t.model.member.current.id);
+        return self.item_list_incomplete().filter(function(o) {
+          return t.model.member.current && o.assignedTo(t.model.member.current.id);
         });
       },
       item_count: function() {
