@@ -186,13 +186,18 @@ Teambo.team = (function(t){
     });
   };
 
-  var createFirstMember = function(team) {
+  var createFirstMember = function(team, member_id) {
     return t.promise(function(fulfill, resolve) {
       t.team.current = team;
-      t.model.member.create({
-        pubKey: t.acct.current.rsa.pubTPO().n,
-        email:  t.acct.current.email
-      }).then(function(m) {
+      var member = new t.model.member({
+        id: member_id,
+        iv: "new",
+        opts: {
+          pubKey: t.acct.current.rsa.pubTPO().n,
+          email:  t.acct.current.email
+        }
+      });
+      member.save().then(function(m) {
         t.model.member.uncacheAll().then(function() {
           t.team.current = null;
           fulfill(m);
@@ -220,7 +225,7 @@ Teambo.team = (function(t){
           new_team.save().then(function(){
             acct.teams.push({id: new_team.id, mkey: data.mkey, key: key, admin: true});
             acct.save().then(function(){
-              createFirstMember(new_team).then(function() {
+              createFirstMember(new_team, data.member_id).then(function() {
                 fulfill(new_team);
               });
             }).catch(reject);

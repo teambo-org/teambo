@@ -36,14 +36,25 @@ func Team(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Team member could not be saved", 500)
 				return
 			}
-			admin := team.NewAdmin(member.Id)
+			memberKey := team.NewMemberKey()
+			memberKey.Ciphertext = member.Id
+			err = memberKey.Save()
+			if err != nil {
+				team.Remove()
+				error_out(w, "Team member could not be saved", 500)
+				return
+			}
+			mkey = memberKey.Id
+			admin := team.NewAdmin(mkey)
+			admin.Ciphertext = member.Id
 			err = admin.Save()
 			if err != nil {
 				team.Remove()
 				error_out(w, "Team member could not be saved", 500)
 				return
 			}
-			res["mkey"] = member.Id
+			res["member_id"] = member.Id
+			res["mkey"] = mkey
 		} else if len(team_id) > 0 && len(mkey) > 0 && len(ct) > 0 && len(iv) > 0 {
 			team, err = auth_team(w, r)
 			if err != nil {
