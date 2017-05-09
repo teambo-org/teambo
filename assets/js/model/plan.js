@@ -38,12 +38,17 @@ Teambo.model.plan = (function(t){
           return o.opts.status !== 'complete' && o.assignedToMe();
         });
       },
-      item_list_member_complete: function() {
+      member_has_items: function() {
+        return self.item_list().filter(function(o) {
+          return t.model.member.current && o.assignedTo(t.model.member.current.id);
+        }).length;
+      },
+      member_item_list_complete: function() {
         return self.item_list().filter(function(o) {
           return o.opts.status === 'complete' && t.model.member.current && o.assignedTo(t.model.member.current.id);
         });
       },
-      item_list_member_incomplete: function() {
+      member_item_list_incomplete: function() {
         return self.item_list().filter(function(o) {
           return o.opts.status !== 'complete' && t.model.member.current && o.assignedTo(t.model.member.current.id);
         });
@@ -94,6 +99,12 @@ Teambo.model.plan = (function(t){
 
   model.getActiveId = function() {
     return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.plan_id : null);
+  };
+
+  model.member_list = function() {
+    return model.all.filter(function(plan) {
+      return plan.member_has_items();
+    });
   };
 
   return model;

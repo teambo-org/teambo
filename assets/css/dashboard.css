@@ -90,7 +90,6 @@
 #dashboard .main h1 i { position: absolute; left: 0; }
 
 #dashboard .main .item p { margin: 0; }
-#dashboard .main section { }
 #dashboard .main section.description { padding: 0.8em 1em; word-break: break-word; margin-bottom: 0.5em; }
 #dashboard .main section.tags { padding: 0; }
 #dashboard .main section.tags ul { margin: 0; padding: 0; }
@@ -132,7 +131,6 @@
 #dashboard .main .nav #status .outbox span { font-size: 0.8em; }
 #dashboard .main .nav #status .outbox i { margin-right: 0.2em; }
 
-#dashboard .main .team { }
 #dashboard .main .team a { display: block; }
 #dashboard .main .team a:hover .icon-down-open-1 { opacity: 0.8; background: none; }
 
@@ -159,13 +157,12 @@
 #dashboard .main ul.buckets > li { margin-bottom: 1em; padding: 0; }
 #dashboard .main ul.buckets > li > a { position: relative; }
 #dashboard .main ul.buckets > li > a .name { font-weight: 500; }
-#dashboard .main ul.buckets ul.items li.status-complete a { }
 
 #dashboard .main .bucket-view p.plan { padding: 0.8em 1em 0; margin-top: 0; font-size: 0.8em; }
 #dashboard .main .bucket-view span.plan { float: right; font-size: 0.8em; line-height: 1.7em; padding-right: 0.4em; }
 #dashboard .main .bucket-view span.plan i { margin-top: -0.1em; margin-right: 0.2em; }
 #dashboard .main .bucket-view p.description { padding: 0.3em 0.4em 0.2em 2.15em; margin-top: 0; font-size: 0.8em; max-height: 4.8em; overflow: hidden; clear: both; word-break: break-word; }
-#dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em;  }
+#dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em; }
 #dashboard .main .bucket-view ul.items.complete li { margin-bottom: 0; }
 
 #dashboard .main .dash ul.buckets ul.items li { list-style: none; }
