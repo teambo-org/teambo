@@ -124,6 +124,7 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .external #status.offline { position: absolute; left: 0; top: -1.725em; padding: 0.2em 0.6em 0; line-height: 1.6em;
     background: rgba(0,0,0,0.1); text-transform: uppercase; font-size: 0.8em; }
 .external #status.online { display: none; }
+.external .main #status.offline { left: 1.25em; }
 
 .keygen { padding: 2em 0 3em;  }
 .keygen h3 { text-align: center; border: none; margin: 0; }
