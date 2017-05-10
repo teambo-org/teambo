@@ -101,6 +101,20 @@ Teambo.model.invite = (function(t){
     });
   };
 
+  model.activate = function(ikey, ct, mkey) {
+    var data = t.acct.current.rsa.decrypt(t.crypto.b64tohex(ct));
+    if(data) {
+      var parts = data.split('-');
+      t.acct.current.teams.push({
+        id: parts[0],
+        mkey: mkey,
+        key: parts[1]
+      });
+    }
+    t.deleteByProperty(t.acct.current.invites, 'ikey', ikey);
+    return t.acct.current.save();
+  };
+
   return model;
 
 })(Teambo);

@@ -132,12 +132,12 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 		ikeys := strings.Split(ikey, ",")
 		c := socket.CreateConnection(ikeys, ws)
 		for _, k := range ikeys {
-			inviteResponse, err := model.InviteResponseFind(k)
-			if inviteResponse.Id != "" {
+			inviteResponse, _ := model.InviteResponseFind(k)
+			if inviteResponse.PubKey != "" {
 				c.Write(websocket.TextMessage, socket.Message(k, inviteResponse.PubKey))
-			} else if err == nil {
-				invite, err := model.InviteFind(k)
-				if err == nil && invite.Id == "" {
+			} else {
+				invite, _ := model.InviteFind(k)
+				if invite.Hash == "" {
 					c.Write(websocket.TextMessage, socket.Message(k, "expired"))
 				}
 			}
@@ -206,8 +206,8 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 
 		subject := "Teambo Invite Accepted"
 		link := scheme + "://" + util.Config("app.host") + "/#/account"
-		body := "Your team invite has been accepted on Teambo<br/><br/>"
-		body = body + "Log in to your account to join your new team:<br/>"
+		body := "One of your recent team invites has been accepted on Teambo.<br/>"
+		body = body + "Log in to your account to join your new team!<br/>"
 		body = body + "<a href='" + link + "'>" + link + "</a>"
 		err = util.SendMail(email, subject, body)
 
@@ -231,12 +231,12 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 		ikeys := strings.Split(ikey, ",")
 		c := socket.CreateConnection(ikeys, ws)
 		for _, k := range ikeys {
-			inviteAcceptance, err := model.InviteAcceptanceFind(k)
-			if inviteAcceptance.Id != "" {
+			inviteAcceptance, _ := model.InviteAcceptanceFind(k)
+			if inviteAcceptance.Ciphertext != "" {
 				c.Write(websocket.TextMessage, socket.Message(k, inviteAcceptance.Ciphertext))
-			} else if err == nil {
-				inviteResponse, err := model.InviteResponseFind(k)
-				if err == nil && inviteResponse.Id == "" {
+			} else {
+				inviteResponse, _ := model.InviteResponseFind(k)
+				if inviteResponse.PubKey == "" {
 					c.Write(websocket.TextMessage, socket.Message(k, "expired"))
 				}
 			}

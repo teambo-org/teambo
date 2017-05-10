@@ -74,7 +74,8 @@ Teambo.crypto = (function(t, sjcl){
         return null;
       }
     },
-    hextob64: hextob64
+    hextob64: hextob64,
+    b64tohex: b64tohex
   };
 
 })(Teambo, sjcl);

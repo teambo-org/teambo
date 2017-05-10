@@ -8,6 +8,11 @@ function(t){
 
   t.editing(true);
 
+  t.socket.inviteAcceptance.on('activated', function() {
+    t.gotoUrl('/account');
+  });
+  t.socket.inviteAcceptance.start();
+
   var el = document.getElementById('teams');
   t.team.findAll().then(function(teams) {
     var html = '';
@@ -33,7 +38,9 @@ function(t){
       });
     });
     var i = 0;
-    anchors[0].focus();
+    if(anchors.length) {
+      anchors[0].focus();
+    }
   });
 
   t.view.updateStatus();

@@ -34,6 +34,17 @@ func clear_invites() error {
 		return nil
 	})
 	fmt.Println("Deleted " + strconv.Itoa(n) + " invite responses")
+	n = 0
+	db.Update(func(tx *bolt.Tx) error {
+		c := tx.Bucket([]byte("invite_acceptance")).Cursor()
+		prefix := []byte("")
+		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
+			c.Delete()
+			n = n + 1
+		}
+		return nil
+	})
+	fmt.Println("Deleted " + strconv.Itoa(n) + " invite acceptances")
 	return nil
 }
 

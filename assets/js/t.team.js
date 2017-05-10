@@ -159,8 +159,10 @@ Teambo.team = (function(t){
         return t.findByProperty(t.acct.current.teams, 'id', self.id).admin || false;
       },
       rsaTPO: function(pubKey) {
-        var key = (new RSAKey()).fromPubTPO({n: pubKey, e: 'EAAQ'});
-        return t.crypto.hextob64(key.encrypt(self.id+'-'+key));
+        var rsa = new RSAKey();
+        var e = 65537;
+        rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
+        return t.crypto.hextob64(rsa.encrypt(self.id+'-'+key));
       }
     });
     var uncacheTeam = function() {
@@ -320,8 +322,8 @@ Teambo.team = (function(t){
         reject();
         return;
       }
-      team.fetch(id, d.mkey).then(function(ct) {
-        var new_team = new team(ct, d.mkey, d.key);
+      team.fetch(id, d.mkey).then(function(data) {
+        var new_team = new team(data.team.ct, d.mkey, d.key);
         new_team.cache().then(function(){
           fulfill(new_team);
         });
@@ -399,7 +401,9 @@ Teambo.team = (function(t){
 
   t.event.on('team-post-init', function() {
     t.socket.team.start();
-    t.socket.inviteResponse.start();
+    if(t.team.current.isAdmin()) {
+      t.socket.inviteResponse.start();
+    }
   });
 
   return team;
