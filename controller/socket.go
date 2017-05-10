@@ -46,6 +46,7 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	c.Write(websocket.TextMessage, socket.Message(team_id, fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))))
 	socket.TeamHub.Register <- c
-	go c.Writer()
-	c.Reader(socket.TeamHub)
+	// go c.Writer()
+	// c.Reader(socket.TeamHub)
+	c.Writer()
 }
