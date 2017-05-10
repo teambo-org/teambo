@@ -14,6 +14,7 @@ function(t){
     var data = form.values(['member_email', 'name', 'include_team_name', 'include_sender_details']);
     t.model.invite.create(data).then(function(member){
       t.view.updateSideNav();
+      t.socket.inviteResponse.start();
       t.gotoUrl('/'+t.team.current.id+'/members');
     }).catch(function(xhr){
       form.enable();

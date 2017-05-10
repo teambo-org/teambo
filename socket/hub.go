@@ -39,6 +39,20 @@ var TeamHub = hub{
 	unregister:  make(chan *connection),
 }
 
+var InviteResponseHub = hub{
+	connections: make(map[string]map[*connection]bool),
+	Broadcast:   make(chan wsmessage),
+	Register:    make(chan *connection),
+	unregister:  make(chan *connection),
+}
+
+var InviteAcceptanceHub = hub{
+	connections: make(map[string]map[*connection]bool),
+	Broadcast:   make(chan wsmessage),
+	Register:    make(chan *connection),
+	unregister:  make(chan *connection),
+}
+
 func (h *hub) Run() {
 	// go func() {
 	// for {

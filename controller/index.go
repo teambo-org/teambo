@@ -87,6 +87,7 @@ var jsapp = []string{
 	"/js/model/history.js",
 	"/js/model/invite.js",
 	"/js/socket/team.js",
+	"/js/socket/inviteResponse.js",
 }
 var jsasync = []string{
 	// "/js/lib/zxcvbn.js",

@@ -26,6 +26,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/acct/verification":   controller.AcctVerification,
 	"/invite":              controller.Invite,
 	"/invite/response":     controller.InviteResponse,
+	"/invite/acceptance":   controller.InviteAcceptance,
 	"/team":                controller.Team,
 	"/team/remove":         controller.TeamRemove,
 	"/team/socket":         controller.TeamSocket,
@@ -86,6 +87,8 @@ func main() {
 	}
 
 	go socket.TeamHub.Run()
+	go socket.InviteResponseHub.Run()
+	go socket.InviteAcceptanceHub.Run()
 
 	http.Handle("/", StaticHandler{})
 

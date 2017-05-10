@@ -19,6 +19,7 @@ func GlobalInit() error {
 	err = db_invite_update(func(tx *bolt.Tx) error {
 		tx.CreateBucketIfNotExists([]byte("invite"))
 		tx.CreateBucketIfNotExists([]byte("invite_response"))
+		tx.CreateBucketIfNotExists([]byte("invite_acceptance"))
 		return nil
 	})
 	if err != nil {

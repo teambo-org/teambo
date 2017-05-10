@@ -3,13 +3,17 @@ package controller
 import (
 	"../model"
 	"../util"
+	"../socket"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
+	"github.com/gorilla/websocket"
 	// "errors"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
+	"strings"
 	// "fmt"
 )
 
@@ -73,36 +77,174 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	now := time.Now().UnixNano()
-	invite, err := model.InviteFind(ikey)
-	if err != nil {
-		error_out(w, "Invite could not be found", 500)
-		return
-	}
-	if invite.Id == "" {
-		error_out(w, "Invite has expired", 404)
-		return
-	}
-	if invite.Hash != hash {
-		error_out(w, "Incorrect authentication hash", 403)
-		return
-	}
-	invite.Delete()
-
-	if invite.Expiration < now {
-		error_out(w, "Invite has expired", 404)
-		return
+	scheme := "http"
+	if util.Config("ssl.active") == "true" {
+		scheme = scheme + "s"
 	}
 
-	_, err = model.InviteResponseCreate(ikey, pubKey)
-	if err != nil {
-		error_out(w, "Invite could not be accepted", 500)
+	if r.Method == "POST" {
+		now := time.Now().UnixNano()
+		invite, err := model.InviteFind(ikey)
+		if err != nil {
+			error_out(w, "Invite could not be found", 500)
+			return
+		}
+		if invite.Id == "" {
+			error_out(w, "Invite has expired", 404)
+			return
+		}
+		if invite.Hash != hash {
+			error_out(w, "Incorrect authentication hash", 403)
+			return
+		}
+		invite.Delete()
+
+		if invite.Expiration < now {
+			error_out(w, "Invite has expired", 404)
+			return
+		}
+
+		_, err = model.InviteResponseCreate(ikey, pubKey)
+		if err != nil {
+			error_out(w, "Invite Response could not be created", 500)
+			return
+		}
+
+		socket.InviteResponseHub.Broadcast <- socket.Message(ikey, pubKey)
+
+		msg, _ := json.Marshal(map[string]bool{
+			"success": true,
+		})
+		http.Error(w, string(msg), 201)
+	} else if r.Method == "GET" {
+		if r.Header.Get("Origin") != scheme + "://" + util.Config("app.host") {
+			http.Error(w, "Origin not allowed", 403)
+			return
+		}
+		ws, err := websocket.Upgrade(w, r, nil, 1024, 1024)
+		if _, ok := err.(websocket.HandshakeError); ok {
+			http.Error(w, "Not a websocket handshake", 400)
+			return
+		} else if err != nil {
+			log.Println(err)
+			return
+		}
+		ikeys := strings.Split(ikey, ",")
+		c := socket.CreateConnection(ikeys, ws)
+		for _, k := range ikeys {
+			inviteResponse, err := model.InviteResponseFind(k)
+			if inviteResponse.Id != "" {
+				c.Write(websocket.TextMessage, socket.Message(k, inviteResponse.PubKey))
+			} else if err == nil {
+				invite, err := model.InviteFind(k)
+				if err == nil && invite.Id == "" {
+					c.Write(websocket.TextMessage, socket.Message(k, "expired"))
+				}
+			}
+		}
+		socket.InviteResponseHub.Register <- c
+		c.Writer()
+	} else {
+		http.Error(w, "Method not allowed", 405)
 		return
 	}
+}
 
-	msg, _ := json.Marshal(map[string]bool{
-		"success": true,
-	})
-	http.Error(w, string(msg), 201)
+func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
+	ikey := r.FormValue("ikey")
+	ct := r.FormValue("ct")
+	email := r.FormValue("email")
+	member_id := r.FormValue("member_id")
+	mkey := r.FormValue("mkey")
 
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	scheme := "http"
+	if util.Config("ssl.active") == "true" {
+		scheme = scheme + "s"
+	}
+
+	if r.Method == "POST" {
+
+		team, err := auth_team(w, r)
+		if err != nil {
+			return
+		}
+		if !team.IsAdmin(mkey) {
+			error_out(w, "Only a team admin can accept invites", 403)
+			return
+		}
+
+		inviteResponse, err := model.InviteResponseFind(ikey)
+		if err != nil {
+			error_out(w, "Invite Response could not be found", 500)
+			return
+		}
+		if inviteResponse.Id == "" {
+			error_out(w, "Invite has already been accepted", 404)
+			return
+		}
+
+		memberKey := team.NewMemberKey()
+		memberKey.Ciphertext = member_id
+		err = memberKey.Save()
+		if err != nil {
+			team.Remove()
+			error_out(w, "Team member could not be saved", 500)
+			return
+		}
+
+		_, err = model.InviteAcceptanceCreate(ikey, ct + "-" + memberKey.Id)
+		if err != nil {
+			error_out(w, "Invite could not be accepted", 500)
+			return
+		}
+
+		inviteResponse.Delete()
+
+		socket.InviteAcceptanceHub.Broadcast <- socket.Message(ikey, ct + "-" + memberKey.Id)
+
+		subject := "Teambo Invite Accepted"
+		link := scheme + "://" + util.Config("app.host") + "/#/account"
+		body := "Your team invite has been accepted on Teambo<br/><br/>"
+		body = body + "Log in to your account to join your new team:<br/>"
+		body = body + "<a href='" + link + "'>" + link + "</a>"
+		err = util.SendMail(email, subject, body)
+
+		msg, _ := json.Marshal(map[string]bool{
+			"success": true,
+		})
+		http.Error(w, string(msg), 201)
+	} else if r.Method == "GET" {
+		if r.Header.Get("Origin") != scheme + "://" + util.Config("app.host") {
+			http.Error(w, "Origin not allowed", 403)
+			return
+		}
+		ws, err := websocket.Upgrade(w, r, nil, 1024, 1024)
+		if _, ok := err.(websocket.HandshakeError); ok {
+			http.Error(w, "Not a websocket handshake", 400)
+			return
+		} else if err != nil {
+			log.Println(err)
+			return
+		}
+		ikeys := strings.Split(ikey, ",")
+		c := socket.CreateConnection(ikeys, ws)
+		for _, k := range ikeys {
+			inviteAcceptance, err := model.InviteAcceptanceFind(k)
+			if inviteAcceptance.Id != "" {
+				c.Write(websocket.TextMessage, socket.Message(k, inviteAcceptance.Ciphertext))
+			} else if err == nil {
+				inviteResponse, err := model.InviteResponseFind(k)
+				if err == nil && inviteResponse.Id == "" {
+					c.Write(websocket.TextMessage, socket.Message(k, "expired"))
+				}
+			}
+		}
+		socket.InviteAcceptanceHub.Register <- c
+		c.Writer()
+	} else {
+		http.Error(w, "Method not allowed", 405)
+		return
+	}
 }

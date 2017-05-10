@@ -157,6 +157,10 @@ Teambo.team = (function(t){
       },
       isAdmin: function() {
         return t.findByProperty(t.acct.current.teams, 'id', self.id).admin || false;
+      },
+      rsaTPO: function(pubKey) {
+        var key = (new RSAKey()).fromPubTPO({n: pubKey, e: 'EAAQ'});
+        return t.crypto.hextob64(key.encrypt(self.id+'-'+key));
       }
     });
     var uncacheTeam = function() {
@@ -395,6 +399,7 @@ Teambo.team = (function(t){
 
   t.event.on('team-post-init', function() {
     t.socket.team.start();
+    t.socket.inviteResponse.start();
   });
 
   return team;

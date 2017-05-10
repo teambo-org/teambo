@@ -5,7 +5,9 @@ Teambo.model.invite = (function(t){
     var self = this;
     t.extend(this, data);
     t.extend(this, {
-      ikey: data.ikey
+      ikey: data.ikey,
+      name: data.name,
+      pubKey: data.pubKey || null
     });
   };
 
@@ -62,6 +64,36 @@ Teambo.model.invite = (function(t){
       }).then(function (xhr) {
         if(xhr.status == 201) {
           fulfill(xhr);
+        } else {
+          reject(xhr);
+        }
+      });
+    });
+  };
+
+  model.accept = function(member, pubKey) {
+    if(!member || !pubKey) {
+      return Promise.reject();
+    }
+    return t.promise(function (fulfill, reject) {
+      var email = member.opts.email;
+      var xhrdata = {
+        team_id:   t.team.current.id,
+        mkey:      t.team.current.mkey,
+        member_id: member.id,
+        email:     member.opts.email,
+        ikey:      member.opts.invite_key,
+        ct:        t.team.current.rsaTPO(pubKey)
+      };
+      t.xhr.post('/invite/acceptance', {
+        data: xhrdata
+      }).then(function (xhr) {
+        if(xhr.status == 201) {
+          member.opts.pubKey = pubKey;
+          delete(member.opts['invite_key']);
+          member.save().then(function(){
+            fulfill(xhr);
+          });
         } else {
           reject(xhr);
         }
