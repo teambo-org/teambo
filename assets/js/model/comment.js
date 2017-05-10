@@ -16,7 +16,12 @@ Teambo.model.comment = (function(t){
         return t.model.member.get(self.opts.member_id);
       },
       url: function() {
-        return '/'+t.team.current.id+'/comment/'+self.id;
+        var parentModel = self.parentModel();
+        var url_prefix = '';
+        if(parentModel.type == 'item') {
+          url_prefix = '/' + parentModel.url().split('/').slice(2).join('/');
+        }
+        return '/'+t.team.current.id+url_prefix+'/comment/'+self.id;
       },
       editable: function() {
         return self.opts.member_id == t.acct.current.member().id;

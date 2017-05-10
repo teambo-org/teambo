@@ -2,7 +2,12 @@
 {{#model.item.current}}
     <nav class="breadcrumbs">
         <a href="#{{team.url}}">Team</a>
-        <a href="#{{#bucket}}{{url}}{{/bucket}}">Bucket</a>
+        {{#model.plan.current}}
+        <a href="#{{url}}" data-keybind="q escape `">Plan</a>
+        {{/model.plan.current}}
+        {{^model.plan.current}}
+        <a href="#{{#bucket}}{{url}}{{/bucket}}" data-keybind="q escape `">Bucket</a>
+        {{/model.plan.current}}
         <a href="#{{url}}" data-keybind="q escape `">Item</a>
         <span>Remove</span>
     </nav>

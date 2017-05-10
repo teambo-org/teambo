@@ -71,7 +71,7 @@ form.ext.std .field { text-align: center; }
 form.ext.std .field.submit { text-align: center; }
 form.std { padding: 1em; box-shadow: 0 0 1em rgba(0,0,0,0.1); }
 form.std .field { padding: 0.5em 0.5em; }
-form.std .field.submit { padding-top: 1em; }
+form.std .field.submit { padding-top: 1em; clear: both; }
 form.std .field.first { padding-top: 0; }
 form.std .field label { display: block; line-height: 1.2em; padding-bottom: 0.25em; }
 form.std .text { border: none; padding: 0.4em 0.5em; width: 20em; font-size: 1em; line-height: 1.2em; box-sizing: border-box; max-width: 100%; }
@@ -80,8 +80,9 @@ form.std .small { width: 12em; }
 form.std select.demo-icon { width: 4em; }
 form.std .date { width: 7em; }
 form.std .full { width: 100%; box-sizing: border-box; }
-form.std textarea.tall { height: 24em; }
 form.std textarea.large { height: 8em; }
+form.std textarea.tall { height: 24em; }
+form.std textarea.med-tall { height: 12em; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; opacity: 0.5; }
 form.std a.cancel:hover { opacity: 1; }

@@ -161,7 +161,7 @@
 #dashboard .main .bucket-view p.plan { padding: 0.8em 1em 0; margin-top: 0; font-size: 0.8em; }
 #dashboard .main .bucket-view span.plan { float: right; font-size: 0.8em; line-height: 1.7em; padding-right: 0.4em; }
 #dashboard .main .bucket-view span.plan i { margin-top: -0.1em; margin-right: 0.2em; }
-#dashboard .main .bucket-view p.description { padding: 0.3em 0.4em 0.2em 2.15em; margin-top: 0; font-size: 0.8em; max-height: 4.8em; overflow: hidden; clear: both; word-break: break-word; }
+#dashboard .main .bucket-view p.description { margin: 0.3em 0.4em 0.2em 2.15em; font-size: 0.8em; max-height: 4.85em; overflow: hidden; clear: both; word-break: break-word; position: relative; }
 #dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em; }
 #dashboard .main .bucket-view ul.items.complete li { margin-bottom: 0; }
 

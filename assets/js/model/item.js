@@ -21,7 +21,9 @@ Teambo.model.item = (function(t){
         return t.model.comment.allByModel(model.type, self.id);
       },
       url: function() {
-        return '/'+t.team.current.id+'/item/'+self.id;
+        var item_url = '/item/' + self.id;
+        var plan_url = t.model.plan.current ? '/plan/' + t.model.plan.current.id : '';
+        return '/'+t.team.current.id + plan_url + item_url;
       },
       assigned: function() {
         return self.member() ? true : false;
