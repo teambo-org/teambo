@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	// "errors"
 	"net/http"
+	"net/url"
 	"time"
 	// "fmt"
 )
@@ -40,17 +41,18 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 	}
 
 	subject := "Teambo Invite"
-	url := scheme + "://" + util.Config("app.host") + "/#/invite?ikey="+ikey+"&chk="+chk
+	link := scheme + "://" + util.Config("app.host") + "/#/invite?ikey="+ikey+"&chk="+chk
 	body := "You have been invited to join a team on Teambo<br/><br/>"
 	if team_name != "" {
 		body = body + "Team: <b>" + team_name + "</b><br/>"
+		link = link + "&name=" + url.QueryEscape(team_name)
 	}
 	if sender_name != "" && sender_email != "" {
 		body = body + "Admin: " + sender_name + " &lt; " + sender_email + " &gt; " + "<br/>"
 	}
 	body = body + "<br/>"
 	body = body + "Click the link below within the next 72 hours to respond:<br/>"
-	body = body + "<a href='" + url + "'>" + url + "</a>"
+	body = body + "<a href='" + link + "'>" + link + "</a>"
 	err = util.SendMail(email, subject, body)
 	if err != nil {
 		invite.Delete()
@@ -72,13 +74,17 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	now := time.Now().UnixNano()
-	invite, err := model.InviteFind(ikey, hash)
+	invite, err := model.InviteFind(ikey)
 	if err != nil {
 		error_out(w, "Invite could not be found", 500)
 		return
 	}
 	if invite.Id == "" {
 		error_out(w, "Invite has expired", 404)
+		return
+	}
+	if invite.Hash != hash {
+		error_out(w, "Incorrect authentication hash", 403)
 		return
 	}
 	invite.Delete()

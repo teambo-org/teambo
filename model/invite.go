@@ -6,6 +6,7 @@ import (
 	"github.com/boltdb/bolt"
 	"time"
 	"strconv"
+	"strings"
 )
 
 type Invite struct {
@@ -39,7 +40,7 @@ func InviteCreate(id string, hash string, ttl int64) (item Invite, err error) {
 	db_invite_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("invite"))
 
-		err := b.Put([]byte(id + hash), []byte(v))
+		err := b.Put([]byte(id + "-" + hash), []byte(v))
 		if err != nil {
 			return err
 		}
@@ -56,16 +57,21 @@ func InviteCreate(id string, hash string, ttl int64) (item Invite, err error) {
 	return item, nil
 }
 
-func InviteFind(id string, hash string) (item Invite, err error) {
+func InviteFind(id string) (item Invite, err error) {
 	item = Invite{}
 	db_invite_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("invite"))
+		c := b.Cursor()
 
-		v := b.Get([]byte(id + hash))
-
-		ts, _ := strconv.Atoi(string(v))
-		item = Invite{id, hash, int64(ts)}
-
+		prefix := []byte(id)
+		for k, ts := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
+			fields := strings.Split(string(k), "-")
+			item.Id = fields[0]
+			item.Hash = fields[1]
+			exp, _ := strconv.Atoi(string(ts))
+			item.Expiration = int64(exp)
+			return nil
+		}
 		return nil
 	})
 	if err != nil {

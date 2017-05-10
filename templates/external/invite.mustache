@@ -1,13 +1,15 @@
 <div class="external require-auth c">
     <div id="logo" class="logo"></div>
     <form name="invite_respond" method="POST" class="std ext verification"
-        data-ikey="{{ikey}}" data-chk="{{chk}}">
+        data-ikey="{{ikey}}" data-chk="{{chk}}" data-name="{{name}}">
         <div class="field first">
-            <p>
-                You have been invited to join a team.<br/><br/>
-            </p>
+            <p>You have been invited to join a team</p>
+            {{#name}}
+                <p class="team_name">{{name}}</p>
+            {{/name}}
             <p class="exc">
-                Clicking the button below will indicate<br/>to the admin that you are ready to join.
+                Clicking the button below will indicate<br/>
+                to the admin that you are ready to join
             </p>
         </div>
         <div class="field submit">

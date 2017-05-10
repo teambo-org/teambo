@@ -1,6 +1,16 @@
 <li class="team invite-li">
     <a href="#/invite-responded">
         <div class="i-wrap"><i class="icon-users"></i></div>
-        <div class="name"><div>Pending</div></div>
+        <div class="name">
+            <div>
+                {{#name}}
+                    {{name}}
+                    <span class="pending">Pending</span>
+                {{/name}}
+                {{^name}}
+                    Pending
+                {{/name}}
+            </div>
+        </div>
     </a>
 </li>
