@@ -103,7 +103,7 @@ var Teambo = (function(t){
         return;
       }
     } else if(!('team_id' in data)) {
-      t.socket.stop();
+      t.socket.team.stop();
       t.view.unset('team');
       t.team.current = null;
     }
@@ -193,8 +193,10 @@ var Teambo = (function(t){
       hashChange(window.location.hash.substr(1));
       window.onhashchange = t.refresh;
       t.audio.loadAll(opts.audio);
-    }).catch(function() {
+    }).catch(function(e) {
+      // t.trace(e);
       t.acct.deAuth();
+      // TODO: Fix infinite reload on serious app error
       window.location.reload();
     });
   };

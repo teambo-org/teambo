@@ -37,7 +37,7 @@ Teambo.model = (function(t){
             self.hist.push({iv: iv, diff: diff, ts: t.time(), member_id: member.id});
           }
           var new_ct = self.encrypted(iv);
-          t.socket.ignore([model.type, self.id, iv].join('-'));
+          t.socket.team.ignore([model.type, self.id, iv].join('-'));
           t.xhr.post('/team/'+model.type, {
             data: {
               team_id: t.team.current.id,

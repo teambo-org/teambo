@@ -28,7 +28,7 @@ Teambo.team = (function(t){
           }
           var iv = t.crypto.iv();
           var new_ct = self.encrypted({iv: iv});
-          t.socket.ignore(['team', self.id, iv].join('-'));
+          t.socket.team.ignore(['team', self.id, iv].join('-'));
           t.xhr.post('/team', {
             data: {
               team_id: self.id,
@@ -391,6 +391,10 @@ Teambo.team = (function(t){
         });
       }
     });
+  });
+
+  t.event.on('team-post-init', function() {
+    t.socket.team.start();
   });
 
   return team;
