@@ -2,6 +2,7 @@ package controller
 
 import (
 	"../model"
+	"../socket"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -74,7 +75,7 @@ func Team(w http.ResponseWriter, r *http.Request) {
 			new_iv := parts[0]
 			if new_iv != "new" {
 				log, _ := team.Log(new_iv)
-				SocketHub.broadcast <- wsmessage{team_id, log}
+				socket.TeamHub.Broadcast <- socket.Message(team_id, log)
 			}
 		} else {
 			error_out(w, "Invalid Request", 400)

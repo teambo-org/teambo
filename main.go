@@ -3,6 +3,7 @@ package main
 import (
 	"./controller"
 	"./model"
+	"./socket"
 	"./util"
 	"flag"
 	"fmt"
@@ -27,7 +28,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/invite/response":     controller.InviteResponse,
 	"/team":                controller.Team,
 	"/team/remove":         controller.TeamRemove,
-	"/team/socket":         controller.Socket,
+	"/team/socket":         controller.TeamSocket,
 	"/team/buckets":        controller.HandleTeamObjects("bucket"),
 	"/team/bucket":         controller.HandleTeamObject("bucket", true),
 	"/team/bucket/remove":  controller.HandleTeamObjectRemove("bucket", true),
@@ -84,7 +85,7 @@ func main() {
 		log.Fatal("Could not open Bolt DB for writing")
 	}
 
-	go controller.SocketHub.Run()
+	go socket.TeamHub.Run()
 
 	http.Handle("/", StaticHandler{})
 

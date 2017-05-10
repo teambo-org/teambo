@@ -97,10 +97,11 @@ Teambo.socket = (function (t) {
           failures = 0;
           var parts = evt.data.split('-');
           var e = {
-            ts   : parts[0],
-            type : parts[1],
-            id   : parts[2],
-            iv   : parts[3]
+            team_id : parts[0],
+            ts      : parts[1],
+            type    : parts[2],
+            id      : parts[3],
+            iv      : parts[4]
           };
           if(ignored.indexOf([e.type, e.id, e.iv].join('-')) < 0) {
             handleEvent(e);

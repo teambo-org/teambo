@@ -2,6 +2,7 @@ package controller
 
 import (
 	"../model"
+	"../socket"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -60,7 +61,7 @@ func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *
 			new_iv := parts[0]
 			if log_changes && new_iv != "new" {
 				log, _ := obj.Log(new_iv)
-				SocketHub.broadcast <- wsmessage{team_id, log}
+				socket.TeamHub.Broadcast <- socket.Message(team_id, log)
 			}
 		} else {
 			error_out(w, "Invalid Request", 400)
@@ -128,14 +129,14 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 						err = comment.Remove()
 						if err == nil && log_changes {
 							log, _ := comment.Log("removed")
-							SocketHub.broadcast <- wsmessage{team_id, log}
+							socket.TeamHub.Broadcast <- socket.Message(team_id, log)
 						}
 					}
 				}
 			}
 			if log_changes {
 				log, _ := obj.Log("removed")
-				SocketHub.broadcast <- wsmessage{team_id, log}
+				socket.TeamHub.Broadcast <- socket.Message(team_id, log)
 			}
 		} else {
 			error_out(w, "Invalid Request", 400)
