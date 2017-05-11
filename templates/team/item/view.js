@@ -30,8 +30,8 @@ function(t){
       t.refresh({silent: true});
     }
   });
-  t.view.on('comment-updated', function(e) {
-    if(e.comment.opts.pid == t.model.item.current.id) {
+  t.view.on(['comment-updated', 'comment-removed'], function(e) {
+    if(e.comment.opts.pid == t.model.item.current.id && e.comment.opts.ptype == 'item') {
       t.refresh({silent: true});
     }
   });
