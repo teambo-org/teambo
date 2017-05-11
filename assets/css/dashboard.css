@@ -91,11 +91,12 @@
 
 #dashboard .main .item p { margin: 0; }
 #dashboard .main section.description { padding: 0.8em 1em; word-break: break-word; margin-bottom: 0.5em; }
-#dashboard .main section.tags { padding: 0; }
+#dashboard .main section.tags { padding: 0; background: none; }
 #dashboard .main section.tags ul { margin: 0; padding: 0; }
 #dashboard .main section.tags ul li { list-style: none; margin: 0; padding: 0; }
 #dashboard .main section.tags ul li > a { text-decoration: none; }
 #dashboard .main section.tags ul li i.nav { background: none; }
+#dashboard .main section.tags ul li.id .name { font-family: monospace; font-size: 0.8em; line-height: 2.5em; padding: 0 0.625em; }
 #dashboard .main section.comments { clear: both; background: none; padding: 0; }
 #dashboard .main section.comments h2 { margin: 0 0 0.4em; }
 #dashboard .main section.comments .comment { margin: 0 0 1em; }

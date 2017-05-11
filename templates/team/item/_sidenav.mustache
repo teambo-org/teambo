@@ -1,7 +1,7 @@
 <section class="tags">
     <ul>
         {{#status}}
-        <li class="state section autoselect" data-opt="status">
+        <li class="state section autoselect hi-05" data-opt="status">
             <a href="#{{url}}/edit" class="trigger">
                 <i class="icon-down-open-1 nav color-hi-40"></i>
                 <div class="img"><i class="icon-{{icon}}"></i></div>
@@ -17,7 +17,7 @@
             </div>
         </li>
         {{/status}}
-        <li class="state section autoselect" data-opt="bucket_id">
+        <li class="state section autoselect hi-05" data-opt="bucket_id">
             {{#bucket}}
             <a href="#{{url}}/edit" class="trigger {{#fake}}color-30{{/fake}}">
                 <i class="icon-down-open-1 nav color-hi-40"></i>
@@ -38,7 +38,7 @@
                 </a>
             </div>
         </li>
-        <li class="plan section autoselect" data-opt="plan_id">
+        <li class="plan section autoselect hi-05" data-opt="plan_id">
             {{#plan}}
             <a href="#{{url}}" class="trigger">
                 <i class="icon-down-open-1 nav color-hi-40"></i>
@@ -66,7 +66,7 @@
                 </a>
             </div>
         </li>
-        <li class="member section autoselect" data-opt="member_id">
+        <li class="member section autoselect hi-05" data-opt="member_id">
             {{#member}}
             <a href="#{{url}}" class="trigger">
                 <i class="icon-down-open-1 nav color-hi-40"></i>
@@ -81,7 +81,7 @@
                 <div class="name">(unassigned)</div>
             </a>
             {{/member}}
-            <div class="options">
+            <div class="options bg">
                 {{#model.member.all}}
                 <a data-value="{{id}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="{{icon}}"></i></div>
@@ -93,6 +93,12 @@
                     <div class="name">(unassigned)</div>
                 </a>
             </div>
+        </li>
+        <li class="section id">
+            <span>
+                <div class="img"><i class="icon-pin"></i></div>
+                <div class="name color-50">{{id}}</div>
+            </span>
         </li>
         <!--
         <li class="section">
