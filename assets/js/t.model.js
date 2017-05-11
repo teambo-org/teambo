@@ -20,7 +20,7 @@ Teambo.model = (function(t){
       save: function() {
         return t.promise(function(fulfill, reject) {
           if('schema' in model) {
-            var errs = model.schema.validate(data.opts);
+            var errs = model.schema.validate(data.opts, self.orig);
             if(errs.length) {
               reject(errs);
               return;
@@ -231,7 +231,7 @@ Teambo.model = (function(t){
     model.create = function(opts, id) {
       return t.promise(function(fulfill, reject) {
         if('schema' in model) {
-          var errs = model.schema.validate(opts);
+          var errs = model.schema.validate(opts, {});
           if(errs.length) {
             reject(errs);
             return;

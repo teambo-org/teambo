@@ -21,7 +21,7 @@ Teambo.team = (function(t){
           return Promise.reject('No mkey');
         }
         return t.promise(function(fulfill, reject) {
-          var errs = team.schema.validate(data.opts);
+          var errs = team.schema.validate(data.opts, self.orig);
           if(errs.length) {
             reject(errs);
             return;

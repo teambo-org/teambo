@@ -1,7 +1,7 @@
 Teambo.schema = (function(t){
   "use strict";
-  
-  var validate_property = function(rules, prop, key) {
+
+  var validate_property = function(rules, prop, orig, key) {
     var errs = [];
     var type = typeof prop;
     if(type === 'object') {
@@ -18,7 +18,7 @@ Teambo.schema = (function(t){
           break;
         }
         Object.keys(prop).forEach(function (k) {
-          errs = errs.concat(validate_schema(rules[r], prop[k], key));
+          errs = errs.concat(validate_schema(rules[r], prop[k], orig[k], key));
         });
         break;
       }
@@ -47,30 +47,32 @@ Teambo.schema = (function(t){
     }
     return errs;
   };
-  
-  var validate_schema = function(rules, data, prefix) {
+
+  var validate_schema = function(rules, data, orig, prefix) {
     prefix = prefix ? prefix + '.' : '';
     var errs = [];
     for(var k in data) {
       if(!(k in rules)) {
         delete(data[k]);
         continue;
+      } else if(orig && 'editable' in rules[k] && !rules[k].editable && typeof orig[k] !== 'undefined') {
+        data[k] = orig[k];
       }
-      errs = errs.concat(validate_property(rules[k], data[k], prefix + k));
+      errs = errs.concat(validate_property(rules[k], data[k], orig[k], prefix + k));
     }
     return errs;
   };
-  
+
   var schema = function(rules) {
     t.extend(this, {
-      validate: function(data) {
-        return validate_schema(rules, data);
+      validate: function(data, orig) {
+        return validate_schema(rules, data, orig);
       }
       // diff
       // merge
     });
   };
-  
+
   return schema;
 
 })(Teambo);
