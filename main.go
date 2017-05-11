@@ -24,6 +24,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/acct":                controller.Acct,
 	"/acct/auth":           controller.AcctAuth,
 	"/acct/verification":   controller.AcctVerification,
+	"/acct/socket":         controller.AcctSocket,
 	"/invite":              controller.Invite,
 	"/invite/response":     controller.InviteResponse,
 	"/invite/acceptance":   controller.InviteAcceptance,
@@ -58,6 +59,8 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=0, must-revalidate")
 	// start := time.Now()
 
+	// log.Println(r.URL.Path)
+
 	if handle, ok := routes[r.URL.Path]; ok {
 		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond)))
 		handle(w, r)
@@ -89,6 +92,7 @@ func main() {
 	go socket.TeamHub.Run()
 	go socket.InviteResponseHub.Run()
 	go socket.InviteAcceptanceHub.Run()
+	go socket.AcctHub.Run()
 
 	http.Handle("/", StaticHandler{})
 

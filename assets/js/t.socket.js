@@ -7,7 +7,8 @@ Teambo.socket = (function (t) {
     t.extend(socket, {
       interval: null,
       connect: null,
-      connection: null
+      connection: null,
+      connected: false
     });
 
     socket.stop = function() {
@@ -21,12 +22,11 @@ Teambo.socket = (function (t) {
 
     socket.start = function() {
       socket.stop();
-      var connected = null;
       var failures = 0;
       socket.connect = true;
       var wrapperfunc = function(){
         if (typeof(WebSocket) === "function" && (!socket.connection || socket.connection.readyState > 0)) {
-          if(connected) {
+          if(socket.connected) {
             return;
           }
           var uri = new Uri(window.location);
@@ -38,7 +38,7 @@ Teambo.socket = (function (t) {
             return;
           }
           socket.connection = new WebSocket(scheme+"://"+host+port+url);
-          connected = true;
+          socket.connected = true;
           socket.connection.onclose = function(evt) {
             failures++;
             socket.connected = false;

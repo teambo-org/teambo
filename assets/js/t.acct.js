@@ -10,6 +10,7 @@ Teambo.acct = (function (t) {
     }
     t.extend(this, {
       id:    data.id,
+      iv:    data.iv,
       email: data.email,
       rsa:   data.rsa ? (new RSAKey()).fromPrivTPO(data.rsa) : null,
       opts:  data.opts  || {},
@@ -99,6 +100,33 @@ Teambo.acct = (function (t) {
           }
         });
         return r;
+      },
+      socketUrl: function() {
+        return "/acct/socket?id="+encodeURIComponent(self.id)+"&akey="+encodeURIComponent(akey);
+      },
+      refresh: function(iv) {
+        if(!iv || self.iv == iv) {
+          return Promise.reject();
+        }
+        return t.promise(function (fulfill, reject) {
+          t.xhr.post('/acct/auth', {
+            data: {id: self.id, akey: akey}
+          }).then(function(xhr) {
+            if(xhr.status == 200) {
+              var data = JSON.parse(xhr.responseText);
+              if(data) {
+                var new_acct = new acct(data.ct, akey, key);
+                new_acct.cache().then(function(){
+                  fulfill(new_acct);
+                });
+              } else {
+                reject(xhr);
+              }
+            }
+          }).catch(function(xhr) {
+            reject(xhr);
+          });
+        });
       }
     });
   };
