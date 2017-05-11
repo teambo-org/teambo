@@ -162,3 +162,24 @@ func (tb TeamBucket) Exists(id string) (exists bool, err error) {
 
 	return exists, nil
 }
+
+func (tb TeamBucket) RemoveByValue(id string) (err error) {
+	db_team_update(tb.TeamId, func(tx *bolt.Tx) error {
+		b, _ := tx.CreateBucketIfNotExists([]byte(tb.Name))
+
+		c := b.Cursor()
+		prefix := []byte("")
+		for k, v := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
+			if string(v) == id {
+				c.Delete()
+			}
+		}
+
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
+}

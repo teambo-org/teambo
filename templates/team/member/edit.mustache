@@ -6,11 +6,12 @@
         <span>Edit</span>
     </nav>
     <nav>
-    {{#editable}}
-    <!--
-        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
-    -->
-    {{/editable}}
+    {{#canLeave}}
+        <a href="#{{url}}/leave" data-keybind="r">Leave Team</a>
+    {{/canLeave}}
+    {{#canRemove}}
+        <a href="#{{url}}/remove" data-keybind="r">Remove Member</a>
+    {{/canRemove}}
     </nav>
     <h1><i class="{{icon}}"></i>{{opts.name}}</h1>
     <form id="member-edit" name="member_edit" method="POST" class="std" data-member_id="{{id}}">

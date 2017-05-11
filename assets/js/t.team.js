@@ -406,6 +406,12 @@ Teambo.team = (function(t){
     }
   });
 
+  t.view.on('member-removed', function(e) {
+    if(!Teambo.acct.current.member()) {
+      t.gotoUrl('/team-inaccessible?team_id='+t.team.current.id);
+    }
+  });
+
   return team;
 
 })(Teambo);

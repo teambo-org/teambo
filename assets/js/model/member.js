@@ -20,6 +20,12 @@ Teambo.model.member = (function(t){
       },
       isMe: function() {
         return self.id == t.acct.current.member().id;
+      },
+      canLeave: function() {
+        return self.isMe() && !t.team.current.isAdmin();
+      },
+      canRemove: function() {
+        return !self.isMe() && t.team.current.isAdmin();
       }
     });
     if(!self.opts.name) {

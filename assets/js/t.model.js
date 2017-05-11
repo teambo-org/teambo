@@ -122,12 +122,7 @@ Teambo.model = (function(t){
         });
       },
       uncache: function() {
-        t.deleteByProperty(model.all, 'id', self.id);
-        return t.promise(function (fulfill, reject) {
-          t.team.uncache(self.id).then(function() {
-            fulfill(self);
-          });
-        });
+        return model.uncache(self.id);
       },
       remove: function() {
         return t.promise(function(fulfill, reject) {
@@ -333,8 +328,14 @@ Teambo.model = (function(t){
           } else {
             model.fetch(id, team.id, team.mkey).then(function(ct) {
               fulfill(new model(ct));
-            }).catch(function(e) {
-              fulfill();
+            }).catch(function(xhr) {
+              if(xhr.status === 404) {
+                model.uncache(id).then(function() {
+                  fulfill();
+                });
+              } else {
+                fulfill();
+              }
             });
           }
         });
@@ -405,6 +406,15 @@ Teambo.model = (function(t){
           }
         });
 
+      });
+    };
+
+    model.uncache = function(id) {
+      t.deleteByProperty(model.all, 'id', id);
+      return t.promise(function (fulfill, reject) {
+        t.team.uncache(id).then(function() {
+          fulfill();
+        });
       });
     };
 

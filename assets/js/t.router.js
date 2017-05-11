@@ -41,7 +41,9 @@ Teambo.router = (function(t){
     '/:team_id/item/:item_id/comment/:comment_id/remove' : 'team/comment/remove',
     '/:team_id/members/new'                : 'team/member/new',
     '/:team_id/member/:member_id'          : 'team/member/view',
-    '/:team_id/member/:member_id/edit'     : 'team/member/edit'
+    '/:team_id/member/:member_id/edit'     : 'team/member/edit',
+    '/:team_id/member/:member_id/remove'   : 'team/member/remove',
+    '/:team_id/member/:member_id/leave'    : 'team/member/leave'
   };
 
   return {

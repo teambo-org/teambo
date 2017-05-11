@@ -81,7 +81,6 @@ Teambo.model.invite = (function(t){
         team_id:   t.team.current.id,
         mkey:      t.team.current.mkey,
         member_id: member.id,
-        email:     member.opts.email,
         ikey:      member.opts.invite_key,
         ct:        t.team.current.rsaTPO(pubKey)
       };

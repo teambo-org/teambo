@@ -153,7 +153,6 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 	ikey := r.FormValue("ikey")
 	ct := r.FormValue("ct")
-	email := r.FormValue("email")
 	member_id := r.FormValue("member_id")
 	mkey := r.FormValue("mkey")
 
@@ -203,13 +202,6 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 		inviteResponse.Delete()
 
 		socket.InviteAcceptanceHub.Broadcast <- socket.Message(ikey, ct + "-" + memberKey.Id)
-
-		subject := "Teambo Invite Accepted"
-		link := scheme + "://" + util.Config("app.host") + "/#/account"
-		body := "One of your recent team invites has been accepted on Teambo.<br/>"
-		body = body + "Log in to your account to join your new team!<br/>"
-		body = body + "<a href='" + link + "'>" + link + "</a>"
-		err = util.SendMail(email, subject, body)
 
 		msg, _ := json.Marshal(map[string]bool{
 			"success": true,

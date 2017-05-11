@@ -70,6 +70,15 @@ func (t Team) IsAdmin(mkey string) bool {
 	return false
 }
 
+func (t Team) GetMemberId(mkey string) string {
+	member_keys := TeamBucket{t.Id, "member_key"}
+	member_key, err := member_keys.Find(mkey)
+	if err == nil && member_key.Ciphertext != "" {
+		return member_key.Ciphertext
+	}
+	return ""
+}
+
 func (t Team) InviteCreate(ikey string) (invite TeamObject) {
 	invites := TeamBucket{t.Id, "member_invite"}
 	invite = invites.NewObject("")
