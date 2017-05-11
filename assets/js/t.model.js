@@ -437,11 +437,13 @@ Teambo.model = (function(t){
             return;
           }
           m.uncache().then(function() {
-            e[model.type] = m;
-            t.view.emit(model.type+'-removed', e);
-            // TODO : move updateSideNav someplace else or replace it with something better
-            t.view.updateSideNav();
-            fulfill();
+            model.cacheIds().then(function(){
+              e[model.type] = m;
+              t.view.emit(model.type+'-removed', e);
+              // TODO : move updateSideNav someplace else or replace it with something better
+              t.view.updateSideNav();
+              fulfill();
+            });
           });
         } else {
           if(m && m.iv == e.iv) {
