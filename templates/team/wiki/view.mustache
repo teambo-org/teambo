@@ -10,12 +10,12 @@
         <a href="#{{url}}/edit" data-keybind="e"><i class="icon-edit"></i> <span class="name">Edit</span></a>
         <a href="#{{url}}/new" data-keybind="c"><i class="icon-plus-1"></i> <span class="name">New Page</span></a>
     </nav>
-    
+
     <h1><i class="icon-{{icon}}"></i> {{opts.title}}</h1>
     <div class="up4c3">
     {{#opts.text}}
         <section class="description color-bg" role="main">
-            {{#nl2br}}{{#linkify}}{{opts.text}}{{/linkify}}{{/nl2br}}
+            {{#linkify}}{{#nl2br}}{{opts.text}}{{/nl2br}}{{/linkify}}
         </section>
     {{/opts.text}}
     </div><div class="up4c up4c3b">
@@ -32,7 +32,7 @@
             {{#siblings}}
                 <li class="section sibling">
                     <a href="#{{url}}" class="{{#active}}hi-10 active{{/active}}">
-                        <div class="img"><i class="icon-{{icon}}"></i></div> 
+                        <div class="img"><i class="icon-{{icon}}"></i></div>
                         <div class="name">{{opts.title}}</div>
                     </a>
                 </li>
