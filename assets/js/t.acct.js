@@ -22,7 +22,8 @@ Teambo.acct = (function (t) {
           return Promise.reject('No akey');
         }
         return t.promise(function (fulfill, reject) {
-          var new_ct = self.encrypted();
+          var iv = t.crypto.iv();
+          var new_ct = self.encrypted({iv: iv});
           t.xhr.post('/acct', {
             data: {
               id:   self.id,
@@ -32,7 +33,7 @@ Teambo.acct = (function (t) {
             }
           }).then(function (xhr) {
             if (xhr.status === 200) {
-              self.iv = new_ct.split(' ')[0];
+              self.iv = iv;
               self.cache().then(function() {
                 fulfill(xhr);
               });

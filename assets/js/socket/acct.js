@@ -7,21 +7,24 @@ Teambo.socket.acct = (function (t) {
     }
   });
 
-  t.socket.extend(socket);
-
   var handle = function(e) {
     if(!e.iv) {
       return;
     } else if(e.iv == 'removed') {
-        socket.emit('removed');
-      // log out
+      socket.stop();
+      t.acct.deAuth();
+      t.gotoUrl('/login');
     } else if(e.iv != t.acct.current.iv) {
       t.acct.current.refresh(e.iv).then(function(new_acct) {
         t.acct.current = new_acct;
-        socket.emit('updated');
+        socket.stop();
+        t.refresh({silent: true});
       });
     } else {
-      socket.emit('checked');
+      t.socket.inviteAcceptance.on('activated', function() {
+        t.refresh();
+      });
+      t.socket.inviteAcceptance.start();
     }
   };
 

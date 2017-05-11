@@ -61,9 +61,7 @@ var Teambo = (function(t){
     t.view.render('page', 'external/blank');
     if(t.acct.current) {
       t.acct.current.cacheAuth();
-      setTimeout(function() {
-        window.location.reload();
-      }, 100);
+      window.location.reload();
     } else {
       window.location.reload();
     }

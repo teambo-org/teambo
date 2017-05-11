@@ -13,11 +13,11 @@ Teambo.socket = (function (t) {
 
     socket.stop = function() {
       socket.connect = false;
+      socket.connected = false;
       clearInterval(socket.interval);
       if(socket.connection) {
         socket.connection.close();
       }
-      socket.emit('stop');
     };
 
     socket.start = function() {
@@ -43,9 +43,9 @@ Teambo.socket = (function (t) {
             failures++;
             socket.connected = false;
             socket.connection = null;
-            if(socket.connect) {
-              t.online(false);
-            }
+            // if(socket.connect) {
+              // t.online(false);
+            // }
           }
           socket.connection.onmessage = function(evt) {
             t.online(true);

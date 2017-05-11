@@ -11,19 +11,7 @@ function(t){
   t.event.once('pre-nav', function() {
     t.socket.acct.stop();
   });
-  t.socket.acct.on('updated', function() {
-    t.gotoUrl('/account', true);
-  });
-  t.socket.acct.on('removed', function() {
-    t.acct.deAuth();
-    t.gotoUrl('/login');
-  });
-  t.socket.acct.on('checked', function() {
-    t.socket.inviteAcceptance.on('activated', function() {
-      t.gotoUrl('/account', true);
-    });
-    t.socket.inviteAcceptance.start();
-  });
+
   t.socket.acct.start();
 
   var el = document.getElementById('teams');
