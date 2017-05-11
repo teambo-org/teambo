@@ -4,13 +4,29 @@ function(t){
   t.editing(true);
 
   var form = new t.form(document.invite_respond);
+  var data = {
+    ikey:  form.getAttribute('data-ikey'),
+    chk:   form.getAttribute('data-chk'),
+    name:  form.getAttribute('data-name')
+  };
+
+  if(!t.acct.isAuthed()) {
+    if(data.ikey) {
+      localforage.setItem('ikey-data', data);
+    }
+    t.gotoUrl('/login');
+  } else if(!data.ikey) {
+    form.disable();
+    localforage.getItem('ikey-data').then(function(d) {
+      if(d && d.ikey) {
+        data = d;
+      }
+      form.enable();
+    });
+  }
 
   form.addEventListener('submit', function(e){
-    var data = {
-      ikey:  form.getAttribute('data-ikey'),
-      chk:   form.getAttribute('data-chk'),
-      name:  form.getAttribute('data-name')
-    };
+    localforage.removeItem('ikey-data')
     form.disable();
     t.model.invite.respond(data).then(function(xhr) {
       if(xhr.status == 201) {

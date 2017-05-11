@@ -14,17 +14,14 @@ Teambo.socket.acct = (function (t) {
       socket.stop();
       t.acct.deAuth();
       t.gotoUrl('/login');
-    } else if(e.iv != t.acct.current.iv) {
+    } else {
       t.acct.current.refresh(e.iv).then(function(new_acct) {
         t.acct.current = new_acct;
         socket.stop();
         t.refresh({silent: true});
+      }).catch(function(){
+        t.socket.inviteAcceptance.start();
       });
-    } else {
-      t.socket.inviteAcceptance.on('activated', function() {
-        t.refresh();
-      });
-      t.socket.inviteAcceptance.start();
     }
   };
 

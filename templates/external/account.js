@@ -8,6 +8,12 @@ function(t){
 
   t.editing(true);
 
+  localforage.getItem('ikey-data').then(function(d) {
+    if(d && d.ikey) {
+      t.gotoUrl('/invite');
+    }
+  });
+
   t.event.once('pre-nav', function() {
     t.socket.acct.stop();
   });

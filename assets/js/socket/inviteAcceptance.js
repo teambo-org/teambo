@@ -28,13 +28,13 @@ Teambo.socket.inviteAcceptance = (function (t) {
     } else if(e.ct == 'expired') {
       t.deleteByProperty(t.acct.current.invites, 'ikey', e.ikey);
       t.acct.current.save().then(function() {
-        socket.emit('activated');
+        t.refresh();
       });
     } else {
       var invite = t.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
       if(invite) {
         t.model.invite.activate(e.ikey, e.ct, e.mkey).then(function() {
-          socket.emit('activated');
+          t.refresh();
         });
       }
     }
