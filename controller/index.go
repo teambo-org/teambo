@@ -51,6 +51,7 @@ var jslib = []string{
 	"/js/lib/classList.js",
 	"/js/lib/polyfills.js",
 	"/js/lib/color.js",
+	"/js/lib/diff_match_patch.js",
 }
 var jsapp = []string{
 	"/js/t.js",

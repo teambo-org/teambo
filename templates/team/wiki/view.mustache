@@ -11,7 +11,7 @@
         <a href="#{{url}}/new" data-keybind="c"><i class="icon-plus-1"></i> <span class="name">New Page</span></a>
     </nav>
 
-    <h1><i class="icon-{{icon}}"></i> {{opts.title}}</h1>
+    <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
     <div class="up4c3">
     {{#opts.text}}
         <section class="description color-bg" role="main">
@@ -44,23 +44,24 @@
                 {{/member}}
                 </div>
                 <div class="diff">
-                    {{#diff.parid}}
+                {{#keys}}
+                    {{#parid}}
                     <div class="parid"><span class="k">Parent</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.parid}}</span></div>
-                    {{/diff.parid}}
-                    {{#diff.parent_id}}
+                    {{/parid}}
+                    {{#parent_id}}
                     <div class="parent_id"><span class="k">Parent</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.parent_id}}</span></div>
-                    {{/diff.parent_id}}
-                    {{#diff.title}}
+                    {{/parent_id}}
+                    {{#title}}
                     <div class="title"><span class="k">Title</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.title}}</span></div>
-                    {{/diff.title}}
-                    {{#diff.name}}
-                    <div class="title"><span class="k">Name</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.name}}</span></div>
-                    {{/diff.name}}
-                    {{#diff_text}}
+                    {{/title}}
+                    {{#name}}
+                    <div class="title"><span class="k">Title</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.name}}</span></div>
+                    {{/name}}
+                    {{#text}}
                         {{#diff.text}}
                         <div class="description text">
                             <span class="k">Text</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} <a data-toggle="history-text-{{iv}}"><i class="icon-angle-down"></i></a>
-                            <p class="value color-70 description toggle-target hi-05" data-toggle-target="history-text-{{iv}}">{{#nl2br}}{{diff.text}}{{/nl2br}}</p>
+                            <p class="value color-70 description toggle-target hi-05 patch" data-toggle-target="history-text-{{iv}}">{{{nice_text_patch}}}</p>
                         </div>
                         {{/diff.text}}
                         {{^diff.text}}{{^first}}
@@ -68,7 +69,8 @@
                             <span class="k">Text</span> removed
                         </div>
                         {{/first}}{{/diff.text}}
-                    {{/diff_text}}
+                    {{/text}}
+                {{/keys}}
                 </div>
             </li>
         {{/history}}

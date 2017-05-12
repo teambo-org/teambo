@@ -40,7 +40,7 @@ Teambo.model.member = (function(t){
     pubKey:      { type: 'string', required: false, maxLength: 512, editable: false },
     email:       { type: 'string', required: true,  maxLength: 256, editable: false },
     name:        { type: 'string', required: false, maxLength: 256 },
-    description: { type: 'string', required: false, maxLength: 2048 },
+    description: { type: 'text',   required: false, maxLength: 2048 },
     icon:        { type: 'string', required: false, maxLength: 32 }
   });
 

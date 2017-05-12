@@ -86,7 +86,7 @@ Teambo.model.plan = (function(t){
 
   model.schema = new t.schema({
     name:  { type: 'string', required: true,  maxLength: 256 },
-    desc:  { type: 'string', required: false, maxLength: 65535 },
+    desc:  { type: 'text',   required: false, maxLength: 65535 },
     start: { type: 'string', required: false, minLength: 10, maxLength: 10, empty: true },
     end:   { type: 'string', required: false, minLength: 10, maxLength: 10, empty: true }
   });

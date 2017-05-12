@@ -20,13 +20,13 @@ Teambo.model = (function(t){
       save: function() {
         return t.promise(function(fulfill, reject) {
           if('schema' in model) {
-            var errs = model.schema.validate(data.opts, self.orig);
+            var errs = model.schema.validate(self.opts, self.orig);
             if(errs.length) {
               reject(errs);
               return;
             }
           }
-          var diff = self.diff();
+          var diff = model.schema.diff(self.orig, self.opts);
           if(!Object.keys(diff).length) {
             fulfill(self);
             return;
@@ -71,14 +71,15 @@ Teambo.model = (function(t){
           }).catch(function(xhr) {
             if(xhr.status === 409 && auto_refresh) {
               self.refresh().then(function(new_m) {
-                new_m.update(self.diff()).then(function(){
+                var diff = model.schema.diff(new_m.opts, opts);
+                new_m.update(diff).then(function(){
                   fulfill(new_m);
                 }).catch(function(){
                   reject(xhr);
                 });
               });
             } else if(xhr.status === 0) {
-              var diff = self.diff();
+              var diff = model.schema.diff(self.orig, opts);
               self.orig = t.clone(self.opts);
               self.cache().then(function() {
                 t.team.current.queue.process({type: model.type + '.offline.update', opts: diff, id: self.id});
@@ -172,22 +173,13 @@ Teambo.model = (function(t){
         }
         return t.team.encrypt(data, config);
       },
-      diff: function() {
-        var diff = {};
-        for(var i in self.opts) {
-          if(self.orig[i] != self.opts[i]) {
-            diff[i] = self.opts[i];
-          }
-        }
-        return diff;
-      },
       active: function() {
         return model.current && model.current.id == self.id ? 'active' : '';
       },
       history: function() {
         var h = [];
         self.hist.forEach(function(data, i) {
-          var d = t.model.history.create(data);
+          var d = t.model.history.create(data, self);
           if(i == 0) {
             d.first = true;
           }
