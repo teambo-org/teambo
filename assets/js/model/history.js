@@ -74,6 +74,9 @@ Teambo.model.history = (function(t){
       },
       nice_desc_patch: function() {
         return self.nice_patch('desc');
+      },
+      diff_member_id: function() {
+        return 'member_id' in self.diff;
       }
     });
   };
