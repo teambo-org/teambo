@@ -46,7 +46,7 @@ Teambo.router = (function(t){
     '/:team_id/member/:member_id/leave'    : 'team/member/leave'
   };
 
-  return {
+  var router = {
     init: function(templates) {
       for(i in templates) {
         if(i.indexOf('index/') === 0) {
@@ -88,8 +88,18 @@ Teambo.router = (function(t){
           return route;
         }
       }
-      return
+      return;
+    },
+    findClosest: function(url) {
+      var route = router.find(url);
+      while(!route) {
+        url = url.split('/').slice(0,-1).join('/');
+        route = router.find(url);
+      }
+      return route;
     }
   };
+
+  return router;
 
 })(Teambo);

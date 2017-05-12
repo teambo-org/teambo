@@ -70,7 +70,7 @@ var Teambo = (function(t){
   var hashChange = function(hash, data) {
     var uri = new Uri(hash);
     var path = uri.path().split('..')[0];
-    var route = t.router.find(path);
+    var route = t.router.findClosest(path);
     data = t.extend(data || {}, uri.getQueryParams());
     var silent = data.silent ? data.silent : false;
     if(updateready) {
