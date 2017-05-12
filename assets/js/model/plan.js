@@ -65,9 +65,6 @@ Teambo.model.plan = (function(t){
       progress: function() {
         return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
       },
-      parentModel: function() {
-        return model.get(self.opts.parid);
-      },
       created: function() {
         var h = self.hist[0];
         return h ? h.ts : null;
@@ -88,7 +85,6 @@ Teambo.model.plan = (function(t){
   model.type = 'plan';
 
   model.schema = new t.schema({
-    parid: { type: 'string', required: true,  minLength: 8, maxLength: 8 },
     name:  { type: 'string', required: true,  maxLength: 256 },
     desc:  { type: 'string', required: false, maxLength: 65535 },
     start: { type: 'string', required: false, minLength: 10, maxLength: 10, empty: true },

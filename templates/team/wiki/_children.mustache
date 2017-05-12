@@ -1,11 +1,13 @@
-<ul class="children">
 {{#children}}
-    <li id="wiki-li-{{id}}">
-        <a href="#{{url}}">
-            <i class="icon-angle-right"></i>
-            <span class="name">{{opts.title}}</span>
+    <li class="section child">
+        <a href="#{{url}}" class="{{#active}}hi-10 active{{/active}}">
+            <div class="img"><i class="icon-angle-right"></i></div>
+            <div class="name">{{opts.title}}</div>
         </a>
-        {{>team/wiki/_children}}
     </li>
+    {{#hasChildren}}
+    <ul class="children">
+        {{>team/wiki/_children}}
+    </ul>
+    {{/hasChildren}}
 {{/children}}
-</ul>

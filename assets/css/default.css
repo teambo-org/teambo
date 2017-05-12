@@ -217,6 +217,7 @@ form.filter { clear: both; }
     #dashboard .main section.tags ul { width: 100%; float: left; }
     #dashboard .main section.tags ul li { width: 50%; float: left; clear: none; }
     #dashboard .main section.tags ul li:nth-child(2n) { float: right; }
+    #dashboard .main section.tags.tags-full ul li { width: 100%; }
 }
 
 @media (max-width: 1599px) {

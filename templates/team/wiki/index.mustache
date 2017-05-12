@@ -7,18 +7,8 @@
         <a href="#{{team.url}}/wiki/new" data-keybind="c">Create Page</a>
     </nav>
     <h1><i class="icon-book"></i> Wiki</h1>
-    <ul class="wiki">
-    {{#model.wiki.top}}
-        <li id="wiki-li-{{id}}">
-            <a href="#{{url}}">
-                <i class="icon-book"></i>
-                <span class="name">{{opts.title}}</span>
-            </a>
-            {{>team/wiki/_children}}
-        </li>
-    {{/model.wiki.top}}
-    {{^model.wiki.top}}
-        <p class="empty">Team has no wiki pages</p>
-    {{/model.wiki.top}}
-    </ul>
+    <div class="up4c up4c3"></div>
+    <div class="up4c up4c3b">
+        {{>team/wiki/_toc}}
+    </div>
 </div>

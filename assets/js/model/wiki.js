@@ -12,29 +12,38 @@ Teambo.model.wiki = (function(t){
         return 'book';
       },
       siblings: function() {
-        return model.allByParent(self.opts.parid);
+        return model.allByParent(self.opts.parent_id);
       },
       children: function() {
         return model.allByParent(self.id);
       },
       parents: function() {
         var ret = [];
-        var par = model.get(self.opts.parid);
+        var par = model.get(self.opts.parent_id);
         while(par) {
           ret.push(par);
-          par = model.get(par.opts.parid);
+          par = model.get(par.opts.parent_id);
         }
         return ret.reverse();
+      },
+      hasChildren: function() {
+        return self.children().length;
       }
     });
+    if(self.opts.parid) {
+      self.opts.parent_id = self.opts.parid;
+    }
+    if(self.opts.title) {
+      self.opts.name = self.opts.title;
+    }
   };
 
   model.type = 'wiki';
 
   model.schema = new t.schema({
-    parid: { type: 'string', required: false, minLength: 8, maxLength: 8, empty: true },
-    title: { type: "string", required: true,  maxLength: 256 },
-    text:  { type: "string", required: false, maxLength: 65535 }
+    parent_id: { type: 'string', required: false, minLength: 8, maxLength: 8, empty: true },
+    name:      { type: "string", required: true,  maxLength: 256 },
+    text:      { type: "text",   required: false, maxLength: 65535 }
   });
 
   t.model.extend(model);
@@ -43,11 +52,11 @@ Teambo.model.wiki = (function(t){
     return model.allByParent(null);
   };
 
-  model.allByParent = function(parid) {
+  model.allByParent = function(parent_id) {
     var ret = [];
     for(var i in model.all) {
       var o = model.all[i];
-      if(o.opts.parid == parid || (!o.opts.parid && !parid)) {
+      if(o.opts.parent_id == parent_id || (!o.opts.parent_id && !parent_id)) {
         ret.push(o);
       }
     }

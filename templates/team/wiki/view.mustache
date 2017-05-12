@@ -18,37 +18,9 @@
             {{#linkify}}{{#nl2br}}{{opts.text}}{{/nl2br}}{{/linkify}}
         </section>
     {{/opts.text}}
-    </div><div class="up4c up4c3b">
-        <section class="tags">
-            <ul>
-            {{#parents}}
-                <li class="section parent">
-                    <a href="#{{url}}">
-                        <div class="img"><i class="icon-angle-up"></i></div>
-                        <div class="name">{{opts.title}}</div>
-                    </a>
-                </li>
-            {{/parents}}
-            {{#siblings}}
-                <li class="section sibling">
-                    <a href="#{{url}}" class="{{#active}}hi-10 active{{/active}}">
-                        <div class="img"><i class="icon-{{icon}}"></i></div>
-                        <div class="name">{{opts.title}}</div>
-                    </a>
-                </li>
-                {{#active}}
-                {{#children}}
-                <li class="section child">
-                    <a href="#{{url}}">
-                        <div class="img"><i class="icon-angle-right"></i></div>
-                        <div class="name">{{opts.title}}</div>
-                    </a>
-                </li>
-                {{/children}}
-                {{/active}}
-            {{/siblings}}
-            </ul>
-        </section>
+    </div>
+    <div class="up4c up4c3b">
+        {{>team/wiki/_toc}}
     </div>
     <section class="history up1c"><div class="c">
         <h2><i class="icon-clock"></i> History</h2>
@@ -75,9 +47,15 @@
                     {{#diff.parid}}
                     <div class="parid"><span class="k">Parent</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.parid}}</span></div>
                     {{/diff.parid}}
+                    {{#diff.parent_id}}
+                    <div class="parent_id"><span class="k">Parent</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.parent_id}}</span></div>
+                    {{/diff.parent_id}}
                     {{#diff.title}}
                     <div class="title"><span class="k">Title</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.title}}</span></div>
                     {{/diff.title}}
+                    {{#diff.name}}
+                    <div class="title"><span class="k">Name</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{diff.name}}</span></div>
+                    {{/diff.name}}
                     {{#diff_text}}
                         {{#diff.text}}
                         <div class="description text">
