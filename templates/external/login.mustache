@@ -8,6 +8,14 @@
         <div class="field">
             <input type="password" class="text pass required min-len-8" name="pass" placeholder="Password" />
         </div>
+        {{#app.remember_me}}
+        <div class="field">
+            <label for="remember_me" class="chk">
+                <input id="remember_me" type="checkbox" class="chk" name="remember_me" />
+                Remember Me
+            </label>
+        </div>
+        {{/app.remember_me}}
         <div class="field submit">
             <input id="submit" type="submit" class="submit" value="Submit" />
         </div>

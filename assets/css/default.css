@@ -92,6 +92,9 @@ form.std.horizontal { padding: 0.6em; font-size: 0.9em; margin-bottom: 1em; }
 form.std.horizontal .text { width: auto; padding: 0.2em 0.3em; }
 form.std label.chk { padding: 0.5em; font-size: 0.85em; }
 form.std label input.chk { float: left; margin-right: 0.8em; transform: scale(1.25); }
+form.ext.std .field label.chk { width: 23.9em; box-sizing: border-box; max-width: 100%; text-align: left; margin: 0 auto; padding: 0; }
+form.ext.std .field label.chk input.chk { transform: scale(1.5); }
+form.ext.std .field label.chk input.chk:active { transform: scale(1.5); background: rgba(0,0,0,0.15); }
 
 form.std .error .msg { color: #fff; background: #900; text-align: center; padding: 1em 0; margin: 1em 0; }
 form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }

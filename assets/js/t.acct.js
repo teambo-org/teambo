@@ -54,6 +54,11 @@ Teambo.acct = (function (t) {
         var data = {hash: hash, akey: akey, key: key};
         sessionStorage.setItem('auth', t.crypto.encrypt(data, t.salt));
       },
+      rememberMe: function() {
+        var hash = t.crypto.sha(self.email + t.salt);
+        var data = {hash: hash, akey: akey, key: key};
+        return localforage.setItem('auth', t.crypto.encrypt(data, t.salt));
+      },
       encrypted: function (iv) {
         var data = {
           email: self.email,
@@ -140,9 +145,7 @@ Teambo.acct = (function (t) {
   };
 
   acct.wake = function () {
-    var auth = sessionStorage.getItem('auth');
-    if (auth) {
-      auth = t.crypto.decrypt(auth, t.salt);
+    var callback = function(auth) {
       return t.promise(function (fulfill, reject) {
         localforage.getItem(auth.hash).then(function (ct) {
           var data = t.crypto.decrypt(ct, auth.key);
@@ -151,12 +154,26 @@ Teambo.acct = (function (t) {
             // sessionStorage.removeItem('auth');
             fulfill();
           } else {
-            reject();
+            fulfill();
           }
         });
       });
+    };
+    var auth = sessionStorage.getItem('auth');
+    if (auth) {
+      auth = t.crypto.decrypt(auth, t.salt);
+      return callback(auth);
     } else {
-      return Promise.resolve();
+      return t.promise(function(fulfill, reject) {
+        localforage.getItem('auth').then(function(auth) {
+          auth = t.crypto.decrypt(auth, t.salt);
+          callback(auth).then(function() {
+            fulfill();
+          }).catch(function() {
+            fulfill();
+          });
+        });
+      });
     }
   };
 
@@ -168,6 +185,7 @@ Teambo.acct = (function (t) {
     t.view.set('acct', null);
     acct.current = null;
     sessionStorage.removeItem('auth');
+    return localforage.removeItem('auth');
   };
 
   acct.auth = function (email, pass) {

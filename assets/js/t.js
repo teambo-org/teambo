@@ -193,7 +193,7 @@ var Teambo = (function(t){
         t.trace(e);
         t.acct.deAuth();
         // TODO: Fix infinite reload on serious app error
-        window.location.reload();
+        // window.location.reload();
       });
     });
   };

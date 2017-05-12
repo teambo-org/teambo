@@ -19,3 +19,4 @@ tests.enabled  true
 cache.manifest false
 port.http      80
 port.https     443
+app.remember_me false

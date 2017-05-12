@@ -92,6 +92,8 @@ Teambo.view = (function(t){
     templates = opts.templates;
     template_js = opts.template_js;
 
+    obj.app = opts.app;
+
     obj.model = t.model;
 
     if(window.applicationCache.status !== 0) {

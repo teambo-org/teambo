@@ -299,10 +299,15 @@ func append_js_init(w io.Writer) {
 	if util.Config("debug") == "true" {
 		debug = "true"
 	}
+	remember_me := "false"
+	if util.Config("app.remember_me") == "true" {
+		remember_me = "true"
+	}
 	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " +
 		"'audio': " + string(audio) + ", " +
-		"'debug': " + debug
+		"'debug': " + debug + ", " +
+		"'app':{'remember_me': " + remember_me + "}"
 	if util.Config("tests.enabled") == "true" {
 		js_data = js_data + ", " + "'testing': true"
 	}

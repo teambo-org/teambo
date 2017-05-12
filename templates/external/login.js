@@ -3,10 +3,10 @@ function(t){
 
   t.editing(true);
 
-  var form = new t.form(document.auth),
-    vkey = form.getAttribute("data-vkey"),
-    email,
-    pass;
+  var form = new t.form(document.auth);
+  var vkey = form.getAttribute("data-vkey");
+  var email;
+  var pass;
 
   var form_submit_login = function(email, pass) {
     var password_reset = function() {
@@ -24,6 +24,10 @@ function(t){
     t.acct.auth(email, pass).then(function(xhr){
       if(xhr === true || xhr.status === 200) {
         t.view.set('acct', t.acct.current);
+        var remember_me = form.remember_me;
+        if(remember_me && remember_me.checked) {
+          t.acct.current.rememberMe();
+        }
         t.gotoUrl(t.afterAuth());
       } else if(xhr.status === 404) {
         t.replace('/verification', {
