@@ -56,7 +56,7 @@ function diff_match_patch() {
 
 
 //  DIFF FUNCTIONS
-
+(function() {
 
 /**
  * The data structure representing a diff is an array of tuples:
@@ -2191,3 +2191,5 @@ this['diff_match_patch'] = diff_match_patch;
 this['DIFF_DELETE'] = DIFF_DELETE;
 this['DIFF_INSERT'] = DIFF_INSERT;
 this['DIFF_EQUAL'] = DIFF_EQUAL;
+
+})();
