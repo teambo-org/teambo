@@ -51,7 +51,8 @@ Teambo.acct = (function (t) {
       },
       cacheAuth: function() {
         var hash = t.crypto.sha(self.email + t.salt);
-        sessionStorage.setItem('auth', JSON.stringify({hash: hash, akey: akey, key: key}));
+        var data = {hash: hash, akey: akey, key: key};
+        sessionStorage.setItem('auth', t.crypto.encrypt(data, t.salt));
       },
       encrypted: function (iv) {
         var data = {
@@ -141,13 +142,13 @@ Teambo.acct = (function (t) {
   acct.wake = function () {
     var auth = sessionStorage.getItem('auth');
     if (auth) {
-      auth = JSON.parse(auth);
+      auth = t.crypto.decrypt(auth, t.salt);
       return t.promise(function (fulfill, reject) {
         localforage.getItem(auth.hash).then(function (ct) {
           var data = t.crypto.decrypt(ct, auth.key);
           if (data) {
             acct.current = new acct(data, auth.akey, auth.key);
-            sessionStorage.removeItem('auth');
+            // sessionStorage.removeItem('auth');
             fulfill();
           } else {
             reject();
@@ -189,11 +190,13 @@ Teambo.acct = (function (t) {
           }
           acct.current = new acct(data.ct, akey, key);
           acct.current.cache();
+          acct.current.cacheAuth();
         }
         fulfill(xhr);
       }).catch(function (xhr) {
         acct.auth.offline(email, pass).then(function (a) {
           acct.current = a;
+          acct.current.cacheAuth();
           fulfill(true);
         }).catch(function () {
           reject(xhr);

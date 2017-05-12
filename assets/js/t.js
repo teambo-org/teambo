@@ -183,19 +183,18 @@ var Teambo = (function(t){
     testing = opts.testing;
     t.view.init(opts);
     t.router.init(opts.templates);
-    Promise.all([
-      t.device.init(),
-      t.acct.init()
-    ]).then(function(){
-      t.view.set('acct', t.acct.current);
-      hashChange(window.location.hash.substr(1));
-      window.onhashchange = t.refresh;
-      t.audio.loadAll(opts.audio);
-    }).catch(function(e) {
-      // t.trace(e);
-      t.acct.deAuth();
-      // TODO: Fix infinite reload on serious app error
-      window.location.reload();
+    t.device.init().then(function() {
+      t.acct.init().then(function(){
+        t.view.set('acct', t.acct.current);
+        hashChange(window.location.hash.substr(1));
+        window.onhashchange = t.refresh;
+        t.audio.loadAll(opts.audio);
+      }).catch(function(e) {
+        t.trace(e);
+        t.acct.deAuth();
+        // TODO: Fix infinite reload on serious app error
+        window.location.reload();
+      });
     });
   };
 

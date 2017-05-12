@@ -46,14 +46,14 @@
                     <div class="plan_id">Removed from planning</div>
                     {{/first}}{{/diff.plan_id}}
                 {{/plan_id}}
-                {{#member_id}}
+                {{#diff_member_id}}
                     {{#diff.member_id}}
                     <div class="member_id">Assigned to {{#assignee}}<a class="value color-70" href="#{{url}}"><i class="{{icon}}"></i>{{opts.name}}</a>{{/assignee}}{{^assignee}}deleted member {{diff.member_id}}{{/assignee}}</div>
                     {{/diff.member_id}}
                     {{^diff.member_id}}
                     <div class="member_id">Unassigned</div>
                     {{/diff.member_id}}
-                {{/member_id}}
+                {{/diff_member_id}}
                 {{#description}}
                     {{#diff.description}}
                     <div class="description text">
