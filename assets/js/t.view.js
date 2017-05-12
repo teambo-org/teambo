@@ -251,7 +251,8 @@ Teambo.view = (function(t){
     obj: obj,
     updateTheme:   update_theme,
     updateSideNav: updateSideNav,
-    updateStatus:  updateStatus
+    updateStatus:  updateStatus,
+    escape: Mustache.escape
   };
 
   t.event.extend(view);

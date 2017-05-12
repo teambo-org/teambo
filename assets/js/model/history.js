@@ -52,15 +52,15 @@ Teambo.model.history = (function(t){
         if(key in self.diff) {
           var text = self.diff[key];
           if(text.substr(0,2) !== '@@') {
-            return Mustache.escape(text).split("\r").join("").split("\n").join("<br>");
+            return t.view.escape(text).split("\r").join("").split("\n").join("<br>");
           }
           var prev = self.previous_value(key);
           var dmp = new diff_match_patch();
           var patch = dmp.patch_fromText(text);
           var parts = dmp.patch_apply(patch, prev);
           var merged = parts[0];
-          prev = Mustache.escape(prev);
-          merged = Mustache.escape(merged);
+          prev = t.view.escape(prev);
+          merged = t.view.escape(merged);
           var diff = dmp.diff_main(prev, merged);
           dmp.diff_cleanupSemantic(diff);
           return diff_prettyHtml(diff);
@@ -94,10 +94,10 @@ Teambo.model.history = (function(t){
       var text = data;
       switch (op) {
         case 1: // DIFF_INSERT
-          html[x] = '<ins>' + text.split("\n").join("\n&nbsp;") + '</ins>';
+          html[x] = '<ins>' + text + '</ins>';
           break;
         case -1: //DIFF_DELETE
-          html[x] = '<del>' + text.split("\n").join("\n&nbsp;") + '</del>';
+          html[x] = '<del>' + text + '</del>';
           break;
         case 0: //DIFF_EQUAL
           html[x] = text;
@@ -122,8 +122,7 @@ Teambo.model.history = (function(t){
         out.push(lines[i]);
       }
     }
-    return out.join("<br>")
-      .replace(/<br>&nbsp;<\/(ins|del)/g, "<br></$1");
+    return out.join("<br>").replace(/<br><br>/g, "<br>&nbsp;&nbsp;<br>");
   };
 
   return model;
