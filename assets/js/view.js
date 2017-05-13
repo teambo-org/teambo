@@ -112,6 +112,7 @@ Teambo.view = (function(t){
         t.app.online = true;
       }, false);
       window.applicationCache.addEventListener('noupdate', function(e) {
+        t.app.moved = true;
         t.app.online = true;
       }, false);
       window.applicationCache.addEventListener('error', function(e) {
@@ -127,11 +128,10 @@ Teambo.view = (function(t){
       };
       if(window.applicationCache.status === 3) {
         window.applicationCache.addEventListener('cached', function(e) {
-          window.applicationCache.update();
+          t.app.online = true;
           startCacheCheck();
         }, false);
       } else {
-        window.applicationCache.update();
         startCacheCheck();
       }
     }

@@ -26,14 +26,23 @@ Teambo.socket.inviteAcceptance = (function (t) {
     if(!e.ct) {
       return;
     } else if(e.ct == 'expired') {
-      t.array.deleteByProperty(t.acct.current.invites, 'ikey', e.ikey);
-      t.acct.current.save().then(function() {
-        t.app.refresh();
-      });
+      var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
+      if(invite && !invite.expired) {
+        t.array.deleteByProperty(t.acct.current.invites, 'ikey', e.ikey);
+        t.socket.acct.stop();
+        t.acct.current.save().then(function() {
+          t.app.refresh();
+        }).catch(function() {
+          t.app.refresh();
+        });
+      }
     } else {
       var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
-      if(invite) {
+      if(invite && !invite.failed) {
+        t.socket.acct.stop();
         t.model.invite.activate(e.ikey, e.ct, e.mkey).then(function() {
+          t.app.refresh();
+        }).catch(function() {
           t.app.refresh();
         });
       }

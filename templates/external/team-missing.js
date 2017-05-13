@@ -1,14 +1,12 @@
 function(t){
   "use strict";
 
-  t.app.editing = true;
-
   var form = new t.form(document.remove_team);
   var team_id = form.dataset.team_id;
 
-  if(!team_id) {
-    t.app.gotoUrl('/account');
-  }
+  // if(!team_id) {
+    // t.app.gotoUrl('/account');
+  // }
 
   form.addEventListener("submit", function(e) {
     form.disable();

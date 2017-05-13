@@ -55,7 +55,7 @@ Teambo.socket = (function (t) {
         }
       };
       wrapperfunc();
-      self.interval = setInterval(wrapperfunc, (failures < 3 ? 1 : 5)*1000);
+      self.interval = setInterval(wrapperfunc, (failures < 5 ? 1 : 60)*1000);
     };
 
     t.event.extend(this);

@@ -156,13 +156,29 @@ Teambo.team = (function(t){
         return self.last_seen;
       },
       isAdmin: function() {
-        return t.array.findByProperty(t.acct.current.teams, 'id', self.id).admin || false;
+        var team = t.array.findByProperty(t.acct.current.teams, 'id', self.id);
+        return team && team.admin;
+      },
+      isCached: function() {
+        return new Promise(function(fulfill, reject) {
+          var hash = t.crypto.sha(self.id+'item_ids'+t.salt);
+          localforage.getItem(hash).then(function(ct) {
+            if(ct) {
+              fulfill();
+            } else {
+              reject();
+            }
+          });
+        });
       },
       rsaTPO: function(pubKey) {
         var rsa = new RSAKey();
         var e = 65537;
         rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
         return t.crypto.hextob64(rsa.encrypt(self.id+'-'+key));
+      },
+      init: function(post) {
+        return team.init(self.id, post);
       }
     });
     var uncacheTeam = function() {
@@ -174,19 +190,32 @@ Teambo.team = (function(t){
 
   team.current = null;
 
+  team.reset = function(id) {
+    team.current = null;
+    t.view.unset('team');
+    t.model.all = [];
+    t.socket.team.stop();
+    t.socket.inviteResponse.stop();
+  };
+
   team.schema = new t.schema({
     name:  { type: "string", required: true,  minLength: 1, maxLength: 256 },
     theme: { type: "string", required: false, maxLength: 32 }
   });
 
-  team.init = function(id) {
+  team.init = function(id, post) {
+    post = typeof post === 'undefined' ? true : post;
     return new Promise(function(fulfill, reject){
       team.find(id).then(function(o) {
         team.current = o;
         t.event.all('team-init', o).then(function() {
-          t.event.all('team-post-init', o).then(function() {
+          if(post) {
+            t.event.all('team-post-init', o).then(function() {
+              fulfill(o);
+            });
+          } else {
             fulfill(o);
-          });
+          }
         }).catch(reject);
       }).catch(reject);
     });
@@ -236,7 +265,7 @@ Teambo.team = (function(t){
               });
             }).catch(reject);
           }).catch(function(e){
-            t.array.deleteByProperty(acct.teams, 'id', new_team.id)
+            t.array.deleteByProperty(acct.teams, 'id', new_team.id);
             reject(e);
           });
         } else {

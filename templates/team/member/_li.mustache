@@ -1,7 +1,12 @@
 <li class="member {{#opts.pubKey}}hi-10{{/opts.pubKey}}{{^opts.pubKey}}color-bg-05{{/opts.pubKey}} up1c" id="member-li-{{id}}">
     <a href="#{{url}}" class="hi-05">
         {{^opts.pubKey}}
-        <span class="pending">Pending</span>
+            {{#opts.invite_key}}
+            <span class="pending">Pending</span>
+            {{/opts.invite_key}}
+            {{^opts.invite_key}}
+            <span class="pending">Expired</span>
+            {{/opts.invite_key}}
         {{/opts.pubKey}}
         <div class="img"><i class="{{icon}}"></i></div>
         <span class="name">{{opts.name}}</span>

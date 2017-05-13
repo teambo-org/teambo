@@ -12,7 +12,7 @@ function(t){
     form.disable();
     if(confirm('Are you sure you want to leave this team? You will need to be reinvited to join it again.')) {
       member.remove().then(function(){
-        t.deleteByProperty(t.acct.current.teams, 'id', t.team.current.id);
+        t.array.deleteByProperty(t.acct.current.teams, 'id', t.team.current.id);
         t.acct.current.save().then(function(){
           t.app.gotoUrl('/account');
         });

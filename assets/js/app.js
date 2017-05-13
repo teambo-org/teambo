@@ -62,11 +62,11 @@ Teambo.app = (function(t){
         if(logo) {
           logo.classList.add('spinner');
         }
-        p.push(t.team.init(data.team_id).then(function(team){
-          t.view.set('team', team);
-        }).catch(function(){
-          // Team init failed
-          t.app.gotoUrl('/account');
+        p.push(new Promise(function(fulfill, reject) {
+          t.team.init(data.team_id).then(function(team){
+            t.view.set('team', team);
+            fulfill();
+          }).catch(reject);
         }));
       } else {
         app.afterAuth = hash;
@@ -74,9 +74,7 @@ Teambo.app = (function(t){
         return;
       }
     } else if(!('team_id' in data)) {
-      t.socket.team.stop();
-      t.view.unset('team');
-      t.team.current = null;
+      t.team.reset();
     }
     var nav = function() {
       if(route.tpl.indexOf('external') !== 0 && !document.getElementById('main')) {
@@ -96,11 +94,16 @@ Teambo.app = (function(t){
         t.audio.play('click', 1);
       }
       t.event.emit('nav', route);
+      if(app.last_hash != '' && app.last_hash != hash) {
+        app.moved = true;
+      }
       app.last_hash = hash;
       app.loaded = true;
     };
     if(p.length) {
-      Promise.all(p).then(nav);
+      Promise.all(p).then(nav).catch(function() {
+        t.app.gotoUrl('/team-missing', {data: data});
+      });
     } else {
       nav();
     }
@@ -127,7 +130,6 @@ Teambo.app = (function(t){
   };
 
   app.refresh = function(data) {
-    app.moved = true;
     hashChange(window.location.hash.substr(1), data);
   };
 
@@ -136,9 +138,12 @@ Teambo.app = (function(t){
   };
 
   var scrollToSub = function(hash, isLoaded) {
-    var parts = hash.split('..'),
-      el = document.getElementById(parts[1]),
-      tar = document.getElementById(app.target);
+    var parts = hash.split('..');
+    var el = document.getElementById(parts[1]);
+    var tar = document.getElementById(app.target);
+    if(!tar) {
+      return;
+    }
     if(parts.length > 1 && el) {
       var add = tar.offsetHeight - el.offsetHeight;
       el.classList.add('hi');

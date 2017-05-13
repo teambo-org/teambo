@@ -326,7 +326,7 @@ Teambo.model = (function(t){
                   fulfill();
                 });
               } else {
-                fulfill();
+                reject(xhr);
               }
             });
           }
@@ -357,12 +357,15 @@ Teambo.model = (function(t){
               model.all = ret;
               fulfill(ret);
             }).catch(function(e){
-              model.all = ret;
-              fulfill(ret);
-              // reject(e);
+              // model.all = ret;
+              // fulfill(ret);
+              reject(e);
             });
           } else {
             var team = t.team.current;
+            if(!team) {
+              reject('team not found');
+            }
             model.fetchAll(team.id, team.mkey).then(function(data){
               var p = [];
               data.forEach(function(o) {
@@ -375,7 +378,7 @@ Teambo.model = (function(t){
                 model.cacheIds().then(function() {
                   fulfill(ret);
                 });
-              });
+              }).catch(reject);
             }).catch(reject);
           }
         });
@@ -396,8 +399,7 @@ Teambo.model = (function(t){
           } else {
             reject(xhr);
           }
-        });
-
+        }).catch(reject);
       });
     };
 

@@ -92,12 +92,23 @@ Teambo.acct = (function (t) {
         }
         return ret;
       },
-      genrsa: function (progress) {
+      genrsa: function (progress, attempts) {
         return new Promise(function(fulfill, reject) {
+          if(self.rsa) {
+            return fulfill(self.rsa);
+          }
           var key = new RSAKey();
           key.generateAsync(2048, (65537).toString(16), function() {
-            self.rsa = key;
-            fulfill(key);
+            if(key.decrypt(key.encrypt('test')) === 'test') {
+              self.rsa = key;
+              fulfill(key);
+            } else if(attempts && attempts < 10) {
+              self.genrsa(progress, attempts ? attempts + 1 : 1).then(function(key){
+                fulfill(key)
+              }, reject);
+            } else {
+              reject('could not generate rsa key');
+            }
           }, progress);
         });
       },
@@ -116,7 +127,7 @@ Teambo.acct = (function (t) {
       },
       refresh: function(iv) {
         if(!iv || self.iv == iv) {
-          return Promise.reject();
+          return Promise.resolve();
         }
         return new Promise(function (fulfill, reject) {
           t.xhr.post('/acct/auth', {

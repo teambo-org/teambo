@@ -78,6 +78,9 @@ Teambo.socket.team = (function (t) {
       id      : parts[3],
       iv      : parts[4]
     };
+    if(!e.ts) {
+      e.ts = e.team_id;
+    }
     if(ignored.indexOf([e.type, e.id, e.iv].join('-')) < 0) {
       handleEvent(e);
     }

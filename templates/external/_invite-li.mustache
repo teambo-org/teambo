@@ -1,16 +1,33 @@
 <li class="team invite-li">
-    <a href="#/invite-responded">
+{{#invite}}
+    {{#failed}}
+    <a href="#/invite-failed?ikey={{ikey}}">
         <div class="i-wrap"><i class="icon-users"></i></div>
-        <div class="name">
-            <div>
-                {{#name}}
-                    {{name}}
-                    <span class="pending">Pending</span>
-                {{/name}}
-                {{^name}}
-                    Pending
-                {{/name}}
-            </div>
-        </div>
+        <div class="name"><div>
+            {{#name}}{{name}}<span class="failed pending">Failed</span>{{/name}}
+            {{^name}}Failed{{/name}}
+        </div></div>
     </a>
+    {{/failed}}
+    {{^failed}}
+        {{#expired}}
+        <a href="#/invite-expired?ikey={{ikey}}">
+            <div class="i-wrap"><i class="icon-users"></i></div>
+            <div class="name"><div>
+                {{#name}}{{name}}<span class="failed pending">Expired</span>{{/name}}
+                {{^name}}Expired{{/name}}
+            </div></div>
+        </a>
+        {{/expired}}
+        {{^expired}}
+        <a href="#/invite-responded">
+            <div class="i-wrap"><i class="icon-users"></i></div>
+            <div class="name"><div>
+                {{#name}}{{name}}<span class="pending">Pending</span>{{/name}}
+                {{^name}}Pending{{/name}}
+            </div></div>
+        </a>
+        {{/expired}}
+    {{/failed}}
+{{/invite}}
 </li>

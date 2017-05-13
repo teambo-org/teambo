@@ -8,7 +8,7 @@ Teambo.offline = (function (t) {
     var cacheKey = t.crypto.sha(team.id+'queue'+t.salt);
     t.object.extend(this, {
       init:  function() {
-        self.wake().then(function(data) {
+        return self.wake().then(function(data) {
           if(data) {
             events = data;
           }
@@ -19,6 +19,8 @@ Teambo.offline = (function (t) {
           localforage.getItem(cacheKey).then(function(ct) {
             if(ct) {
               fulfill(team.decrypt(ct));
+            } else {
+              fulfill();
             }
           });
         });

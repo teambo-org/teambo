@@ -56,6 +56,7 @@ var jsapp = []string{
 	"/js/app.js",
 	"/js/array.js",
 	"/js/object.js",
+	"/js/promise.js",
 	"/js/crypto.js",
 	"/js/event.js",
 	"/js/time.js",

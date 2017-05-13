@@ -1,0 +1,34 @@
+<div class="external require-auth c">
+    <div id="logo" class="logo"></div>
+    <form name="remove_team" class="std ext" data-team_id="{{data.team_id}}">
+        <div class="field first">
+            <p>This team appears to be missing<br/><br/></p>
+            {{#app.online}}
+            <p class="ex">
+                If you believe you have received this message in error, you may issue a hard refresh
+                by pressing
+            </p>
+                <p class="team_name">Ctrl + Shift + R </p>
+            <p class="ex">
+                If that doesn't fix it, you were probably removed from the team. You can either return to the
+                account page and wait for this issue to resolve itself or you can remove the team
+                from your list of teams.
+            </p>
+            {{/app.online}}
+            {{^app.online}}
+            <p class="ex">
+                You must access a team at least once before using it while offline. If you wish to
+                view this team while offline, you need to find an internet connection and open the
+                team at least once. After that, it should be cached and browsable while offline.
+            </p>
+            {{/app.online}}
+        </div>
+        <div class="field submit">
+            <a href="#/account" data-keybind="escape q"><i class="icon-angle-left"></i>Back to account</a>
+            {{#app.online}}
+            <br/><br/><br/>
+            <input type="submit" class="submit" value="Remove Team" />
+            {{/app.online}}
+        </div>
+    </form>
+</div>

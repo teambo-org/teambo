@@ -16,11 +16,13 @@ Teambo.socket.acct = (function (t) {
       t.app.gotoUrl('/login');
     } else {
       t.acct.current.refresh(e.iv).then(function(new_acct) {
-        t.acct.current = new_acct;
-        socket.stop();
-        t.app.refresh({silent: true});
-      }).catch(function(){
-        t.socket.inviteAcceptance.start();
+        if(new_acct) {
+          t.acct.current = new_acct;
+          socket.stop();
+          t.app.refresh({silent: true});
+        } else {
+          t.socket.inviteAcceptance.start();
+        }
       });
     }
   };

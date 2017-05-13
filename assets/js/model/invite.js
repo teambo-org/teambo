@@ -104,14 +104,22 @@ Teambo.model.invite = (function(t){
     var data = t.acct.current.rsa.decrypt(t.crypto.b64tohex(ct));
     if(data) {
       var parts = data.split('-');
-      t.acct.current.teams.push({
+      var team_data = {
         id: parts[0],
         mkey: mkey,
         key: parts[1]
-      });
+      };
+      t.array.deleteByProperty(t.acct.current.teams, 'id', team_data.id);
+      t.acct.current.teams.push(team_data);
+      t.array.deleteByProperty(t.acct.current.invites, 'ikey', ikey);
+      return t.acct.current.save();
+    } else {
+      var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', ikey);
+      if(invite) {
+        invite.failed = true;
+      }
+      return Promise.reject();
     }
-    t.array.deleteByProperty(t.acct.current.invites, 'ikey', ikey);
-    return t.acct.current.save();
   };
 
   return model;
