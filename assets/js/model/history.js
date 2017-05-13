@@ -20,8 +20,8 @@ Teambo.model.history = (function(t){
       member: function() {
         return t.model.member.get(self.member_id);
       },
-      keys: function() {
-        return Object.keys(self.diff).reduce(function(obj,key){obj[key] = true;return obj;},{});
+      diff_keys: function() {
+        return Object.keys(self.diff).reduce(function(obj,key){obj['diff_'+key] = true;return obj;},{});
       },
       previous_value: function(key) {
         var schema = t.model[parentModel.type].schema;
@@ -74,9 +74,6 @@ Teambo.model.history = (function(t){
       },
       nice_desc_patch: function() {
         return self.nice_patch('desc');
-      },
-      diff_member_id: function() {
-        return 'member_id' in self.diff;
       }
     });
   };
