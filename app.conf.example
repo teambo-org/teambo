@@ -1,5 +1,4 @@
 env            dev
-debug          true
 app.procs      4
 app.host       dev.teambo.com
 app.data       /var/lib/teambo
@@ -15,8 +14,9 @@ smtp.from      noreply@teambo.com
 static.cache   false
 static.min     false
 app.manifest   true
-tests.enabled  true
 cache.manifest false
 port.http      80
 port.https     443
+app.debug      true
+app.testing    true
 app.remember_me false

@@ -9,7 +9,7 @@ function(t){
     form.disable();
     wiki.remove().then(function(){
       t.view.updateSideNav();
-      t.gotoUrl(parent ? parent.url() : t.team.current.url() + '/wiki');
+      t.app.gotoUrl(parent ? parent.url() : t.team.current.url() + '/wiki');
     }).catch(function(e){
       form.enable();
       form.error.msg("Wiki page could not be removed.", "Please try again");

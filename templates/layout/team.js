@@ -2,7 +2,7 @@ function(t){
   "use strict";
 
   if(!t.acct.current.member()) {
-    t.gotoUrl('/team-inaccessible?team_id='+t.team.current.id);
+    t.app.gotoUrl('/team-inaccessible?team_id='+t.team.current.id);
   }
 
   t.view.updateTheme();

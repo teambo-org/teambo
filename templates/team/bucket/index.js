@@ -23,7 +23,7 @@ function(t){
   t.view.autofilter(filter_form, 'bucket-index', true).then(hide_empty_buckets);
 
   t.view.on(['bucket-removed', 'bucket-updated', 'item-removed', 'item-updated'], function(e) {
-    t.refresh({silent: true});
+    t.app.refresh({silent: true});
   });
 
 }

@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.verification),
     reset = form.getAttribute('data-reset');
@@ -12,7 +12,7 @@ function(t){
     t.acct.verification.send(email, pass).then(function(xhr) {
       form.disable();
       if(xhr.status == 201) {
-        t.replace('/verification-sent', {email: email});
+        t.app.replaceUrl('/verification-sent', {email: email});
       } else {
         form.enable();
         form.error.msg('Verification could not be sent');

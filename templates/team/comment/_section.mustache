@@ -34,7 +34,7 @@
     <form id="comment" name="comment" method="POST" class="std">
         <input type="hidden" name="pid" value="{{id}}" />
         <input type="hidden" name="ptype" value="item" />
-        <input type="hidden" name="member_id" value="{{#acct.member}}{{id}}{{/acct.member}}" />
+        <input type="hidden" name="member_id" value="{{#acct.current.member}}{{id}}{{/acct.current.member}}" />
         <h4>Add Comment</h4>
         <div class="field">
             <textarea class="text" name="text"></textarea>

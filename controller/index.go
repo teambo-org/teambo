@@ -30,7 +30,6 @@ type Page struct {
 	MANIFEST []string
 	IMAGE    []string
 	FONT     []string
-	DEBUG    bool
 }
 
 var jslib = []string{
@@ -54,26 +53,28 @@ var jslib = []string{
 	"/js/lib/diff_match_patch.js",
 }
 var jsapp = []string{
-	"/js/t.js",
-	"/js/t.crypto.js",
-	"/js/t.event.js",
-	"/js/t.time.js",
-	"/js/t.socket.js",
-	"/js/t.form.js",
-	"/js/t.xhr.js",
-	"/js/t.dom.js",
-	"/js/t.device.js",
-	"/js/t.router.js",
-	"/js/t.view.js",
-	"/js/t.acct.js",
-	"/js/t.audio.js",
-	"/js/t.themes.js",
-	"/js/t.chat.js",
-	"/js/t.schema.js",
-	"/js/t.offline.js",
-	"/js/t.team.js",
-	"/js/t.model.js",
-	"/js/t.keybind.js",
+	"/js/app.js",
+	"/js/array.js",
+	"/js/object.js",
+	"/js/crypto.js",
+	"/js/event.js",
+	"/js/time.js",
+	"/js/socket.js",
+	"/js/form.js",
+	"/js/xhr.js",
+	"/js/dom.js",
+	"/js/device.js",
+	"/js/router.js",
+	"/js/view.js",
+	"/js/acct.js",
+	"/js/audio.js",
+	"/js/themes.js",
+	"/js/chat.js",
+	"/js/schema.js",
+	"/js/offline.js",
+	"/js/team.js",
+	"/js/model.js",
+	"/js/keybind.js",
 	"/js/view/calendar.js",
 	"/js/view/autoselect.js",
 	"/js/view/autofilter.js",
@@ -128,7 +129,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			JSAPP:    []string{"/min.js?v=" + js_min_version(jsapp)},
 			JSINIT:   []string{},
 			CSS:      []string{"/min.css?v=" + css_min_version()},
-			DEBUG:    util.Config("debug") == "true",
 			MANIFEST: manifest,
 		}
 	} else {
@@ -138,7 +138,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			JSASYNC:  hash_version(jsasync),
 			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
 			CSS:      hash_version(css),
-			DEBUG:    util.Config("debug") == "true",
 			MANIFEST: manifest,
 		}
 	}
@@ -295,23 +294,22 @@ func append_js_init(w io.Writer) {
 	}
 	template_scripts := strings.Join(tpljs, ", ")
 	audio, _ := json.Marshal(find_audio())
-	debug := "false"
-	if util.Config("debug") == "true" {
-		debug = "true"
+	app := map[string]bool{
+		"debug":       false,
+		"testing":     false,
+		"remember_me": false,
 	}
-	remember_me := "false"
-	if util.Config("app.remember_me") == "true" {
-		remember_me = "true"
+	for k, _ := range app {
+		if util.Config("app." + k) == "true" {
+			app[k] = true
+		}
 	}
+	app_json, _ := json.Marshal(app)
 	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " +
 		"'audio': " + string(audio) + ", " +
-		"'debug': " + debug + ", " +
-		"'app':{'remember_me': " + remember_me + "}"
-	if util.Config("tests.enabled") == "true" {
-		js_data = js_data + ", " + "'testing': true"
-	}
-	js := "Teambo.init({" + js_data + "});"
+		"'app': " + string(app_json)
+	js := "Teambo.app.init({" + js_data + "});"
 	if util.Config("static.min") == "true" {
 		jsmin.Run(strings.NewReader(js), w)
 	} else {

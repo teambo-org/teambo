@@ -9,12 +9,12 @@ function(t){
   
   t.view.on('wiki-removed', function(e) {
     if(e.id == t.model.wiki.current.id) {
-      t.gotoUrl('/wiki');
+      t.app.gotoUrl('/wiki');
     }
   });
   t.view.on('wiki-updated', function(e) {
     if(e.id == t.model.wiki.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
 

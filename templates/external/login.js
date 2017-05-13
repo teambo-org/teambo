@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.auth);
   var vkey = form.getAttribute("data-vkey");
@@ -14,7 +14,7 @@ function(t){
       form.error.msg('Incorrect password', 'If you forgot your password, you may request a <a href="#/reset" id="reset">Password Reset</a>');
       document.getElementById('reset').onclick = function(e) {
         e.preventDefault();
-        t.replace('/verification', {
+        t.app.replaceUrl('/verification', {
           reset: true,
           email: email,
           pass: pass
@@ -23,14 +23,15 @@ function(t){
     }
     t.acct.auth(email, pass).then(function(xhr){
       if(xhr === true || xhr.status === 200) {
-        t.view.set('acct', t.acct.current);
         var remember_me = form.remember_me;
         if(remember_me && remember_me.checked) {
           t.acct.current.rememberMe();
         }
-        t.gotoUrl(t.afterAuth());
+        var after_auth = t.app.afterAuth ? t.app.afterAuth : '/account';
+        t.app.afterAuth = null;
+        t.app.gotoUrl(after_auth);
       } else if(xhr.status === 404) {
-        t.replace('/verification', {
+        t.app.replaceUrl('/verification', {
           email: email,
           pass:  pass
         });
@@ -38,7 +39,7 @@ function(t){
         password_reset();
       }
     }).catch(function() {
-      if(t.online()) {
+      if(t.app.online) {
         form.error.msg('Unknown error', "Please try again in a few minutes.");
       } else {
         form.error.msg('You are offline', "You must log in once from this device while online<br/>before accessing your account in offline mode.");
@@ -49,8 +50,7 @@ function(t){
 
   var form_submit_verification = function(email, pass) {
     t.acct.verification.confirm(vkey, email, pass).then(function(xhr) {
-      t.view.set('acct', t.acct.current);
-      t.gotoUrl('/account');
+      t.app.gotoUrl('/account');
     }).catch(function(e){
       form.enable();
       if(e.status == 404) {
@@ -80,8 +80,7 @@ function(t){
 
   if(vkey != '') {
     t.acct.verification.confirm(vkey).then(function(xhr) {
-      t.view.set('acct', t.acct.current);
-      t.gotoUrl('/account');
+      t.app.gotoUrl('/account');
     }).catch(function(e){
       form.error.msg('', '<br/>Enter your email address and password<br/>to complete verification');
       document.getElementById('onboarding').innerHTML = '';
@@ -92,7 +91,7 @@ function(t){
   }
 
   if(t.acct.isAuthed()) {
-    t.gotoUrl('/account');
+    t.app.gotoUrl('/account');
   }
 
   t.view.updateStatus();

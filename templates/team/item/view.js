@@ -7,7 +7,7 @@ function(t){
     var data = form.values(['text', 'pid', 'ptype', 'member_id']);
     var submit = function() {
       t.model.comment.create(data).then(function(comment){
-        t.refresh();
+        t.app.refresh();
       }).catch(function(e){
         form.enable();
         form.error.msg("Comment could not be saved", "Please try again");
@@ -22,22 +22,22 @@ function(t){
 
   t.view.on('item-removed', function(e) {
     if(e.id == t.model.item.current.id) {
-      t.gotoUrl((t.model.bucket.current || t.team.current).url());
+      t.app.gotoUrl((t.model.bucket.current || t.team.current).url());
     }
   });
   t.view.on('item-updated', function(e) {
     if(e.id == t.model.item.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
   t.view.on(['comment-updated', 'comment-removed'], function(e) {
     if(e.comment.opts.pid == t.model.item.current.id && e.comment.opts.ptype == 'item') {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
   t.view.on(['bucket-removed', 'bucket-updated'], function(e) {
     if(e.opts.bucket_id == t.model.bucket.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
 

@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.item_edit),
     item_id = form.dataset.item_id,
@@ -13,7 +13,7 @@ function(t){
     var submit = function() {
       item.update(data, true).then(function(item){
         t.view.updateSideNav();
-        t.gotoUrl(item.url());
+        t.app.gotoUrl(item.url());
       }).catch(function(xhr){
         form.enable();
         form.error.msg("Item could not be saved", "Please try again");

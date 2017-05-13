@@ -3,14 +3,14 @@
         <a href="#{{team.url}}/outbox" class="outbox hi-10"><i class="icon-upload"></i><span>{{queue.length}}</span></a>
     {{/queue.length}}
 {{/team}}
-{{#online}}
-    {{#updateready}}
+{{#app.online}}
+    {{#app.updateready}}
         Update Ready
-    {{/updateready}}
-    {{^updateready}}
+    {{/app.updateready}}
+    {{^app.updateready}}
         Online
-    {{/updateready}}
-{{/online}}
-{{^online}}
+    {{/app.updateready}}
+{{/app.online}}
+{{^app.online}}
     Offline
-{{/online}}
+{{/app.online}}

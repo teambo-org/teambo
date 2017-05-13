@@ -8,7 +8,7 @@ Teambo.acct = (function (t) {
       data = t.crypto.decrypt(data, key);
       data.iv = data.iv ? data.iv : iv;
     }
-    t.extend(this, {
+    t.object.extend(this, {
       id:    data.id,
       iv:    data.iv,
       email: data.email,
@@ -21,7 +21,7 @@ Teambo.acct = (function (t) {
         if (!akey) {
           return Promise.reject('No akey');
         }
-        return t.promise(function (fulfill, reject) {
+        return new Promise(function (fulfill, reject) {
           var iv = t.crypto.iv();
           var new_ct = self.encrypted({iv: iv});
           t.xhr.post('/acct', {
@@ -55,6 +55,9 @@ Teambo.acct = (function (t) {
         sessionStorage.setItem('auth', t.crypto.encrypt(data, t.salt));
       },
       rememberMe: function() {
+        if(!t.app.rememberme()) {
+          return Promise.resolve();
+        }
         var hash = t.crypto.sha(self.email + t.salt);
         var data = {hash: hash, akey: akey, key: key};
         return localforage.setItem('auth', t.crypto.encrypt(data, t.salt));
@@ -90,7 +93,7 @@ Teambo.acct = (function (t) {
         return ret;
       },
       genrsa: function (progress) {
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           var key = new RSAKey();
           key.generateAsync(2048, (65537).toString(16), function() {
             self.rsa = key;
@@ -115,7 +118,7 @@ Teambo.acct = (function (t) {
         if(!iv || self.iv == iv) {
           return Promise.reject();
         }
-        return t.promise(function (fulfill, reject) {
+        return new Promise(function (fulfill, reject) {
           t.xhr.post('/acct/auth', {
             data: {id: self.id, akey: akey}
           }).then(function(xhr) {
@@ -146,7 +149,7 @@ Teambo.acct = (function (t) {
 
   acct.wake = function () {
     var callback = function(auth) {
-      return t.promise(function (fulfill, reject) {
+      return new Promise(function (fulfill, reject) {
         localforage.getItem(auth.hash).then(function (ct) {
           var data = t.crypto.decrypt(ct, auth.key);
           if (data) {
@@ -164,7 +167,7 @@ Teambo.acct = (function (t) {
       auth = t.crypto.decrypt(auth, t.salt);
       return callback(auth);
     } else {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         localforage.getItem('auth').then(function(auth) {
           auth = t.crypto.decrypt(auth, t.salt);
           callback(auth).then(function() {
@@ -182,7 +185,6 @@ Teambo.acct = (function (t) {
   };
 
   acct.deAuth = function () {
-    t.view.set('acct', null);
     acct.current = null;
     sessionStorage.removeItem('auth');
     return localforage.removeItem('auth');
@@ -192,8 +194,8 @@ Teambo.acct = (function (t) {
     var id   = t.crypto.sha(email);
     var key  = t.crypto.pbk(pass, email);
     var akey = t.crypto.pbk(pass, id + key);
-    return t.promise(function (fulfill, reject) {
-      if(t.online()) {
+    return new Promise(function (fulfill, reject) {
+      if(t.app.online) {
         var p = t.xhr.post('/acct/auth', {
           data: {id: id, akey: akey}
         });
@@ -228,7 +230,7 @@ Teambo.acct = (function (t) {
     var hash = t.crypto.sha(email + t.salt);
     var key  = t.crypto.pbk(pass, email);
     var akey = t.crypto.pbk(pass, id + key);
-    return t.promise(function (fulfill, reject) {
+    return new Promise(function (fulfill, reject) {
       localforage.getItem(hash).then(function (item) {
         var data = t.crypto.decrypt(item, key);
         if (data) {
@@ -248,7 +250,7 @@ Teambo.acct = (function (t) {
       var id   = t.crypto.sha(email);
       var key  = t.crypto.pbk(pass, email);
       var akey = t.crypto.pbk(pass, id + key);
-      return t.promise(function (fulfill, reject) {
+      return new Promise(function (fulfill, reject) {
         var xhr_data = {
           email: email,
           akey:  akey
@@ -282,7 +284,7 @@ Teambo.acct = (function (t) {
     },
     confirm : function(vkey, email, pass) {
       var id, key, akey;
-      return t.promise(function (fulfill, reject) {
+      return new Promise(function (fulfill, reject) {
         var send_confirmation = function () {
           t.xhr.post('/acct/verification', {
             data: {id: id, akey: akey, vkey: vkey}

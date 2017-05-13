@@ -7,7 +7,7 @@ function(t){
 
   t.view.on('team-updated', function(e) {
     if(e.id == t.team.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
 

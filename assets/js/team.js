@@ -8,11 +8,11 @@ Teambo.team = (function(t){
       data = t.crypto.decrypt(data, key);
       data.iv = data.iv ? data.iv : iv;
     }
-    t.extend(this, {
+    t.object.extend(this, {
       id: data.id,
       iv: data.iv,
       mkey: mkey,
-      orig: data.opts ? t.clone(data.opts) : {},
+      orig: data.opts ? t.object.clone(data.opts) : {},
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
       last_seen: data.last_seen ? data.last_seen : 0,
@@ -20,7 +20,7 @@ Teambo.team = (function(t){
         if(!mkey) {
           return Promise.reject('No mkey');
         }
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           var errs = team.schema.validate(data.opts, self.orig);
           if(errs.length) {
             reject(errs);
@@ -39,7 +39,7 @@ Teambo.team = (function(t){
           }).then(function(xhr){
             if(xhr.status == 200) {
               self.iv = iv;
-              self.orig = t.clone(self.opts);
+              self.orig = t.object.clone(self.opts);
               self.cache();
               fulfill(xhr);
             } else {
@@ -49,8 +49,8 @@ Teambo.team = (function(t){
         });
       },
       update: function(opts) {
-        self.opts = t.extend(self.opts, opts);
-        return t.promise(function(fulfill, reject) {
+        t.object.extend(self.opts, opts);
+        return new Promise(function(fulfill, reject) {
           self.save().then(function(xhr) {
             fulfill(self)
           }).catch(function(xhr) {
@@ -64,17 +64,17 @@ Teambo.team = (function(t){
                 });
               });
             } else {
-              self.opts = t.clone(self.orig);
+              self.opts = t.object.clone(self.orig);
               reject(e);
             }
           });
         });
       },
       remove: function(name) {
-        if(name != self.opts.name || !t.online()) {
+        if(name != self.opts.name || !t.app.online) {
           return Promise.reject();
         }
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           var data = {
             team_id: t.team.current.id,
             mkey:    t.team.current.mkey
@@ -89,7 +89,7 @@ Teambo.team = (function(t){
               });
               Promise.all(p).then(function() {
                 uncacheTeam().then(function(){
-                  t.deleteByProperty(t.acct.current.teams, 'id', self.id);
+                  t.array.deleteByProperty(t.acct.current.teams, 'id', self.id);
                   t.acct.current.save().then(function(){
                     fulfill();
                   });
@@ -113,7 +113,7 @@ Teambo.team = (function(t){
           hist:  self.hist,
           iv:    self.iv
         };
-        t.extend(data, override);
+        t.object.extend(data, override);
         var config = {};
         if(override.iv) {
           config.iv = override.iv;
@@ -156,7 +156,7 @@ Teambo.team = (function(t){
         return self.last_seen;
       },
       isAdmin: function() {
-        return t.findByProperty(t.acct.current.teams, 'id', self.id).admin || false;
+        return t.array.findByProperty(t.acct.current.teams, 'id', self.id).admin || false;
       },
       rsaTPO: function(pubKey) {
         var rsa = new RSAKey();
@@ -180,7 +180,7 @@ Teambo.team = (function(t){
   });
 
   team.init = function(id) {
-    return t.promise(function(fulfill, reject){
+    return new Promise(function(fulfill, reject){
       team.find(id).then(function(o) {
         team.current = o;
         t.event.all('team-init', o).then(function() {
@@ -193,7 +193,7 @@ Teambo.team = (function(t){
   };
 
   var createFirstMember = function(team, member_id) {
-    return t.promise(function(fulfill, resolve) {
+    return new Promise(function(fulfill, resolve) {
       t.team.current = team;
       var member = new t.model.member({
         id: member_id,
@@ -213,7 +213,7 @@ Teambo.team = (function(t){
   };
 
   team.create = function(name) {
-    return t.promise(function(fulfill, reject) {
+    return new Promise(function(fulfill, reject) {
       t.xhr.post('/team').then(function(xhr){
         if(xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
@@ -236,7 +236,7 @@ Teambo.team = (function(t){
               });
             }).catch(reject);
           }).catch(function(e){
-            t.deleteByProperty(acct.teams, 'id', new_team.id)
+            t.array.deleteByProperty(acct.teams, 'id', new_team.id)
             reject(e);
           });
         } else {
@@ -247,8 +247,8 @@ Teambo.team = (function(t){
   };
 
   team.find = function (id) {
-    return t.promise(function (fulfill, reject) {
-      var d = t.findByProperty(t.acct.current.teams, 'id', id);
+    return new Promise(function (fulfill, reject) {
+      var d = t.array.findByProperty(t.acct.current.teams, 'id', id);
       if (!d) {
         reject();
         return;
@@ -275,11 +275,11 @@ Teambo.team = (function(t){
   team.findAll = function () {
     var acct = t.acct.current;
     if(!acct) return Promise.reject();
-    return t.promise(function (fulfill, reject) {
+    return new Promise(function (fulfill, reject) {
       var ret = [];
       var p = [];
       acct.teams.forEach(function (v) {
-        p.push(t.promise(function(fulfill, reject) {
+        p.push(new Promise(function(fulfill, reject) {
           team.find(v.id).then(function(found_team) {
             ret.push(found_team);
             fulfill();
@@ -296,7 +296,7 @@ Teambo.team = (function(t){
   };
 
   team.fetch = function(id, mkey) {
-    return t.promise(function(fulfill, reject) {
+    return new Promise(function(fulfill, reject) {
       t.xhr.get('/team', {
         data: {
           team_id: id,
@@ -316,8 +316,8 @@ Teambo.team = (function(t){
   team.refresh = function(id) {
     var acct = t.acct.current;
     if(!acct) return Promise.reject();
-    return t.promise(function (fulfill, reject) {
-      var d = t.findByProperty(acct.teams, 'id', id);
+    return new Promise(function (fulfill, reject) {
+      var d = t.array.findByProperty(acct.teams, 'id', id);
       if (!d) {
         reject();
         return;
@@ -363,7 +363,7 @@ Teambo.team = (function(t){
 
   t.event.on('model-event', function(e) {
     if(e.type != 'team') return Promise.resolve();
-    return t.promise(function(fulfill, reject) {
+    return new Promise(function(fulfill, reject) {
       var m = team.find(e.id, true);
       if(e.iv === 'removed') {
         if(!m) {
@@ -374,7 +374,7 @@ Teambo.team = (function(t){
           e['team'] = m;
           t.view.emit('team-removed', e);
           if(t.team.current && e.id == t.team.current.id) {
-            t.gotoUrl("/account");
+            t.app.gotoUrl("/account");
           }
         });
       } else {
@@ -408,7 +408,7 @@ Teambo.team = (function(t){
 
   t.view.on('member-removed', function(e) {
     if(!Teambo.acct.current.member()) {
-      t.gotoUrl('/team-inaccessible?team_id='+t.team.current.id);
+      t.app.gotoUrl('/team-inaccessible?team_id='+t.team.current.id);
     }
   });
 

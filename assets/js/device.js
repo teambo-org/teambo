@@ -5,7 +5,7 @@ Teambo.device = (function(t){
     if(t.salt) {
       return Promise.resolve(t.salt);
     } else {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         localforage.getItem('salt').then(function(salt){
           if(!salt) {
             salt = t.crypto.randomKey();

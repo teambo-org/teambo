@@ -1,7 +1,7 @@
 Teambo.socket.inviteResponse = (function (t) {
   "use strict";
 
-  var socket = t.socket.extend({
+  var socket = new t.socket({
     url: function() {
       var team = t.team.current;
       if(!team) {

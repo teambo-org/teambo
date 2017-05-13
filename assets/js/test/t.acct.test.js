@@ -3,11 +3,11 @@ describe("Account", function() {
   var email = "test@test.test";
   var pass = Teambo.crypto.randomKey();
 
-  Teambo.online(true);
+  Teambo.app.online(true);
 
   console.log(pass);
 
-  Teambo.gotoUrl("");
+  Teambo.app.gotoUrl("");
   Teambo.acct.deAuth();
 
   it("Can be created", function(done) {

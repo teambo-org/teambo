@@ -60,7 +60,7 @@ Teambo.schema = (function(t){
   };
 
   var schema = function(rules) {
-    t.extend(this, {
+    t.object.extend(this, {
       validate: function(data, orig) {
         return validate_schema(rules, data, orig);
       },

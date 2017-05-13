@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.plan_edit),
     plan_id = form.dataset.plan_id,
@@ -12,7 +12,7 @@ function(t){
     var data = form.values(['name', 'desc', 'start', 'end']);
     plan.update(data, true).then(function(plan){
       t.view.updateSideNav();
-      t.gotoUrl(plan.url());
+      t.app.gotoUrl(plan.url());
     }).catch(function(xhr){
       form.enable();
       form.error.msg("Plan could not be saved", "Please try again");

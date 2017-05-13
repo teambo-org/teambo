@@ -4,9 +4,9 @@ Teambo.model.item = (function(t){
   var model = function(data) {
     var self = this;
     t.model.apply(this, [data, model]);
-    t.extend(this, {
+    t.object.extend(this, {
       status: function() {
-        return t.findByProperty(model.statuses, 'key', self.opts.status);
+        return t.array.findByProperty(model.statuses, 'key', self.opts.status);
       },
       bucket: function() {
         return t.model.bucket.get(self.opts.bucket_id);

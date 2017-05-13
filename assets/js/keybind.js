@@ -84,12 +84,12 @@
 
   var pageReload = function(e) {
     e.preventDefault();
-    if(e.shiftKey && t.online()) {
+    if(e.shiftKey && t.app.online) {
       localforage.clear().then(function(){
-        t.reload();
+        t.app.reload();
       });
     } else {
-      t.reload();
+      t.app.reload();
     }
   };
 

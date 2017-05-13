@@ -2,9 +2,9 @@ Teambo.xhr = (function(t){
   "use strict";
 
   var xhr = function(method, url, opts) {
-    return t.promise(function(fulfill, reject) {
+    return new Promise(function(fulfill, reject) {
       var x = new(window.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
-      if(!t.online()) {
+      if(!t.app.online) {
         reject(x);
         return;
       }
@@ -16,10 +16,10 @@ Teambo.xhr = (function(t){
       x.onreadystatechange = function(){
         if(x.readyState > 3) {
           if(x.status === 0) {
-            t.online(false);
+            t.app.online = false;
           } else {
             t.time.update(x.getResponseHeader('server-time'));
-            t.online(true);
+            t.app.online = true;
           }
           x.status > 0 ? fulfill(x) : reject(x);
         }
@@ -41,7 +41,7 @@ Teambo.xhr = (function(t){
     return opts;
   }
 
-  t.extend(xhr, {
+  t.object.extend(xhr, {
     get: function(url, opts) {
       opts = opts ? opts : {};
       var alt = encode_data(opts);

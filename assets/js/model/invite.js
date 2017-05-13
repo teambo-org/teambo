@@ -3,8 +3,8 @@ Teambo.model.invite = (function(t){
 
   var model = function(data) {
     var self = this;
-    t.extend(this, data);
-    t.extend(this, {
+    t.object.extend(this, data);
+    t.object.extend(this, {
       ikey: data.ikey,
       name: data.name,
       pubKey: data.pubKey || null
@@ -15,7 +15,7 @@ Teambo.model.invite = (function(t){
     if(!data || !data.member_email) {
       return Promise.reject();
     }
-    return t.promise(function (fulfill, reject) {
+    return new Promise(function (fulfill, reject) {
       var xhrdata = {
         team_id: t.team.current.id,
         mkey:    t.team.current.mkey,
@@ -52,7 +52,7 @@ Teambo.model.invite = (function(t){
     if(!data || !data.chk || !data.ikey) {
       return Promise.reject();
     }
-    return t.promise(function (fulfill, reject) {
+    return new Promise(function (fulfill, reject) {
       var email = t.acct.current.email;
       var xhrdata = {
         ikey:   data.ikey,
@@ -75,7 +75,7 @@ Teambo.model.invite = (function(t){
     if(!member || !pubKey) {
       return Promise.reject();
     }
-    return t.promise(function (fulfill, reject) {
+    return new Promise(function (fulfill, reject) {
       var email = member.opts.email;
       var xhrdata = {
         team_id:   t.team.current.id,
@@ -110,7 +110,7 @@ Teambo.model.invite = (function(t){
         key: parts[1]
       });
     }
-    t.deleteByProperty(t.acct.current.invites, 'ikey', ikey);
+    t.array.deleteByProperty(t.acct.current.invites, 'ikey', ikey);
     return t.acct.current.save();
   };
 

@@ -79,12 +79,8 @@ Teambo.view = (function(t){
   var updateStatus = function() {
     var el = document.getElementById('status');
     if(el) {
-      var online = t.online();
-      el.innerHTML = renderTemplate('layout/status', {
-        online: online,
-        updateready: t.updateReady()
-      });
-      el.classList.value = online ? 'online' : 'offline';
+      el.innerHTML = renderTemplate('layout/status');
+      el.classList.value = t.app.online ? 'online' : 'offline';
     }
   };
 
@@ -92,34 +88,41 @@ Teambo.view = (function(t){
     templates = opts.templates;
     template_js = opts.template_js;
 
-    obj.app = opts.app;
-
+    obj.app = t.app;
+    obj.acct = t.acct;
     obj.model = t.model;
+
+    t.app.watch('online', function(prop, old_val, new_val) {
+      if(old_val != new_val) {
+        updateStatus();
+      }
+    });
 
     if(window.applicationCache.status !== 0) {
       window.applicationCache.addEventListener('updateready', function(e) {
         if(window.applicationCache.status === window.applicationCache.UPDATEREADY
         || window.applicationCache.status === window.applicationCache.CHECKING) {
-          if(!t.moved() && !t.editing() && (!t.team.current || !t.team.current.queue || !t.team.current.queue.processing)) {
-            t.reload();
+          if(!t.app.moved && !t.app.editing && (!t.team.current || !t.team.current.queue || !t.team.current.queue.processing)) {
+            t.app.reload();
           } else {
-            t.updateReady(true);
+            t.app.updateready = true;
+            updateStatus();
           }
         }
-        t.online(true);
+        t.app.online = true;
       }, false);
       window.applicationCache.addEventListener('noupdate', function(e) {
-        t.online(true);
+        t.app.online = true;
       }, false);
       window.applicationCache.addEventListener('error', function(e) {
-        t.online(false);
+        t.app.online = false;
       }, false);
       var startCacheCheck = function() {
-        if(!t.updateReady()) {
+        if(!t.app.updateready) {
           setTimeout(function(){
             window.applicationCache.update();
             startCacheCheck();
-          }, t.online() ? 60000 : 3000);
+          }, t.app.online ? 60000 : 3000);
         }
       };
       if(window.applicationCache.status === 3) {
@@ -149,18 +152,18 @@ Teambo.view = (function(t){
       }
       if(el.matches('.replace')) {
         e.preventDefault();
-        t.gotoUrl(el.getAttribute('href').substr(1), true);
+        t.app.gotoUrl(el.getAttribute('href').substr(1), true);
         return;
       }
       if(el.matches('.logout')) {
         e.preventDefault();
         t.acct.deAuth();
-        t.gotoUrl('/login');
+        t.app.gotoUrl('/login');
         return;
       }
       if(el.matches('.force')) {
         e.preventDefault();
-        t.gotoUrl(el.getAttribute('href').substr(1), true);
+        t.app.gotoUrl(el.getAttribute('href').substr(1), true);
         return;
       }
     });
@@ -170,8 +173,8 @@ Teambo.view = (function(t){
   var renderTemplate = function(tplname, data, override) {
     data = data ? data : {};
     override = override ? override : {};
-    t.extend(data, obj);
-    t.extend(data, override);
+    t.object.extend(data, obj);
+    t.object.extend(data, override);
     var html = Mustache.render(
       templates[tplname],
       data,
@@ -181,9 +184,9 @@ Teambo.view = (function(t){
   };
 
   var scrollToSub = function(hash, isLoaded) {
-    var parts = hash.split('..'),
-      el = document.getElementById(parts[1]),
-      tar = document.getElementById(target);
+    var parts = hash.split('..');
+    var el = document.getElementById(parts[1]);
+    var tar = document.getElementById(t.app.target);
     if(parts.length > 1 && el) {
       var add = tar.offsetHeight - el.offsetHeight;
       el.classList.add('hi');
@@ -206,22 +209,22 @@ Teambo.view = (function(t){
     if(target.firstChild && target.firstChild.classList) {
       var class_list = target.firstChild.classList;
       if(class_list.contains('require-auth') && !t.acct.isAuthed()) {
-        t.afterAuth(window.location.hash.substr(1));
-        return t.gotoUrl('/login');
+        t.app.afterAuth = window.location.hash.substr(1);
+        return t.app.gotoUrl('/login');
       }
       if(class_list.contains('require-no-auth') && t.acct.isAuthed()) {
-        t.afterAuth(window.location.hash.substr(1));
-        return t.gotoUrl('/account');
+        t.app.afterAuth = window.location.hash.substr(1);
+        return t.app.gotoUrl('/account');
       }
       if(class_list.contains('require-team') && !view.isset('team')) {
-        t.afterAuth(window.location.hash.substr(1));
-        return t.gotoUrl('/account');
+        t.app.afterAuth = window.location.hash.substr(1);
+        return t.app.gotoUrl('/account');
       }
       var models = target.firstChild.getAttribute('require-model');
       if(models) {
         models.split(' ').forEach(function(type) {
           if(type in view.obj && !view.obj[type].current) {
-            return t.gotoUrl(t.team.current ? t.team.current.url() : '/account');
+            return t.app.gotoUrl(t.team.current ? t.team.current.url() : '/account');
           }
         });
       }
@@ -229,7 +232,7 @@ Teambo.view = (function(t){
     if(tplname in template_js) {
       template_js[tplname](t);
     }
-    if(t.loaded() && target.id === 'main') {
+    if(t.app.loaded && target.id === 'main') {
       target.scrollTop = 0;
     }
   };

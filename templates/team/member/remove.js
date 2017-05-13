@@ -12,7 +12,7 @@ function(t){
     form.disable();
     member.remove().then(function(){
       t.view.updateSideNav();
-      t.gotoUrl(t.team.current.url() + '/members');
+      t.app.gotoUrl(t.team.current.url() + '/members');
     }).catch(function(e){
       form.enable();
       form.error.msg("Member could not be removed.", "Please try again");

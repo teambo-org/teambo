@@ -50,7 +50,6 @@ func Test(w http.ResponseWriter, r *http.Request) {
 			JSAPP:   []string{"/min.js?v=" + js_min_version(jsapp)},
 			JSINIT:  []string{},
 			CSS:     []string{"/min.css?v=" + css_min_version()},
-			DEBUG:   util.Config("debug") == "true",
 		}
 	} else {
 		p = Page{
@@ -59,7 +58,6 @@ func Test(w http.ResponseWriter, r *http.Request) {
 			JSAPP:   hash_version(jsapp),
 			JSINIT:  append([]string{"/init.js?v=" + jsinit_version()}, hash_version(tests)...),
 			CSS:     hash_version(tcss),
-			DEBUG:   util.Config("debug") == "true",
 		}
 	}
 

@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.comment_edit),
     comment_id = form.comment_id.value,
@@ -16,7 +16,7 @@ function(t){
     var data = form.values(['text']);
     var submit = function() {
       comment.update(data, true).then(function(comment){
-        t.gotoUrl(comment.parentModel().url());
+        t.app.gotoUrl(comment.parentModel().url());
       }).catch(function(xhr){
         form.enable();
         form.error.msg("Comment could not be saved", "Please try again");

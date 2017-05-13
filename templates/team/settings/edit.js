@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.team_edit);
   var team_id = form.dataset.team_id;
@@ -12,7 +12,7 @@ function(t){
     var submit = function() {
       t.team.current.update(data, true).then(function(team){
         t.view.updateSideNav();
-        t.gotoUrl('/'+t.team.current.id);
+        t.app.gotoUrl('/'+t.team.current.id);
       }).catch(function(xhr){
         form.enable();
         form.error.msg("Team changes could not be saved", "Please try again");

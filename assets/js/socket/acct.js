@@ -1,7 +1,7 @@
 Teambo.socket.acct = (function (t) {
   "use strict";
 
-  var socket = t.socket.extend({
+  var socket = new t.socket({
     url: function() {
       return t.acct.current && t.acct.current.socketUrl();
     }
@@ -13,12 +13,12 @@ Teambo.socket.acct = (function (t) {
     } else if(e.iv == 'removed') {
       socket.stop();
       t.acct.deAuth();
-      t.gotoUrl('/login');
+      t.app.gotoUrl('/login');
     } else {
       t.acct.current.refresh(e.iv).then(function(new_acct) {
         t.acct.current = new_acct;
         socket.stop();
-        t.refresh({silent: true});
+        t.app.refresh({silent: true});
       }).catch(function(){
         t.socket.inviteAcceptance.start();
       });

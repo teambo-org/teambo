@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.member_edit),
     member_id = form.dataset.member_id,
@@ -16,7 +16,7 @@ function(t){
     form.disable();
     member.update(data, true).then(function(member){
       t.view.updateSideNav();
-      t.gotoUrl(member.url());
+      t.app.gotoUrl(member.url());
     }).catch(function(xhr){
       form.enable();
       form.error.msg("member could not be saved", "Please try again");

@@ -1,12 +1,12 @@
 Teambo.offline = (function (t) {
   "use strict";
-  
+
   var queue = function(team) {
     var self = this;
     var events = [];
     var processing = false;
     var cacheKey = t.crypto.sha(team.id+'queue'+t.salt);
-    t.extend(this, {
+    t.object.extend(this, {
       init:  function() {
         self.wake().then(function(data) {
           if(data) {
@@ -15,7 +15,7 @@ Teambo.offline = (function (t) {
         });
       },
       wake: function() {
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           localforage.getItem(cacheKey).then(function(ct) {
             if(ct) {
               fulfill(team.decrypt(ct));
@@ -27,7 +27,7 @@ Teambo.offline = (function (t) {
         return localforage.setItem(cacheKey, team.encrypt(events));
       },
       processEvent: function(e) {
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           if(e.type) {
             t.event.all(e.type, e).then(function() {
               fulfill();
@@ -40,7 +40,7 @@ Teambo.offline = (function (t) {
         });
       },
       process: function(evt) {
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           if(evt) {
             events.push(evt);
             t.view.updateStatus();
@@ -49,7 +49,7 @@ Teambo.offline = (function (t) {
               return;
             }
           }
-          if(!t.online()) {
+          if(!t.app.online) {
             self.cache().then(function() {
               processing = false;
               fulfill();
@@ -90,24 +90,21 @@ Teambo.offline = (function (t) {
       processing: function() {
         return processing;
       },
-      debug: function() {
-        return events;
-      },
       all: function() {
         var ret = [];
         events.forEach(function(item) {
-          
+
           ret.push(item);
         });
         return ret;
       }
     });
   };
-  
+
   t.event.on('team-init', function(team) {
     return team.queue.init();
   });
-  
+
   return {
     queue: queue
   };

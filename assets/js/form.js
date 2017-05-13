@@ -61,7 +61,7 @@ Teambo.form = (function(t){
       }
     }, false);
 
-    return t.extend(el, {
+    return t.object.extend(el, {
       error: {
         msg: function(msg, ex) {
           error.innerHTML = t.view.renderTemplate('util/error', {msg: msg, ex: ex});

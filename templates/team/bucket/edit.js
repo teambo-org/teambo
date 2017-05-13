@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.bucket_edit),
     bucket_id = form.dataset.bucket_id,
@@ -12,7 +12,7 @@ function(t){
     var data = form.values(['name', 'description']);
     bucket.update(data, true).then(function(bucket){
       t.view.updateSideNav();
-      t.gotoUrl(bucket.url());
+      t.app.gotoUrl(bucket.url());
     }).catch(function(xhr){
       form.enable();
       form.error.msg("Bucket could not be saved", "Please try again");

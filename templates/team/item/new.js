@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.item_new);
   form.name.focus();
@@ -10,7 +10,7 @@ function(t){
     var data = form.values(['name', 'description', 'status', 'bucket_id', 'plan_id', 'member_id']);
     t.model.item.create(data).then(function(item){
       t.view.updateSideNav();
-      t.gotoUrl(item.url());
+      t.app.gotoUrl(item.url());
     }).catch(function(e){
       form.enable();
       form.error.msg("Item could not be created", "Please try again");

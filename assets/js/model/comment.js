@@ -4,7 +4,7 @@ Teambo.model.comment = (function(t){
   var model = function(data) {
     var self = this;
     t.model.apply(this, [data, model]);
-    t.extend(this, {
+    t.object.extend(this, {
       parentModel: function() {
         return t.model[self.opts.ptype].get(self.opts.pid);
       },

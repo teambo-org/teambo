@@ -4,7 +4,7 @@ Teambo.view.autofilter = (function(t){
   var autofilter_cache = {};
 
   var autofilter = function(form, target, sticky) {
-    return t.promise(function(fulfill, reject) {
+    return new Promise(function(fulfill, reject) {
       var tar = document.getElementById(target);
       var uri = new Uri(window.location.hash.slice(1));
       var path = uri.path().split('..')[0];

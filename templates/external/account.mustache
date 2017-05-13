@@ -2,18 +2,18 @@
     <div id="logo" class="logo"></div>
     <div class="nav">
         <a class="logout" href="#/logout"><i class="icon-power" title="Log Out"></i></a>
-        <p>Logged in as {{acct.email}}</p>
+        <p>Logged in as {{acct.current.email}}</p>
     </div>
     <div class="main">
         <div id="status"></div>
         <ul id="teams" class="teams">
-        {{^acct.teams}}
+        {{^acct.current.teams}}
             <li class="placeholder">
                 <h3>Welcome to your new account</h3>
-                You can create a new team by clicking the link below or you can contact a member 
+                You can create a new team by clicking the link below or you can contact a member
                 of an existing team and ask them to invite you
             </li>
-        {{/acct.teams}}
+        {{/acct.current.teams}}
         </ul>
         <a href="#/team-new" class="team-new replace" data-keybind="c">Create Team</a>
     </div>

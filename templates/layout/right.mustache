@@ -1,10 +1,10 @@
 <div class="section account hi-20">
-    {{#acct.member}}
+    {{#acct.current.member}}
     <a href="#{{url}}" class="default-focus">
         <div class="img"><i class="{{icon}}"></i></div>
         <div class="name">{{opts.name}}</div>
     </a>
-    {{/acct.member}}
+    {{/acct.current.member}}
 </div>
 <div class="workload scrollable">
     {{#plan.all}}

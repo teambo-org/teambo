@@ -9,7 +9,7 @@ function(t){
     form.disable();
     item.remove().then(function(){
       t.view.updateSideNav();
-      t.gotoUrl(bucket.url());
+      t.app.gotoUrl(bucket.url());
     }).catch(function(e){
       form.enable();
       form.error.msg("Item could not be removed.", "Please try again");

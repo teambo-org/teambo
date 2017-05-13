@@ -9,16 +9,16 @@ function(t){
 
   t.view.on('team-updated', function(e) {
     if(e.id == t.team.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
 
   t.view.on(['plan-removed', 'plan-updated'], function(e) {
-    t.refresh({silent: true});
+    t.app.refresh({silent: true});
   });
 
   t.view.on(['item-removed', 'item-updated'], function(e) {
-    t.refresh({silent: true});
+    t.app.refresh({silent: true});
   });
 
 }

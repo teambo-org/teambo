@@ -7,17 +7,17 @@ function(t){
 
   t.view.on('bucket-removed', function(e) {
     if(e.id == t.model.bucket.current.id) {
-      t.gotoUrl(t.team.current.url(), false, {silent: true});
+      t.app.gotoUrl(t.team.current.url(), false, {silent: true});
     }
   });
   t.view.on('bucket-updated', function(e) {
     if(e.id == t.model.bucket.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
   t.view.on(['item-removed', 'item-updated'], function(e) {
     if(e.item.opts.bucket_id == t.model.bucket.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
 

@@ -10,15 +10,15 @@ Teambo.model = (function(t){
       data = t.team.decrypt(data);
       data.iv = data.iv ? data.iv : iv;
     }
-    t.extend(this, {
+    t.object.extend(this, {
       type: model.type,
       id:   data.id,
       iv:   data.iv,
-      orig: data.opts ? t.clone(data.opts) : {},
+      orig: data.opts ? t.object.clone(data.opts) : {},
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
       save: function() {
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           if('schema' in model) {
             var errs = model.schema.validate(self.opts, self.orig);
             if(errs.length) {
@@ -49,12 +49,12 @@ Teambo.model = (function(t){
           }).then(function(xhr){
             if(xhr.status == 200) {
               self.iv = iv;
-              self.orig = t.clone(self.opts);
+              self.orig = t.object.clone(self.opts);
               self.cache().then(function() {
                 fulfill(self);
               });
             } else {
-              t.deleteByProperty(self.hist, 'iv', iv);
+              t.array.deleteByProperty(self.hist, 'iv', iv);
               reject(xhr);
             }
           }).catch(function(e){
@@ -64,8 +64,8 @@ Teambo.model = (function(t){
         });
       },
       update: function(opts, auto_refresh) {
-        self.opts = t.extend(self.opts, opts);
-        return t.promise(function(fulfill, reject) {
+        t.object.extend(self.opts, opts);
+        return new Promise(function(fulfill, reject) {
           self.save().then(function(xhr) {
             fulfill(self);
           }).catch(function(xhr) {
@@ -80,20 +80,20 @@ Teambo.model = (function(t){
               });
             } else if(xhr.status === 0) {
               var diff = model.schema.diff(self.orig, opts);
-              self.orig = t.clone(self.opts);
+              self.orig = t.object.clone(self.opts);
               self.cache().then(function() {
                 t.team.current.queue.process({type: model.type + '.offline.update', opts: diff, id: self.id});
                 fulfill(self);
               });
             } else {
-              self.opts = t.clone(self.orig);
+              self.opts = t.object.clone(self.orig);
               reject(xhr);
             }
           });
         });
       },
       refresh: function() {
-        return t.promise(function (fulfill, reject) {
+        return new Promise(function (fulfill, reject) {
           var d = t.team.current;
           model.fetch(self.id, d.id, d.mkey).then(function(ct) {
             var m = new model(ct);
@@ -106,7 +106,7 @@ Teambo.model = (function(t){
         });
       },
       cache: function() {
-        return t.promise(function (fulfill, reject) {
+        return new Promise(function (fulfill, reject) {
           var updated = false;
           model.all.forEach(function(m, i) {
             if(m.id == self.id) {
@@ -126,7 +126,7 @@ Teambo.model = (function(t){
         return model.uncache(self.id);
       },
       remove: function() {
-        return t.promise(function(fulfill, reject) {
+        return new Promise(function(fulfill, reject) {
           var data = {
             team_id: t.team.current.id,
             mkey:    t.team.current.mkey,
@@ -216,7 +216,7 @@ Teambo.model = (function(t){
     };
 
     model.create = function(opts, id) {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         if('schema' in model) {
           var errs = model.schema.validate(opts, {});
           if(errs.length) {
@@ -277,7 +277,7 @@ Teambo.model = (function(t){
     };
 
     model.fetch = function(id, team_id, mkey) {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         t.xhr.get('/team/'+model.type, {
           data: {
             team_id: team_id,
@@ -307,7 +307,7 @@ Teambo.model = (function(t){
     };
 
     model.find = function(id) {
-      return t.promise(function(fulfill, reject){
+      return new Promise(function(fulfill, reject){
         var team = t.team.current;
         var m = model.get(id, true);
         if(m) {
@@ -335,7 +335,7 @@ Teambo.model = (function(t){
     };
 
     model.findAll = function(force) {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         if(model.all.length) {
           fulfill(model.all);
           return;
@@ -383,7 +383,7 @@ Teambo.model = (function(t){
     };
 
     model.fetchAll = function(team_id, mkey) {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         t.xhr.get('/team/'+model.type+'s', {
           data: {
             team_id: team_id,
@@ -402,8 +402,8 @@ Teambo.model = (function(t){
     };
 
     model.uncache = function(id) {
-      t.deleteByProperty(model.all, 'id', id);
-      return t.promise(function (fulfill, reject) {
+      t.array.deleteByProperty(model.all, 'id', id);
+      return new Promise(function (fulfill, reject) {
         t.team.uncache(id).then(function() {
           fulfill();
         });
@@ -421,7 +421,7 @@ Teambo.model = (function(t){
 
     t.event.on('model-event', function(e) {
       if(e.type != model.type) return Promise.resolve();
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         var m = model.get(e.id, true);
         if(e.iv === 'removed') {
           if(!m) {
@@ -494,7 +494,7 @@ Teambo.model = (function(t){
     });
 
     t.event.on(model.type + '.offline.create', function(e) {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         model.create(e.opts, e.id).then(function(new_m) {
           new_m.cache().then(function() {
             model.cacheIds();
@@ -509,7 +509,7 @@ Teambo.model = (function(t){
     });
 
     t.event.on(model.type + '.offline.update', function(e) {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         model.find(e.id).then(function(m) {
           if(m) {
             m.refresh().then(function(m) {
@@ -532,7 +532,7 @@ Teambo.model = (function(t){
     });
 
     t.event.on(model.type + '.offline.remove', function(e) {
-      return t.promise(function(fulfill, reject) {
+      return new Promise(function(fulfill, reject) {
         model.find(e.id).then(function(m) {
           if(m) {
             m.remove().then(function() {

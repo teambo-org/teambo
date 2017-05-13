@@ -2,15 +2,15 @@ function(t){
   "use strict";
 
   if(!t.acct.current.rsa) {
-    t.gotoUrl('/keygen');
+    t.app.gotoUrl('/keygen');
     return;
   }
 
-  t.editing(true);
+  t.app.editing = true;
 
   localforage.getItem('ikey-data').then(function(d) {
     if(d && d.ikey) {
-      t.gotoUrl('/invite');
+      t.app.gotoUrl('/invite');
     }
   });
 

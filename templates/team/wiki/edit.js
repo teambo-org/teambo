@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.wiki_edit),
     wiki_id = form.dataset.wiki_id,
@@ -13,7 +13,7 @@ function(t){
     var submit = function() {
       wiki.update(data, true).then(function(wiki){
         t.view.updateSideNav();
-        t.gotoUrl(wiki.url());
+        t.app.gotoUrl(wiki.url());
       }).catch(function(xhr){
         form.enable();
         form.error.msg("Wiki could not be saved", "Please try again");

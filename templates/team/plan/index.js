@@ -7,12 +7,12 @@ function(t){
   t.view.autofilter(filter_form, 'plan-index', true);
 
   t.view.on(['plan-removed', 'plan-updated'], function(e) {
-    t.refresh({silent: true});
+    t.app.refresh({silent: true});
   });
 
   t.view.on(['item-removed', 'item-updated'], function(e) {
     if(e.item.opts.plan_id == t.model.plan.current.id) {
-      t.refresh({silent: true});
+      t.app.refresh({silent: true});
     }
   });
 

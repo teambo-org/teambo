@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.member_new);
   form.member_email.focus();
@@ -15,7 +15,7 @@ function(t){
     t.model.invite.create(data).then(function(member){
       t.view.updateSideNav();
       t.socket.inviteResponse.start();
-      t.gotoUrl('/'+t.team.current.id+'/members');
+      t.app.gotoUrl('/'+t.team.current.id+'/members');
     }).catch(function(xhr){
       form.enable();
       form.error.msg("Member could not be saved", "Please try again");

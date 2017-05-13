@@ -26,7 +26,7 @@ Teambo.view.autoselect = (function(t){
         data[opt] = val;
         model.update(data).then(function() {
           t.view.updateSideNav();
-          t.refresh();
+          t.app.refresh();
         });
       });
     });

@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.plan_new);
   form.name.focus();
@@ -11,13 +11,13 @@ function(t){
     t.model.plan.create(data).then(function(plan){
       t.view.updateSideNav();
       t.view.updateTheme();
-      t.gotoUrl(plan.url());
+      t.app.gotoUrl(plan.url());
     }).catch(function(e){
       form.enable();
       form.error.msg("Plan could not be created", "Please try again");
     });
   });
-  
+
   t.view.calendar.init('plan_start');
   t.view.calendar.init('plan_end');
 

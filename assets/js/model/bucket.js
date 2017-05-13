@@ -4,7 +4,7 @@ Teambo.model.bucket = (function(t){
   var model = function(data) {
     var self = this;
     t.model.apply(this, [data, model]);
-    t.extend(this, {
+    t.object.extend(this, {
       item_list: function() {
         return t.model.item.getByBucket(self.id);
       },

@@ -12,7 +12,7 @@ function(t){
     }
     form.disable();
     comment.remove().then(function(){
-      t.gotoUrl(parentModel.url());
+      t.app.gotoUrl(parentModel.url());
     }).catch(function(e){
       form.enable();
       form.error.msg("Comment could not be removed.", "Please try again");

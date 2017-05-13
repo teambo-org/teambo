@@ -1,7 +1,7 @@
 Teambo.socket.team = (function (t) {
   "use strict";
 
-  var socket = t.socket.extend({
+  var socket = new t.socket({
     url: function() {
       var team = t.team.current;
       if(!team) {
@@ -21,7 +21,7 @@ Teambo.socket.team = (function (t) {
   };
 
   var processEvent = function(e) {
-    return t.promise(function(fulfill, reject) {
+    return new Promise(function(fulfill, reject) {
       var done = function() {
         t.team.current.lastSeen(e.ts);
         fulfill();
@@ -50,12 +50,13 @@ Teambo.socket.team = (function (t) {
     if(e) {
       processing = true;
       // TODO: Check event type as well as id
-      if(t.findByProperty(events, 'id', e.id)) {
+      if(t.array.findByProperty(events, 'id', e.id)) {
         setTimeout(handleEvent, 0);
       } else {
-        processEvent(e).always(function() {
+        var callback = function() {
           setTimeout(handleEvent, 0);
-        });
+        };
+        processEvent(e).then(callback).catch(callback);
       }
     } else {
       t.team.current.queue.process().then(function() {

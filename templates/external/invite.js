@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  t.editing(true);
+  t.app.editing = true;
 
   var form = new t.form(document.invite_respond);
   var data = {
@@ -14,7 +14,7 @@ function(t){
     if(data.ikey) {
       localforage.setItem('ikey-data', data);
     }
-    t.gotoUrl('/login');
+    t.app.gotoUrl('/login');
   } else if(!data.ikey) {
     form.disable();
     localforage.getItem('ikey-data').then(function(d) {
@@ -33,7 +33,7 @@ function(t){
         var invite = new t.model.invite(data);
         t.acct.current.invites.push(invite);
         t.acct.current.save().then(function() {
-          t.replace('/invite-responded');
+          t.app.replaceUrl('/invite-responded');
         });
       } else {
         form.enable();

@@ -3,10 +3,10 @@ Teambo.model.history = (function(t){
 
   var model = function(data, parentModel) {
     var self = this;
-    t.extend(this, data);
-    t.extend(this, {
+    t.object.extend(this, data);
+    t.object.extend(this, {
       status: function() {
-        return t.findByProperty(t.model.item.statuses, 'key', self.diff.status);
+        return t.array.findByProperty(t.model.item.statuses, 'key', self.diff.status);
       },
       bucket: function() {
         return t.model.bucket.get(self.diff.bucket_id);

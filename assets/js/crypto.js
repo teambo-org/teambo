@@ -1,7 +1,7 @@
 Teambo.crypto = (function(t, sjcl){
   "use strict";
-  
-  sjcl = t.clone(sjcl);
+
+  sjcl = t.object.clone(sjcl);
 
   var e = 65537;
 

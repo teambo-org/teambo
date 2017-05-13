@@ -14,10 +14,9 @@ function(t){
       member.remove().then(function(){
         t.deleteByProperty(t.acct.current.teams, 'id', t.team.current.id);
         t.acct.current.save().then(function(){
-          t.gotoUrl('/account');
+          t.app.gotoUrl('/account');
         });
       }).catch(function(e){
-        console.log(e);
         form.enable();
         form.error.msg("Member could not be removed.", "Please try again");
       });

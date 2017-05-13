@@ -2,7 +2,7 @@ function(t){
   "use strict";
   
   if(t.acct.current.rsa) {
-    t.gotoUrl('/account');
+    t.app.gotoUrl('/account');
     return;
   }
   
@@ -13,7 +13,7 @@ function(t){
     };
     t.acct.current.genrsa(progressCallback).then(function(key) {
       t.acct.current.save().then(function() {
-        t.gotoUrl('/account');
+        t.app.gotoUrl('/account');
       });
     });
   };

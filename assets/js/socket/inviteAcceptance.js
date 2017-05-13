@@ -1,7 +1,7 @@
 Teambo.socket.inviteAcceptance = (function (t) {
   "use strict";
 
-  var socket = t.socket.extend({
+  var socket = new t.socket({
     url: function() {
       var ikeys = get_invite_keys();
       if(!ikeys) {
@@ -26,15 +26,15 @@ Teambo.socket.inviteAcceptance = (function (t) {
     if(!e.ct) {
       return;
     } else if(e.ct == 'expired') {
-      t.deleteByProperty(t.acct.current.invites, 'ikey', e.ikey);
+      t.array.deleteByProperty(t.acct.current.invites, 'ikey', e.ikey);
       t.acct.current.save().then(function() {
-        t.refresh();
+        t.app.refresh();
       });
     } else {
-      var invite = t.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
+      var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
       if(invite) {
         t.model.invite.activate(e.ikey, e.ct, e.mkey).then(function() {
-          t.refresh();
+          t.app.refresh();
         });
       }
     }

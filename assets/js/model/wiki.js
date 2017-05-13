@@ -4,7 +4,7 @@ Teambo.model.wiki = (function(t){
   var model = function(data) {
     var self = this;
     t.model.apply(this, [data, model]);
-    t.extend(this, {
+    t.object.extend(this, {
       url: function() {
         return '/'+t.team.current.id+'/wiki/'+self.id;
       },
