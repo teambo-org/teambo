@@ -56,7 +56,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 }
 
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Cache-Control", "max-age=0, must-revalidate")
+	w.Header().Set("Cache-Control", "max-age=0, no-cache, must-revalidate")
 	// start := time.Now()
 
 	// log.Println(r.URL.Path)
