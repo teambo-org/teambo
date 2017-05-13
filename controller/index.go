@@ -240,6 +240,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 	if util.Config("cache.manifest") == "true" {
 		manifest_cache = b.String()
 	}
+	w.Header().Set("Content-Type", "text/cache-manifest")
 	w.Write(b.Bytes())
 }
 
