@@ -74,8 +74,9 @@ func Team(w http.ResponseWriter, r *http.Request) {
 			parts := strings.Split(ct, " ")
 			new_iv := parts[0]
 			if new_iv != "new" {
-				log, _ := team.Log(new_iv)
-				socket.TeamHub.Broadcast <- socket.Message(team_id, log)
+				log_str, _ := team.Log(new_iv)
+				logs := model.TeamLogParse([]string{log_str})
+				socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 			}
 		} else {
 			error_out(w, "Invalid Request", 400)
@@ -98,12 +99,18 @@ func TeamRemove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	id := r.FormValue("team_id")
+	mkey := r.FormValue("mkey")
 
 	// TODO: Confirm admin auth prior to team removal
 
 	team, err := auth_team(w, r)
 	if err != nil {
 		error_out(w, "Team could not be found", 500)
+		return
+	}
+
+	if !team.IsAdmin(mkey) {
+		error_out(w, "Only a team admin can delete a team", 403)
 		return
 	}
 

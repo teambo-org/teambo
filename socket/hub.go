@@ -1,11 +1,12 @@
 package socket
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/gorilla/websocket"
 	// "log"
 	// "net/http"
 	"time"
+	"encoding/json"
 )
 
 const (
@@ -23,6 +24,12 @@ type wsmessage struct {
 
 func Message(channel_id string, text string) wsmessage {
 	return wsmessage{channel_id, channel_id + "-" + text}
+}
+
+func JsonMessage(channel_id string, data map[string]interface{}) wsmessage {
+	data["channel_id"] = channel_id
+	json_bytes, _ := json.Marshal(data)
+	return wsmessage{channel_id, string(json_bytes)}
 }
 
 type hub struct {
@@ -151,7 +158,8 @@ func (c *connection) Writer() {
 				return
 			}
 		case <-timesync.C:
-			if err := c.Write(websocket.TextMessage, wsmessage{"", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond))}); err != nil {
+			var msg = JsonMessage("", map[string]interface{}{"type": "timesync"})
+			if err := c.Write(websocket.TextMessage, msg); err != nil {
 				return
 			}
 		}

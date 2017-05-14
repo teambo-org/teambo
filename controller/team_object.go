@@ -60,8 +60,9 @@ func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *
 			parts := strings.Split(ct, " ")
 			new_iv := parts[0]
 			if log_changes && new_iv != "new" {
-				log, _ := obj.Log(new_iv)
-				socket.TeamHub.Broadcast <- socket.Message(team_id, log)
+				log_str, _ := obj.Log(new_iv)
+				logs := model.TeamLogParse([]string{log_str})
+				socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 			}
 		} else {
 			error_out(w, "Invalid Request", 400)
@@ -128,15 +129,17 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 					if err == nil {
 						err = comment.Remove()
 						if err == nil && log_changes {
-							log, _ := comment.Log("removed")
-							socket.TeamHub.Broadcast <- socket.Message(team_id, log)
+							log_str, _ := comment.Log("removed")
+							logs := model.TeamLogParse([]string{log_str})
+							socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 						}
 					}
 				}
 			}
 			if log_changes {
-				log, _ := obj.Log("removed")
-				socket.TeamHub.Broadcast <- socket.Message(team_id, log)
+				log_str, _ := obj.Log("removed")
+				logs := model.TeamLogParse([]string{log_str})
+				socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 			}
 		} else {
 			error_out(w, "Invalid Request", 400)

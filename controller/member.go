@@ -50,8 +50,9 @@ func Member(w http.ResponseWriter, r *http.Request) {
 			parts := strings.Split(ct, " ")
 			new_iv := parts[0]
 			if true && new_iv != "new" {
-				log, _ := obj.Log(new_iv)
-				socket.TeamHub.Broadcast <- socket.Message(team_id, log)
+				log_str, _ := obj.Log(new_iv)
+				logs := model.TeamLogParse([]string{log_str})
+				socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 			}
 		} else {
 			error_out(w, "Invalid Request", 400)
@@ -120,14 +121,16 @@ func MemberRemove(w http.ResponseWriter, r *http.Request) {
 					if err == nil {
 						err = comment.Remove()
 						if err == nil {
-							log, _ := comment.Log("removed")
-							socket.TeamHub.Broadcast <- socket.Message(team_id, log)
+							log_str, _ := comment.Log("removed")
+							logs := model.TeamLogParse([]string{log_str})
+							socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 						}
 					}
 				}
 			}
-			log, _ := obj.Log("removed")
-			socket.TeamHub.Broadcast <- socket.Message(team_id, log)
+			log_str, _ := obj.Log("removed")
+			logs := model.TeamLogParse([]string{log_str})
+			socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 		} else {
 			error_out(w, "Invalid Request", 400)
 			return

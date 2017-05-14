@@ -177,8 +177,8 @@ Teambo.team = (function(t){
         rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
         return t.crypto.hextob64(rsa.encrypt(self.id+'-'+key));
       },
-      init: function(post) {
-        return team.init(self.id, post);
+      init: function() {
+        return team.init(self.id);
       }
     });
     var uncacheTeam = function() {
@@ -203,19 +203,12 @@ Teambo.team = (function(t){
     theme: { type: "string", required: false, maxLength: 32 }
   });
 
-  team.init = function(id, post) {
-    post = typeof post === 'undefined' ? true : post;
+  team.init = function(id) {
     return new Promise(function(fulfill, reject){
       team.find(id).then(function(o) {
         team.current = o;
         t.event.all('team-init', o).then(function() {
-          if(post) {
-            t.event.all('team-post-init', o).then(function() {
-              fulfill(o);
-            });
-          } else {
-            fulfill(o);
-          }
+          fulfill(o);
         }).catch(reject);
       }).catch(reject);
     });
@@ -391,7 +384,7 @@ Teambo.team = (function(t){
   };
 
   t.event.on('model-event', function(e) {
-    if(e.type != 'team') return Promise.resolve();
+    if(e.model != 'team') return Promise.resolve();
     return new Promise(function(fulfill, reject) {
       var m = team.find(e.id, true);
       if(e.iv === 'removed') {
@@ -426,13 +419,6 @@ Teambo.team = (function(t){
         });
       }
     });
-  });
-
-  t.event.on('team-post-init', function() {
-    t.socket.team.start();
-    if(t.team.current.isAdmin()) {
-      t.socket.inviteResponse.start();
-    }
   });
 
   t.view.on('member-removed', function(e) {

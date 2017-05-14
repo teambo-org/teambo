@@ -65,7 +65,7 @@ function(t){
         el.innerHTML = t.view.renderTemplate('external/_teams-loading');
         var p = [];
         teams.forEach(function(team) {
-          p.push(function(){team.init(false);});
+          p.push(team.init);
         });
         logo.classList.add('spinner');
         t.promise.serial(p).then(function() {

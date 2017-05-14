@@ -110,7 +110,9 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		socket.InviteResponseHub.Broadcast <- socket.Message(ikey, pubKey)
+		socket.InviteResponseHub.Broadcast <- socket.JsonMessage(ikey, map[string]interface{}{
+			"pubKey": pubKey,
+		})
 
 		msg, _ := json.Marshal(map[string]bool{
 			"success": true,
@@ -134,11 +136,15 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 		for _, k := range ikeys {
 			inviteResponse, _ := model.InviteResponseFind(k)
 			if inviteResponse.PubKey != "" {
-				c.Write(websocket.TextMessage, socket.Message(k, inviteResponse.PubKey))
+				c.Write(websocket.TextMessage, socket.JsonMessage(k, map[string]interface{}{
+					"pubKey": inviteResponse.PubKey,
+				}))
 			} else {
 				invite, _ := model.InviteFind(k)
 				if invite.Hash == "" {
-					c.Write(websocket.TextMessage, socket.Message(k, "expired"))
+					c.Write(websocket.TextMessage, socket.JsonMessage(k, map[string]interface{}{
+						"expired": true,
+					}))
 				}
 			}
 		}
@@ -201,7 +207,10 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 
 		inviteResponse.Delete()
 
-		socket.InviteAcceptanceHub.Broadcast <- socket.Message(ikey, ct + "-" + memberKey.Id)
+		socket.InviteAcceptanceHub.Broadcast <- socket.JsonMessage(ikey, map[string]interface{}{
+			"ct": ct,
+			"mkey": memberKey.Id,
+		})
 
 		msg, _ := json.Marshal(map[string]bool{
 			"success": true,
@@ -225,11 +234,17 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 		for _, k := range ikeys {
 			inviteAcceptance, _ := model.InviteAcceptanceFind(k)
 			if inviteAcceptance.Ciphertext != "" {
-				c.Write(websocket.TextMessage, socket.Message(k, inviteAcceptance.Ciphertext))
+				parts := strings.Split(inviteAcceptance.Ciphertext, "-")
+				c.Write(websocket.TextMessage, socket.JsonMessage(k, map[string]interface{}{
+					"ct":   parts[0],
+					"mkey": parts[1],
+				}))
 			} else {
 				inviteResponse, _ := model.InviteResponseFind(k)
 				if inviteResponse.PubKey == "" {
-					c.Write(websocket.TextMessage, socket.Message(k, "expired"))
+					c.Write(websocket.TextMessage, socket.JsonMessage(k, map[string]interface{}{
+						"ct": "expired",
+					}))
 				}
 			}
 		}

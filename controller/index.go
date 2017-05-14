@@ -281,9 +281,18 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 	w.Write(b.Bytes())
 }
 
+// json marshal with SetEscapeHTML to prevent ugly escaping
+func safe_json_marshal(content map[string]string) string {
+    buffer := &bytes.Buffer{}
+    encoder := json.NewEncoder(buffer)
+    encoder.SetEscapeHTML(false)
+    encoder.Encode(content)
+    return string(buffer.Bytes())
+}
+
 func append_js_init(w io.Writer) {
 	content, scripts := compile_templates()
-	templates, _ := json.Marshal(content)
+	templates := safe_json_marshal(content)
 	keys := []string{}
 	tpljs := []string{}
 	for k := range scripts {

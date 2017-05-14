@@ -422,7 +422,7 @@ Teambo.model = (function(t){
     };
 
     t.event.on('model-event', function(e) {
-      if(e.type != model.type) return Promise.resolve();
+      if(e.model != model.type) return Promise.resolve();
       return new Promise(function(fulfill, reject) {
         var m = model.get(e.id, true);
         if(e.iv === 'removed') {
@@ -451,6 +451,7 @@ Teambo.model = (function(t){
             } else if(new_m && !m){
               p.push(new_m.cache().then(function() {
                 model.cacheIds();
+                fulfill();
               }));
             }
             Promise.all(p).then(function(){
@@ -557,6 +558,40 @@ Teambo.model = (function(t){
   };
 
   model.types = types;
+
+  model.integrity = function() {
+    var ivs = [];
+    var fn = function(a, b) {
+      return a.id > b.id ? 1 : (a.id === b.id ? 0 : -1);
+    };
+    model.types.sort().forEach(function(type) {
+      model[type].all.sort(fn).forEach(function(model){
+        ivs.push(type + "-" + model.id + "-" + model.iv);
+      });
+    });
+    return ivs;
+  };
+
+  model.integrityCheck = function(ivs) {
+    return new Promise(function(fulfill, reject) {
+      t.xhr.post('/team/integrity', {
+        data: {
+          team_id: t.team.current.id,
+          mkey: t.team.current.mkey,
+          ivs: ivs
+        }
+      }).then(function(xhr) {
+        if (xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          fulfill(data.log);
+        } else {
+          reject(xhr);
+        }
+      }).catch(function(xhr) {
+        reject(xhr);
+      });
+    });
+  };
 
   return model;
 

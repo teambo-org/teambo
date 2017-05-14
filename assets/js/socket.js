@@ -18,11 +18,13 @@ Teambo.socket = (function (t) {
       if(self.connection) {
         self.connection.close();
       }
+      self.emit('stop');
     };
 
     this.start = function() {
       self.stop();
       var failures = 0;
+      self.emit('start');
       self.connect = true;
       var wrapperfunc = function(){
         if (typeof(WebSocket) === "function" && (!self.connection || self.connection.readyState > 0)) {
@@ -50,7 +52,13 @@ Teambo.socket = (function (t) {
           self.connection.onmessage = function(evt) {
             t.app.online = true;
             failures = 0;
-            self.emit('message', evt);
+            try {
+              var data = JSON.parse(evt.data);
+              self.emit('message', data);
+            } catch(e) {
+              t.app.log('Socket event parse failed: ' + evt);
+              t.app.log(e);
+            }
           }
         }
       };

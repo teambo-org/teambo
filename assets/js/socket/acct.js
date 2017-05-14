@@ -27,12 +27,8 @@ Teambo.socket.acct = (function (t) {
     }
   };
 
-  socket.on('message', function(evt) {
-    var parts = evt.data.split('-');
-    var e = {
-      id : parts[0],
-      iv : parts[1]
-    };
+  socket.on('message', function(e) {
+    e.id = e.channel_id;
     handle(e);
   });
 

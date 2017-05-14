@@ -13,6 +13,7 @@ Teambo.socket.team = (function (t) {
 
   var events = [];
   var ignored = [];
+  var process = false;
   var processing = false;
 
   socket.ignore = function(k) {
@@ -26,13 +27,29 @@ Teambo.socket.team = (function (t) {
         t.team.current.lastSeen(e.ts);
         fulfill();
       };
-      if(e.type) {
+      if(e.type == "log") {
         t.event.all('model-event', e).then(function() {
           done();
         });
-      } else if(e.ts) {
+      } else if(e.type == "timesync") {
         t.time.update(e.ts);
         fulfill();
+      } else if(e.type == "integrity") {
+        var ivs = t.model.integrity();
+        var hash = t.crypto.sha(ivs.join(""));
+        if(hash != e.hash) {
+          t.app.log('Integrity hash invalid');
+          t.model.integrityCheck(ivs).then(function(iv_events){
+            t.app.log('Applying ' + iv_events.length + ' updates from integrity check');
+            events = events.concat(iv_events);
+            fulfill();
+          }).catch(function(e){
+            reject();
+          });
+        } else {
+          t.app.log('Integrity hash looks good');
+          fulfill();
+        }
       } else {
         fulfill();
       }
@@ -40,6 +57,9 @@ Teambo.socket.team = (function (t) {
   };
 
   var handleEvent = function(e) {
+    if(!process) {
+      return;
+    }
     if(e) {
       events.push(e);
       if(processing) {
@@ -51,9 +71,11 @@ Teambo.socket.team = (function (t) {
       processing = true;
       // TODO: Check event type as well as id
       if(t.array.findByProperty(events, 'id', e.id)) {
+        processing = false;
         setTimeout(handleEvent, 0);
       } else {
         var callback = function() {
+          processing = false;
           setTimeout(handleEvent, 0);
         };
         processEvent(e).then(callback).catch(callback);
@@ -65,23 +87,26 @@ Teambo.socket.team = (function (t) {
     }
   };
 
-  socket.on('stop', function() {
+  socket.on('start', function() {
+    events = [];
     ignored = [];
+    process = true;
+    processing = false;
   });
 
-  socket.on('message', function(evt) {
-    var parts = evt.data.split('-');
-    var e = {
-      team_id : parts[0],
-      ts      : parts[1],
-      type    : parts[2],
-      id      : parts[3],
-      iv      : parts[4]
-    };
-    if(!e.ts) {
-      e.ts = e.team_id;
+  socket.on('stop', function() {
+    events = [];
+    ignored = [];
+    process = false;
+    processing = false;
+  });
+
+  socket.on('message', function(e) {
+    e.team_id = e.channel_id;
+    if(e.team_id && e.team_id != t.team.current.id) {
+      return;
     }
-    if(ignored.indexOf([e.type, e.id, e.iv].join('-')) < 0) {
+    if(ignored.indexOf([e.model, e.id, e.iv].join('-')) < 0) {
       handleEvent(e);
     }
   });

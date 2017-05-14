@@ -56,12 +56,8 @@ Teambo.socket.inviteResponse = (function (t) {
     // Stop socket if no more pending invites
   };
 
-  socket.on('message', function(evt) {
-    var parts = evt.data.split('-');
-    var e = {
-      ikey   : parts[0],
-      pubKey : parts[1]
-    };
+  socket.on('message', function(e) {
+    e.ikey = e.channel_id;
     handle(e);
   });
 

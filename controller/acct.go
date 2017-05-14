@@ -38,7 +38,9 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(ct, " ")
 	acct_iv := parts[0]
 
-	socket.AcctHub.Broadcast <- socket.Message(id, acct_iv)
+	socket.AcctHub.Broadcast <- socket.JsonMessage(id, map[string]interface{}{
+		"iv": acct_iv,
+	})
 
 	res, _ := json.Marshal(acct)
 	w.Write([]byte(string(res)))
@@ -117,10 +119,14 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 	acct_iv := parts[0]
 
 	if acct.Ciphertext == "" {
-		c.Write(websocket.TextMessage, socket.Message(id, "removed"))
+		c.Write(websocket.TextMessage, socket.JsonMessage(id, map[string]interface{}{
+			"iv": "removed",
+		}))
 		return
 	} else {
-		c.Write(websocket.TextMessage, socket.Message(id, acct_iv))
+		c.Write(websocket.TextMessage, socket.JsonMessage(id, map[string]interface{}{
+			"iv": acct_iv,
+		}))
 	}
 
 	socket.AcctHub.Register <- c

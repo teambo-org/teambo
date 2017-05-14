@@ -74,7 +74,11 @@ func db_team_update(team_id string, fn func(*bolt.Tx) error) error {
 }
 
 func db_team_view(team_id string, fn func(*bolt.Tx) error) error {
-	db, err := bolt.Open(util.Config("app.data")+"/teams/"+team_id+".db", 0644, nil)
+	var path = util.Config("app.data")+"/teams/"+team_id+".db"
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+	  return err
+	}
+	db, err := bolt.Open(path, 0644, nil)
 	if err != nil {
 		return err
 	}
