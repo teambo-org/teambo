@@ -6,7 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"strings"
-	"log"
+	// "log"
 )
 
 type teamIntegrity struct {
@@ -53,7 +53,6 @@ func (ti *teamIntegrity) Hash() string {
 	if ti.Cache != "" {
 		return ti.Cache
 	}
-	log.Println(ti.Ivs)
 	hasher := sha256.New()
 	for _, k := range ti.Ivs {
 		hasher.Write([]byte(k))

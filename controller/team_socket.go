@@ -52,7 +52,6 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	integrity, err := model.TeamIntegrityCache.Find(team_id)
 	if err == nil {
 		hash := integrity.Hash()
-		log.Println("integrity: " + team_id + " - " + hash)
 		c.Write(websocket.TextMessage, socket.JsonMessage(team_id, map[string]interface{}{
 			"type": "integrity",
 			"hash": hash,
