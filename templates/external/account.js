@@ -58,7 +58,6 @@ function(t){
       var n = t.team.summaries[team.id] ? t.team.summaries[team.id].logs : 0;
       var update_el = function() {
         if(!el) return;
-        console.log(el);
         t.team.summaries[team.id] = {"logs": n};
         el.innerHTML = t.view.renderTemplate('external/_team-li', team);
       };
