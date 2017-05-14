@@ -72,7 +72,7 @@ Teambo.socket.team = (function (t) {
     if(e) {
       processing = true;
       // TODO: Check event type as well as id
-      if(t.array.findByProperty(events, 'id', e.id)) {
+      if(e.id && t.array.findByProperty(events, 'id', e.id)) {
         processing = false;
         setTimeout(handleEvent, 0);
       } else {

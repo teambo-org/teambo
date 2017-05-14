@@ -6,14 +6,12 @@ Teambo.socket = (function (t) {
     t.object.extend(this, {
       interval: null,
       connect: null,
-      connection: null,
-      connected: false
+      connection: null
     });
     t.object.extend(this, data);
 
     this.stop = function() {
       self.connect = false;
-      self.connected = false;
       clearInterval(self.interval);
       if(self.connection) {
         self.connection.close();
@@ -22,13 +20,13 @@ Teambo.socket = (function (t) {
     };
 
     this.start = function() {
-      self.stop();
       var failures = 0;
       self.emit('start');
       self.connect = true;
+      var connected = false;
       var wrapperfunc = function(){
         if (typeof(WebSocket) === "function" && (!self.connection || self.connection.readyState > 0)) {
-          if(self.connected) {
+          if(connected) {
             return;
           }
           var uri = new Uri(window.location);
@@ -40,14 +38,10 @@ Teambo.socket = (function (t) {
             return;
           }
           self.connection = new WebSocket(scheme+"://"+host+port+url);
-          self.connected = true;
+          connected = true;
           self.connection.onclose = function(evt) {
             failures++;
-            self.connected = false;
-            self.connection = null;
-            // if(self.connect) {
-              // t.app.online = false;
-            // }
+            connected = false;
           }
           self.connection.onmessage = function(evt) {
             t.app.online = true;
