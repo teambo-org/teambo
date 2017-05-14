@@ -131,4 +131,6 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 
 	socket.AcctHub.Register <- c
 	c.Writer()
+	go c.Writer()
+	c.Reader(socket.AcctHub)
 }

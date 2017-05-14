@@ -149,7 +149,8 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		socket.InviteResponseHub.Register <- c
-		c.Writer()
+		go c.Writer()
+		c.Reader(socket.InviteResponseHub)
 	} else {
 		http.Error(w, "Method not allowed", 405)
 		return
@@ -249,7 +250,8 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		socket.InviteAcceptanceHub.Register <- c
-		c.Writer()
+		go c.Writer()
+		c.Reader(socket.InviteAcceptanceHub)
 	} else {
 		http.Error(w, "Method not allowed", 405)
 		return

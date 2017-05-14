@@ -90,6 +90,7 @@ var jsapp = []string{
 	"/js/model/history.js",
 	"/js/model/invite.js",
 	"/js/socket/team.js",
+	"/js/socket/teamSummary.js",
 	"/js/socket/inviteResponse.js",
 	"/js/socket/inviteAcceptance.js",
 	"/js/socket/acct.js",

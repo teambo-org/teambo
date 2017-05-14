@@ -98,13 +98,12 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	}))
 
 	socket.TeamHub.Register <- c
-	c.Writer()
-	// Not reading input on socket
-	// Could be used to:
+	go c.Writer()
+	c.Reader(socket.TeamHub)
+	// Reader could be used to:
 	// - switch or add channels
 	// - send chat messages
 	// - update following integrity mismatch
-	// go c.Reader(socket.TeamHub)
 }
 
 func TeamIntegrity(w http.ResponseWriter, r *http.Request) {

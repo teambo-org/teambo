@@ -4,7 +4,7 @@ Teambo.socket = (function (t) {
   var socket = function(data) {
     var self = this;
     t.object.extend(this, {
-      interval: null,
+      timeout: null,
       connect: null,
       connection: null
     });
@@ -12,7 +12,7 @@ Teambo.socket = (function (t) {
 
     this.stop = function() {
       self.connect = false;
-      clearInterval(self.interval);
+      clearTimeout(self.timeout);
       if(self.connection) {
         self.connection.close();
       }
@@ -20,15 +20,15 @@ Teambo.socket = (function (t) {
     };
 
     this.start = function() {
-      var failures = 0;
+      var failures = 1;
+      var backoff = function() {
+        return failures*3*1000;
+      }
       self.emit('start');
       self.connect = true;
       var connected = false;
       var wrapperfunc = function(){
-        if (typeof(WebSocket) === "function" && (!self.connection || self.connection.readyState > 0)) {
-          if(connected) {
-            return;
-          }
+        if (t.app.online && typeof(WebSocket) === "function" && (!self.connection || self.connection.readyState > 0) && !connected) {
           var uri = new Uri(window.location);
           var host = uri.host();
           var scheme = uri.protocol() == 'https' ? 'wss' : 'ws';
@@ -45,7 +45,7 @@ Teambo.socket = (function (t) {
           }
           self.connection.onmessage = function(evt) {
             t.app.online = true;
-            failures = 0;
+            failures = Math.min(failures, 10);
             if(evt.ts && typeof evt.ts === 'number') {
               evt.ts = '' + evt.ts;
             }
@@ -58,9 +58,9 @@ Teambo.socket = (function (t) {
             }
           }
         }
+        self.timeout = setTimeout(wrapperfunc, backoff());
       };
       wrapperfunc();
-      self.interval = setInterval(wrapperfunc, (failures < 5 ? 1 : 60)*1000);
     };
 
     t.event.extend(this);

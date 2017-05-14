@@ -123,7 +123,7 @@ Teambo.view = (function(t){
           setTimeout(function(){
             window.applicationCache.update();
             startCacheCheck();
-          }, t.app.online ? 60000 : 3000);
+          }, t.app.online ? 60000 : 10000);
         }
       };
       if(window.applicationCache.status === 3) {

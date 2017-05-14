@@ -6,12 +6,14 @@ function(t){
     return;
   }
 
-  var pollInterval = null;
+  var sockets = [];
 
   t.event.once('pre-nav', function() {
     t.socket.acct.stop();
     t.socket.inviteAcceptance.stop();
-    clearInterval(pollInterval);
+    sockets.forEach(function(socket) {
+      socket.stop();
+    });
   });
 
   var el = document.getElementById('teams');
@@ -48,17 +50,30 @@ function(t){
 
     t.socket.acct.start();
 
-    if(pollInterval === null) {
-      pollInterval = setInterval(function() {
-        var p = [];
-        teams.forEach(function(team) {
-          p.push(team.getSummary());
-        });
-        Promise.all(p).then(function() {
-          renderTeams(teams, orig_html);
-        });
-      }, 10*1000);
-    }
+    t.team.summaries = {};
+    teams.forEach(function(team) {
+      var el = document.getElementById('team-li-'+team.id);
+      var timeout;
+      var socket = new t.socket.teamSummary(team);
+      var n = t.team.summaries[team.id] ? t.team.summaries[team.id].logs : 0;
+      var update_el = function() {
+        if(!el) return;
+        console.log(el);
+        t.team.summaries[team.id] = {"logs": n};
+        el.innerHTML = t.view.renderTemplate('external/_team-li', team);
+      };
+      socket.on('message', function(e) {
+        if(e.type == "log") {
+          if(e.ts > team.last_seen) {
+            n++;
+            clearTimeout(timeout);
+            timeout = setTimeout(update_el, 100);
+          }
+        }
+      });
+      socket.start();
+      sockets.push(socket);
+    });
   };
 
   var findTeams = function() {
@@ -74,7 +89,7 @@ function(t){
         var p = [];
         teams.forEach(function(team) {
           p.push(team.isCached());
-          p.push(team.getSummary());
+          // p.push(team.getSummary());
           p.push(team.queue.init());
         });
         Promise.all(p).then(function() {
