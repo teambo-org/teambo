@@ -199,12 +199,14 @@ Teambo.model = (function(t){
 
     model.ids = function() {
       var ids = [];
-      model.all.sort(function(a, b) {
-        return a.opts.name > b.opts.name ? 1 : a.opts.name < b.opts.name ? -1 : 0;
-      }).forEach(function(m) {
+      model.all.sort(model.nameSort).forEach(function(m) {
         ids.push(m.id);
       });
       return ids;
+    };
+
+    model.nameSort = function(a, b) {
+      return a.opts.name > b.opts.name ? 1 : a.opts.name < b.opts.name ? -1 : 0;
     };
 
     model.getActiveId = function() {
@@ -561,15 +563,12 @@ Teambo.model = (function(t){
 
   model.integrity = function() {
     var ivs = [];
-    var fn = function(a, b) {
-      return a.id > b.id ? 1 : (a.id === b.id ? 0 : -1);
-    };
-    model.types.sort().forEach(function(type) {
-      model[type].all.sort(fn).forEach(function(model){
+    model.types.forEach(function(type) {
+      model[type].all.forEach(function(model){
         ivs.push(type + "-" + model.id + "-" + model.iv);
       });
     });
-    return ivs;
+    return ivs.sort();
   };
 
   model.integrityCheck = function(ivs) {
