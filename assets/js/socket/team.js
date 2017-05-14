@@ -121,7 +121,7 @@ Teambo.socket.team = (function (t) {
         t.app.replaceUrl('/team-inaccessible', {tid: t.team.current.id});
       });
     } else if(e.code === 404) {
-      t.app.gotoUrl('/team-missing', {tid: t.team.current.id});
+      t.app.replaceUrl('/team-missing', {tid: t.team.current.id});
     } else if(e.code === 500) {
       // do nothing I guess?
     }

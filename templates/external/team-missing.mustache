@@ -5,21 +5,9 @@
             <p>This team appears to be missing<br/><br/></p>
             {{#app.online}}
             <p class="ex">
-                If you believe you have received this message in error, you may issue a hard refresh
-                by pressing
-            </p>
-                <p class="team_name">Ctrl + Shift + R </p>
-            <p class="ex">
-                If that doesn't fix it, you were probably removed from the team. You can either return to the
+                The team was probably deleted. You can either return to the
                 account page and wait for this issue to resolve itself or you can remove the team
-                from your list of teams.
-            </p>
-            {{/app.online}}
-            {{^app.online}}
-            <p class="ex">
-                You must access a team at least once before using it while offline. If you wish to
-                view this team while offline, you need to find an internet connection and open the
-                team at least once. After that, it should be cached and browsable while offline.
+                from your list of teams{{^app.online}} the next time you are online{{/app.online}}.
             </p>
             {{/app.online}}
         </div>
