@@ -105,7 +105,7 @@ func (tb TeamBucket) RemoveByValue(id string) (err error) {
 		b, _ := tx.CreateBucketIfNotExists([]byte(tb.Name))
 
 		c := b.Cursor()
-		prefix := []byte("")
+		prefix := []byte(id)
 		for k, v := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
 			if string(v) == id {
 				c.Delete()
