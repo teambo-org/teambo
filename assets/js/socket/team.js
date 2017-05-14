@@ -29,7 +29,9 @@ Teambo.socket.team = (function (t) {
         }
         fulfill();
       };
-      if(e.type == "log") {
+      if(ignored.indexOf([e.model, e.id, e.iv].join('-')) >= 0) {
+        done();
+      } else if(e.type == "log") {
         t.event.all('model-event', e).then(function() {
           done();
         });
@@ -110,7 +112,7 @@ Teambo.socket.team = (function (t) {
     }
     if(e.type == "error") {
       handleError(e);
-    } else if(ignored.indexOf([e.model, e.id, e.iv].join('-')) < 0) {
+    } else {
       handleEvent(e);
     }
   });
