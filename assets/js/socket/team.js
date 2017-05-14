@@ -24,7 +24,9 @@ Teambo.socket.team = (function (t) {
   var processEvent = function(e) {
     return new Promise(function(fulfill, reject) {
       var done = function() {
-        t.team.current.lastSeen(e.ts);
+        if(t.team.current) {
+          t.team.current.lastSeen(e.ts);
+        }
         fulfill();
       };
       if(e.type == "log") {
@@ -106,10 +108,24 @@ Teambo.socket.team = (function (t) {
     if(e.team_id && e.team_id != t.team.current.id) {
       return;
     }
-    if(ignored.indexOf([e.model, e.id, e.iv].join('-')) < 0) {
+    if(e.type == "error") {
+      handleError(e);
+    } else if(ignored.indexOf([e.model, e.id, e.iv].join('-')) < 0) {
       handleEvent(e);
     }
   });
+
+  var handleError = function(e) {
+    if(e.code === 403) {
+      t.model.uncacheAll().then(function() {
+        t.app.replaceUrl('/team-inaccessible', {tid: t.team.current.id});
+      });
+    } else if(e.code === 404) {
+      t.app.gotoUrl('/team-missing', {tid: t.team.current.id});
+    } else if(e.code === 500) {
+      // do nothing I guess?
+    }
+  };
 
   return socket;
 

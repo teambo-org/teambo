@@ -68,7 +68,9 @@ Teambo.form = (function(t){
           error.style.display = 'block';
         },
         hide: function() {
-          error.style.display = 'none';
+          if(error) {
+            error.style.display = 'none';
+          }
         }
       },
       disable: function() {

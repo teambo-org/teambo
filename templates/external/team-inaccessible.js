@@ -10,15 +10,25 @@ function(t){
     t.app.gotoUrl('/account');
   }
 
+  var team = t.array.findByProperty(t.acct.current.teams, 'id', team_id);
+  if(!team) {
+    t.app.gotoUrl('/account');
+  }
+
   form.addEventListener("submit", function(e) {
     form.disable();
-    t.array.deleteByProperty(t.acct.current.teams, 'id', team_id);
-    t.acct.current.save().then(function() {
-      t.app.gotoUrl('/account');
-    }).catch(function(e){
-      form.enable();
-      form.error.msg("Team could not be remove", "Please try again when you are online");
-    });;
+    var hard_confirm = "Are you sure you wish to remove this team? You are the admin which " +
+      "means that if you remove this team from your account, there may be nobody left " +
+      "to administer the team."
+    if(!team.admin || confirm(hard_confirm)) {
+      t.array.deleteByProperty(t.acct.current.teams, 'id', team_id);
+      t.acct.current.save().then(function() {
+        t.app.gotoUrl('/account');
+      }).catch(function(e){
+        form.enable();
+        form.error.msg("Team could not be fully removed", "Please try again when you are online");
+      });
+    }
   });
 
 }

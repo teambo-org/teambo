@@ -37,8 +37,9 @@ Teambo.socket.inviteResponse = (function (t) {
         }
       });
       if(member) {
-        member.update({invite_key: ''});
-        t.view.emit('member-updated', {id: member.id, iv: member.iv, member: member});
+        member.update({invite_key: ''}).then(function(member) {
+          t.view.emit('member-updated', {id: member.id, iv: member.iv, member: member});
+        });
       }
       // Mark member invite expired
     } else {
@@ -49,8 +50,9 @@ Teambo.socket.inviteResponse = (function (t) {
         }
       });
       if(member) {
-        t.model.invite.accept(member, e.pubKey);
-        t.view.emit('member-updated', {id: member.id, iv: member.iv, member: member});
+        t.model.invite.accept(member, e.pubKey).then(function(member) {
+          t.view.emit('member-updated', {id: member.id, iv: member.iv, member: member});
+        });
       }
     }
     // Stop socket if no more pending invites

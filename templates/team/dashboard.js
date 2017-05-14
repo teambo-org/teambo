@@ -21,4 +21,12 @@ function(t){
     t.app.refresh({silent: true});
   });
 
+  t.view.on(['member-removed', 'member-updated'], function(e) {
+    t.app.refresh({silent: true});
+  });
+
+  t.view.on(['wiki-removed', 'wiki-updated'], function(e) {
+    t.app.refresh({silent: true});
+  });
+
 }

@@ -434,6 +434,13 @@ Teambo.model = (function(t){
           }
           m.uncache().then(function() {
             model.cacheIds().then(function(){
+              if(model.type == 'member' && m.opts.pubKey == t.acct.current.rsa.pubTPO().n && !t.acct.current.member()) {
+                t.model.uncacheAll().then(function() {
+                  t.app.replaceUrl('/team-inaccessible', {tid: t.team.current.id});
+                  fulfill();
+                });
+                return;
+              }
               e[model.type] = m;
               t.view.emit(model.type+'-removed', e);
               // TODO : move updateSideNav someplace else or replace it with something better
@@ -560,6 +567,14 @@ Teambo.model = (function(t){
   };
 
   model.types = types;
+
+  model.uncacheAll = function() {
+    var p = [];
+    model.types.forEach(function(type) {
+      p.push(model[type].uncacheAll());
+    })
+    return Promise.all(p);
+  };
 
   model.integrity = function() {
     var ivs = [];

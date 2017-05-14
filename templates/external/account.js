@@ -6,18 +6,10 @@ function(t){
     return;
   }
 
-  localforage.getItem('ikey-data').then(function(d) {
-    if(d && d.ikey) {
-      t.app.gotoUrl('/invite');
-    }
-  });
-
   t.event.once('pre-nav', function() {
     t.socket.acct.stop();
     t.socket.inviteAcceptance.stop();
   });
-
-  t.socket.acct.start();
 
   var el = document.getElementById('teams');
   var renderTeams = function(teams, orig_html) {
@@ -50,32 +42,44 @@ function(t){
       anchors[0].focus();
     }
     document.getElementById('team-new').style.display = "block";
+
+    t.socket.acct.start();
   };
 
-  t.team.findAll().then(function(teams) {
-    var orig_html = el.innerHTML;
-    if(teams.length) {
-      var p = [];
-      teams.forEach(function(team) {
-        p.push(team.isCached());
-      });
-      Promise.all(p).then(function() {
-        renderTeams(teams, orig_html);
-      }).catch(function() {
-        el.innerHTML = t.view.renderTemplate('external/_teams-loading');
+  var findTeams = function() {
+    t.team.findAll().then(function(teams) {
+      var orig_html = el.innerHTML;
+      if(teams.length) {
         var p = [];
         teams.forEach(function(team) {
-          p.push(team.init);
+          p.push(team.isCached());
         });
-        logo.classList.add('spinner');
-        t.promise.serial(p).then(function() {
+        Promise.all(p).then(function() {
           renderTeams(teams, orig_html);
-        }).catch(function(e) {
-          renderTeams(teams, orig_html);
+        }).catch(function() {
+          el.innerHTML = t.view.renderTemplate('external/_teams-loading');
+          var p = [];
+          teams.forEach(function(team) {
+            p.push(team.init);
+          });
+          logo.classList.add('spinner');
+          t.promise.serial(p).then(function() {
+            renderTeams(teams, orig_html);
+          }).catch(function(e) {
+            renderTeams(teams, orig_html);
+          });
         });
-      });
+      } else {
+        renderTeams(teams, orig_html);
+      }
+    });
+  };
+
+  localforage.getItem('ikey-data').then(function(d) {
+    if(d && d.ikey) {
+      t.app.gotoUrl('/invite');
     } else {
-      renderTeams(teams, orig_html);
+      findTeams();
     }
   });
 

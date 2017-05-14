@@ -160,6 +160,7 @@ Teambo.acct = (function (t) {
 
   acct.wake = function () {
     var callback = function(auth) {
+      if(!auth) return Promise.resolve();
       return new Promise(function (fulfill, reject) {
         localforage.getItem(auth.hash).then(function (ct) {
           var data = t.crypto.decrypt(ct, auth.key);

@@ -79,7 +79,7 @@ func (tb TeamBucket) All() (o []TeamObject, err error) {
 
 func (tb TeamBucket) Exists(id string) (exists bool, err error) {
 	exists = false
-	db_team_view(tb.TeamId, func(tx *bolt.Tx) error {
+	err = db_team_view(tb.TeamId, func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(tb.Name))
 		if b == nil {
 			return nil
@@ -100,18 +100,15 @@ func (tb TeamBucket) Exists(id string) (exists bool, err error) {
 	return exists, nil
 }
 
-func (tb TeamBucket) RemoveByValue(id string) (err error) {
-	db_team_update(tb.TeamId, func(tx *bolt.Tx) error {
+func (tb TeamBucket) RemoveByValue(val string) (err error) {
+	err = db_team_update(tb.TeamId, func(tx *bolt.Tx) error {
 		b, _ := tx.CreateBucketIfNotExists([]byte(tb.Name))
-
-		c := b.Cursor()
-		prefix := []byte(id)
-		for k, v := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
-			if string(v) == id {
-				c.Delete()
+		b.ForEach(func(k, v []byte) error {
+			if string(v) == val {
+				b.Delete([]byte(k))
 			}
-		}
-
+			return nil
+		})
 		return nil
 	})
 	if err != nil {

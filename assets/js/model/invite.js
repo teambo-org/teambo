@@ -90,8 +90,8 @@ Teambo.model.invite = (function(t){
         if(xhr.status == 201) {
           member.opts.pubKey = pubKey;
           delete(member.opts['invite_key']);
-          member.save().then(function(){
-            fulfill(xhr);
+          member.save().then(function(member){
+            fulfill(member);
           });
         } else {
           reject(xhr);

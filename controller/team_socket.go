@@ -15,12 +15,8 @@ import (
 
 func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	team_id := r.FormValue("team_id")
+	mkey := r.FormValue("mkey")
 	ts := r.FormValue("ts")
-
-	_, err := auth_team(w, r)
-	if err != nil {
-		return
-	}
 
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", 405)
@@ -38,6 +34,43 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+
+	team, err := model.FindTeam(team_id)
+	if err != nil {
+		msg, _ := json.Marshal(map[string]interface{}{
+			"channel_id": team_id,
+			"code": 500,
+			"type": "error",
+			"msg": "Could not access team database",
+		})
+		ws.WriteMessage(websocket.TextMessage, msg)
+		return
+	}
+
+	if team.Id != team_id {
+		msg, _ := json.Marshal(map[string]interface{}{
+			"channel_id": team_id,
+			"code": 404,
+			"type": "error",
+			"msg": "Team could not be found",
+		})
+		ws.WriteMessage(websocket.TextMessage, msg)
+		return
+	}
+
+	member_id := team.GetMemberId(mkey)
+
+	if member_id == "" {
+		msg, _ := json.Marshal(map[string]interface{}{
+			"channel_id": team_id,
+			"code": 403,
+			"type": "error",
+			"msg": "You do not have access to this team",
+		})
+		ws.WriteMessage(websocket.TextMessage, msg)
+		return
+	}
+
 	c := socket.CreateConnection([]string{team_id}, ws)
 	if ts != "0" && ts != "" {
 		logs, err := model.TeamLogSince(team_id, ts)

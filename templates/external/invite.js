@@ -43,6 +43,9 @@ function(t){
     }).catch(function(xhr){
       if(xhr.status == 403) {
         form.error.msg("Email Address does not match", "Are you logged into the correct account?");
+      } else if(xhr.status == 404) {
+        localforage.removeItem('ikey-data');
+        t.app.gotoUrl('/account')
       } else {
         form.enable();
         var d = JSON.parse(xhr.responseText);

@@ -1,0 +1,19 @@
+<div class="external require-auth c">
+    <div id="logo" class="logo"></div>
+    <form name="remove_team" class="std ext" data-team_id="{{tid}}">
+        <div class="field first">
+            <p>Something went wrong<br/></p>
+            <p class="ex">
+                An error occured on the server. Your team could not be accessed. Your best course
+                of action is to wait and see if it comes back. Otherwise, you can remove the team.
+            </p>
+        </div>
+        <div class="field submit">
+            <a href="#/account" data-keybind="escape q"><i class="icon-angle-left"></i>Back to account</a>
+            <br/><br/>
+            {{^admin}}
+            <input type="submit" class="submit" value="Remove Team" />
+            {{/admin}}
+        </div>
+    </form>
+</div>

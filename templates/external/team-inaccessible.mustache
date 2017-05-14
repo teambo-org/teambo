@@ -1,15 +1,10 @@
 <div class="external require-auth c">
     <div id="logo" class="logo"></div>
-    <form name="remove_team" class="std ext" data-team_id="{{team_id}}">
+    <form name="remove_team" class="std ext" data-team_id="{{tid}}">
         <div class="field first">
-            <p>You no longer have access to this team.<br/></p>
-            <p class="ex">
-                If you believe you have received this message in error, you may issue a hard refresh
-                by pressing
-            </p>
-                <p class="team_name">Ctrl + Shift + R </p>
-            <p class="ex">
-                If that doesn't fix it, you were probably removed from the team. You can either return to the
+            <p>You no longer have access to this team<br/></p>
+            <p class="ex" id="msg">
+                Your access to the team has been revoked. You can either return to the
                 account page and wait for this issue to resolve itself or you can remove the team
                 from your list of teams.
             </p>
@@ -17,7 +12,7 @@
         <div class="field submit">
             <a href="#/account" data-keybind="escape q"><i class="icon-angle-left"></i>Back to account</a>
             <br/><br/>
-            <input type="submit" class="submit" value="Remove Team" />
+            <input type="submit" class="submit" id="remove_team" value="Remove Team" />
         </div>
     </form>
 </div>
