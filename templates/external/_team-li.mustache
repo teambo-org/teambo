@@ -1,6 +1,11 @@
 <li class="team" id="team-li-{{id}}">
     <a href="#{{url}}">
         <div class="i-wrap"><i class="icon-users"></i></div>
-        <div class="name"><div>{{opts.name}}</div></div>
+        <div class="name"><div>
+            {{opts.name}}
+            {{#isAdmin}}
+            <i class="icon-crown admin" title="You are the admin"></i>
+            {{/isAdmin}}
+        </div></div>
     </a>
 </li>

@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'teambo';
-  src: url('../font/teambo.eot?32647400');
-  src: url('../font/teambo.eot?32647400#iefix') format('embedded-opentype'),
-       url('../font/teambo.woff2?32647400') format('woff2'),
-       url('../font/teambo.woff?32647400') format('woff'),
-       url('../font/teambo.ttf?32647400') format('truetype'),
-       url('../font/teambo.svg?32647400#teambo') format('svg');
+  src: url('../font/teambo.eot?99245406');
+  src: url('../font/teambo.eot?99245406#iefix') format('embedded-opentype'),
+       url('../font/teambo.woff2?99245406') format('woff2'),
+       url('../font/teambo.woff?99245406') format('woff'),
+       url('../font/teambo.ttf?99245406') format('truetype'),
+       url('../font/teambo.svg?99245406#teambo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'teambo';
-    src: url('../font/teambo.svg?32647400#teambo') format('svg');
+    src: url('../font/teambo.svg?99245406#teambo') format('svg');
   }
 }
 */
@@ -110,9 +110,9 @@
 .icon-trash:before { content: '\e834'; } /* '' */
 .icon-asl:before { content: '\e835'; } /* '' */
 .icon-user-add:before { content: '\e836'; } /* '' */
-.icon-thumbs-up:before { content: '\e837'; } /* '' */
+.icon-arrows-cw:before { content: '\e837'; } /* '' */
 .icon-github-circled:before { content: '\e838'; } /* '' */
-.icon-grooveshark:before { content: '\e839'; } /* '' */
+.icon-cw:before { content: '\e839'; } /* '' */
 .icon-keyboard:before { content: '\e83a'; } /* '' */
 .icon-power:before { content: '\e83b'; } /* '' */
 .icon-picture:before { content: '\e83c'; } /* '' */
@@ -121,6 +121,7 @@
 .icon-check-1:before { content: '\e83f'; } /* '' */
 .icon-check-empty:before { content: '\e840'; } /* '' */
 .icon-minus-1:before { content: '\e841'; } /* '' */
+.icon-crown:before { content: '\e842'; } /* '' */
 .icon-adult:before { content: '\e843'; } /* '' */
 .icon-heart:before { content: '\e844'; } /* '' */
 .icon-plus-1:before { content: '\e845'; } /* '' */
@@ -134,7 +135,6 @@
 .icon-floppy:before { content: '\e84f'; } /* '' */
 .icon-giraffe:before { content: '\e850'; } /* '' */
 .icon-lock-open-alt:before { content: '\f075'; } /* '' */
-.icon-twitter:before { content: '\f099'; } /* '' */
 .icon-coffee:before { content: '\f0f4'; } /* '' */
 .icon-angle-left:before { content: '\f104'; } /* '' */
 .icon-angle-right:before { content: '\f105'; } /* '' */
