@@ -29,6 +29,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/invite/response":     controller.InviteResponse,
 	"/invite/acceptance":   controller.InviteAcceptance,
 	"/team":                controller.Team,
+	"/team/summary":        controller.TeamSummary,
 	"/team/integrity":      controller.TeamIntegrity,
 	"/team/remove":         controller.TeamRemove,
 	"/team/socket":         controller.TeamSocket,

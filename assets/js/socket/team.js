@@ -44,13 +44,13 @@ Teambo.socket.team = (function (t) {
           t.model.integrityCheck(ivs).then(function(iv_events){
             t.app.log('Applying ' + iv_events.length + ' updates from integrity check');
             events = events.concat(iv_events);
-            fulfill();
+            done();
           }).catch(function(e){
             reject();
           });
         } else {
           t.app.log('Integrity hash looks good');
-          fulfill();
+          done();
         }
       } else {
         fulfill();

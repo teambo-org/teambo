@@ -36,7 +36,7 @@ function(t){
     }
   });
   t.view.on(['bucket-removed', 'bucket-updated'], function(e) {
-    if(e.opts.bucket_id == t.model.bucket.current.id) {
+    if(e.id == t.model.item.current.opts.bucket_id) {
       t.app.refresh({silent: true});
     }
   });

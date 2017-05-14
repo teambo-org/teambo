@@ -148,7 +148,6 @@ Teambo.team = (function(t){
         return '/'+data.id;
       },
       lastSeen: function(ts) {
-        ts = parseInt(ts);
         if(ts && ts > self.last_seen || ts === 0) {
           self.last_seen = ts;
           self.cache();
@@ -179,6 +178,28 @@ Teambo.team = (function(t){
       },
       init: function() {
         return team.init(self.id);
+      },
+      getSummary: function() {
+        if(!self.last_seen) {
+          return Promise.resolve();
+        }
+        return new Promise(function(fulfill, reject) {
+          t.xhr.get('/team/summary', {
+            data: {
+              team_id: self.id,
+              mkey: self.mkey,
+              ts: self.last_seen
+            }
+          }).then(function(xhr) {
+            if(xhr.status == 200) {
+              team.summaries[self.id] = JSON.parse(xhr.responseText);
+            }
+            fulfill();
+          }).catch(fulfill);
+        });
+      },
+      summary: function() {
+        return team.summaries[self.id];
       }
     });
     var uncacheTeam = function() {
@@ -197,6 +218,8 @@ Teambo.team = (function(t){
     t.socket.team.stop();
     t.socket.inviteResponse.stop();
   };
+
+  team.summaries = {};
 
   team.schema = new t.schema({
     name:  { type: "string", required: true,  minLength: 1, maxLength: 256 },

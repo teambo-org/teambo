@@ -6,9 +6,12 @@ function(t){
     return;
   }
 
+  var pollInterval = null;
+
   t.event.once('pre-nav', function() {
     t.socket.acct.stop();
     t.socket.inviteAcceptance.stop();
+    clearInterval(pollInterval);
   });
 
   var el = document.getElementById('teams');
@@ -44,6 +47,18 @@ function(t){
     document.getElementById('team-new').style.display = "block";
 
     t.socket.acct.start();
+
+    if(pollInterval === null) {
+      pollInterval = setInterval(function() {
+        var p = [];
+        teams.forEach(function(team) {
+          p.push(team.getSummary());
+        });
+        Promise.all(p).then(function() {
+          renderTeams(teams, orig_html);
+        });
+      }, 10*1000);
+    }
   };
 
   var findTeams = function() {
@@ -53,6 +68,8 @@ function(t){
         var p = [];
         teams.forEach(function(team) {
           p.push(team.isCached());
+          p.push(team.getSummary());
+          p.push(team.queue.init());
         });
         Promise.all(p).then(function() {
           renderTeams(teams, orig_html);
@@ -64,6 +81,11 @@ function(t){
           });
           logo.classList.add('spinner');
           t.promise.serial(p).then(function() {
+            teams.forEach(function(team) {
+              if(!team.last_seen) {
+                team.lastSeen(t.time());
+              }
+            });
             renderTeams(teams, orig_html);
           }).catch(function(e) {
             renderTeams(teams, orig_html);

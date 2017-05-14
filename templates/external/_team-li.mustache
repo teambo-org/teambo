@@ -3,6 +3,22 @@
         <div class="i-wrap"><i class="icon-users"></i></div>
         <div class="name"><div>
             {{opts.name}}
+            {{#summary}}
+                {{#logs}}
+                <div class="summary logs">
+                    <i class="icon-download" title="{{logs}} Updates"></i>
+                    <span class="count">{{logs}}</span>
+                </div>
+                {{/logs}}
+            {{/summary}}
+            {{#queue}}
+                {{#length}}
+                <div class="summary actions">
+                    <i class="icon-upload" title="{{length}} Pending Actions"></i>
+                    <span class="count">{{length}}</span>
+                </div>
+                {{/length}}
+            {{/queue}}
             {{#isAdmin}}
             <i class="icon-crown admin" title="You are the admin"></i>
             {{/isAdmin}}

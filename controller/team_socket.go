@@ -4,13 +4,13 @@ import (
 	"../model"
 	"../socket"
 	// "../util"
-	// "fmt"
 	"github.com/gorilla/websocket"
-	"log"
 	"net/http"
 	"time"
 	"strings"
 	"encoding/json"
+	"log"
+	"fmt"
 )
 
 func TeamSocket(w http.ResponseWriter, r *http.Request) {
@@ -88,13 +88,13 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 		c.Write(websocket.TextMessage, socket.JsonMessage(team_id, map[string]interface{}{
 			"type": "integrity",
 			"hash": hash,
-			"ts": time.Now().UTC().UnixNano()/int64(time.Millisecond),
+			"ts": fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
 		}))
 	}
 
 	c.Write(websocket.TextMessage, socket.JsonMessage(team_id, map[string]interface{}{
 		"type": "timesync",
-		"ts": time.Now().UTC().UnixNano()/int64(time.Millisecond),
+		"ts": fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
 	}))
 
 	socket.TeamHub.Register <- c

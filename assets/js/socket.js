@@ -46,6 +46,9 @@ Teambo.socket = (function (t) {
           self.connection.onmessage = function(evt) {
             t.app.online = true;
             failures = 0;
+            if(evt.ts && typeof evt.ts === 'number') {
+              evt.ts = '' + evt.ts;
+            }
             try {
               var data = JSON.parse(evt.data);
               self.emit('message', data);

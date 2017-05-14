@@ -94,7 +94,6 @@ func Team(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(string(res_json)))
 }
 
-
 func TeamRemove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -136,4 +135,21 @@ func TeamRemove(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(204)
 	return
+}
+
+func TeamSummary(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	team_id := r.FormValue("team_id")
+	ts := r.FormValue("ts")
+
+	_, err := auth_team(w, r)
+	if err != nil {
+		return
+	}
+
+	res, _ := json.Marshal(map[string]interface{}{
+		"logs": model.TeamLogCount(team_id, ts),
+	})
+	w.Write([]byte(string(res)))
 }
