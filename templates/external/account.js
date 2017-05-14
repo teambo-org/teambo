@@ -62,9 +62,15 @@ function(t){
   };
 
   var findTeams = function() {
+    // return;
     t.team.findAll().then(function(teams) {
-      var orig_html = el.innerHTML;
+      var orig_html = '';
+      var welcome_el = document.getElementById('welcome');
+      if(welcome_el) {
+        var orig_html = el.innerHTML;
+      }
       if(teams.length) {
+        logo.classList.add('spinner');
         var p = [];
         teams.forEach(function(team) {
           p.push(team.isCached());
@@ -74,12 +80,10 @@ function(t){
         Promise.all(p).then(function() {
           renderTeams(teams, orig_html);
         }).catch(function() {
-          el.innerHTML = t.view.renderTemplate('external/_teams-loading');
           var p = [];
           teams.forEach(function(team) {
             p.push(team.init);
           });
-          logo.classList.add('spinner');
           t.promise.serial(p).then(function() {
             teams.forEach(function(team) {
               if(!team.last_seen) {

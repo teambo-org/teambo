@@ -7,8 +7,11 @@
     <div class="main">
         <div id="status"></div>
         <ul id="teams" class="teams">
+        {{#acct.current.teams}}
+        <li class="team">&nbsp;</li>
+        {{/acct.current.teams}}
         {{^acct.current.teams}}
-            <li class="placeholder">
+            <li class="placeholder" id="welcome">
                 <h3>Welcome to your new account</h3>
                 You can create a new team by clicking the link below or you can contact a member
                 of an existing team and ask them to invite you
