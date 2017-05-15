@@ -79,7 +79,7 @@
 #dashboard .right .account a { display: block; }
 #dashboard .right .account a:hover .icon-cog { opacity: 0.8; }
 
-#dashboard .right .workload { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 0; }
+#dashboard .right .workload { overflow-y: auto; position: absolute; top: 4em; left: 0; right: 0; bottom: 0; }
 #dashboard .right .workload i.nav { opacity: 0.2; }
 
 #dashboard .main div.left { float: left; width: 12em; height: 100%; position: relative; overflow: hidden; }
@@ -154,6 +154,7 @@
 #dashboard .main ul.buckets ul.items li a { padding: 0.3em 0.2em; }
 #dashboard .main ul.items i.plan-icon { float: right; margin-left: 0.1em; opacity: 0.5; }
 #dashboard .main ul.items i.member-icon { float: right; margin-left: 0.1em; opacity: 1; }
+#dashboard .main ul.items .date { float: right; font-size: 0.9em; opacity: 0.5; margin-right: 0.2em; }
 #dashboard .main ul.buckets { padding: 0; }
 #dashboard .main ul.buckets > li { margin-bottom: 1em; padding: 0; }
 #dashboard .main ul.buckets > li > a { position: relative; }
