@@ -18,7 +18,7 @@ function(t){
 
   t.view.autoselect.init('#main .autoselect', t.model.item.current);
 
-  t.view.toggle.init('ul.history');
+  t.view.history.init(t.model.item.current);
 
   t.view.on('item-removed', function(e) {
     if(e.id == t.model.item.current.id) {

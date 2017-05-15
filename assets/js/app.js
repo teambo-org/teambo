@@ -117,8 +117,8 @@ Teambo.app = (function(t){
               return;
           }
         }
-        t.app.trace(xhr);
-        t.app.gotoUrl('/team-unavailable', false, {tid: data.team_id});
+        t.app.trace(e);
+        t.app.gotoUrl('/account', false, {tid: data.team_id});
       });
     } else {
       nav();

@@ -168,6 +168,7 @@
 #dashboard .main .bucket-view ul.items.complete li { margin-bottom: 0; }
 
 #dashboard .main .dash ul.buckets ul.items li { list-style: none; }
+
 #dashboard .main nav { float: right; margin: -0.5em -0.5em 0 0; }
 #dashboard .main nav a { float: left; padding: 0 0.75em; line-height: 2em; }
 #dashboard .main nav .name { display: none; }
@@ -200,6 +201,9 @@
 #dashboard .main ul.history li div.diff { font-size: 0.9em; padding: 0.5em; }
 #dashboard .main ul.history p.toggle-target.open { padding: 0.4em 0.8em 0.5em; margin: 0.3em 0; }
 #dashboard .main ul.history p.patch { line-height: 1.35em; }
+#dashboard .main section.history .history-trigger {  }
+#dashboard .main section.history .history-target { display: none; }
+#dashboard .main section.history .history-target.open { display: block; }
 
 #dashboard .main .filter-status-incomplete .status-complete { display: none; }
 #dashboard .main form.filter select { margin-right: 0.5em; }
