@@ -62,6 +62,10 @@ Teambo.app = (function(t){
         if(logo) {
           logo.classList.add('spinner');
         }
+        if(t.team.current && data.team_id != t.team.current.id) {
+          t.app.reload();
+          return;
+        }
         p.push(new Promise(function(fulfill, reject) {
           t.team.init(data.team_id).then(function(team){
             t.view.set('team', team);
