@@ -3,7 +3,7 @@ package socket
 import (
 	// "fmt"
 	"github.com/gorilla/websocket"
-	"log"
+	// "log"
 	// "net/http"
 	"time"
 	"encoding/json"
@@ -91,8 +91,6 @@ func (h *hub) Run() {
 		case m := <-h.Broadcast:
 			if connections, ok := h.connections[m.channel_id]; ok {
 				for c := range connections {
-					log.Print("Sending Message: ")
-					log.Println(m)
 					select {
 					case c.send <- m:
 					default:
