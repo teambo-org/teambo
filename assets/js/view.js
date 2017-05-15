@@ -30,6 +30,9 @@ Teambo.view = (function(t){
     localTime : function() {
       return function(text, render) {
         var ts = parseInt(render(text)) - new Date().getTimezoneOffset() * 60 * 1000;
+        if(!ts) {
+          return;
+        }
         return new Date(ts).toISOString().slice(0, 16).replace('T', '&nbsp;&nbsp;');
       };
     }

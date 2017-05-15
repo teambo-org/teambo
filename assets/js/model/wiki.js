@@ -9,7 +9,7 @@ Teambo.model.wiki = (function(t){
         return '/'+t.team.current.id+'/wiki/'+self.id;
       },
       icon: function() {
-        return 'book';
+        return self.opts.parent_id ? 'angle-right' : 'book';
       },
       siblings: function() {
         return model.allByParent(self.opts.parent_id);
@@ -42,8 +42,8 @@ Teambo.model.wiki = (function(t){
 
   model.schema = new t.schema({
     parent_id: { type: 'string', required: false, minLength: 8, maxLength: 8, empty: true },
-    name:      { type: "string", required: true,  maxLength: 256 },
-    text:      { type: "text",   required: false, maxLength: 65535 }
+    name:      { type: "string", required: true,  maxLength: 256, searchable: true },
+    text:      { type: "text",   required: false, maxLength: 65535, searchable: true }
   });
 
   t.model.extend(model);

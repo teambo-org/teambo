@@ -77,10 +77,13 @@ Teambo.schema = (function(t){
         }
         return diff;
       },
-      rules: rules
+      rules: rules,
+      searchFields: function() {
+        return Object.keys(rules).filter(function(field){return !!rules[field].searchable;});
+      }
       // merge
     });
-  };
+  };;
 
   return schema;
 

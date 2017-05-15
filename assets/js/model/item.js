@@ -44,8 +44,8 @@ Teambo.model.item = (function(t){
   model.type = 'item';
 
   model.schema = new t.schema({
-    name:        { type: "string", required: true,  maxLength: 256 },
-    description: { type: "text",   required: false, maxLength: 65535 },
+    name:        { type: "string", required: true,  maxLength: 256, searchable: true },
+    description: { type: "text",   required: false, maxLength: 65535, searchable: true },
     bucket_id:   { type: "string", required: false, minLength: 8, maxLength: 8 },
     plan_id:     { type: "string", required: false, minLength: 8, maxLength: 8 },
     member_id:   { type: "string", required: false, minLength: 8, maxLength: 8 },

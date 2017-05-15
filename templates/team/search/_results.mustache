@@ -1,0 +1,90 @@
+<p class="up1c color-50"><strong class="color-70">{{result.total}}</strong> result{{result.total_inf}} from {{result.total_searched}} searched record{{result.total_searched_inf}}</p>
+{{#result.empty}}
+<p class="empty up1c">No Results</p>
+{{/result.empty}}
+<ul class="buckets">
+{{#result.has_item}}
+<li class="bucket hi-10 up3c result-item">
+    <a href="#{{team.url}}/buckets" class="hi-05">
+        <div class="info">{{result.count_item}} / {{result.total_item}}</div>
+        <i class="icon-archive"></i>
+        <span class="name">Items</span>
+    </a>
+    <ul class="items">
+    {{#result.item}}
+        {{>team/item/_li}}
+    {{/result.item}}
+    </ul>
+</li>
+{{/result.has_item}}
+{{#result.has_bucket}}
+<li class="bucket hi-10 up3c result-bucket">
+    <a href="#{{team.url}}/buckets" class="hi-05">
+        <i class="icon-folder"></i>
+        <div class="info">{{result.count_bucket}} / {{result.total_bucket}}</div>
+        <span class="name">Buckets</span>
+    </a>
+    <ul class="items">
+    {{#result.bucket}}
+        {{>team/bucket/_search-li}}
+    {{/result.bucket}}
+    </ul>
+</li>
+{{/result.has_bucket}}
+{{#result.has_plan}}
+<li class="bucket hi-10 up3c result-bucket">
+    <a href="#{{team.url}}/plan" class="hi-05">
+        <i class="icon-calendar-check-o"></i>
+        <div class="info">{{result.count_plan}} / {{result.total_plan}}</div>
+        <span class="name">Planning</span>
+    </a>
+    <ul class="items">
+    {{#result.plan}}
+        {{>team/plan/_search-li}}
+    {{/result.plan}}
+    </ul>
+</li>
+{{/result.has_plan}}
+{{#result.has_wiki}}
+<li class="bucket hi-10 up3c result-bucket">
+    <a href="#{{team.url}}/wiki" class="hi-05">
+        <i class="icon-book"></i>
+        <div class="info">{{result.count_wiki}} / {{result.total_wiki}}</div>
+        <span class="name">Wiki</span>
+    </a>
+    <ul class="items">
+    {{#result.wiki}}
+        {{>team/wiki/_search-li}}
+    {{/result.wiki}}
+    </ul>
+</li>
+{{/result.has_wiki}}
+{{#result.has_member}}
+<li class="bucket hi-10 up3c result-bucket">
+    <a href="#{{team.url}}/wiki" class="hi-05">
+        <i class="icon-users"></i>
+        <div class="info">{{result.count_member}} / {{result.total_member}}</div>
+        <span class="name">Members</span>
+    </a>
+    <ul class="items">
+    {{#result.member}}
+        {{>team/member/_search-li}}
+    {{/result.member}}
+    </ul>
+</li>
+{{/result.has_member}}
+{{#result.has_comment}}
+<li class="bucket hi-10 up3c result-bucket">
+    <a href="#{{team.url}}/wiki" class="hi-05">
+        <i class="icon-book"></i>
+        <div class="info">{{result.count_comment}} / {{result.total_comment}}</div>
+        <span class="name">Comments</span>
+    </a>
+    <ul class="items">
+    {{#result.comment}}
+        {{>team/comment/_search-li}}
+    {{/result.comment}}
+    </ul>
+</li>
+{{/result.has_comment}}
+</ul>

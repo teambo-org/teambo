@@ -104,9 +104,9 @@ var jsinit = []string{
 var css = []string{
 	"/css/font.css",
 	"/css/font-semibold.css",
-	"/css/teambo-embedded.css",
 	"/css/default.css",
 	"/css/dashboard.css",
+	"/font/teambo/css/teambo-embedded.css",
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {

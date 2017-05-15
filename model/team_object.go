@@ -31,9 +31,11 @@ func (o TeamObject) Save() (err error) {
 		fmt.Println(err)
 		return err
 	}
-	integrity, err := TeamIntegrityCache.Find(o.TeamId)
-	if err == nil {
-		integrity.Insert(o.Bucket, o.Id, o.Ciphertext)
+	if o.Ciphertext != "new" {
+		integrity, err := TeamIntegrityCache.Find(o.TeamId)
+		if err == nil {
+			integrity.Insert(o.Bucket, o.Id, o.Ciphertext)
+		}
 	}
 	return nil
 }
@@ -53,9 +55,11 @@ func (o TeamObject) Remove() (err error) {
 		fmt.Println(err)
 		return err
 	}
-	integrity, err := TeamIntegrityCache.Find(o.TeamId)
-	if err == nil {
-		integrity.Remove(o.Bucket, o.Id)
+	if o.Ciphertext != "new" {
+		integrity, err := TeamIntegrityCache.Find(o.TeamId)
+		if err == nil {
+			integrity.Remove(o.Bucket, o.Id)
+		}
 	}
 	return nil
 }

@@ -562,8 +562,6 @@ Teambo.model = (function(t){
         });
       });
     });
-
-    t.view.set(model.type, model);
   };
 
   model.types = types;
@@ -574,6 +572,36 @@ Teambo.model = (function(t){
       p.push(model[type].uncacheAll());
     })
     return Promise.all(p);
+  };
+
+  model.searchAll = function(q) {
+    var ret = {};
+    var total = 0;
+    var total_searched = 0
+    model.types.forEach(function(type) {
+      var models = [];
+      var fields = model[type].schema.searchFields();
+      model[type].all.forEach(function(m) {
+        for(var i in fields) {
+          if(m.id.indexOf(q) >= 0 || (m.opts[fields[i]] && m.opts[fields[i]].indexOf(q) >= 0)) {
+            models.push(m);
+            break;
+          }
+        }
+      });
+      ret[type] = models;
+      ret['has_'+type] = !!models.length;
+      ret['count_'+type] = models.length;
+      ret['total_'+type] = model[type].all.length;
+      total              = total + models.length;
+      total_searched     = total_searched + model[type].all.length;
+    });
+    ret.total = total;
+    ret.empty = total === 0;
+    ret.total_searched = total_searched;
+    ret.total_inf = total === 1 ? '' : 's';
+    ret.total_searched_inf = total_searched === 1 ? '' : 's';
+    return ret;
   };
 
   model.integrity = function() {

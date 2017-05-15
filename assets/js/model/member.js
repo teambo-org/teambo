@@ -38,9 +38,9 @@ Teambo.model.member = (function(t){
   model.schema = new t.schema({
     invite_key:  { type: 'string', required: false, maxLength: 16 },
     pubKey:      { type: 'string', required: false, maxLength: 512, editable: false },
-    email:       { type: 'string', required: true,  maxLength: 256, editable: false },
-    name:        { type: 'string', required: false, maxLength: 256 },
-    description: { type: 'text',   required: false, maxLength: 2048 },
+    email:       { type: 'string', required: true,  maxLength: 256, editable: false, searchable: true },
+    name:        { type: 'string', required: false, maxLength: 256 , searchable: true},
+    description: { type: 'text',   required: false, maxLength: 2048, searchable: true },
     icon:        { type: 'string', required: false, maxLength: 32 }
   });
 

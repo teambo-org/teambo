@@ -1,0 +1,17 @@
+<li class="member" id="member-li-{{id}}">
+    <a href="#{{url}}">
+        {{^opts.pubKey}}
+            {{#opts.invite_key}}
+            <span class="pending">Pending</span>
+            {{/opts.invite_key}}
+            {{^opts.invite_key}}
+            <span class="pending">Expired</span>
+            {{/opts.invite_key}}
+        {{/opts.pubKey}}
+        <div class="img"><i class="{{icon}}"></i></div>
+        <span class="name">{{opts.name}}</span>
+        {{#opts.description}}
+        <p class="description color-50">{{opts.description}}</p>
+        {{/opts.description}}
+    </a>
+</li>

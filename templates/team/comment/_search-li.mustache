@@ -1,0 +1,15 @@
+<li class="item" id="comment-li-{{id}}">
+    <a href="#{{#parentModel}}{{url}}{{/parentModel}}..comment-{{id}}" class="dim">
+    {{#member}}
+        <div class="img"><i class="{{icon}} color-30"></i></div>
+        <span class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></span>
+    {{/member}}
+    {{^member}}
+        <div class="img"><i class="icon-user-1"></i></div>
+        <span class="name">{{opts.member_id}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></span>
+    {{/member}}
+    {{#opts.text}}
+        <p class="description color-50">{{opts.text}}</p>
+    {{/opts.text}}
+    </a>
+</li>
