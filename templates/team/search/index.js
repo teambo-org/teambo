@@ -15,7 +15,6 @@ function(t){
   if(q) {
     form.disable();
     var result = t.model.searchAll(q);
-    console.log(result);
     results_el.innerHTML = t.view.renderTemplate('team/search/_results', {result: result});
     form.enable();
   }
