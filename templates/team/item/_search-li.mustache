@@ -15,5 +15,8 @@
             {{/isMe}}
         {{/member}}
         <span class="name">{{opts.name}}</span>
+        {{#opts.description}}
+        <p class="description color-50">{{opts.description}}</p>
+        {{/opts.description}}
     </a>
 </li>
