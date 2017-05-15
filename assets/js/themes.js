@@ -18,24 +18,6 @@ Teambo.themes = (function(){
       "chat":  {"bg": h2r(h3, 0.5*s, 0.1*v), "hi": h2r(h3, 1*s, 1*v), "color": "255,255,255"}
     };
   };
-  var deep = function(h, s, v) {
-    s = s || 1;
-    v = v || 1;
-    var h2 = h;
-    var h3 = h;
-    return {
-      "main":  {"bg": h2r(h,  0.9*s, 0.2*v), "hi": h2r(h,  0.8*s,  1*v), "color": "255,255,255"},
-      "right": {"bg": h2r(h2, 0.9*s, 0.2*v), "hi": h2r(h2, 0.8*s,  1*v), "color": "255,255,255"},
-      "chat":  {"bg": h2r(h3, 0.9*s, 0.2*v), "hi": h2r(h3, 0.75*s, 1*v), "color": "255,255,255"}
-    };
-  };
-  var mix = function(method, h1, s1, h2, s2) {
-    return {
-      "main":  {"bg": h2r(h1, s1, 0.15),  "hi": h2r(h2,  s2,  1), "color": "255,255,255"},
-      "right": {"bg": method(h1, s1).right.bg, "hi": method(h2, s2).right.hi, "color": "255,255,255"},
-      "chat":  {"bg": method(h1, s1).chat.bg,  "hi": method(h2, s2).chat.hi, "color": "255,255,255"}
-    }
-  };
   var full = function(h1, s1, v1, h2, s2, v2) {
     return {
       "main":  {"bg": h2r(h1, s1, v1), "hi": h2r(h2, s2, v2), "color": "255,255,255"},
@@ -43,8 +25,27 @@ Teambo.themes = (function(){
       "chat":  {"bg": h2r(h1, 0.9*s1, v1), "hi": h2r(h2, s2, v2), "color": "255,255,255"}
     }
   };
+  var full2 = function(h1, s1, v1, h2, s2, v2) {
+    return {
+      "main":  {"bg": h2r(h1, s1, v1), "hi": h2r(h2, s2, v2), "color": "255,255,255"},
+      "right": {"bg": h2r(h1, 0.9*s1, 1*v1), "hi": h2r(h2, s2, v2), "color": "255,255,255"},
+      "chat":  {"bg": h2r(h1, 0.9*s1, v1), "hi": h2r(h2, s2, v2), "color": "255,255,255"}
+    }
+  };
 
   return {
+    'Blood Orange' : full(0,   1,   0.14, 30,  1,   1),
+    'Soft Leather' : full(30,  0.9, 0.11, 30,  0.6, 1),
+    'Forest'       : full(50,  1,   0.07, 90,  1,   1),
+    'Wheatgrass'   : full(110, 1,   0.13, 70,  1,   1),
+    'Permafrost'   : full(180, 1,   0.12, 160, 0.9, 1),
+    'Moonlight'    : full(210, 1,   0.11, 210, 0.5, 1),
+    'Ocean Blue'   : full(210, 1,   0.14, 180, 1,   1),
+    'Navy Blue'    : full(240, 0.9, 0.14, 210, 0.7, 1),
+    'Black Light'  : full2(270, 1, 0.13, 240, 0.7, 1),
+    'Lavender'     : full(270, 0.8, 0.13, 270, 0.5, 1),
+    'Grape Soda'   : full(270, 0.8, 0.13, 300, 0.9, 0.9),
+
     'Slate Red'        : slate(0,   0.8),
     'Slate Orange'     : slate(30,  0.9),
     'Slate Yellow'     : slate(60,  0.9),
@@ -57,15 +58,6 @@ Teambo.themes = (function(){
     'Slate Violet'     : slate(270, 0.7),
     'Slate Magenta'    : slate(300, 0.8),
     'Slate Crimson'    : slate(330, 1),
-
-    'Blood Orange' : full(0, 1, 0.14, 30, 1, 1),
-    'Soft Leather' : full(30, 0.9, 0.11, 30, 0.6, 1),
-    'Spring Green' : full(120, 1, 0.14,  60, 1, 1),
-    'Ocean Blue'   : mix(deep, 210, 1,   180, 1),
-    'Midnight'     : full(210, 1, 0.1,  200, 0.5, 1),
-    'Permafrost'   : full(180, 1, 0.12, 160, 0.9, 1),
-    'Lavender'     : full(270, 0.8, 0.13,  270, 0.5, 1),
-    'Grape Soda'   : full(270, 0.8, 0.13, 300, 0.9, 0.9),
 
     Default : slate(180)
   };
