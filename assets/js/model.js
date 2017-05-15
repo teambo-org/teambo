@@ -583,7 +583,7 @@ Teambo.model = (function(t){
       var fields = model[type].schema.searchFields();
       model[type].all.forEach(function(m) {
         for(var i in fields) {
-          if(m.id.indexOf(q) >= 0 || (m.opts[fields[i]] && m.opts[fields[i]].indexOf(q) >= 0)) {
+          if(m.id.indexOf(q) >= 0 || (m.opts[fields[i]] && m.opts[fields[i]].toLowerCase().indexOf(q) >= 0)) {
             models.push(m);
             break;
           }
