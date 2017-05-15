@@ -2,7 +2,6 @@
     <a href="#{{url}}">
         <div class="i-wrap"><i class="icon-users"></i></div>
         <div class="name"><div>
-            {{opts.name}}
             {{#summary}}
                 {{#logs}}
                 <div class="summary logs">
@@ -22,6 +21,7 @@
             {{#isAdmin}}
             <i class="icon-crown admin" title="You are the admin"></i>
             {{/isAdmin}}
+            {{opts.name}}
         </div></div>
     </a>
 </li>
