@@ -101,20 +101,20 @@ Teambo.app = (function(t){
       app.loaded = true;
     };
     if(p.length) {
-      Promise.all(p).then(nav).catch(function(xhr) {
-        if(xhr && xhr.status) {
-          if(xhr.status === 403) {
+      Promise.all(p).then(nav).catch(function(e) {
+        if(e && e.status) {
+          if(e.status === 403) {
             t.model.uncacheAll().then(function() {
               t.app.replaceUrl('/team-inaccessible', {tid: t.team.current.id});
+              return;
             });
-          } else if(xhr.status === 404) {
+          } else if(e.status === 404) {
             t.app.replaceUrl('/team-missing', {tid: data.team_id});
-          } else {
-            t.app.replaceUrl('/team-unavailable', {tid: data.team_id});
+              return;
           }
-        } else {
-          t.app.replaceUrl('/team-unavailable', {tid: data.team_id});
         }
+        t.app.trace(xhr);
+        t.app.gotoUrl('/team-unavailable', false, {tid: data.team_id});
       });
     } else {
       nav();
