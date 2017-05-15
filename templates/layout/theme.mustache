@@ -115,19 +115,19 @@
 
 #dashboard .chat input.text:focus { outline: none; background: rgba({{chat.hi}}, 0.15); }
 
-{{#item.statuses}}
+{{#model.item.statuses}}
 #dashboard .main .filter-status-{{key}} [class*=status-] { display: none; }
 #dashboard .main .filter-status-{{key}} .status-{{key}} { display: block; }
-{{/item.statuses}}
+{{/model.item.statuses}}
 
-{{#plan.all}}
+{{#model.plan.all}}
 #dashboard .main .filter-plan_id-{{id}} ul ul li:not(.plan_id-{{id}}) { display: none; }
-{{/plan.all}}
+{{/model.plan.all}}
 #dashboard .main .filter-plan_id-none ul ul li:not(.plan_id-) { display: none; }
 
-{{#member.all}}
+{{#model.member.all}}
 #dashboard .main .filter-member_id-{{id}} ul ul li:not(.member_id-{{id}}) { display: none; }
-{{/member.all}}
+{{/model.member.all}}
 #dashboard .main .filter-member_id-none ul ul li:not(.member_id-) { display: none; }
 
 #date_selector { background: rgba({{main.bg}}, 1); color: rgba({{main.color}}, 0.7); }
