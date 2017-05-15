@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"strings"
+	"sync"
 	// "log"
 )
 
@@ -17,9 +18,12 @@ type teamIntegrity struct {
 	Expires int64
 	Cache   string
 	bucket_names map[string]bool
+	mutex   *sync.Mutex
 }
 
 func (ti *teamIntegrity) Init() (err error) {
+	ti.mutex = &sync.Mutex{}
+	ti.mutex.Lock()
 	ti.bucket_names = map[string]bool{}
 	err = db_team_view(ti.TeamId, func(tx *bolt.Tx) error {
 		for _, bucket_name := range ti.Buckets {
@@ -37,6 +41,7 @@ func (ti *teamIntegrity) Init() (err error) {
 		}
 		return nil
 	})
+	ti.mutex.Unlock()
 	if err != nil {
 		return err
 	}
@@ -50,7 +55,9 @@ func (ti *teamIntegrity) ExpirationReset() {
 }
 
 func (ti *teamIntegrity) Hash() string {
+	ti.mutex.Lock()
 	if ti.Cache != "" {
+		ti.mutex.Unlock()
 		return ti.Cache
 	}
 	hasher := sha256.New()
@@ -58,6 +65,7 @@ func (ti *teamIntegrity) Hash() string {
 		hasher.Write([]byte(k))
 	}
 	ti.Cache = base64.StdEncoding.EncodeToString(hasher.Sum(nil))
+	ti.mutex.Unlock()
 	ti.Expires = time.Now().UnixNano() + ti.TTL
 	return ti.Cache
 }
@@ -70,6 +78,7 @@ func (ti *teamIntegrity) Insert(model string, key string, ct string) {
 	iv := parts[0]
 	id := model + "-" + key
 	new_k := id + "-" + iv
+	ti.mutex.Lock()
 	for i, k := range ti.Ivs {
 		if strings.HasPrefix(k, id) {
 			// replace
@@ -82,6 +91,7 @@ func (ti *teamIntegrity) Insert(model string, key string, ct string) {
 		}
 	}
 	ti.Cache = ""
+	ti.mutex.Unlock()
 	ti.ExpirationReset()
 	return
 }
@@ -91,6 +101,7 @@ func (ti *teamIntegrity) Remove(model string, key string) {
 		return
 	}
 	id := model + "-" + key
+	ti.mutex.Lock()
 	for i, k := range ti.Ivs {
 		if strings.HasPrefix(k, id) {
 			// remove
@@ -102,6 +113,7 @@ func (ti *teamIntegrity) Remove(model string, key string) {
 		}
 	}
 	ti.Cache = ""
+	ti.mutex.Unlock()
 	ti.ExpirationReset()
 	return
 }

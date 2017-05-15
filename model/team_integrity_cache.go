@@ -30,7 +30,6 @@ func (tic *teamIntegrityCache) Find(team_id string) (ti *teamIntegrity, err erro
 			Buckets: tic.Buckets,
 			TTL:     tic.TTL,
 		}
-		// RACE CONDITION?
 		err = new_ti.Init()
 		if err != nil {
 			return ti, err
