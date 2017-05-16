@@ -23,7 +23,7 @@
     </div>
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/buckets" class="nav-section">
+        <a href="#{{team.url}}/buckets" class="nav-section" data-keybind="i">
             <div class="img"><i class="icon-archive"></i></div>
             <div class="name">Items</div>
         </a>
@@ -78,6 +78,7 @@
         </a>
     </div>
     -->
+    {{#team.isAdmin}}
     <div class="section hi-10">
         <i class="icon-down-open-1 nav color-hi-40"></i>
         <a href="#{{team.url}}/edit" class="nav-section">
@@ -85,5 +86,6 @@
             <div class="name">Settings</div>
         </a>
     </div>
+    {{/team.isAdmin}}
 </div>
 <div id="status"></div>
