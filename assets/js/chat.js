@@ -1,4 +1,5 @@
 Teambo.chat = (function(t){
+  "use strict";
 
   var toggle = function(state) {
     var dash = document.getElementById('dashboard'),
