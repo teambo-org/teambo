@@ -7,18 +7,28 @@ function(t){
   var vkey = form.getAttribute("data-vkey");
   var email;
   var pass;
+  var ikey;
+
+  localforage.getItem('ikey-data').then(function(d) {
+    if(d && d.ikey) {
+      ikey = d.ikey;
+    }
+  });
+
+  document.getElementById('signup').onclick = function(e) {
+    e.preventDefault();
+    t.app.replaceUrl('/signup', {
+      ikey: ikey
+    });
+  };
 
   var form_submit_login = function(email, pass) {
     var password_incorrect = function() {
       form.enable();
-      form.error.msg('Incorrect email address or password', 'If you forgot your password, you may <a href="#/reset" id="reset" class="create-account">Create a New Account<i class="icon-angle-right"></i></a>');
+      form.error.msg('Incorrect email address or password', 'If you forgot your password, you may want to<br/><a href="#/reset" id="reset" class="create-account">Create a New Account<i class="icon-angle-right"></i></a>');
       document.getElementById('reset').onclick = function(e) {
         e.preventDefault();
-        t.app.replaceUrl('/verification', {
-          reset: true,
-          email: email,
-          pass: pass
-        });
+        t.app.replaceUrl('/verification', {reset: true, email: email, pass: pass, ikey: ikey});
       };
     }
     t.acct.auth(email, pass).then(function(xhr){
@@ -84,7 +94,7 @@ function(t){
         localforage.removeItem('verification');
         t.app.gotoUrl('/account');
       }).catch(function(e){
-        localforage.removeItem('verification');
+        // localforage.removeItem('verification');
         display_verification_msg();
       });
     } else {

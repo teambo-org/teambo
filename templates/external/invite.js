@@ -25,6 +25,16 @@ function(t){
     });
   }
 
+  var decline = document.getElementById('decline');
+  if(decline) {
+    decline.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      localforage.removeItem('ikey-data');
+      t.app.gotoUrl('/account');
+    });
+  }
+
   form.addEventListener('submit', function(e){
     localforage.removeItem('ikey-data')
     form.disable();

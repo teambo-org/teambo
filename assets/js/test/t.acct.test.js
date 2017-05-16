@@ -11,8 +11,7 @@ describe("Account", function() {
   Teambo.acct.deAuth();
 
   it("Can be created", function(done) {
-    var bypass = true;
-    Teambo.acct.verification.send(email, pass, bypass).then(function(){
+    Teambo.acct.verification.send(email, pass, {bypass: true}).then(function(){
       expect(Teambo.acct.current).not.toBe(null);
       done();
     }).catch(function(e){

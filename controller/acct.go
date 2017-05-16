@@ -64,6 +64,7 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 	}
 	if acct.Akey == "" || acct.Ciphertext == "new" {
 		error_out(w, "Account not found", 404)
+		return
 	}
 
 	res, _ := json.Marshal(acct)

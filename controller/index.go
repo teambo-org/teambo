@@ -216,7 +216,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 	p := Page{}
 	if util.Config("static.min") == "true" {
 		p = Page{
-			JSLIB:   hash_version(jslib),
+			JSLIB:   []string{"/lib.js?v=" + js_min_lib_version(jslib)},
 			JSASYNC: hash_version(jsasync),
 			JSAPP:   []string{"/min.js?v=" + js_min_version(jsapp)},
 			JSINIT:  []string{},
@@ -349,6 +349,16 @@ func css_min_version() string {
 		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, hasher)
 	}
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func js_min_lib_version(js []string) string {
+	hasher := md5.New()
+	for _, v := range js {
+		src, _ := os.Open("assets" + v)
+		jsmin.Run(src, hasher)
+	}
+	append_js_init(hasher)
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 

@@ -255,7 +255,7 @@ Teambo.acct = (function (t) {
   };
 
   acct.verification = {
-    send : function (email, pass, bypass, beta) {
+    send : function (email, pass, opts) {
       if(!email || !pass) {
         return Promise.reject();
       }
@@ -265,10 +265,16 @@ Teambo.acct = (function (t) {
       return new Promise(function (fulfill, reject) {
         var xhr_data = {
           email: email,
-          akey:  akey,
-          beta: beta
+          akey:  akey
         };
-        if(bypass) {
+        if(opts.beta) {
+          xhr_data.beta = opts.beta;
+        }
+        if(opts.ikey && opts.ichk) {
+          xhr_data.ikey = opts.ikey;
+          xhr_data.ihash = t.crypto.sha(opts.ikey+opts.ichk+email);
+        }
+        if(opts.bypass) {
           xhr_data.bypass = 'true';
         }
         t.xhr.post('/acct/verification', {
@@ -276,7 +282,7 @@ Teambo.acct = (function (t) {
         }).then(function (xhr){
           var data = JSON.parse(xhr.responseText);
           if(xhr.status == 201) {
-            if(bypass && 'vkey' in data) {
+            if(opts.bypass && 'vkey' in data) {
               acct.verification.confirm(data.vkey, email, pass).then(function(){
                 fulfill(xhr);
               });

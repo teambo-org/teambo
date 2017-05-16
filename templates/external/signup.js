@@ -4,6 +4,7 @@ function(t){
   t.app.editing = true;
 
   var form = new t.form(document.auth);
+  var ikey = form.dataset.ikey;
   var email;
   var pass;
 
@@ -14,7 +15,7 @@ function(t){
         t.app.afterAuth = null;
         t.app.gotoUrl(after_auth);
       } else if(xhr.status === 404) {
-        t.app.replaceUrl('/verification', {email: email, pass: pass});
+        t.app.replaceUrl('/verification', {email: email, pass: pass, ikey: ikey});
       } else {
         form.error.msg('Unknown error', "Please try again in a few minutes.");
       }

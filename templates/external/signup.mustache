@@ -1,6 +1,6 @@
 <div class="external require-no-auth c">
     <div id="logo" class="logo" alt="Teambo"></div>
-    <form id="auth" name="auth" method="POST" class="std ext">
+    <form id="auth" name="auth" method="POST" class="std ext" data-ikey="{{ikey}}">
         <div id="status"></div>
         <div class="field">
             <input type="email" class="text required" name="email" placeholder="Email Address" />
@@ -16,7 +16,7 @@
     <div class="subtext" id="onboarding">
         <p>
             Enter your email address and choose a password<br/><br/>
-            <a href="#/login" class="create-account"><i class="icon-angle-left"></i>Back to Login</a>
+            <a href="#/login" class="create-account force"><i class="icon-angle-left"></i>Back to Login</a>
         </p>
     </div>
 </div>

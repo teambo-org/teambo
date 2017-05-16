@@ -15,7 +15,10 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	vkey := r.FormValue("vkey")
 	bypass := r.FormValue("bypass")
 	beta_code := r.FormValue("beta")
+	ikey := r.FormValue("ikey")
+	ihash := r.FormValue("ihash")
 
+	beta := model.BetaCode{}
 	err := errors.New("")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -52,15 +55,27 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if beta_code == "" {
-			error_out(w, "Beta code required", 400)
-			return
-		}
+		if ikey != "" && ihash != "" {
+			invite, _ := model.InviteFind(ikey)
+			if invite.Hash == "" {
+				error_out(w, "Invite Has Expired", 404)
+				return
+			}
+			if invite.Hash != ihash {
+				error_out(w, "Invalid Invite Code", 403)
+				return
+			}
+		} else {
+			if beta_code == "" {
+				error_out(w, "Beta code required", 400)
+				return
+			}
 
-		beta, _ := model.FindBetaCode(beta_code)
-		if beta.Found == "" {
-			error_out(w, "Invalid Beta Code", 403)
-			return
+			beta, _ := model.FindBetaCode(beta_code)
+			if beta.Found == "" {
+				error_out(w, "Invalid Beta Code", 403)
+				return
+			}
 		}
 
 		// TODO : Add rate limiting for acct verification emails
@@ -82,6 +97,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				"vkey":    vkey,
 			})
 		} else {
+			// TODO: move emails to background job
 			subject := "Teambo Account Verification"
 			url := scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey
 			body := "Click the link below to verify your new Teambo account:<br/><br/><a href='" + url + "'>" + url + "</a>"
@@ -94,7 +110,9 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				"success": true,
 			})
 		}
+		if(beta.Code != "" && beta.Found != "") {
+			beta.Delete()
+		}
 		http.Error(w, string(msg), 201)
-		beta.Delete()
 	}
 }
