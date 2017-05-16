@@ -4,10 +4,10 @@ function(t){
   t.app.editing = true;
 
   var form = new t.form(document.team_new);
-  form.name.focus();
+  form.team_name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var name = form.name.value;
+    var name = form.team_name.value;
     t.team.create(name).then(function(team){
       t.app.gotoUrl('/'+team.id);
     }).catch(function(e){

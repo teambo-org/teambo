@@ -3,8 +3,6 @@ package controller
 import (
 	"../model"
 	"../util"
-	"crypto/sha256"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -13,7 +11,6 @@ import (
 
 func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
-	id := r.FormValue("id")
 	akey := r.FormValue("akey")
 	vkey := r.FormValue("vkey")
 	bypass := r.FormValue("bypass")
@@ -22,57 +19,42 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	if (email == "" && id == "") || akey == "" {
-		error_out(w, "Email and password required", 400)
-		return
-	}
-
 	if vkey != "" {
-		v, err := model.FindAcctVerification(id, akey, vkey)
+		v, err := model.FindAcctVerification(akey)
 		if err != nil {
 			error_out(w, "Verification could not be completed", 500)
 			return
 		}
-		if v.Id == "" {
+		if v.Vkey != vkey {
 			error_out(w, "Verification has expired", 404)
 			return
 		}
-		_, err = model.CreateAcct(id, akey, "new")
+		_, err = model.CreateAcct(akey, "new")
 		if err != nil {
 			error_out(w, "Account could not be created", 500)
 			return
 		}
-		err = v.Delete()
-		if err != nil {
-			error_out(w, "Verification could not be deleted", 500)
-			return
-		}
+		v.Delete()
 		msg, _ := json.Marshal(map[string]bool{
 			"success": true,
 		})
 		http.Error(w, string(msg), 200)
 	} else {
-		hash := sha256.New()
-		hash.Write([]byte(email))
-		id = base64.StdEncoding.EncodeToString(hash.Sum(nil))
+		if (email == "") || akey == "" {
+			error_out(w, "Email and access key required", 400)
+			return
+		}
 
-		// Don't issue verification for existing accounts
-		acct, _ := model.FindAcct(id, akey)
-		if acct.Id != "" {
+		acct, _ := model.FindAcct(akey)
+		if acct.Ciphertext != "" && acct.Ciphertext != "new" {
 			error_out(w, "Account already exists", 409)
 			return
 		}
 
-		if bypass != "true" || util.Config("tests.enabled") != "true" {
-			// Protect against brute force
-			count, err := model.CountAcctVerification(id)
-			if count > 3 || err != nil {
-				error_out(w, "Account verification limit reached", 403)
-				return
-			}
-		}
+		// TODO : Add rate limiting for acct verification emails
+
 		vkey = util.RandStr(16)
-		_, err = model.CreateAcctVerification(id, akey, vkey)
+		_, err = model.CreateAcctVerification(akey, vkey)
 		if err != nil {
 			error_out(w, "Verification could not be sent", 500)
 			return

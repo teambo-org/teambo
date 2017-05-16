@@ -26,7 +26,6 @@ Teambo.acct = (function (t) {
           var new_ct = self.encrypted({iv: iv});
           t.xhr.post('/acct', {
             data: {
-              id:   self.id,
               akey: akey,
               ct:   self.encrypted(),
               iv:   self.iv
@@ -131,7 +130,7 @@ Teambo.acct = (function (t) {
         }
         return new Promise(function (fulfill, reject) {
           t.xhr.post('/acct/auth', {
-            data: {id: self.id, akey: akey}
+            data: {akey: akey}
           }).then(function(xhr) {
             if(xhr.status == 200) {
               var data = JSON.parse(xhr.responseText);
@@ -209,7 +208,7 @@ Teambo.acct = (function (t) {
     return new Promise(function (fulfill, reject) {
       if(t.app.online) {
         var p = t.xhr.post('/acct/auth', {
-          data: {id: id, akey: akey}
+          data: {akey: akey}
         });
       } else {
         var p = Promise.reject();
@@ -223,6 +222,7 @@ Teambo.acct = (function (t) {
           acct.current = new acct(data.ct, akey, key);
           acct.current.cache();
           acct.current.cacheAuth();
+
         }
         fulfill(xhr);
       }).catch(function (xhr) {
@@ -280,12 +280,13 @@ Teambo.acct = (function (t) {
                 fulfill(xhr);
               });
             } else {
-              localforage.setItem('verification', {
-                email: email,
-                id:   id,
-                key:  key,
-                akey: akey
-              });
+              if(t.app.easy_verification) {
+                localforage.setItem('verification', {
+                  email: email,
+                  key:  key,
+                  akey: akey
+                });
+              }
               fulfill(xhr);
             }
           } else {
@@ -299,10 +300,12 @@ Teambo.acct = (function (t) {
       return new Promise(function (fulfill, reject) {
         var send_confirmation = function () {
           t.xhr.post('/acct/verification', {
-            data: {id: id, akey: akey, vkey: vkey}
+            data: {akey: akey, vkey: vkey}
           }).then(function (xhr){
             if(xhr.status == 200) {
-              localforage.removeItem('verification');
+              if(t.app.easy_verification) {
+                localforage.removeItem('verification');
+              }
               acct.current = new acct({
                 email: email,
                 id:    id,
@@ -322,17 +325,21 @@ Teambo.acct = (function (t) {
           });
         };
         if (!email || !pass) {
-          localforage.getItem('verification').then(function (v) {
-            if(v) {
-              email = v.email;
-              id    = v.id;
-              key   = v.key;
-              akey  = v.akey;
-              send_confirmation();
-            } else {
-              reject("Verification not found");
-            }
-          });
+          if(t.app.easy_verification) {
+            localforage.getItem('verification').then(function (v) {
+              if(v) {
+                email = v.email;
+                id    = t.crypto.sha(email);
+                key   = v.key;
+                akey  = v.akey;
+                send_confirmation();
+              } else {
+                reject("Verification not found");
+              }
+            });
+          } else {
+            reject("Email and password required for verification");
+          }
         } else {
           id   = t.crypto.sha(email);
           key  = t.crypto.pbk(pass, email);

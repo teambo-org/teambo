@@ -1,20 +1,19 @@
 <div class="external require-no-auth c">
     <div id="logo" class="logo"></div>
-    <form name="verification" method="POST" class="std ext verification" 
+    <form name="verification" method="POST" class="std ext verification"
         data-reset="{{reset}}" data-email="{{email}}" data-pass="{{pass}}">
         <div class="field first">
+            <p class="email">{{email}}</p>
             {{#reset}}
             <p class="warning">
-                The only way to reset your password is to create a new account. You can have multiple
-                accounts per email address but they must have different passwords. Your new account 
-                will be empty. Someone from each of your teams will need to reinvite you to the team. 
-                If you remember your password, your old account will still be available.
+                You may create more than one account with the same email address. Each account must
+                have a different password.
             </p>
             {{/reset}}
-            {{^reset}}
-            <p id="msg">In order to create a new account<br/>you will need to verify your email address</p>
-            {{/reset}}
-            <p class="email">{{email}}</p>
+            <p class="warning">In order to create a new account you will first need to confirm your{{#reset}} new{{/reset}} password and verify your email address.</p>
+        </div>
+        <div class="field">
+            <input type="password" class="text pass" name="verify_pass" placeholder="Confirm Password" />
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Send Verification Email" />

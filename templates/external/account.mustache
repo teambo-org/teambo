@@ -11,14 +11,14 @@
         <li class="team placeholder">&nbsp;</li>
         {{/acct.current.teams}}
         {{^acct.current.teams}}
-            <li class="placeholder" id="welcome">
+            <li class="welcome" id="welcome">
                 <h3>Welcome to your new account</h3>
-                You can create a new team by clicking the link below or you can contact a member
-                of an existing team and ask them to invite you
+                <p>You can create a new team by clicking the link below or you can contact a member
+                of an existing team and ask them to invite you</p>
             </li>
         {{/acct.current.teams}}
         </ul>
-        <a href="#/team-new" class="team-new replace" id="team-new" data-keybind="c">Create Team</a>
+        <a href="#/team-new" class="team-new" id="team-new" data-keybind="c">Create Team</a>
     </div>
 </div>
 <link id="account-themes" type='text/css' rel='stylesheet'/>

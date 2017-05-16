@@ -51,8 +51,8 @@ func list_keys(bucket_name string) error {
 		if *key != "" {
 			prefix = []byte(*key)
 		}
-		for k, v := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, v = c.Next() {
-			fmt.Println(string(k) + ": " + string(v))
+		for k, v := c.Seek(prefix); bytes.HasPrefix(k, prefix) && len(v) > 0; k, v = c.Next() {
+			fmt.Println(string(k) + ": " + string(v) + "\n")
 		}
 		return nil
 	})

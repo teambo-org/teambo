@@ -9,9 +9,9 @@ function(t){
   var pass;
 
   var form_submit_login = function(email, pass) {
-    var password_reset = function() {
+    var password_incorrect = function() {
       form.enable();
-      form.error.msg('Incorrect password', 'If you forgot your password, you may request a <a href="#/reset" id="reset">Password Reset</a>');
+      form.error.msg('Incorrect email address or password', 'If you forgot your password, you may <a href="#/reset" id="reset" class="create-account">Create a New Account<i class="icon-angle-right"></i></a>');
       document.getElementById('reset').onclick = function(e) {
         e.preventDefault();
         t.app.replaceUrl('/verification', {
@@ -30,13 +30,8 @@ function(t){
         var after_auth = t.app.afterAuth ? t.app.afterAuth : '/account';
         t.app.afterAuth = null;
         t.app.gotoUrl(after_auth);
-      } else if(xhr.status === 404) {
-        t.app.replaceUrl('/verification', {
-          email: email,
-          pass:  pass
-        });
-      } else if(xhr.status === 403) {
-        password_reset();
+      } else if(xhr.status === 404 || xhr.status === 403) {
+        password_incorrect();
       }
     }).catch(function() {
       if(t.app.online) {
@@ -58,7 +53,7 @@ function(t){
       } else if(e.status == 500) {
         form.error.msg('Verification failed', 'Please refresh the page and try again');
       } else {
-        form.error.msg('Error', 'Verification failed');
+        form.error.msg('Unknown Error', 'Verification failed, please try again.');
       }
     });
   };
@@ -79,14 +74,26 @@ function(t){
   }
 
   if(vkey != '') {
-    t.acct.verification.confirm(vkey).then(function(xhr) {
-      t.app.gotoUrl('/account');
-    }).catch(function(e){
+    var display_verification_msg = function() {
       form.error.msg('', '<br/>Enter your email address and password<br/>to complete verification');
       document.getElementById('onboarding').innerHTML = '';
       form_init(form_submit_verification);
-    });
+    };
+    if(t.app.easy_verification) {
+      t.acct.verification.confirm(vkey).then(function(xhr) {
+        localforage.removeItem('verification');
+        t.app.gotoUrl('/account');
+      }).catch(function(e){
+        localforage.removeItem('verification');
+        display_verification_msg();
+      });
+    } else {
+      display_verification_msg();
+    }
   } else {
+    if(t.app.easy_verification) {
+      localforage.removeItem('verification');
+    }
     form_init(form_submit_login);
   }
 

@@ -3,12 +3,18 @@ function(t){
 
   t.app.editing = true;
 
-  var form = new t.form(document.verification),
-    reset = form.getAttribute('data-reset');
+  var form = new t.form(document.verification);
+  var email = form.getAttribute('data-email');
+  var pass  = form.getAttribute('data-pass');
+  form.verify_pass.focus();
 
   form.addEventListener('submit', function(e){
-    var email = form.getAttribute('data-email');
-    var pass  = form.getAttribute('data-pass');
+    var verify_pass  = form.verify_pass.value;
+    if(verify_pass !== pass) {
+      form.error.msg('Password does not match', 'Please confirm the password you entered on the previous screen or return to the last step');
+      form.verify_pass.focus();
+      return;
+    }
     t.acct.verification.send(email, pass).then(function(xhr) {
       form.disable();
       if(xhr.status == 201) {

@@ -85,7 +85,7 @@ form.std textarea.large { height: 8em; }
 form.std textarea.tall { height: 24em; }
 form.std textarea.med-tall { height: 12em; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
-form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; opacity: 0.5; }
+form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel:hover { opacity: 1; }
 form.std p { margin: 0; font-size: 0.9em; }
 form.std.horizontal { padding: 0.6em; font-size: 0.9em; margin-bottom: 1em; }
@@ -98,7 +98,7 @@ form.ext.std .field label.chk input.chk:active { transform: scale(1.5); backgrou
 
 form.std .error .msg { color: #fff; background: #900; text-align: center; padding: 1em 0; margin: 1em 0; }
 form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
-.external .subtext { max-width: 30em; margin: 0 auto; padding: 1em 0; text-align: center; opacity: 0.7; }
+.external .subtext { max-width: 30em; margin: 0 auto; padding: 1em 0; text-align: center; color: rgba(0,0,0,0.5); }
 .external .subtext p { font-size: 0.9em; }
 .external.account .nav { max-width: 30em; margin: 0 auto; padding: 1em; text-align: center; }
 .external.account .nav p { margin: 0 2em; line-height: 2em; }
@@ -110,6 +110,9 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .external.account a.team-new:focus { text-decoration: underline; }
 .external.account .teams-loading { text-align: center; opacity: 0.5; }
 .external .verification { padding-top: 1em; }
+.external .verification p.email { margin: 0 1em 1em; }
+.external .verification p.warning { margin: 0 0 1em; }
+.external .verification p.top { margin: 0 0 1em; text-align: center; }
 .external p.email { margin: 1.3em 1.3em 0; font-size: 1.1em; background: rgba(255,255,255,0.5); line-height: 2em; }
 .external p.team_name { margin: 1em 0; font-size: 1.1em; background: rgba(255,255,255,0.5); line-height: 2em; }
 .external p.warning { padding: 0em 1.5em; text-align: left; }
@@ -135,8 +138,12 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .external ul.teams li.team a .failed { opacity: 1; }
 .external ul.teams div.teams-loading { position: absolute; left: 0; right: 0; top: 50%; margin-top: -0.5em; text-align: center; vertical-align: middle; }
 
+.external ul.teams li.welcome h3 { text-align: center; color: #fff; font-size: 1em; background: #040; margin: -2em -2em 2em; padding: 1.5em 0; }
+.external ul.teams li.welcome p { font-size: 0.9em; }
+.external a.create-account { color: #000; font-size: 1em; }
+
 .external p.error { background: #900; color: #fff; line-height: 4em; padding: 0; margin: -2.5em -0.5em 1.5em; font-size: 1em; }
-.external p.ex { margin: 0 0 1em; padding: 0 1.5em; color: #000; line-height: 1.5em; }
+.external form.std .error .ex { margin: 0 0 1em; padding: 0 1.5em; opacity: 1; line-height: 1.5em; font-size: 0.8em; }
 
 .external a.team-new { display: block; text-align: center; margin-bottom: 1em; }
 .external form .field input:focus { outline: 4px solid rgba(0,0,0,0.15); }
