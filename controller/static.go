@@ -15,6 +15,7 @@ import (
 )
 
 func Static(w http.ResponseWriter, r *http.Request) {
+	version := r.FormValue("v")
 	if r.URL.Path == "/.perf" {
 		return
 	}
@@ -44,7 +45,7 @@ func Static(w http.ResponseWriter, r *http.Request) {
 	// Serve file
 	ext := filepath.Ext(path)
 	mimetype := mime.TypeByExtension(ext)
-	if util.Config("static.cache") == "true" {
+	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
@@ -55,20 +56,24 @@ func Static(w http.ResponseWriter, r *http.Request) {
 }
 
 func compile_js(w http.ResponseWriter, r *http.Request) {
-	if util.Config("static.cache") == "true" {
+	version := r.FormValue("v")
+	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
 	w.Header().Set("Content-Type", mime.TypeByExtension(".js"))
+	w.Write([]byte("(function(){"))
 	for _, v := range jsapp {
 		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, w)
 	}
 	append_js_init(w)
+	w.Write([]byte("})();"))
 }
 
 func compile_css(w http.ResponseWriter, r *http.Request) {
-	if util.Config("static.cache") == "true" {
+	version := r.FormValue("v")
+	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
