@@ -41,7 +41,8 @@ Teambo.chat = (function(t){
       }
       document.getElementById('dashboard').addEventListener('click', autoclose);
     },
-    toggle: toggle
+    toggle: toggle,
+    autoclose: true
   };
 
 })(Teambo);

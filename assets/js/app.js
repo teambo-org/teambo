@@ -24,6 +24,7 @@ Teambo.app = (function(t){
     t.object.extend(app, opts.app);
     t.object.watchable(app);
     t.view.init(opts);
+    t.manifest.init();
     t.router.init(opts.templates);
     t.device.init().then(function() {
       t.acct.init().then(function(){
@@ -93,7 +94,6 @@ Teambo.app = (function(t){
       app.editing = false;
       t.event.emit('pre-nav', route);
       t.view.render(app.target, route.tpl, data);
-      scrollToSub(hash, app.loaded);
       if(app.loaded && !silent) {
         t.audio.play('click', 1);
       }
@@ -151,22 +151,6 @@ Teambo.app = (function(t){
 
   app.replaceUrl = function(url, data) {
     hashChange(url, data);
-  };
-
-  var scrollToSub = function(hash, isLoaded) {
-    var parts = hash.split('..');
-    var el = document.getElementById(parts[1]);
-    var tar = document.getElementById(app.target);
-    if(!tar) {
-      return;
-    }
-    if(parts.length > 1 && el) {
-      var add = tar.offsetHeight - el.offsetHeight;
-      el.classList.add('hi');
-      tar.parentNode.scrollTop = Math.max(add/4, 10);
-    } else if (isLoaded){
-      tar.parentNode.scrollTop = 0;
-    }
   };
 
   app.log = function(msg) {

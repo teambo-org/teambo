@@ -76,6 +76,7 @@ var jsapp = []string{
 	"/js/team.js",
 	"/js/model.js",
 	"/js/keybind.js",
+	"/js/manifest.js",
 	"/js/view/calendar.js",
 	"/js/view/autoselect.js",
 	"/js/view/autofilter.js",

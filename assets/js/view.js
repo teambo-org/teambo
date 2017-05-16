@@ -19,9 +19,6 @@ Teambo.view = (function(t){
         return render(text).split("\r").join("[r]").split("\n").join("<br/>");
       };
     },
-    chat: {
-      autoclose: true
-    },
     inf : function() {
       return function(text, render) {
         return parseInt(render(text)) === 1 ? '' : 's';
@@ -94,6 +91,7 @@ Teambo.view = (function(t){
     obj.app = t.app;
     obj.acct = t.acct;
     obj.model = t.model;
+    obj.chat = t.chat;
 
     t.app.watch('online', function(prop, old_val, new_val) {
       if(old_val != new_val) {
@@ -101,43 +99,11 @@ Teambo.view = (function(t){
       }
     });
 
-    if(window.applicationCache.status !== 0) {
-      window.applicationCache.addEventListener('updateready', function(e) {
-        if(window.applicationCache.status === window.applicationCache.UPDATEREADY
-        || window.applicationCache.status === window.applicationCache.CHECKING) {
-          if(!t.app.moved && !t.app.editing && (!t.team.current || !t.team.current.queue || !t.team.current.queue.processing)) {
-            t.app.reload();
-          } else {
-            t.app.updateready = true;
-            updateStatus();
-          }
-        }
-        t.app.online = true;
-      }, false);
-      window.applicationCache.addEventListener('noupdate', function(e) {
-        t.app.moved = true;
-        t.app.online = true;
-      }, false);
-      window.applicationCache.addEventListener('error', function(e) {
-        t.app.online = false;
-      }, false);
-      var startCacheCheck = function() {
-        if(!t.app.updateready) {
-          setTimeout(function(){
-            window.applicationCache.update();
-            startCacheCheck();
-          }, t.app.online ? 60000 : 10000);
-        }
-      };
-      if(window.applicationCache.status === 3) {
-        window.applicationCache.addEventListener('cached', function(e) {
-          t.app.online = true;
-          startCacheCheck();
-        }, false);
-      } else {
-        startCacheCheck();
+    t.app.watch('updateready', function(prop, old_val, new_val) {
+      if(old_val != new_val) {
+        updateStatus();
       }
-    }
+    });
 
     document.body.addEventListener('mousedown', function(e) {
       if(e.which !== 1) {
@@ -186,19 +152,6 @@ Teambo.view = (function(t){
     return html;
   };
 
-  var scrollToSub = function(hash, isLoaded) {
-    var parts = hash.split('..');
-    var el = document.getElementById(parts[1]);
-    var tar = document.getElementById(t.app.target);
-    if(parts.length > 1 && el) {
-      var add = tar.offsetHeight - el.offsetHeight;
-      el.classList.add('hi');
-      tar.parentNode.scrollTop = Math.max(add/4, 10);
-    } else if (isLoaded){
-      tar.parentNode.scrollTop = 0;
-    }
-  };
-
   var render = function(target, tplname, data, override) {
     data = data ? data : {};
     override = override ? override : {};
@@ -235,8 +188,18 @@ Teambo.view = (function(t){
     if(tplname in template_js) {
       template_js[tplname](t);
     }
-    if(t.app.loaded && target.id === 'main') {
-      target.scrollTop = 0;
+    scrollToSub(target, window.location.hash);
+  };
+
+  var scrollToSub = function(tar, hash) {
+    var parts = hash.split('..');
+    var el = document.getElementById(parts[1]);
+    if(parts.length > 1 && el) {
+      var add = tar.offsetHeight - el.offsetHeight;
+      el.classList.add('hi');
+      tar.parentNode.scrollTop = Math.max(add/4, 10);
+    } else if (t.app.loaded){
+      tar.parentNode.scrollTop = 0;
     }
   };
 
