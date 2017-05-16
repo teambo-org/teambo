@@ -36,18 +36,7 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	team, err := model.FindTeam(team_id)
-	if err != nil {
-		msg, _ := json.Marshal(map[string]interface{}{
-			"channel_id": team_id,
-			"code": 500,
-			"type": "error",
-			"msg": "Could not access team database",
-		})
-		ws.WriteMessage(websocket.TextMessage, msg)
-		return
-	}
-
-	if team.Id != team_id {
+	if err != nil || team.Id != team_id {
 		msg, _ := json.Marshal(map[string]interface{}{
 			"channel_id": team_id,
 			"code": 404,

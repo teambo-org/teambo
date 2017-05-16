@@ -139,6 +139,9 @@ func NewTeam() Team {
 }
 
 func FindTeam(id string) (item Team, err error) {
+	if !db_team_exists(id) {
+		return item, err;
+	}
 	ct := ""
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("team"))

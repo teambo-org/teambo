@@ -93,3 +93,10 @@ func db_team_delete(team_id string) error {
 	}
 	return nil
 }
+
+func db_team_exists(team_id string) bool {
+	if _, err := os.Stat(util.Config("app.data")+"/teams/"+team_id+".db"); err == nil {
+		return true
+	}
+	return false
+}
