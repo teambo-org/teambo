@@ -31,9 +31,11 @@ function(t){
       }
     }).catch(function(xhr){
       if(xhr.status == 403) {
-        form.error.msg('Invalid Beta Code', "Ask around, I'm sure someone you know can find one");
+        form.enable();
+        form.error.msg('Invalid Beta Code', "Ask around<br/>I'm sure someone you know can find one");
         form.beta.focus();
       } else {
+        form.enable();
         form.error.msg('Verification could not be sent', 'please try again');
       }
     });

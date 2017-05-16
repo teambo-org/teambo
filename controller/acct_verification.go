@@ -94,7 +94,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				"success": true,
 			})
 		}
-		beta.Delete()
 		http.Error(w, string(msg), 201)
+		beta.Delete()
 	}
 }
