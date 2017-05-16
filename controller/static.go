@@ -23,6 +23,10 @@ func Static(w http.ResponseWriter, r *http.Request) {
 		compile_js(w, r)
 		return
 	}
+	if r.URL.Path == "/lib.js" {
+		compile_lib_js(w, r)
+		return
+	}
 	if r.URL.Path == "/min.css" {
 		compile_css(w, r)
 		return
@@ -53,6 +57,19 @@ func Static(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Length", strconv.Itoa(int(stat.Size())))
 	file, _ := ioutil.ReadFile(path)
 	w.Write(file)
+}
+
+func compile_lib_js(w http.ResponseWriter, r *http.Request) {
+	version := r.FormValue("v")
+	if util.Config("static.cache") == "true" && version != "" {
+		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
+		w.Header().Set("Cache-Control", "max-age=315360000")
+	}
+	w.Header().Set("Content-Type", mime.TypeByExtension(".js"))
+	for _, v := range jslib {
+		src, _ := os.Open("assets" + v)
+		jsmin.Run(src, w)
+	}
 }
 
 func compile_js(w http.ResponseWriter, r *http.Request) {

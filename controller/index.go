@@ -128,7 +128,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	p := Page{}
 	if util.Config("static.min") == "true" && min != "0" {
 		p = Page{
-			JSLIB:    hash_version(jslib),
+			// JSLIB:    hash_version(jslib),
+			JSLIB:    []string{"/lib.js?v=" + js_min_version(jslib)},
 			JSASYNC:  hash_version(jsasync),
 			JSAPP:    []string{"/min.js?v=" + js_min_version(jsapp)},
 			JSINIT:   []string{},
