@@ -7,7 +7,6 @@ import (
 	"./util"
 	"flag"
 	"fmt"
-	"golang.org/x/net/http2"
 	"log"
 	"net/http"
 	"time"
@@ -98,18 +97,18 @@ func main() {
 	go socket.InviteAcceptanceHub.Run()
 	go socket.AcctHub.Run()
 
-	http.Handle("/", StaticHandler{})
-
 	if config["ssl.active"] == "true" {
-		srv := &http.Server{
-			Addr: ":" + config["port.https"],
-		}
-		http2.ConfigureServer(srv, &http2.Server{})
-		log.Fatal(srv.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"]))
+		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(redirectToHttps(config)))
+		http.Handle("/", StaticHandler{})
+		log.Fatal(http.ListenAndServeTLS(":"+config["port.https"], config["ssl.crt"], config["ssl.key"], nil))
 	} else {
-		err := http.ListenAndServe(":"+config["port.http"], nil)
-		if err != nil {
-			fmt.Println("ERROR - " + err.Error())
-		}
+		http.Handle("/", StaticHandler{})
+		log.Fatal(http.ListenAndServe(":"+config["port.http"], nil))
+	}
+}
+
+func redirectToHttps(config map[string]string) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "https://"+config["app.host"], http.StatusMovedPermanently)
 	}
 }
