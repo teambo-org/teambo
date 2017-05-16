@@ -167,6 +167,8 @@
 #dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em; }
 #dashboard .main .bucket-view ul.items.complete li { margin-bottom: 0; }
 
+#dashboard .main .search p.description { margin-left: 2.05em; }
+
 #dashboard .main .dash ul.buckets ul.items li { list-style: none; }
 
 #dashboard .main nav { float: right; margin: -0.5em -0.5em 0 0; }
