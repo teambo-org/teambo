@@ -255,7 +255,7 @@ Teambo.acct = (function (t) {
   };
 
   acct.verification = {
-    send : function (email, pass, bypass) {
+    send : function (email, pass, bypass, beta) {
       if(!email || !pass) {
         return Promise.reject();
       }
@@ -265,7 +265,8 @@ Teambo.acct = (function (t) {
       return new Promise(function (fulfill, reject) {
         var xhr_data = {
           email: email,
-          akey:  akey
+          akey:  akey,
+          beta: beta
         };
         if(bypass) {
           xhr_data.bypass = 'true';

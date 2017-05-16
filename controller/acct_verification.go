@@ -14,6 +14,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	akey := r.FormValue("akey")
 	vkey := r.FormValue("vkey")
 	bypass := r.FormValue("bypass")
+	beta_code := r.FormValue("beta")
 
 	err := errors.New("")
 
@@ -51,6 +52,17 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		if beta_code == "" {
+			error_out(w, "Beta code required", 400)
+			return
+		}
+
+		beta, _ := model.FindBetaCode(beta_code)
+		if beta.Found == "" {
+			error_out(w, "Invalid Beta Code", 403)
+			return
+		}
+
 		// TODO : Add rate limiting for acct verification emails
 
 		vkey = util.RandStr(16)
@@ -82,6 +94,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				"success": true,
 			})
 		}
+		beta.Delete()
 		http.Error(w, string(msg), 201)
 	}
 }

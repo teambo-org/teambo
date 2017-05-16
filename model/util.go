@@ -11,6 +11,8 @@ func GlobalInit() error {
 		tx.CreateBucketIfNotExists([]byte("acct"))
 		tx.CreateBucketIfNotExists([]byte("verification"))
 		tx.CreateBucketIfNotExists([]byte("verification_expires"))
+		tx.CreateBucketIfNotExists([]byte("beta_code"))
+		tx.CreateBucketIfNotExists([]byte("beta_code_expires"))
 		return nil
 	})
 	if err != nil {

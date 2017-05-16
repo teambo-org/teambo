@@ -13,6 +13,11 @@ type AcctVerification struct {
 	Vkey    string `json:"vkey"`
 }
 
+type BetaCode struct {
+	Code    string `json:"code"`
+	Found   string `json:"found"`
+}
+
 func (av *AcctVerification) Delete() (err error) {
 	db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("verification"))
@@ -59,6 +64,35 @@ func FindAcctVerification(akey string) (item AcctVerification, err error) {
 		b := tx.Bucket([]byte("verification"))
 		v := b.Get([]byte(akey))
 		item = AcctVerification{akey, string(v)}
+		return nil
+	})
+	if err != nil {
+		log.Println(err)
+		return item, err
+	}
+
+	return item, nil
+}
+
+func (bc *BetaCode) Delete() (err error) {
+	db_update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("beta_code"))
+		b.Delete([]byte(bc.Code))
+		return nil
+	})
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func FindBetaCode(beta string) (item BetaCode, err error) {
+	item = BetaCode{}
+	db_view(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("beta_code"))
+		v := b.Get([]byte(beta))
+		item = BetaCode{beta, string(v)}
 		return nil
 	})
 	if err != nil {
