@@ -7,6 +7,7 @@ import (
 )
 
 var team_id *string = flag.String("t", "", "Team ID")
+var bucket *string = flag.String("b", "", "Bucket")
 
 func list_buckets() (buckets []string, err error) {
 	db, err := bolt.Open("/var/lib/teambo/teams/"+*team_id+".db", 0644, nil)
@@ -53,12 +54,16 @@ func main() {
 	flag.Parse()
 	fmt.Println("--- team ---")
 	fmt.Println("/var/lib/teambo/teams/" + *team_id + ".db")
-	buckets, err := list_buckets()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	for _, bucket_name := range buckets {
-		list_keys(bucket_name)
+	if *bucket != "" {
+		list_keys(*bucket)
+	} else {
+		buckets, err := list_buckets()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for _, bucket_name := range buckets {
+			list_keys(bucket_name)
+		}
 	}
 }
