@@ -7,7 +7,7 @@
 <div class="scrollable">
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/plan" class="nav-section">
+        <a href="#{{team.url}}/plan" class="nav-section" data-keybind="p">
             <div class="img"><i class="icon-calendar-check-o"></i></div>
             <div class="name">Planning</div>
         </a>
@@ -39,7 +39,7 @@
     </div>
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/wiki" class="nav-section">
+        <a href="#{{team.url}}/wiki" class="nav-section" data-keybind="k">
             <div class="img"><i class="icon-book"></i></div>
             <div class="name">Wiki</div>
         </a>
@@ -54,7 +54,7 @@
     </div>
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/members" class="nav-section">
+        <a href="#{{team.url}}/members" class="nav-section" data-keybind="m">
             <div class="img"><i class="icon-users"></i></div>
             <div class="name">Members</div>
         </a>
@@ -81,11 +81,12 @@
     {{#team.isAdmin}}
     <div class="section hi-10">
         <i class="icon-down-open-1 nav color-hi-40"></i>
-        <a href="#{{team.url}}/edit" class="nav-section">
+        <a href="#{{team.url}}/edit" class="nav-section" data-keybind="t">
             <div class="img"><i class="icon-wrench"></i></div>
             <div class="name">Settings</div>
         </a>
     </div>
     {{/team.isAdmin}}
+    <a href="#{{team.url}}/item/new" class="hidden" data-keybind="n"></a>
 </div>
 <div id="status"></div>

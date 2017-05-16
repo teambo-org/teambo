@@ -46,15 +46,22 @@
                 </select>
             </div>
         </div>
-        <div class="field submit">
-            <input type="submit" class="submit" value="Create Item" />
-            {{#model.plan.current}}
-            <a class="cancel" href="#{{url}}">cancel</a>
-            {{/model.plan.current}}
-            {{#model.bucket.current}}
-            <a class="cancel" href="#{{url}}">cancel</a>
-            {{/model.bucket.current}}
+        <div class="up1c">
+            <div class="field">
+                <input type="submit" class="submit" value="Create Item" />
+                {{#model.plan.current}}
+                <a class="cancel" href="#{{url}}">cancel</a>
+                {{/model.plan.current}}
+                {{#model.bucket.current}}
+                <a class="cancel" href="#{{url}}">cancel</a>
+                {{/model.bucket.current}}
+                {{^model.bucket.current}}
+                {{^model.plan.current}}
+                <a class="cancel" href="#{{team.url}}">cancel</a>
+                {{/model.plan.current}}
+                {{/model.bucket.current}}
+            </div>
+            <div class="error"></div>
         </div>
-        <div class="error"></div>
     </form>
 </div>
