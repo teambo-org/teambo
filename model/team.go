@@ -2,7 +2,8 @@ package model
 
 import (
 	"../util"
-	"bytes"
+	// "bytes"
+	"log"
 	"fmt"
 	"github.com/boltdb/bolt"
 	"time"
@@ -14,31 +15,25 @@ type Team struct {
 }
 
 func (t Team) Save() (err error) {
-	db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("team"))
-		err = b.Put([]byte(t.Id), []byte(t.Ciphertext))
+	db_team_update(t.Id, func(tx *bolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists([]byte("settings"))
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		err = b.Put([]byte("team"), []byte(t.Ciphertext))
 		return err
 	})
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 	return nil
 }
 
 func (t Team) Remove() (err error) {
-	db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("team"))
-		err = b.Delete([]byte(t.Id))
-		return err
-	})
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
 	err = db_team_delete(t.Id)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -106,7 +101,7 @@ func (t Team) InviteResponseFind(ikey string) (inviteResponse TeamObject, err er
 	return inviteResponse, err
 }
 
-func (t Team) Log(iv string) (log string, err error) {
+func (t Team) Log(iv string) (item string, err error) {
 	db_team_update(t.Id, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("log"))
 		ts := time.Now().UnixNano()
@@ -115,21 +110,20 @@ func (t Team) Log(iv string) (log string, err error) {
 		if err != nil {
 			return err
 		}
-		log = k + "-" + iv
+		item = k + "-" + iv
 		return nil
 	})
 	if err != nil {
-		fmt.Println(err)
-		return log, err
+		log.Println(err)
+		return item, err
 	}
-	return log, nil
+	return item, nil
 }
 
 func NewTeam() Team {
 	id := util.RandStr(8)
 	for {
-		exists, _ := TeamExists(id)
-		if exists {
+		if TeamExists(id) {
 			id = util.RandStr(8)
 		} else {
 			break
@@ -139,16 +133,13 @@ func NewTeam() Team {
 }
 
 func FindTeam(id string) (item Team, err error) {
-	if !db_team_exists(id) {
-		return item, err;
-	}
 	ct := ""
-	db_view(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("team"))
+	db_team_view(id, func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("settings"))
 		if b == nil {
 			return nil
 		}
-		v := b.Get([]byte(id))
+		v := b.Get([]byte("team"))
 		if err != nil {
 			return err
 		}
@@ -156,7 +147,6 @@ func FindTeam(id string) (item Team, err error) {
 		return nil
 	})
 	if err != nil {
-		fmt.Println(err)
 		return item, err
 	}
 
@@ -167,26 +157,8 @@ func FindTeam(id string) (item Team, err error) {
 	return item, nil
 }
 
-func TeamExists(id string) (exists bool, err error) {
-	exists = false
-	db_view(func(tx *bolt.Tx) error {
-		var b = tx.Bucket([]byte("team"))
-		if b == nil {
-			return nil
-		}
-		var c = b.Cursor()
-		prefix := []byte(id)
-		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			exists = true
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-		return false, err
-	}
-
-	return exists, nil
+func TeamExists(id string) bool {
+	return db_team_exists(id)
 }
 
 func TeamSave(id string, ct string) (item Team, err error) {

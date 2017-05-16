@@ -127,12 +127,16 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .external ul.teams li.team a .i-wrap { float: left; margin-right: 0.5em; }
 .external ul.teams li.team a i { width: 2em; float: left; text-align: center; padding-right: 0.1em; }
 .external ul.teams li.team a i.admin { width: 2em; float: right; padding-right: 0; margin: 0; background: none !important; }
+.external ul.teams li.team a div.error { float: right; padding: 0 1em; margin: 0; font-size: 0.75em; }
 .external ul.teams li.team a div.summary { float: right; padding: 0; margin: 0; height: 2em; width: 2em; }
 .external ul.teams li.team a div.summary i { background: none; padding: 0 0.25em; width: 1.5em; display: block; height: 1.25em; line-height: 1.25em; }
 .external ul.teams li.team a div.summary .count { font-size: 0.6em; display: block; line-height: 0.9em; text-align: center; opacity: 0.7; }
 .external ul.teams li.team a .pending { float: right; margin: 0 1em; opacity: 0.7; font-size: 0.8em; line-height: 2.5em; }
 .external ul.teams li.team a .failed { opacity: 1; }
 .external ul.teams div.teams-loading { position: absolute; left: 0; right: 0; top: 50%; margin-top: -0.5em; text-align: center; vertical-align: middle; }
+
+.external p.error { background: #900; color: #fff; line-height: 4em; padding: 0; margin: -2.5em -0.5em 1.5em; font-size: 1em; }
+.external p.ex { margin: 0 0 1em; padding: 0 1.5em; color: #000; line-height: 1.5em; }
 
 .external a.team-new { display: block; text-align: center; margin-bottom: 1em; }
 .external form .field input:focus { outline: 4px solid rgba(0,0,0,0.15); }

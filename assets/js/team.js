@@ -328,7 +328,10 @@ Teambo.team = (function(t){
           team.find(v.id).then(function(found_team) {
             ret.push(found_team);
             fulfill();
-          }).catch(fulfill);
+          }).catch(function() {
+            ret.push(new team.missing(v));
+            fulfill();
+          });
         }));
       });
       Promise.all(p).then(function() {
@@ -338,6 +341,17 @@ Teambo.team = (function(t){
         fulfill(ret);
       }).catch(reject);
     });
+  };
+
+  team.missing = function(data) {
+    return {
+      id: data.id,
+      opts: {
+        name: 'Missing'
+      },
+      missing: true,
+      theme: t.themes['Slate Red']
+    };
   };
 
   team.fetch = function(id, mkey) {

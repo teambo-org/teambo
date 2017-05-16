@@ -2,7 +2,7 @@
     <div id="logo" class="logo"></div>
     <form name="remove_team" class="std ext" data-team_id="{{tid}}">
         <div class="field first">
-            <p>You no longer have access to this team<br/></p>
+            <p class="error">You no longer have access to this team</p>
             <p class="ex" id="msg">
                 Your access to the team has been revoked. You can either return to the
                 account page and wait for this issue to resolve itself or you can remove the team
@@ -11,7 +11,7 @@
         </div>
         <div class="field submit">
             <a href="#/account" data-keybind="escape q"><i class="icon-angle-left"></i>Back to account</a>
-            <br/><br/>
+            <br/><br/><br/>
             <input type="submit" class="submit" id="remove_team" value="Remove Team" />
         </div>
     </form>

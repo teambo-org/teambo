@@ -22,7 +22,11 @@ function(t){
     logo.classList.remove('spinner');
     var html = '';
     teams.forEach(function(team) {
-      html += t.view.renderTemplate('external/_team-li', team);
+      if(team.missing) {
+        html += t.view.renderTemplate('external/_team-missing-li', team);
+      } else {
+        html += t.view.renderTemplate('external/_team-li', team);
+      }
     });
     t.acct.current.invites.forEach(function(invite) {
       html += t.view.renderTemplate('external/_invite-li', {invite: invite});
@@ -52,15 +56,19 @@ function(t){
 
     t.team.summaries = {};
     teams.forEach(function(team) {
+      if(team.missing) {
+        return;
+      }
       var el = document.getElementById('team-li-'+team.id);
       var timeout;
-      var socket = new t.socket.teamSummary(team);
       var n = t.team.summaries[team.id] ? t.team.summaries[team.id].logs : 0;
       var update_el = function() {
         if(!el) return;
         t.team.summaries[team.id] = {"logs": n};
         el.innerHTML = t.view.renderTemplate('external/_team-li', team);
       };
+      update_el();
+      var socket = new t.socket.teamSummary(team);
       socket.on('message', function(e) {
         if(e.type == "log") {
           if(e.ts > team.last_seen) {
@@ -76,7 +84,6 @@ function(t){
   };
 
   var findTeams = function() {
-    // return;
     t.team.findAll().then(function(teams) {
       var orig_html = '';
       var welcome_el = document.getElementById('welcome');
@@ -87,16 +94,21 @@ function(t){
         logo.classList.add('spinner');
         var p = [];
         teams.forEach(function(team) {
-          p.push(team.isCached());
-          // p.push(team.getSummary());
-          p.push(team.queue.init());
+          if(!team.missing) {
+            p.push(team.isCached());
+            p.push(team.queue.init());
+          } else {
+            // p.push(Promise.reject());
+          }
         });
         Promise.all(p).then(function() {
           renderTeams(teams, orig_html);
         }).catch(function() {
           var p = [];
           teams.forEach(function(team) {
-            p.push(team.init);
+            if(!team.missing) {
+              p.push(team.init);
+            }
           });
           t.promise.serial(p).then(function() {
             teams.forEach(function(team) {
