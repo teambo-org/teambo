@@ -174,8 +174,8 @@ Teambo.view = (function(t){
   };
 
   var renderTemplate = function(tplname, data, override) {
-    data = data ? data : {};
     override = override ? override : {};
+    data = data ? t.object.extend({}, data) : {};
     t.object.extend(data, obj);
     t.object.extend(data, override);
     var html = Mustache.render(
