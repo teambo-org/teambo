@@ -7,7 +7,7 @@ function(t){
 
   t.view.on('bucket-removed', function(e) {
     if(e.id == t.model.bucket.current.id) {
-      t.app.gotoUrl(t.team.current.url(), false, {silent: true});
+      t.app.gotoUrl(t.team.current.url(), {silent: true});
     }
   });
   t.view.on('bucket-updated', function(e) {

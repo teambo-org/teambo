@@ -121,7 +121,7 @@ Teambo.view = (function(t){
       }
       if(el.matches('.replace')) {
         e.preventDefault();
-        t.app.gotoUrl(el.getAttribute('href').substr(1), true);
+        t.app.replaceUrl(el.getAttribute('href').substr(1));
         return;
       }
       if(el.matches('.logout')) {
@@ -132,7 +132,7 @@ Teambo.view = (function(t){
       }
       if(el.matches('.force')) {
         e.preventDefault();
-        t.app.gotoUrl(el.getAttribute('href').substr(1), true);
+        t.app.replaceUrl(el.getAttribute('href').substr(1));
         return;
       }
     });

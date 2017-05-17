@@ -118,7 +118,7 @@ Teambo.app = (function(t){
           }
         }
         t.app.trace(e);
-        t.app.gotoUrl('/account', false, {tid: data.team_id});
+        t.app.gotoUrl('/account', {tid: data.team_id});
       });
     } else {
       nav();
@@ -135,11 +135,9 @@ Teambo.app = (function(t){
     }
   };
 
-  app.gotoUrl = function(href, replace, data) {
+  app.gotoUrl = function(href, data) {
     if(window.location.hash == "#"+href) {
       app.refresh(data);
-    } else if(replace) {
-      hashChange(href, data);
     } else {
       window.location.hash = "#"+href;
     }

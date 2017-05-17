@@ -41,7 +41,6 @@ Teambo.socket.inviteResponse = (function (t) {
           t.view.emit('member-updated', {id: member.id, iv: member.iv, member: member});
         });
       }
-      // Mark member invite expired
     } else {
       var member;
       t.model.member.all.forEach(function(m){
