@@ -24,17 +24,27 @@ func (tic *teamIntegrityCache) Init(buckets []string) {
 }
 
 func (tic *teamIntegrityCache) Find(team_id string) (ti *teamIntegrity, err error) {
-	if _, ok := tic.Teams[team_id]; !ok {
-		new_ti := teamIntegrity{
-			TeamId:  team_id,
-			Buckets: tic.Buckets,
-			TTL:     tic.TTL,
-		}
-		err = new_ti.Init()
-		if err != nil {
-			return ti, err
-		}
-		tic.Teams[team_id] = &new_ti
+	new_ti := teamIntegrity{
+		TeamId:  team_id,
+		Buckets: tic.Buckets,
+		TTL:     tic.TTL,
 	}
-	return tic.Teams[team_id], nil
+	err = new_ti.Init()
+	if err != nil {
+		return ti, err
+	}
+	return &new_ti, nil
+	// if _, ok := tic.Teams[team_id]; !ok {
+		// new_ti := teamIntegrity{
+			// TeamId:  team_id,
+			// Buckets: tic.Buckets,
+			// TTL:     tic.TTL,
+		// }
+		// err = new_ti.Init()
+		// if err != nil {
+			// return ti, err
+		// }
+		// tic.Teams[team_id] = &new_ti
+	// }
+	// return tic.Teams[team_id], nil
 }

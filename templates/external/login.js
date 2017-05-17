@@ -79,8 +79,7 @@ function(t){
       form_submit_fn(email, pass);
     });
     form.email.focus();
-    form.email.oninput = form.error.hide;
-    form.pass.oninput  = form.error.hide;
+    form.pass.oninput = form.error.hide;
   }
 
   if(vkey != '') {
