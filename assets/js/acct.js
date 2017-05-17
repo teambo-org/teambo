@@ -91,6 +91,11 @@ Teambo.acct = (function (t) {
         }
         return ret;
       },
+      rsaTest: function(key) {
+        var test_key     = (new RSAKey()).fromPrivTPO(key.privTPO());
+        var test_pub_key = (new RSAKey()).fromPubTPO(key.pubTPO());
+        return test_key.decrypt(test_pub_key.encrypt('test')) == 'test';
+      },
       genrsa: function (progress, attempts) {
         return new Promise(function(fulfill, reject) {
           if(self.rsa) {
@@ -98,10 +103,10 @@ Teambo.acct = (function (t) {
           }
           var key = new RSAKey();
           key.generateAsync(2048, (65537).toString(16), function() {
-            if(key.decrypt(key.encrypt('test')) === 'test') {
+            if(self.rsaTest(key)) {
               self.rsa = key;
               fulfill(key);
-            } else if(attempts && attempts < 10) {
+            } else if(!attempts || attempts < 10) {
               self.genrsa(progress, attempts ? attempts + 1 : 1).then(function(key){
                 fulfill(key)
               }, reject);

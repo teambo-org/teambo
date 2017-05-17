@@ -215,7 +215,7 @@ RSAKey.prototype.fromPrivTPO = RSAFromPrivTPO;
 var RSAPubTPO = function () {
     return {
         'n' : hex2b64(this.n.toString(16)),
-        'e' : hex2b64(this.e.toString(16))
+        'e' : this.e.toString(16)
     };
 };
 RSAKey.prototype.pubTPO = RSAPubTPO;
@@ -224,7 +224,7 @@ RSAKey.prototype.pubTPO = RSAPubTPO;
 var RSAFromPubTPO = function (tpo) {
     this.setPublic(
         b64tohex(tpo.n),
-        b64tohex(tpo.e)
+        tpo.e
     );
     return this;
 };
