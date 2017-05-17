@@ -107,6 +107,7 @@ var css = []string{
 	"/css/font.css",
 	"/css/font-semibold.css",
 	"/css/default.css",
+	"/css/external.css",
 	"/css/dashboard.css",
 	"/font/teambo/css/teambo-embedded.css",
 }

@@ -24,10 +24,14 @@ Teambo.view.autoselect = (function(t){
         var val = a.dataset.value;
         var data = {};
         data[opt] = val;
-        model.update(data, true).then(function() {
-          t.view.updateSideNav();
-          t.app.refresh();
-        });
+        if(model) {
+          model.update(data, true).then(function() {
+            t.view.updateSideNav();
+            t.app.refresh();
+          });
+        } else {
+          el.classList.remove('open');
+        }
       });
     });
   };

@@ -250,6 +250,14 @@ form.std.remove p { text-align: center; }
     #dashboard form.filter a.clear { width: 100%; display: block; text-align: center; padding: 0.5em 0 0; margin: 0; }
 }
 
+@media (max-width: 1259px) {
+    #dashboard .main section.tags { width: 100%; float: left; }
+    #dashboard .main section.tags ul { width: 100%; float: left; }
+    #dashboard .main section.tags ul li { width: 50%; float: left; clear: none; }
+    #dashboard .main section.tags ul li:nth-child(2n) { float: right; }
+    #dashboard .main section.tags.tags-full ul li { width: 100%; }
+}
+
 @media print {
     #dashboard { overflow: visible; }
     #dashboard .right { display: none; }
