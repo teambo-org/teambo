@@ -1,11 +1,6 @@
 function(t){
   "use strict";
 
-  if(!t.acct.current.rsa) {
-    t.app.gotoUrl('/keygen');
-    return;
-  }
-
   var sockets = [];
 
   t.event.once('pre-nav', function() {

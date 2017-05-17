@@ -1,11 +1,6 @@
 function(t){
   "use strict";
-  
-  if(t.acct.current.rsa) {
-    t.app.gotoUrl('/account');
-    return;
-  }
-  
+
   var createKey = function(){
     var inner = document.getElementById('progressbar-inner');
     var progressCallback = function(p){
@@ -18,5 +13,5 @@ function(t){
     });
   };
   setTimeout(createKey, 50);
-  
+
 }
