@@ -7,7 +7,7 @@ function(t){
 
   t.view.on('plan-removed', function(e) {
     if(e.id == t.model.plan.current.id) {
-      t.app.gotoUrl(t.team.current.url(), {silent: true});
+      t.app.gotoUrl(t.team.current.url());
     }
   });
   t.view.on('plan-updated', function(e) {
