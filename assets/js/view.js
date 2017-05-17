@@ -37,7 +37,7 @@ Teambo.view = (function(t){
 
   var linkify = function (text) {
     var r = ' ' +  text + ' ',
-      domainRegEx = "([\\w]+\\.)+(com|org|net|gov|edu|mil|biz|cat|int|pro|tel|xxx|jobs|arpa|coop|asia|info|mobi|name|aero|jobs|museum|travel|[a-z]{2})",
+      domainRegEx = "([a-zA-Z0-9-]+\\.)+(com|org|net|gov|edu|mil|biz|cat|int|pro|tel|xxx|jobs|arpa|coop|asia|info|mobi|name|aero|jobs|museum|travel|[a-z]{2})",
       ipRegEx = "((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)",
       pathRegEx = "([\\/(&#x2F;)\\?\\#]+([^ \\\"\\t\\n\\r\\<\\{\\}]*))?",
       chr = "<span class=\"chr\">&#xa71b;</span>";
