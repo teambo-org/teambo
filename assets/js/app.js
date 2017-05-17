@@ -14,7 +14,8 @@ Teambo.app = (function(t){
     editing: false,
     debug: false,
     testing: false,
-    remember_me: false
+    remember_me: false,
+    next_data: {}
   };
 
   app.init = function(opts) {
@@ -52,10 +53,14 @@ Teambo.app = (function(t){
     }
     if(!route) {
       app.log('route not found ' + hash);
-      t.app.gotoUrl('/login');
+      app.gotoUrl('/login');
       return;
     }
     t.object.extend(data, route.data);
+    if(app.next_data) {
+      t.object.extend(data, app.next_data);
+    }
+    app.next_data = {};
     var p = [];
     if('team_id' in data && (!(t.view.isset('team')) || t.view.get('team').id != data.team_id)) {
       if(t.acct.isAuthed()) {
@@ -64,7 +69,7 @@ Teambo.app = (function(t){
           logo.classList.add('spinner');
         }
         if(t.team.current && data.team_id != t.team.current.id) {
-          t.app.reload();
+          app.reload();
           return;
         }
         p.push(new Promise(function(fulfill, reject) {
@@ -75,7 +80,7 @@ Teambo.app = (function(t){
         }));
       } else {
         app.afterAuth = hash;
-        t.app.gotoUrl('/login');
+        app.gotoUrl('/login');
         return;
       }
     } else if(!('team_id' in data)) {
@@ -84,7 +89,7 @@ Teambo.app = (function(t){
     var nav = function() {
       if(route.tpl.indexOf('external') !== 0 && !document.getElementById('main')) {
         if(!t.view.isset('team')) {
-          t.app.gotoUrl('/account');
+          app.gotoUrl('/account');
         }
         t.view.render('page', "layout/team", data);
         app.target = "main";
@@ -93,8 +98,11 @@ Teambo.app = (function(t){
       }
       app.editing = false;
       t.event.emit('pre-nav', route);
-      t.view.render(app.target, route.tpl, data);
+      if(t.view.render(app.target, route.tpl, data) === false) {
+        return;
+      }
       if(app.loaded && !silent) {
+        app.log(route);
         t.audio.play('click', 1);
       }
       t.event.emit('nav', route);
@@ -109,16 +117,16 @@ Teambo.app = (function(t){
         if(e && e.status) {
           if(e.status === 403) {
             t.model.uncacheAll().then(function() {
-              t.app.replaceUrl('/team/inaccessible', {tid: data.team_id});
+              app.replaceUrl('/team/inaccessible', {tid: data.team_id});
               return;
             });
           } else if(e.status === 404) {
-            t.app.replaceUrl('/team/missing', {tid: data.team_id});
+            app.replaceUrl('/team/missing', {tid: data.team_id});
               return;
           }
         }
-        t.app.trace(e);
-        t.app.gotoUrl('/account');
+        app.trace(e);
+        app.gotoUrl('/account');
       });
     } else {
       nav();
@@ -127,19 +135,16 @@ Teambo.app = (function(t){
 
   app.reload = function() {
     t.view.render('page', 'external/blank');
-    if(t.acct.current) {
-      t.acct.current.cacheAuth();
-      window.location.reload();
-    } else {
-      window.location.reload();
-    }
+    window.location.reload();
   };
 
   app.gotoUrl = function(href, data) {
     if(window.location.hash == "#"+href) {
       app.refresh(data);
     } else {
-      // what happen my data?
+      if(typeof data === 'object') {
+        app.next_data = data;
+      }
       window.location.hash = "#"+href;
     }
   };

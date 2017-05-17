@@ -47,5 +47,4 @@ function(t){
   form_init(form_submit_signup);
 
   t.view.updateStatus();
-
 }

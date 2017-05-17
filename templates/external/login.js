@@ -17,9 +17,8 @@ function(t){
 
   document.getElementById('signup').onclick = function(e) {
     e.preventDefault();
-    t.app.replaceUrl('/signup', {
-      ikey: ikey
-    });
+    e.stopPropagation();
+    t.app.gotoUrl('/signup', {ikey: ikey});
   };
 
   var form_submit_login = function(email, pass) {
