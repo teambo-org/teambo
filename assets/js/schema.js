@@ -7,6 +7,9 @@ Teambo.schema = (function(t){
     if(type === 'object') {
       type = Array.isArray(prop) ? 'array' : type;
     }
+    if('alias' in rules) {
+      return errs;
+    }
     if(!('type' in rules)) {
       errs.push(key + " does not have a declared type");
     } else if(type !== rules.type && (type != 'string' || rules.type != 'text')) {
@@ -41,7 +44,7 @@ Teambo.schema = (function(t){
     prefix = prefix ? prefix + '.' : '';
     var errs = [];
     for(var k in data) {
-      if(!(k in rules)) {
+      if(!(k in rules) || !('type' in rules[k])) {
         delete(data[k]);
         continue;
       } else if(orig && 'editable' in rules[k] && !rules[k].editable && typeof orig[k] !== 'undefined') {
@@ -80,6 +83,15 @@ Teambo.schema = (function(t){
       rules: rules,
       searchFields: function() {
         return Object.keys(rules).filter(function(field){return !!rules[field].searchable;});
+      },
+      getAliasProps: function() {
+        var aliasProps = [];
+        for(var k in rules) {
+          if('alias' in rules[k]) {
+            aliasProps.push({oldProp: k, newProp: rules[k].alias});
+          }
+        }
+        return aliasProps;
       }
       // merge
     });

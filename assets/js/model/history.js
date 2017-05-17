@@ -8,8 +8,8 @@ Teambo.model.history = (function(t){
       status: function() {
         return t.array.findByProperty(t.model.item.statuses, 'key', self.diff.status);
       },
-      bucket: function() {
-        return t.model.bucket.get(self.diff.bucket_id);
+      folder: function() {
+        return t.model.folder.get(self.diff.folder_id);
       },
       plan: function() {
         return t.model.plan.get(self.diff.plan_id);

@@ -1,0 +1,30 @@
+<div class="folder-edit" require-model="folder">
+{{#model.folder.current}}
+    <nav class="breadcrumbs">
+        <a href="#{{team.url}}">Team</a>
+        <a href="#{{url}}" data-keybind="q escape `">Folder</a>
+        <span>Edit</span>
+    </nav>
+    <nav>
+    {{^fake}}
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+    {{/fake}}
+    </nav>
+    <h1><i class="icon-folder-open"></i> {{opts.name}}</h1>
+    <form id="folder-edit" name="folder_edit" method="POST" class="std" data-folder_id="{{id}}">
+        <div class="field">
+            <label for="folder_name">Name</label>
+            <input id="folder_name" type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Folder Name" value="{{opts.name}}" />
+        </div>
+        <div class="field">
+            <label for="folder_description">Description</label>
+            <textarea id="folder_description" class="text" name="description">{{opts.description}}</textarea>
+        </div>
+        <div class="field submit">
+            <input type="submit" class="submit" value="Save" />
+            <a class="cancel" href="#{{url}}">cancel</a>
+        </div>
+        <div class="error"></div>
+    </form>
+{{/model.folder.current}}
+</div>

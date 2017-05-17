@@ -1,8 +1,8 @@
-describe("Bucket", function() {
+describe("Folder", function() {
 
   it("Can be created", function(done) {
-    Teambo.model.bucket.create({name: 'New Test Bucket'}).then(function(b){
-      expect(b.opts.name).toBe("New Test Bucket");
+    Teambo.model.folder.create({name: 'New Test Folder'}).then(function(b){
+      expect(b.opts.name).toBe("New Test Folder");
       done();
     }).catch(function(e){
       fail("Team not found");
@@ -11,10 +11,10 @@ describe("Bucket", function() {
   });
 
   it("Can be edited", function(done) {
-    Teambo.model.bucket.findAll().then(function(buckets) {
-      var bucket = buckets[0];
-      bucket.update({name: 'Test Bucket'}).then(function(b){
-        expect(b.opts.name).toBe("Test Bucket");
+    Teambo.model.folder.findAll().then(function(folders) {
+      var folder = folders[0];
+      folder.update({name: 'Test Folder'}).then(function(b){
+        expect(b.opts.name).toBe("Test Folder");
         done();
       }).catch(function(e){
         fail("Team not found");
@@ -24,10 +24,10 @@ describe("Bucket", function() {
   });
 
   it("Can be deleted", function(done) {
-    Teambo.model.bucket.create({name: 'Bucket to Delete'}).then(function(b){
+    Teambo.model.folder.create({name: 'Folder to Delete'}).then(function(b){
       b.remove().then(function(){
-        Teambo.model.bucket.findAll().then(function(buckets) {
-          expect(buckets.length).toBe(1);
+        Teambo.model.folder.findAll().then(function(folders) {
+          expect(folders.length).toBe(1);
           done();
         });
       }).catch(function(e){
@@ -41,7 +41,7 @@ describe("Bucket", function() {
   });
 
   it("Can have description", function(done) {
-    Teambo.model.bucket.create({name: 'Test Bucket With Description', description: 'Hello, World.'}).then(function(b){
+    Teambo.model.folder.create({name: 'Test Folder With Description', description: 'Hello, World.'}).then(function(b){
       expect(b.opts.description).toBe("Hello, World.");
       done();
     }).catch(function(e){
@@ -51,7 +51,7 @@ describe("Bucket", function() {
   });
 
   it("Cannot have undefined properties", function(done) {
-    Teambo.model.bucket.create({name: 'Test Bucket without undefined properties', description: 'Hello, World.', asdf: 'asdasdfasdfasdfasdf'}).then(function(b){
+    Teambo.model.folder.create({name: 'Test Folder without undefined properties', description: 'Hello, World.', asdf: 'asdasdfasdfasdfasdf'}).then(function(b){
       expect(b.opts.asdf).toBe(undefined);
       done();
     }).catch(function(e){

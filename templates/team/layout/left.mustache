@@ -14,7 +14,7 @@
     </div>
     <div class="section plans subsection">
     {{#model.plan.all}}
-        <a href="#{{url}}" class="bucket {{active}}" data-obj="plan-{{id}}">
+        <a href="#{{url}}" class="folder {{active}}" data-obj="plan-{{id}}">
             <div class="img"><i class="icon-flag-1"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress hi-10" data-progress="{{progress}}"></div>
@@ -23,19 +23,19 @@
     </div>
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/buckets" class="nav-section" data-keybind="i">
+        <a href="#{{team.url}}/folders" class="nav-section" data-keybind="i">
             <div class="img"><i class="icon-archive"></i></div>
             <div class="name">Items</div>
         </a>
     </div>
-    <div class="section buckets subsection">
-    {{#model.bucket.list}}
-        <a href="#{{url}}" class="bucket {{active}}" data-obj="bucket-{{id}}">
+    <div class="section folders subsection">
+    {{#model.folder.list}}
+        <a href="#{{url}}" class="folder {{active}}" data-obj="folder-{{id}}">
             <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
             <div class="name">{{opts.name}}</div>
             <div class="progress hi-10" data-progress="{{progress}}"></div>
         </a>
-    {{/model.bucket.list}}
+    {{/model.folder.list}}
     </div>
     <div class="section hi-10">
         <i class="icon-down-open-1 nav on color-hi-40"></i>
@@ -46,7 +46,7 @@
     </div>
     <div class="section wiki subsection">
     {{#model.wiki.top}}
-        <a href="#{{url}}" class="bucket {{active}}" data-obj="wiki-{{id}}">
+        <a href="#{{url}}" class="folder {{active}}" data-obj="wiki-{{id}}">
             <div class="img"><i class="icon-{{icon}}"></i></div>
             <div class="name">{{opts.name}}</div>
         </a>
@@ -87,6 +87,5 @@
         </a>
     </div>
     {{/team.isAdmin}}
-    <a href="#{{team.url}}/item/new" class="hidden" data-keybind="n"></a>
 </div>
 <div id="status"></div>

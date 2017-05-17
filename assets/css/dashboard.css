@@ -19,7 +19,7 @@
 
 #dashboard .section { clear: both; }
 #dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
-#dashboard .section .bucket { position: relative; }
+#dashboard .section .folder { position: relative; }
 #dashboard .progress { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
 #dashboard .progress > div { height: 2px; }
 #dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; overflow: hidden; position: relative; }
@@ -137,39 +137,39 @@
 
 #dashboard .main p.empty { padding: 3em 0; text-align: center; }
 
-#dashboard .main ul.buckets li { list-style: none; }
-#dashboard .main ul.buckets li i { float: left; }
-#dashboard .main ul.buckets li span.name { margin-left: 1.7em; display: block; }
-#dashboard .main ul.buckets li > a { display: block; padding: 0.5em; text-decoration: none; font-size: 1.2em; }
-#dashboard .main ul.buckets li .info { padding: 0.25em 0.5em; font-size: 0.75em; opacity: 0.7; float: right; }
+#dashboard .main ul.folders li { list-style: none; }
+#dashboard .main ul.folders li i { float: left; }
+#dashboard .main ul.folders li span.name { margin-left: 1.7em; display: block; }
+#dashboard .main ul.folders li > a { display: block; padding: 0.5em; text-decoration: none; font-size: 1.2em; }
+#dashboard .main ul.folders li .info { padding: 0.25em 0.5em; font-size: 0.75em; opacity: 0.7; float: right; }
 #dashboard .main ul.items { padding: 0; }
 #dashboard .main ul.items li { list-style: none; }
 #dashboard .main ul.items li i { float: left; }
 #dashboard .main ul.items li span.name { margin-left: 1.7em; display: block; }
 #dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; }
 
-#dashboard .main ul.buckets ul.items { padding: 0.5em; font-size: 0.8em; }
+#dashboard .main ul.folders ul.items { padding: 0.5em; font-size: 0.8em; }
 #dashboard .main ul.items.complete { opacity: 0.7; }
-#dashboard .main ul.buckets ul.items li span.name { margin-left: 1.6em; }
-#dashboard .main ul.buckets ul.items li a { padding: 0.3em 0.2em; }
+#dashboard .main ul.folders ul.items li span.name { margin-left: 1.6em; }
+#dashboard .main ul.folders ul.items li a { padding: 0.3em 0.2em; }
 #dashboard .main ul.items i.plan-icon { float: right; margin-left: 0.1em; opacity: 0.5; }
 #dashboard .main ul.items i.member-icon { float: right; margin-left: 0.1em; opacity: 1; }
 #dashboard .main ul.items .date { float: right; font-size: 0.9em; opacity: 0.5; margin-right: 0.2em; }
-#dashboard .main ul.buckets { padding: 0; }
-#dashboard .main ul.buckets > li { margin-bottom: 1em; padding: 0; }
-#dashboard .main ul.buckets > li > a { position: relative; }
-#dashboard .main ul.buckets > li > a .name { font-weight: 500; }
+#dashboard .main ul.folders { padding: 0; }
+#dashboard .main ul.folders > li { margin-bottom: 1em; padding: 0; }
+#dashboard .main ul.folders > li > a { position: relative; }
+#dashboard .main ul.folders > li > a .name { font-weight: 500; }
 
-#dashboard .main .bucket-view p.plan { padding: 0.8em 1em 0; margin-top: 0; font-size: 0.8em; }
-#dashboard .main .bucket-view span.plan { float: right; font-size: 0.8em; line-height: 1.7em; padding-right: 0.4em; }
-#dashboard .main .bucket-view span.plan i { margin-top: -0.1em; margin-right: 0.2em; }
-#dashboard .main .bucket-view p.description { margin: 0.3em 0.4em 0.2em 2.15em; font-size: 0.8em; max-height: 4.85em; overflow: hidden; clear: both; word-break: break-word; position: relative; }
-#dashboard .main .bucket-view ul.items li { margin-bottom: 0.5em; }
-#dashboard .main .bucket-view ul.items.complete li { margin-bottom: 0; }
+#dashboard .main .folder-view p.plan { padding: 0.8em 1em 0; margin-top: 0; font-size: 0.8em; }
+#dashboard .main .folder-view span.plan { float: right; font-size: 0.8em; line-height: 1.7em; padding-right: 0.4em; }
+#dashboard .main .folder-view span.plan i { margin-top: -0.1em; margin-right: 0.2em; }
+#dashboard .main .folder-view p.description { margin: 0.3em 0.4em 0.2em 2.15em; font-size: 0.8em; max-height: 4.85em; overflow: hidden; clear: both; word-break: break-word; position: relative; }
+#dashboard .main .folder-view ul.items li { margin-bottom: 0.5em; }
+#dashboard .main .folder-view ul.items.complete li { margin-bottom: 0; }
 
 #dashboard .main .search p.description { margin-left: 2.05em; }
 
-#dashboard .main .dash ul.buckets ul.items li { list-style: none; }
+#dashboard .main .dash ul.folders ul.items li { list-style: none; }
 
 #dashboard .main nav { float: right; margin: -0.5em -0.5em 0 0; }
 #dashboard .main nav a { float: left; padding: 0 0.75em; line-height: 2em; }
@@ -190,9 +190,9 @@
 #dashboard .side .subsection .img { background: none; }
 #dashboard .side .subsection .name { margin: 0; padding: 0; }
 #dashboard .side .active i { opacity: 1; }
-#dashboard .side .bucket .icon-folder-open { display: none; }
-#dashboard .side .bucket.active .icon-folder { display: none; }
-#dashboard .side .bucket.active .icon-folder-open { display: inline-block; }
+#dashboard .side .folder .icon-folder-open { display: none; }
+#dashboard .side .folder.active .icon-folder { display: none; }
+#dashboard .side .folder.active .icon-folder-open { display: inline-block; }
 #dashboard .side .member.active i { opacity: 1; }
 
 #dashboard .main section.history { background: none; }

@@ -22,7 +22,7 @@ function(t){
 
   t.view.on('item-removed', function(e) {
     if(e.id == t.model.item.current.id) {
-      t.app.gotoUrl((t.model.bucket.current || t.team.current).url());
+      t.app.gotoUrl((t.model.folder.current || t.team.current).url());
     }
   });
   t.view.on('item-updated', function(e) {
@@ -35,8 +35,8 @@ function(t){
       t.app.refresh({silent: true});
     }
   });
-  t.view.on(['bucket-removed', 'bucket-updated'], function(e) {
-    if(e.id == t.model.item.current.opts.bucket_id) {
+  t.view.on(['folder-removed', 'folder-updated'], function(e) {
+    if(e.id == t.model.item.current.opts.folder_id) {
       t.app.refresh({silent: true});
     }
   });

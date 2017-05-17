@@ -1,6 +1,6 @@
-<ul class="buckets" id="buckets">
-{{#model.bucket.list}}
-<li class="bucket hi-10 up3c" id="bucket-li-{{id}}">
+<ul class="folders" id="folders">
+{{#model.folder.list}}
+<li class="folder hi-10 up3c" id="folder-li-{{id}}">
     <a href="#{{url}}" class="hi-05">
         <i class="icon-folder"></i>
         <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
@@ -13,5 +13,5 @@
     {{/item_list}}
     </ul>
 </li>
-{{/model.bucket.list}}
+{{/model.folder.list}}
 </ul>

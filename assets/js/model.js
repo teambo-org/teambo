@@ -186,16 +186,29 @@ Teambo.model = (function(t){
           h.push(d);
         });
         return h;
+      },
+      alias: function() {
+        model.aliasProps.forEach(function(a) {
+          if(a.oldProp in self.opts) {
+            self.opts[a.newProp] = self.opts[a.oldProp];
+            delete self.opts[a.oldProp];
+          }
+          t.array.moveProperty(self.hist, a.oldProp, a.newProp);
+        });
       }
     });
+    this.alias();
   };
 
   model.extend = function(model) {
     types.push(model.type);
 
     model.all = [];
+    model.archives = [];
 
     model.track_history = true;
+
+    model.aliasProps = model.schema.getAliasProps();
 
     model.ids = function() {
       var ids = [];

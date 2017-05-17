@@ -7,7 +7,7 @@ function(t){
   form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = form.values(['name', 'description', 'status', 'bucket_id', 'plan_id', 'member_id']);
+    var data = form.values(['name', 'description', 'status', 'folder_id', 'plan_id', 'member_id']);
     t.model.item.create(data).then(function(item){
       t.view.updateSideNav();
       t.app.gotoUrl(item.url());
@@ -31,11 +31,11 @@ function(t){
   form.plan_id.value = form.dataset.plan_id ? form.dataset.plan_id : "";
 
   var html = '';
-  t.model.bucket.all.forEach(function(o) {
+  t.model.folder.all.forEach(function(o) {
     html +=  "<option value='"+o.id+"'>"+o.opts.name+"</option>";
   });
-  form.bucket_id.innerHTML = html + form.bucket_id.innerHTML;
-  form.bucket_id.value = form.dataset.bucket_id ? form.dataset.bucket_id : "";
+  form.folder_id.innerHTML = html + form.folder_id.innerHTML;
+  form.folder_id.value = form.dataset.folder_id ? form.dataset.folder_id : "";
 
   var html = '';
   t.model.member.all.forEach(function(o) {

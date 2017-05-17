@@ -35,9 +35,9 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/team/members":        controller.Members,
 	"/team/member":         controller.Member,
 	"/team/member/remove":  controller.MemberRemove,
-	"/team/buckets":        controller.HandleTeamObjects("bucket"),
-	"/team/bucket":         controller.HandleTeamObject("bucket", true),
-	"/team/bucket/remove":  controller.HandleTeamObjectRemove("bucket", true),
+	"/team/folders":        controller.HandleTeamObjects("folder"),
+	"/team/folder":         controller.HandleTeamObject("folder", true),
+	"/team/folder/remove":  controller.HandleTeamObjectRemove("folder", true),
 	"/team/items":          controller.HandleTeamObjects("item"),
 	"/team/item":           controller.HandleTeamObject("item", true),
 	"/team/item/remove":    controller.HandleTeamObjectRemove("item", true),
@@ -90,7 +90,7 @@ func main() {
 		log.Fatal("Could not open Bolt DB for writing")
 	}
 
-	model.TeamIntegrityCache.Init([]string{"bucket", "comment", "item", "member", "plan", "wiki"})
+	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
 
 	go socket.TeamHub.Run()
 	go socket.InviteResponseHub.Run()

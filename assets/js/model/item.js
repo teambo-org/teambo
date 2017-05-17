@@ -8,8 +8,8 @@ Teambo.model.item = (function(t){
       status: function() {
         return t.array.findByProperty(model.statuses, 'key', self.opts.status);
       },
-      bucket: function() {
-        return t.model.bucket.get(self.opts.bucket_id);
+      folder: function() {
+        return t.model.folder.get(self.opts.folder_id);
       },
       plan: function() {
         return t.model.plan.get(self.opts.plan_id);
@@ -46,19 +46,20 @@ Teambo.model.item = (function(t){
   model.schema = new t.schema({
     name:        { type: "string", required: true,  maxLength: 256, searchable: true },
     description: { type: "text",   required: false, maxLength: 65535, searchable: true },
-    bucket_id:   { type: "string", required: false, minLength: 8, maxLength: 8 },
+    folder_id:   { type: "string", required: false, minLength: 8, maxLength: 8 },
     plan_id:     { type: "string", required: false, minLength: 8, maxLength: 8 },
     member_id:   { type: "string", required: false, minLength: 8, maxLength: 8 },
-    status:      { type: "string", required: true,  maxLength: 16 }
+    status:      { type: "string", required: true,  maxLength: 16 },
+    bucket_id:   { alias: "folder_id" }
   });
 
   t.model.extend(model);
 
-  model.getByBucket = function(bucket_id) {
+  model.getByFolder = function(folder_id) {
     var ret = [];
     for(var i in model.all) {
       var o = model.all[i];
-      if(o.opts.bucket_id == bucket_id) {
+      if(o.opts.folder_id == folder_id) {
         ret.push(o);
       }
     }
@@ -88,19 +89,19 @@ Teambo.model.item = (function(t){
   };
 
   model.hasOrphaned = function() {
-    var bucket_ids = t.model.bucket.ids();
+    var folder_ids = t.model.folder.ids();
     for(var i in model.all) {
-      if(bucket_ids.indexOf(model.all[i].opts.bucket_id) < 0) {
+      if(folder_ids.indexOf(model.all[i].opts.folder_id) < 0) {
         return true;
       }
     }
   };
 
   model.getOrphaned = function() {
-    var bucket_ids = t.model.bucket.ids();
+    var folder_ids = t.model.folder.ids();
     var ret = [];
     for(var i in model.all) {
-      if(bucket_ids.indexOf(model.all[i].opts.bucket_id) < 0) {
+      if(folder_ids.indexOf(model.all[i].opts.folder_id) < 0) {
         ret.push(model.all[i]);
       }
     }

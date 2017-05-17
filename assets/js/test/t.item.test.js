@@ -1,9 +1,9 @@
 describe("Item", function() {
 
   it("Can be created", function(done) {
-    Teambo.model.bucket.findAll().then(function(buckets) {
-      bucket_id = buckets[0].id;
-      Teambo.model.item.create({name: 'New Test Item', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
+    Teambo.model.folder.findAll().then(function(folders) {
+      folder_id = folders[0].id;
+      Teambo.model.item.create({name: 'New Test Item', status: 'ready', description: 'This is a test item', folder_id: folder_id}).then(function(item){
         expect(item.opts.name).toBe("New Test Item");
         done();
       }).catch(function(e){
@@ -27,9 +27,9 @@ describe("Item", function() {
   });
 
   it("Can be deleted", function(done) {
-    Teambo.model.bucket.findAll().then(function(buckets) {
-      bucket_id = buckets[0].id;
-      Teambo.model.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
+    Teambo.model.folder.findAll().then(function(folders) {
+      folder_id = folders[0].id;
+      Teambo.model.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', folder_id: folder_id}).then(function(item){
         item.remove().then(function(){
           Teambo.model.item.findAll().then(function(items){
             expect(items.length).toBe(1);
@@ -47,9 +47,9 @@ describe("Item", function() {
   });
 
   it("Is removed from cache upon deletion", function(done) {
-    Teambo.model.bucket.findAll().then(function(buckets) {
-      bucket_id = buckets[0].id;
-      Teambo.model.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', bucket_id: bucket_id}).then(function(item){
+    Teambo.model.folder.findAll().then(function(folders) {
+      folder_id = folders[0].id;
+      Teambo.model.item.create({name: 'Test Item For Deletion', status: 'ready', description: 'This is a test item', folder_id: folder_id}).then(function(item){
         var item_id = item.id;
         item.remove().then(function(b){
           Teambo.model.item.findAll().then(function(items) {
@@ -72,9 +72,9 @@ describe("Item", function() {
   });
 
   it("Can have a status", function(done) {
-    Teambo.model.bucket.findAll().then(function(buckets) {
-      bucket_id = buckets[0].id;
-      Teambo.model.item.create({name: 'In Progress Item', status: 'inprogress', description: 'This is an in progress item', bucket_id: bucket_id}).then(function(item){
+    Teambo.model.folder.findAll().then(function(folders) {
+      folder_id = folders[0].id;
+      Teambo.model.item.create({name: 'In Progress Item', status: 'inprogress', description: 'This is an in progress item', folder_id: folder_id}).then(function(item){
         expect(item.opts.status).toBe("inprogress");
         done();
       }).catch(function(e){
@@ -83,15 +83,15 @@ describe("Item", function() {
       });
     });
   });
-  
-  it("Can be moved between buckets", function(done) {
-    Teambo.model.bucket.findAll().then(function(buckets) {
-      bucket_id = buckets[0].id;
-      bucket2 = buckets[1];
-      Teambo.model.item.create({name: 'Moved Item', status: 'ready', description: 'This is a test item for move', bucket_id: bucket_id}).then(function(item){
+
+  it("Can be moved between folders", function(done) {
+    Teambo.model.folder.findAll().then(function(folders) {
+      folder_id = folders[0].id;
+      folder2 = folders[1];
+      Teambo.model.item.create({name: 'Moved Item', status: 'ready', description: 'This is a test item for move', folder_id: folder_id}).then(function(item){
         var item_id = item.id;
-        item.update({bucket_id: bucket2.id}).then(function(new_item){
-          expect(new_item.opts.bucket_id).toBe(bucket2.id);
+        item.update({folder_id: folder2.id}).then(function(new_item){
+          expect(new_item.opts.folder_id).toBe(folder2.id);
           done();
         }).catch(function(e){
           fail("Item could not be edited");

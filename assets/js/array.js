@@ -26,6 +26,14 @@ Teambo.array = (function (t) {
         }
       });
       return a;
+    },
+    moveProperty: function(a, k1, k2) {
+      a.forEach(function(o) {
+        if(typeof o === 'object' && k1 in o) {
+          o[k2] === o[k1];
+          delete o[k1];
+        }
+      });
     }
   };
 

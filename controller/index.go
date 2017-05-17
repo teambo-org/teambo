@@ -84,7 +84,7 @@ var jsapp = []string{
 	"/js/view/toggle.js",
 	"/js/view/history.js",
 	"/js/model/comment.js",
-	"/js/model/bucket.js",
+	"/js/model/folder.js",
 	"/js/model/item.js",
 	"/js/model/plan.js",
 	"/js/model/wiki.js",

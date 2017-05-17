@@ -1,4 +1,4 @@
-Teambo.model.bucket = (function(t){
+Teambo.model.folder = (function(t){
   "use strict";
 
   var model = function(data) {
@@ -6,7 +6,7 @@ Teambo.model.bucket = (function(t){
     t.model.apply(this, [data, model]);
     t.object.extend(this, {
       item_list: function() {
-        return t.model.item.getByBucket(self.id);
+        return t.model.item.getByFolder(self.id);
       },
       item_list_incomplete: function() {
         return self.item_list().filter(function(o) {
@@ -31,19 +31,19 @@ Teambo.model.bucket = (function(t){
         return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
       },
       url: function() {
-        return '/'+t.team.current.id+'/bucket/'+self.id;
+        return '/'+t.team.current.id+'/folder/'+self.id;
       },
       icon: function() {
         return self.active() ? 'folder-open' : 'folder';
       },
       active: function() {
         return ((model.current && model.current.id == self.id)
-            || (t.model.item.current && t.model.item.current.opts.bucket_id == self.id)) ? 'active' : '';
+            || (t.model.item.current && t.model.item.current.opts.folder_id == self.id)) ? 'active' : '';
       }
     });
   };
 
-  model.type = 'bucket';
+  model.type = 'folder';
 
   model.schema = new t.schema({
     pid:         { type: 'string', required: false, minLength: 8, maxLength: 8 },
@@ -54,14 +54,14 @@ Teambo.model.bucket = (function(t){
   t.model.extend(model);
 
   model.getActiveId = function() {
-    return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.bucket_id : null);
+    return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.folder_id : null);
   };
 
   model.orphaned = new model({
     id: "orphaned",
     opts: {
       name: "(none)",
-      description: "This is a list of items that don't belong to any existing buckets."
+      description: "This is a list of items that don't belong to any existing folders."
     }
   });
 

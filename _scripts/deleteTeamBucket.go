@@ -22,7 +22,7 @@ func delete_bucket() error {
 	}
 	defer db.Close()
 	db.Update(func(tx *bolt.Tx) error {
-		c := tx.DeleteBucket([]byte(*bucket))
+		tx.DeleteBucket([]byte(*bucket))
 		return nil
 	})
 	return nil

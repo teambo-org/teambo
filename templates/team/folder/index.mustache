@@ -1,10 +1,11 @@
-<div class="bucket-index" id="bucket-index">
+<div class="folder-index" id="folder-index">
     <nav class="breadcrumbs">
         <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
         <span class="active">Items</span>
     </nav>
     <nav>
-        <a href="#{{team.url}}/new" data-keybind="c">Create Bucket</a>
+        <a href="#{{team.url}}/new" data-keybind="n">New Folder</a>
+        <a href="#{{team.url}}/item/new" data-keybind="c">Create Item</a>
     </nav>
     <h1><div class="img"><i class="icon-archive"></i></div> Items</h1>
     <form class="std horizontal color-bg filter" name="filter">
@@ -29,11 +30,11 @@
             {{/model.member.all}}
             <option value="none">(unassigned)</option>
         </select>
-        <a class="clear" href="#{{team.url}}/buckets?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
+        <a class="clear" href="#{{team.url}}/folders?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
     </form>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
-    {{>team/bucket/_list}}
-    {{^model.bucket.list}}
-    <p class="empty">Team has no buckets</p>
-    {{/model.bucket.list}}
+    {{>team/folder/_list}}
+    {{^model.folder.list}}
+    <p class="empty">Team has no folders</p>
+    {{/model.folder.list}}
 </div>

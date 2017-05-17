@@ -3,7 +3,7 @@ xdescribe("Stress", function() {
   // var factor = 100;
   var factor = 50;
 
-  it("Performs well with "+factor+" buckets each having "+factor+" items", function(done) {
+  it("Performs well with "+factor+" folders each having "+factor+" items", function(done) {
     var i = 0;
     var j = 0;
     var el = document.createElement('div');
@@ -11,14 +11,14 @@ xdescribe("Stress", function() {
     el.style.padding = '2em';
     el.style.fontSize = '2em';
     window.document.body.appendChild(el);
-    var create_buckets = function() {
+    var create_folders = function() {
       return new Promise(function(fulfill, reject) {
-        Teambo.model.bucket.create({name: 'Test Bucket '+i}).then(function(bucket) {
+        Teambo.model.folder.create({name: 'Test Folder '+i}).then(function(folder) {
           j = 0;
-          create_items(bucket).then(function() {
+          create_items(folder).then(function() {
             i++;
             if(i < factor) {
-              create_buckets().then(function(){
+              create_folders().then(function(){
                 fulfill();
               });
             } else {
@@ -28,13 +28,13 @@ xdescribe("Stress", function() {
         });
       });
     };
-    var create_items = function(bucket) {
+    var create_items = function(folder) {
       return new Promise(function(fulfill, reject) {
-        Teambo.model.item.create({name: 'Test Item ' + j, status: 'ready', description: 'This is a test item', bucket_id: bucket.id}).then(function() {
+        Teambo.model.item.create({name: 'Test Item ' + j, status: 'ready', description: 'This is a test item', folder_id: folder.id}).then(function() {
           j++;
           el.innerHTML = 'Created objects: ' + (j + i*factor);
           if(j < factor) {
-            create_items(bucket).then(function(){
+            create_items(folder).then(function(){
               fulfill();
             });
           } else {
@@ -43,7 +43,7 @@ xdescribe("Stress", function() {
         });
       });
     };
-    create_buckets().then(function(){
+    create_folders().then(function(){
       done();
     });
   }, Math.pow(2, 31) - 1 /* max execution time = max_32_int */);

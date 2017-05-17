@@ -4,12 +4,12 @@ function(t){
   var form = new t.form(document.item_remove);
   var item_id = form.item_id.value;
   var item = t.model.item.get(item_id);
-  var bucket = item.bucket();
+  var folder = item.folder();
   form.addEventListener("submit", function(e) {
     form.disable();
     item.remove().then(function(){
       t.view.updateSideNav();
-      t.app.gotoUrl(bucket.url());
+      t.app.gotoUrl(folder.url());
     }).catch(function(e){
       form.enable();
       form.error.msg("Item could not be removed.", "Please try again");

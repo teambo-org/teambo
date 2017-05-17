@@ -23,7 +23,7 @@ var tests = []string{
 	"/js/test/t.schema.test.js",
 	"/js/test/t.acct.test.js",
 	"/js/test/t.team.test.js",
-	"/js/test/t.bucket.test.js",
+	"/js/test/t.folder.test.js",
 	"/js/test/t.item.test.js",
 	"/js/test/t.plan.test.js",
 	"/js/test/stress.test.js",

@@ -28,12 +28,12 @@
             {{#diff_status}}
             <div class="status"><span class="k">Status</span> {{#first}}set{{/first}}{{^first}}changed{{/first}} to <span class="value color-70">{{#status}}<i class="icon-{{icon}}"></i>{{label}}{{/status}}</span></div>
             {{/diff_status}}
-            {{#diff_bucket_id}}
-            <div class="bucket_id">
+            {{#diff_folder_id}}
+            <div class="folder_id">
                 {{#first}}Added{{/first}}{{^first}}Moved{{/first}} to
-                {{#bucket}}<a class="value color-70" href="#{{url}}"><i class="icon-{{icon}}"></i>{{opts.name}}</a>{{/bucket}}{{^bucket}}deleted bucket {{diff.bucket_id}}{{/bucket}}
+                {{#folder}}<a class="value color-70" href="#{{url}}"><i class="icon-{{icon}}"></i>{{opts.name}}</a>{{/folder}}{{^folder}}deleted folder {{diff.folder_id}}{{/folder}}
             </div>
-            {{/diff_bucket_id}}
+            {{/diff_folder_id}}
             {{#diff_plan_id}}
                 {{#diff.plan_id}}
                 <div class="plan_id">

@@ -2,10 +2,10 @@
 {{#result.empty}}
 <p class="empty up1c">No Results</p>
 {{/result.empty}}
-<ul class="buckets">
+<ul class="folders">
 {{#result.has_item}}
-<li class="bucket hi-10 up3c result-item">
-    <a href="#{{team.url}}/buckets" class="hi-05">
+<li class="folder hi-10 up3c result-item">
+    <a href="#{{team.url}}/folders" class="hi-05">
         <div class="info">{{result.count_item}} / {{result.total_item}}</div>
         <i class="icon-archive"></i>
         <span class="name">Items</span>
@@ -17,22 +17,22 @@
     </ul>
 </li>
 {{/result.has_item}}
-{{#result.has_bucket}}
-<li class="bucket hi-10 up3c result-bucket">
-    <a href="#{{team.url}}/buckets" class="hi-05">
+{{#result.has_folder}}
+<li class="folder hi-10 up3c result-folder">
+    <a href="#{{team.url}}/folders" class="hi-05">
         <i class="icon-folder"></i>
-        <div class="info">{{result.count_bucket}} / {{result.total_bucket}}</div>
-        <span class="name">Buckets</span>
+        <div class="info">{{result.count_folder}} / {{result.total_folder}}</div>
+        <span class="name">Folders</span>
     </a>
     <ul class="items">
-    {{#result.bucket}}
-        {{>team/bucket/_search-li}}
-    {{/result.bucket}}
+    {{#result.folder}}
+        {{>team/folder/_search-li}}
+    {{/result.folder}}
     </ul>
 </li>
-{{/result.has_bucket}}
+{{/result.has_folder}}
 {{#result.has_plan}}
-<li class="bucket hi-10 up3c result-bucket">
+<li class="folder hi-10 up3c result-folder">
     <a href="#{{team.url}}/plan" class="hi-05">
         <i class="icon-calendar-check-o"></i>
         <div class="info">{{result.count_plan}} / {{result.total_plan}}</div>
@@ -46,7 +46,7 @@
 </li>
 {{/result.has_plan}}
 {{#result.has_wiki}}
-<li class="bucket hi-10 up3c result-bucket">
+<li class="folder hi-10 up3c result-folder">
     <a href="#{{team.url}}/wiki" class="hi-05">
         <i class="icon-book"></i>
         <div class="info">{{result.count_wiki}} / {{result.total_wiki}}</div>
@@ -60,7 +60,7 @@
 </li>
 {{/result.has_wiki}}
 {{#result.has_member}}
-<li class="bucket hi-10 up3c result-bucket">
+<li class="folder hi-10 up3c result-folder">
     <a href="#{{team.url}}/wiki" class="hi-05">
         <i class="icon-users"></i>
         <div class="info">{{result.count_member}} / {{result.total_member}}</div>
@@ -74,7 +74,7 @@
 </li>
 {{/result.has_member}}
 {{#result.has_comment}}
-<li class="bucket hi-10 up3c result-bucket">
+<li class="folder hi-10 up3c result-folder">
     <a href="#{{team.url}}/wiki" class="hi-05">
         <i class="icon-book"></i>
         <div class="info">{{result.count_comment}} / {{result.total_comment}}</div>
