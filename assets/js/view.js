@@ -42,7 +42,7 @@ Teambo.view = (function(t){
       pathRegEx = "([\\/(&#x2F;)\\?\\#]+([^ \\\"\\t\\n\\r\\<\\{\\}]*))?",
       chr = "<span class=\"chr\">&#xa71b;</span>";
     r = r.replace(new RegExp("(^|\\n| )(mailto:)?([a-z0-9&\\-_\\.]+@"+domainRegEx+")([^\\w]{1})", "ig"), "$1<a target=\"_blank\" rel=\"nofollow noopener noreferrer\" href=\"mailto:$3\">$3</a>"+chr+"$6");
-    r = r.replace(new RegExp("(^|\\n| )((https?|ftp|irc):&#x2F;&#x2F;("+domainRegEx+"|"+ipRegEx+")([^\\w]{1})"+pathRegEx+")([^0-9a-zA-Z_\\#~-]{1})", "ig"), "$1<a target=\"_blank\" rel=\"nofollow noopener noreferrer\" href=\"$2\">$2</a>"+chr+"$13");
+    r = r.replace(new RegExp("(^|\\n| )((https?|ftp|irc):&#x2F;&#x2F;("+domainRegEx+"|"+ipRegEx+")([^\\w]{1})?"+pathRegEx+")([^0-9a-zA-Z_\\#~-]{1})", "ig"), "$1<a target=\"_blank\" rel=\"nofollow noopener noreferrer\" href=\"$2\">$2</a>"+chr+"$13");
     r = r.replace(new RegExp("(^|\\n| )(("+domainRegEx+"|"+ipRegEx+")(\\:[0-9]+)?"+pathRegEx+")([^\\w]{1})", "ig"), "$1<a target=\"_blank\" rel=\"nofollow noopener noreferrer\" href=\"http:&#x2F;&#x2F;$2\">$2</a>"+chr+"$12");
     return r.slice(1,-1);
   };
@@ -159,7 +159,12 @@ Teambo.view = (function(t){
       target = document.getElementById(target);
     }
     if(!target) {
-      return;
+      return false;
+    }
+    if(tplname+'.pre' in template_js) {
+      if(template_js[tplname+'.pre'](t) === false) {
+        return false;
+      }
     }
     target.innerHTML = renderTemplate(tplname, data, override);
     if(target.firstChild && target.firstChild.classList) {
