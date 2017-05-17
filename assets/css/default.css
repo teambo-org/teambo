@@ -165,9 +165,9 @@ form.filter { clear: both; }
 
 /* < 1000 */
 @media (max-width: 1025px) {
-    .up3c { float: left; width: 100%; margin: 0; font-size: 1em; }
-    .up4c3 { width: 98%; }
-    .up4c3b { width: 98%; }
+    .up3c:not(.frozen) { float: left; width: 100%; margin: 0; font-size: 1em; }
+    .up4c3:not(.frozen) { width: 98%; }
+    .up4c3b:not(.frozen) { width: 98%; }
     h1 { font-size: 1.4em }
 }
 
@@ -183,20 +183,20 @@ form.filter { clear: both; }
 /* 1024 */
 @media (min-width: 1025px) and (max-width: 1259px) {
     #page { font-size: 1.2em; }
-    .up3c { float: left; width: 100%; margin: 0; }
-    .up4c3 { width: 98%; }
-    .up4c3b { width: 98%; }
+    .up3c:not(.frozen) { float: left; width: 100%; margin: 0; }
+    .up4c3:not(.frozen) { width: 98%; }
+    .up4c3b:not(.frozen) { width: 98%; }
 }
 
 /* 1280 */
 @media (min-width: 1260px)  and (max-width: 1599px) {
     .up2l, .up2r { width: 100%; }
     #page { font-size: 1.3em; }
-    .up3c { float: left; width: 48%; margin: 0 1%; }
-    .up3c:nth-child(3n+1) { clear: none; }
-    .up3c:nth-child(2n+1) { clear: left; }
-    .up4c3 { width: 64%; }
-    .up4c3b { width: 32%; }
+    .up3c:not(.frozen) { float: left; width: 48%; margin: 0 1%; }
+    .up3c:not(.frozen):nth-child(3n+1) { clear: none; }
+    .up3c:not(.frozen):nth-child(2n+1) { clear: left; }
+    .up4c3:not(.frozen) { width: 64%; }
+    .up4c3b:not(.frozen) { width: 32%; }
 }
 
 /* 1600 */

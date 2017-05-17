@@ -251,11 +251,11 @@ form.std.remove p { text-align: center; }
 }
 
 @media (max-width: 1259px) {
-    #dashboard .main section.tags { width: 100%; float: left; }
-    #dashboard .main section.tags ul { width: 100%; float: left; }
-    #dashboard .main section.tags ul li { width: 50%; float: left; clear: none; }
-    #dashboard .main section.tags ul li:nth-child(2n) { float: right; }
-    #dashboard .main section.tags.tags-full ul li { width: 100%; }
+    #dashboard :not(.frozen) .main section.tags { width: 100%; float: left; }
+    #dashboard :not(.frozen) .main section.tags ul { width: 100%; float: left; }
+    #dashboard :not(.frozen) .main section.tags ul li { width: 50%; float: left; clear: none; }
+    #dashboard :not(.frozen) .main section.tags ul li:nth-child(2n) { float: right; }
+    #dashboard :not(.frozen) .main section.tags.tags-full ul li { width: 100%; }
 }
 
 @media print {
