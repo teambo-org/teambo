@@ -27,11 +27,18 @@ Teambo.array = (function (t) {
       });
       return a;
     },
-    moveProperty: function(a, k1, k2) {
+    moveProperty: function(a, k1, k2, prefix) {
       a.forEach(function(o) {
-        if(typeof o === 'object' && k1 in o) {
-          o[k2] === o[k1];
-          delete o[k1];
+        if(prefix) {
+          if(typeof o === 'object' && prefix in o && k1 in o[prefix]) {
+            o[prefix][k2] === o[prefix][k1];
+            delete o[prefix][k1];
+          }
+        } else {
+          if(typeof o === 'object' && k1 in o) {
+            o[k2] === o[k1];
+            delete o[k1];
+          }
         }
       });
     }

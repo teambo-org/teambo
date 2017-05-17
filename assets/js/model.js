@@ -193,7 +193,7 @@ Teambo.model = (function(t){
             self.opts[a.newProp] = self.opts[a.oldProp];
             delete self.opts[a.oldProp];
           }
-          t.array.moveProperty(self.hist, a.oldProp, a.newProp);
+          t.array.moveProperty(self.hist, a.oldProp, a.newProp, 'diff');
         });
       }
     });
