@@ -43,7 +43,7 @@ function(t){
         var invite = new t.model.invite(data);
         t.acct.current.invites.push(invite);
         t.acct.current.save().then(function() {
-          t.app.replaceUrl('/invite-responded');
+          t.app.replaceUrl('/invite/responded');
         });
       } else {
         form.enable();

@@ -23,16 +23,16 @@ function(t){
     var html = '';
     teams.forEach(function(team) {
       if(team.missing) {
-        html += t.view.renderTemplate('external/_team-missing-li', team);
+        html += t.view.renderTemplate('external/team/_missing-li', team);
       } else {
-        html += t.view.renderTemplate('external/_team-li', team);
+        html += t.view.renderTemplate('external/team/_li', team);
       }
     });
     t.acct.current.invites.forEach(function(invite) {
-      html += t.view.renderTemplate('external/_invite-li', {invite: invite});
+      html += t.view.renderTemplate('external/invite/_li', {invite: invite});
     });
     el.innerHTML = orig_html + html;
-    var theme_styles = t.view.renderTemplate('external/account-themes', {teams: teams, default_theme: t.themes["Default"]}),
+    var theme_styles = t.view.renderTemplate('external/account/_themes', {teams: teams, default_theme: t.themes["Default"]}),
       url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('account-themes').href = "data:text/css;base64,"+url;
 
@@ -65,7 +65,7 @@ function(t){
       var update_el = function() {
         if(!el) return;
         t.team.summaries[team.id] = {"logs": n};
-        el.innerHTML = t.view.renderTemplate('external/_team-li', team);
+        el.innerHTML = t.view.renderTemplate('external/team/_li', team);
       };
       update_el();
       var socket = new t.socket.teamSummary(team);

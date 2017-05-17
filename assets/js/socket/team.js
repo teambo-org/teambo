@@ -120,10 +120,10 @@ Teambo.socket.team = (function (t) {
   var handleError = function(e) {
     if(e.code === 403) {
       t.model.uncacheAll().then(function() {
-        t.app.replaceUrl('/team-inaccessible', {tid: t.team.current.id});
+        t.app.replaceUrl('/team/inaccessible', {tid: t.team.current.id});
       });
     } else if(e.code === 404) {
-      t.app.replaceUrl('/team-missing', {tid: t.team.current.id});
+      t.app.replaceUrl('/team/missing', {tid: t.team.current.id});
     } else if(e.code === 500) {
       // do nothing I guess?
     }

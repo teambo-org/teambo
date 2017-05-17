@@ -49,7 +49,7 @@ function(t){
     form.disable();
     t.acct.verification.send(email, pass, {beta: beta, ikey: ikey, ichk: ichk}).then(function(xhr) {
       if(xhr.status == 201) {
-        t.app.replaceUrl('/verification-sent', {email: email});
+        t.app.replaceUrl('/verification/sent', {email: email});
       } else {
         form.enable();
         form.error.msg('Verification could not be sent');

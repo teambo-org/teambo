@@ -436,7 +436,7 @@ Teambo.model = (function(t){
             model.cacheIds().then(function(){
               if(model.type == 'member' && m.opts.pubKey == t.acct.current.rsa.pubTPO().n && !t.acct.current.member()) {
                 t.model.uncacheAll().then(function() {
-                  t.app.replaceUrl('/team-inaccessible', {tid: t.team.current.id});
+                  t.app.replaceUrl('/team/inaccessible', {tid: t.team.current.id});
                   fulfill();
                 });
                 return;
