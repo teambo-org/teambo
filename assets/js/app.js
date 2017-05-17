@@ -109,7 +109,7 @@ Teambo.app = (function(t){
         if(e && e.status) {
           if(e.status === 403) {
             t.model.uncacheAll().then(function() {
-              t.app.replaceUrl('/team-inaccessible', {tid: t.team.current.id});
+              t.app.replaceUrl('/team-inaccessible', {tid: data.team_id});
               return;
             });
           } else if(e.status === 404) {
