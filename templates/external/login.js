@@ -85,9 +85,9 @@ function(t){
 
   if(vkey != '') {
     var display_verification_msg = function() {
-      form.error.msg('', '<br/>Enter your email address and password<br/>to complete verification');
-      document.getElementById('onboarding').innerHTML = '';
       form_init(form_submit_verification);
+      document.getElementById('onboarding').innerHTML = '';
+      form.error.msg('', '<br/>Enter your email address and password<br/>to complete verification');
     };
     if(t.app.easy_verification) {
       t.acct.verification.confirm(vkey).then(function(xhr) {
