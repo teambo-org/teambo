@@ -64,22 +64,22 @@ Teambo.view = (function(t){
         };
       }
     }
-    var theme_styles = renderTemplate('layout/theme', {}, data);
+    var theme_styles = renderTemplate('team/layout/theme', {}, data);
     var url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
     document.getElementById('theme').href = "data:text/css;base64,"+url;
   };
 
   var updateSideNav = function() {
-    render('right', 'layout/right');
-    render('left',  'layout/left');
-    render('chat',  'layout/chat');
+    render('right', 'team/layout/right');
+    render('left',  'team/layout/left');
+    render('chat',  'team/layout/chat');
     updateStatus();
   };
 
   var updateStatus = function() {
     var el = document.getElementById('status');
     if(el) {
-      el.innerHTML = renderTemplate('layout/status');
+      el.innerHTML = renderTemplate('team/layout/status');
       el.classList.value = t.app.online ? 'online' : 'offline';
     }
   };

@@ -91,9 +91,10 @@ Teambo.app = (function(t){
         if(!t.view.isset('team')) {
           app.gotoUrl('/account');
         }
-        t.view.render('page', "layout/team", data);
+        t.view.render('page', "team/layout", data);
         app.target = "main";
       } else if (route.tpl.indexOf('external') === 0 && app.loaded && app.target != "page") {
+        // t.view.render('page', "external/layout", data);
         app.target = "page";
       }
       app.editing = false;
