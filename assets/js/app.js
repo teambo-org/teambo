@@ -103,7 +103,6 @@ Teambo.app = (function(t){
         return;
       }
       if(app.loaded && !silent) {
-        app.log(route);
         t.audio.play('click', 1);
       }
       t.event.emit('nav', route);
