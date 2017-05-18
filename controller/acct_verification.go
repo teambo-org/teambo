@@ -18,6 +18,11 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	ikey := r.FormValue("ikey")
 	ihash := r.FormValue("ihash")
 
+	bypass_enabled := false
+	if bypass != "" {
+		bypass_enabled = bypass == "true" && util.Config("app.testing") == "true"
+	}
+
 	beta := model.BetaCode{}
 	err := errors.New("")
 
@@ -65,7 +70,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Invalid Invite Code", 403)
 				return
 			}
-		} else {
+		} else if !bypass_enabled {
 			if beta_code == "" {
 				error_out(w, "Beta code required", 400)
 				return
@@ -91,7 +96,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			scheme = scheme + "s"
 		}
 		msg := []byte("")
-		if bypass == "true" && util.Config("tests.enabled") == "true" {
+		if bypass_enabled {
 			msg, _ = json.Marshal(map[string]interface{}{
 				"success": true,
 				"vkey":    vkey,
