@@ -48,9 +48,7 @@ function(t){
     if(result.feedback.suggestions.length > 0) {
       pass_feedback = result.feedback.suggestions[0];
     }
-    console.log(result.score);
     pass_is_good = result.score >= 3;
-    console.log(pass_is_good);
     update_bar(result.score);
   };
   var update_bar = function(score) {
@@ -84,7 +82,6 @@ function(t){
       return;
     }
     form.disable();
-    console.log(form.beta.value);
     var data = {beta: beta};
     if(ikey == form.beta.value) {
       data['ikey'] = ikey;
