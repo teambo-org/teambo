@@ -11,41 +11,20 @@
         <a href="#{{url}}" data-keybind="q escape `">Item</a>
         <span>Edit</span>
     </nav>
+    <nav>
+        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+    </nav>
     <h1><i class="icon-archive"></i> Edit Item</h1>
-    <form id="item-edit" name="item_edit" method="POST" class="std" data-item_id="{{id}}">
-        <div class="up4c3">
-            <div class="field">
-                <label for="item_name">Item Name</label>
-                <input id="item_name"type="text" class="text large full required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{opts.name}}" />
-            </div>
-            <div class="field">
-                <label for="item_description">Description</label>
-                <textarea id="item_description" class="text med-tall full" name="description">{{opts.description}}</textarea>
-            </div>
+    <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
+    <form id="item-edit" name="item_edit" method="POST" class="std item-form" data-item_id="{{id}}">
+        <div class="up1c">
+            <input id="item_name"type="text" class="text large full required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{opts.name}}" />
         </div>
-        <div class="up4c up4c3b">
-            <div class="field">
-                <label for="item_folder">Folder</label>
-                <select id="item_folder" name="folder_id" class="text full">
-                    <option value="">(none)</option>
-                </select>
-            </div>
-            <div class="field">
-                <label for="item_status">Status</label>
-                <select id="item_status" name="status" class="text full"></select>
-            </div>
-            <div class="field">
-                <label for="item_plan">Plan</label>
-                <select id="item_plan" name="plan_id" class="text full">
-                    <option value="">(none)</option>
-                </select>
-            </div>
-            <div class="field">
-                <label for="item_member">Member</label>
-                <select id="item_member" name="member_id" class="text full">
-                    <option value="">(none)</option>
-                </select>
-            </div>
+        <div class="up4c3">
+            <textarea id="item_description" class="text med-tall full" name="description">{{opts.description}}</textarea>
+        </div>
+        <div class="up4c up4c3b" id="item-opts">
+            {{>team/item/_sidenav}}
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Save Changes" />

@@ -181,20 +181,6 @@
 #dashboard .main .wiki-toc ul.children > li a { padding: 0 0 0 1em; }
 #dashboard .main .wiki section.description { font-size: 0.9em; }
 
-#dashboard .left .section { font-size: 1em; }
-#dashboard .left a.nav-section { font-weight: 500; }
-#dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 2em; }
-
-#dashboard .side .subsection { font-size: 0.9em; }
-#dashboard .side .subsection i { opacity: 0.3; }
-#dashboard .side .subsection .img { background: none; }
-#dashboard .side .subsection .name { margin: 0; padding: 0; }
-#dashboard .side .active i { opacity: 1; }
-#dashboard .side .folder .icon-folder-open { display: none; }
-#dashboard .side .folder.active .icon-folder { display: none; }
-#dashboard .side .folder.active .icon-folder-open { display: inline-block; }
-#dashboard .side .member.active i { opacity: 1; }
-
 #dashboard .main section.history { background: none; }
 #dashboard .main section.history h2 { margin-bottom: 0.4em; }
 #dashboard .main ul.history { padding: 0; }
@@ -210,6 +196,21 @@
 #dashboard .main .filter-status-incomplete .status-complete { display: none; }
 #dashboard .main form.filter select { margin-right: 0.5em; }
 #dashboard .main form.filter.default-options a.clear { display: none; }
+#dashboard .main form.item-form { padding-top: 1.5em; }
+
+#dashboard .left .section { font-size: 1em; }
+#dashboard .left a.nav-section { font-weight: 500; }
+#dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 2em; }
+
+#dashboard .side .subsection { font-size: 0.9em; }
+#dashboard .side .subsection i { opacity: 0.3; }
+#dashboard .side .subsection .img { background: none; }
+#dashboard .side .subsection .name { margin: 0; padding: 0; }
+#dashboard .side .active i { opacity: 1; }
+#dashboard .side .folder .icon-folder-open { display: none; }
+#dashboard .side .folder.active .icon-folder { display: none; }
+#dashboard .side .folder.active .icon-folder-open { display: inline-block; }
+#dashboard .side .member.active i { opacity: 1; }
 
 #dashboard .plan-view h4 { margin-bottom: 0.5em; }
 #dashboard .plan-view p.empty { padding: 0.5em 0; margin: 0 0 0.5em; }

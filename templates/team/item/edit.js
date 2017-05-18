@@ -3,13 +3,15 @@ function(t){
 
   t.app.editing = true;
 
+  document.querySelector('a[name=skipnav]').focus();
+
   var form = new t.form(document.item_edit),
     item_id = form.dataset.item_id,
     item = t.model.item.get(item_id);
-  form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
-    var data = form.values(['name', 'description', 'status', 'folder_id', 'plan_id', 'member_id']);
+    var data = form.values(['name', 'description']);
+    t.object.extend(item.opts, data);
     var submit = function() {
       item.update(data, true).then(function(item){
         t.view.updateSideNav();
@@ -22,31 +24,11 @@ function(t){
     submit();
   });
 
-  t.model.item.statuses.forEach(function(opt) {
-    html +=  "<option value='"+opt.key+"'>"+opt.label+"</option>";
-  });
-  form.status.innerHTML = html + form.status.innerHTML;
-  form.status.value = item.opts.status ? item.opts.status : "";
-
-  var html = '';
-  t.model.plan.all.forEach(function(plan) {
-    html +=  "<option value='"+plan.id+"'>"+plan.opts.name+"</option>";
-  });
-  form.plan_id.innerHTML = html + form.plan_id.innerHTML;
-  form.plan_id.value = item.opts.plan_id ? item.opts.plan_id : "";
-
-  var html = '';
-  t.model.folder.all.forEach(function(o) {
-    html +=  "<option value='"+o.id+"'>"+o.opts.name+"</option>";
-  });
-  form.folder_id.innerHTML = html + form.folder_id.innerHTML;
-  form.folder_id.value = item.opts.folder_id ? item.opts.folder_id : "";
-
-  var html = '';
-  t.model.member.all.forEach(function(o) {
-    html +=  "<option value='"+o.id+"'>"+o.opts.name+"</option>";
-  });
-  form.member_id.innerHTML = html + form.member_id.innerHTML;
-  form.member_id.value = item.opts.member_id ? item.opts.member_id : "";
+  var el = document.getElementById('item-opts');
+  var callback = function(){
+    el.innerHTML = t.view.renderTemplate('team/item/_sidenav', item);
+    t.view.autoselect.init('#item-opts .autoselect', item, callback);
+  };
+  t.view.autoselect.init('#item-opts .autoselect', item, callback);
 
 }

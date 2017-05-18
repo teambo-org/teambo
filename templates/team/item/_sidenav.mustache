@@ -1,22 +1,29 @@
 <section class="tags">
     <ul>
-        {{#status}}
         <li class="state section autoselect hi-05" data-opt="status">
+            {{#status}}
             <a href="#{{url}}/edit" class="trigger">
                 <i class="icon-down-open-1 nav color-hi-40"></i>
                 <div class="img"><i class="icon-{{icon}}"></i></div>
                 <div class="name">{{label}}</div>
             </a>
+            {{/status}}
+            {{^status}}
+            <a href="#{{url}}/edit" class="trigger">
+                <i class="icon-down-open-1 nav color-hi-40"></i>
+                <div class="img"><i class="icon-check-empty"></i></div>
+                <div class="name">Ready</div>
+            </a>
+            {{/status}}
             <div class="options">
                 {{#model.item.statuses}}
-                <a data-value="{{key}}">
+                <a href="#{{name}}" data-value="{{key}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
                     <div class="name">{{label}}</div>
                 </a>
                 {{/model.item.statuses}}
             </div>
         </li>
-        {{/status}}
         <li class="state section autoselect hi-05" data-opt="folder_id">
             {{#folder}}
             <a href="#{{url}}/edit" class="trigger {{#fake}}color-30{{/fake}}">
@@ -25,14 +32,21 @@
                 <div class="name">{{opts.name}}</div>
             </a>
             {{/folder}}
+            {{^folder}}
+            <a href="#{{url}}/edit" class="trigger color-30">
+                <i class="icon-down-open-1 nav color-hi-40"></i>
+                <div class="img"><i class="icon-folder"></i></div>
+                <div class="name">(none)</div>
+            </a>
+            {{/folder}}
             <div class="options">
                 {{#model.folder.all}}
-                <a data-value="{{id}}">
+                <a href="#{{url}}" data-value="{{id}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
                     <div class="name">{{opts.name}}</div>
                 </a>
                 {{/model.folder.all}}
-                <a data-value="">
+                <a href="#" data-value="">
                     <div class="img {{#folder}}color-30{{/folder}}"><i class="icon-folder"></i></div>
                     <div class="name">(none)</div>
                 </a>
@@ -55,12 +69,12 @@
             {{/plan}}
             <div class="options">
                 {{#model.plan.all}}
-                <a data-value="{{id}}">
+                <a href="#{{url}}" data-value="{{id}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
                     <div class="name">{{opts.name}}</div>
                 </a>
                 {{/model.plan.all}}
-                <a data-value="">
+                <a href="#" data-value="">
                     <div class="img {{#plan}}color-30{{/plan}}"><i class="icon-flag-1"></i></div>
                     <div class="name">(none)</div>
                 </a>
@@ -83,30 +97,32 @@
             {{/member}}
             <div class="options bg">
                 {{#model.member.all}}
-                <a data-value="{{id}}">
+                <a href="#{{url}}" data-value="{{id}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="{{icon}}"></i></div>
                     <div class="name">{{opts.name}}</div>
                 </a>
                 {{/model.member.all}}
-                <a data-value="">
+                <a href="#" data-value="">
                     <div class="img {{#member}}color-30{{/member}}"><i class="icon-user-1"></i></div>
                     <div class="name">(unassigned)</div>
                 </a>
             </div>
         </li>
+        {{#id}}
         <li class="section id">
             <span>
                 <div class="img"><i class="icon-pin"></i></div>
                 <div class="name color-50">{{id}}</div>
             </span>
         </li>
-        <!--
-        <li class="section">
-            <a>
-                <div class="img"><i class="icon-tag-1"></i></div>
-                <div class="name">UI</div>
-            </a>
+        {{/id}}
+        {{^id}}
+        <li class="section id">
+            <span>
+                <div class="img color-30"><i class="icon-pin"></i></div>
+                <div class="name color-30">--------</div>
+            </span>
         </li>
-        -->
+        {{/id}}
     </ul>
 </section>

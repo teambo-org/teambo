@@ -71,8 +71,11 @@
 #dashboard .main select:focus,
 #dashboard .main textarea:focus { outline: 2px solid rgba({{main.hi}}, 0.15); }
 #dashboard .main a:focus { background: rgba({{main.hi}}, 0.1); }
+#dashboard .main form.std textarea::-webkit-input-placeholder,
 #dashboard .main form.std input.text::-webkit-input-placeholder { color: rgba({{main.color}},0.5); }
+#dashboard .main form.std textarea::-moz-placeholder,
 #dashboard .main form.std input.text::-moz-placeholder { color: rgba({{main.color}},0.5); }
+#dashboard .main form.std textareat::-ms-input-placeholder,
 #dashboard .main form.std input.text::-ms-input-placeholder { color: rgba({{main.color}},0.5); }
 
 #dashboard .main form.std input.submit:focus { background: rgba({{main.hi}},0.2); outline: none; }
