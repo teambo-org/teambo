@@ -72,7 +72,7 @@ form.ext.std .field span.alert { color: #a00; font-weight: bold; }
 .keygen .progressbar .progressbar-inner { width: 0; height: 0.5em; background: #333; }
 .keygen .crypt { text-align: center; padding: 0.4em 0; font-size: 1.5em; font-weight: bold; }
 
-#page > .about { padding-top: 4em; }
+#page > .about { padding: 4em 0 8em; }
 .about #shadow { position: fixed; top: 0; right: 0; left: 0; background: #fff; padding: 0 1em; z-index: 1098; max-width: 100%; box-shadow: 0 0 1.5em rgba(0,0,0,0.1); height: 4em; }
 .about #shadow-mask { position: absolute; top: 0; right: 0; left: 0; background: #fff; padding: 0 1em; z-index: 1099; max-width: 100%; height: 5em; }
 .about #return { position: fixed; top: 0; right: 0; left: 0; background: #fff; padding: 0 1em; z-index: 1100; max-width: 100%; height: 4em; }

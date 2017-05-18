@@ -1,8 +1,6 @@
 function(t){
   "use strict";
 
-  t.app.log('Howdy, Stranger.');
-
   var theme = "Ocean Blue";
 
   t.view.updateTheme(theme);
