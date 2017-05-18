@@ -23,10 +23,10 @@ Teambo.schema = (function(t){
         errs = errs.concat(validate_schema(rules.values, prop[k], orig[k], key));
       });
     }
-    if('required' in rules && rules.required && !prop || prop === null) {
+    if('required' in rules && rules.required && !prop) {
       errs.push(key + " is required and is not present");
     }
-    if(('minLength' in rules || 'maxLength' in rules) && !(rules['empty'] && !prop)) {
+    if(('minLength' in rules || 'maxLength' in rules) && !(rules.empty && !prop)) {
       if(type !== 'string' && type !== 'array') {
         errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by length");
       }
@@ -42,6 +42,7 @@ Teambo.schema = (function(t){
 
   var validate_schema = function(rules, data, orig, prefix) {
     prefix = prefix ? prefix + '.' : '';
+    orig = orig ? orig : {};
     var errs = [];
     for(var k in data) {
       if(!(k in rules) || !('type' in rules[k])) {

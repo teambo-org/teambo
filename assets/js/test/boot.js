@@ -148,9 +148,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     for (var property in source) destination[property] = source[property];
     return destination;
   }
-  
+
   afterAll(function() {
-    Teambo.gotoUrl("");
+    Teambo.app.gotoUrl("");
   });
 
 }());

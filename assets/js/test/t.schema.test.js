@@ -28,12 +28,12 @@ describe("t.schema.js", function() {
   });
   it("constrains by required", function() {
     var s = new Teambo.schema({
-      name: { required: true }
+      name: { type: 'string', required: true }
     });
     var errs = s.validate({name: "dave"});
     expect(errs.length).toBe(0);
     var errs = s.validate({name: null});
-    expect(errs.length).toBe(1);
+    expect(errs.length).toBe(2);
   });
   xit("constrains numbers by required", function() {
     var s = new Teambo.schema({
@@ -51,16 +51,22 @@ describe("t.schema.js", function() {
   });
   it("constrains by minLength", function() {
     var s = new Teambo.schema({
-      name: { minLength: 3 }
+      name: { type: 'string', minLength: 3 }
     });
     var errs = s.validate({name: "dave"});
     expect(errs.length).toBe(0);
     var errs = s.validate({name: "a"});
     expect(errs.length).toBe(1);
+    var s = new Teambo.schema({
+      name: { type: 'array', minLength: 3 }
+    });
     var errs = s.validate({name: ["a", "b", "c", "d"]});
     expect(errs.length).toBe(0);
     var errs = s.validate({name: ["a", "b"]});
     expect(errs.length).toBe(1);
+    var s = new Teambo.schema({
+      name: { type: 'number', minLength: 3 }
+    });
     var errs = s.validate({name: 123});
     expect(errs.length).toBe(1);
     var s = new Teambo.schema({
@@ -71,16 +77,22 @@ describe("t.schema.js", function() {
   });
   it("constrains by maxLength", function() {
     var s = new Teambo.schema({
-      name: { maxLength: 3 }
+      name: { type: 'string', maxLength: 3 }
     });
     var errs = s.validate({name: "da"});
     expect(errs.length).toBe(0);
     var errs = s.validate({name: "dave"});
     expect(errs.length).toBe(1);
+    var s = new Teambo.schema({
+      name: { type: 'array', maxLength: 3 }
+    });
     var errs = s.validate({name: ["a", "b", "c", "d"]});
     expect(errs.length).toBe(1);
     var errs = s.validate({name: ["a", "b"]});
     expect(errs.length).toBe(0);
+    var s = new Teambo.schema({
+      name: { type: 'number', maxLength: 3 }
+    });
     var errs = s.validate({name: 123});
     expect(errs.length).toBe(1);
   });
