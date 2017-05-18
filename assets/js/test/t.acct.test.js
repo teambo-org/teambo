@@ -31,4 +31,14 @@ describe("Account", function() {
     });
   });
 
+  it("Generates an RSA key", function(done) {
+    var progress = function(a){
+      // console.log(a);
+    };
+    Teambo.acct.current.genrsa(progress).then(function() {
+      expect(Teambo.acct.current.rsa).not.toBe(null);
+      done();
+    });
+  }, 30 * 1000);
+
 });
