@@ -10,21 +10,25 @@
     </nav>
     <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
     <form id="plan-edit" name="plan_edit" method="POST" class="std" data-plan_id="{{id}}">
-        <div class="field">
-            <label for="plan_name">Name</label>
-            <input id="plan_name" type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Plan Name" value="{{opts.name}}" />
+        <div class="up2c">
+            <div class="field">
+                <label for="plan_name">Name</label>
+                <input id="plan_name" type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Plan Name" value="{{opts.name}}" />
+            </div>
+            <div class="field">
+                <label for="plan_desc">Description</label>
+                <textarea id="plan_desc" class="text" name="desc">{{opts.desc}}</textarea>
+            </div>
         </div>
-        <div class="field">
-            <label for="plan_desc">Description</label>
-            <textarea id="plan_desc" class="text" name="desc">{{opts.desc}}</textarea>
-        </div>
-        <div class="field">
-            <label for="plan_start">Start Date</label>
-            <input id="plan_start"type="text" class="text small min-len-10 max-len-10 date" name="start" autocomplete="off" value="{{opts.start}}" />
-        </div>
-        <div class="field">
-            <label for="plan_end">End Date</label>
-            <input id="plan_end" type="text" class="text small min-len-10 max-len-10 date" name="end" autocomplete="off" value="{{opts.end}}" />
+        <div class="up2c">
+            <div class="field">
+                <label for="plan_start">Start Date</label>
+                <input id="plan_start"type="text" class="text small min-len-10 max-len-10 date" name="start" autocomplete="off" value="{{opts.start}}" />
+            </div>
+            <div class="field">
+                <label for="plan_end">End Date</label>
+                <input id="plan_end" type="text" class="text small min-len-10 max-len-10 date" name="end" autocomplete="off" value="{{opts.end}}" />
+            </div>
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Save" />
