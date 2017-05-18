@@ -180,6 +180,8 @@ Teambo.model._prototype = (function(t){
           }
           h.push(d);
         });
+        // Alias pass moved from model init
+        // t.array.moveProperty(self.hist, a.oldProp, a.newProp, 'diff');
         return h;
       },
       alias: function() {
@@ -189,7 +191,6 @@ Teambo.model._prototype = (function(t){
             self.opts[a.newProp] = self.opts[a.oldProp];
             delete self.opts[a.oldProp];
           }
-          t.array.moveProperty(self.hist, a.oldProp, a.newProp, 'diff');
         });
       }
     };
