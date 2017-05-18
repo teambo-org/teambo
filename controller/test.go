@@ -19,18 +19,19 @@ var tcss = append(css, []string{
 }...)
 var tests = []string{
 	"/js/test/boot.js",
-	"/js/test/t.test.js",
-	"/js/test/t.schema.test.js",
-	"/js/test/t.acct.test.js",
-	"/js/test/t.team.test.js",
-	"/js/test/t.folder.test.js",
-	"/js/test/t.item.test.js",
-	"/js/test/t.plan.test.js",
+	"/js/test/array.test.js",
+	"/js/test/object.test.js",
+	"/js/test/schema.test.js",
+	"/js/test/acct.test.js",
+	"/js/test/team.test.js",
+	"/js/test/folder.test.js",
+	"/js/test/item.test.js",
+	"/js/test/plan.test.js",
 	"/js/test/stress.test.js",
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
-	if util.Config("tests.enabled") != "true" {
+	if util.Config("app.testing") != "true" {
 		res, _ := json.Marshal(map[string]string{"error": "Tests not enabled"})
 		http.Error(w, string(res), 403)
 		return

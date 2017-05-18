@@ -1,4 +1,4 @@
-describe("t.schema.js", function() {
+describe("Schema", function() {
   it("constrains by type", function() {
     var s = new Teambo.schema({
       name: { type: 'string' }

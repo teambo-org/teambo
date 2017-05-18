@@ -1,14 +1,4 @@
-describe("app.js", function() {
-  it("object.extend", function() {
-    var a = {a: 1, b: 2};
-    var b = {b: 3, c: 4};
-    var c = Teambo.object.extend(a, b);
-    expect(c.a).toBe(1);
-    expect(c.b).toBe(3);
-    expect(c.c).toBe(4);
-  });
-  // object.watchable
-  // object.clone
+describe("array.js", function() {
   it("array remove", function() {
     var a = ['a', 'b', 'c'];
     Teambo.array.remove(a, 'b');

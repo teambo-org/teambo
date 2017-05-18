@@ -6,7 +6,7 @@ function(t){
     return false;
   }
 
-  if(!t.acct.current.rsa) {
+  if(!t.acct.current.rsa && !t.app.testing) {
     t.app.gotoUrl('/keygen');
     return false;
   }

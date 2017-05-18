@@ -1,7 +1,7 @@
-xdescribe("Stress", function() {
+describe("Stress", function() {
 
   // var factor = 100;
-  var factor = 50;
+  var factor = 10;
 
   it("Performs well with "+factor+" folders each having "+factor+" items", function(done) {
     var i = 0;
@@ -44,6 +44,8 @@ xdescribe("Stress", function() {
       });
     };
     create_folders().then(function(){
+      expect(Teambo.model.folder.all.length > factor).toBe(true);
+      expect(Teambo.model.item.all.length > factor * factor).toBe(true);
       done();
     });
   }, Math.pow(2, 31) - 1 /* max execution time = max_32_int */);

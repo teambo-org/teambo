@@ -8,7 +8,7 @@ describe("Team", function() {
       fail("Team not created");
       done();
     });
-  });
+  }, 15 * 1000);
 
   it("Can be found", function(done) {
     var d = Teambo.acct.current.teams[0];
@@ -22,9 +22,20 @@ describe("Team", function() {
     });
   });
 
-  // it("Member profile is created when team is created", function(done) {
-    // expect(Teambo.model.member.all.length).toBe(1);
-  // });
+  it("Can be initialized", function(done) {
+    Teambo.team.init(Teambo.team.current.id).then(function(team) {
+      expect(team.opts.name).toBe("New Test Team");
+      done();
+    }).catch(function(e){
+      fail(e);
+      done();
+    });
+  });
+
+  it("Creates Member profile when team is created", function(done) {
+    expect(Teambo.model.member.all.length).toBe(1);
+    done();
+  });
 
   it("Can be edited", function(done) {
     Teambo.team.current.update({name: "Test Team"}).then(function(team){

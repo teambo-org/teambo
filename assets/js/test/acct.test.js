@@ -1,4 +1,4 @@
-describe("Account", function() {
+describe("acct.js", function() {
 
   var email = "test@test.test";
   var pass = Teambo.crypto.randomKey();
