@@ -1,12 +1,9 @@
 <div class="external require-no-auth c">
     <div id="logo" class="logo" alt="Teambo"></div>
-    <form id="auth" name="auth" method="POST" class="std ext" data-ikey="{{ikey}}">
+    <form id="auth" name="auth" method="POST" class="std ext" data-pass="{{pass}}" data-ikey="{{ikey}}">
         <div id="status"></div>
         <div class="field">
             <input type="email" class="text required" name="email" placeholder="Email Address" />
-        </div>
-        <div class="field">
-            <input type="password" class="text pass required min-len-8" name="pass" placeholder="New Password" />
         </div>
         <div class="field submit">
             <input id="submit" type="submit" class="submit" value="Create Account" />

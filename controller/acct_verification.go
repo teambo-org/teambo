@@ -54,6 +54,8 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// TODO : Add rate limiting for acct auth & verification per email address
+
 		acct, _ := model.FindAcct(akey)
 		if acct.Ciphertext != "" && acct.Ciphertext != "new" {
 			error_out(w, "Account already exists", 409)
@@ -82,8 +84,6 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-
-		// TODO : Add rate limiting for acct verification emails
 
 		vkey = util.RandStr(16)
 		_, err = model.CreateAcctVerification(akey, vkey)

@@ -4,17 +4,9 @@
         data-reset="{{reset}}" data-email="{{email}}" data-pass="{{pass}}" data-ikey="{{ikey}}">
         <div class="field first">
             <p class="email">{{email}}</p>
-            {{#reset}}
-            <!--
-            <p class="warning">
-                You may create more than one account with the same email address. Each account must
-                have a different password.
-            </p>
-            -->
-            {{/reset}}
             <p class="warning">
                 In order to create a new account you will first need to confirm your
-                {{#reset}} new{{/reset}} password and verify your email address.
+                new password and verify your email address.
             </p>
             <p class="exc">
                 <span class="alert">DO NOT FORGET YOUR PASSWORD</span><br/>
@@ -22,16 +14,14 @@
             </p>
         </div>
         <div class="field">
+            <input type="password" class="text pass" name="pass" placeholder="Password" />
+            <div id="pass-meter"><div id="pass-meter-bar"></div></div>
+        </div>
+        <div class="field">
             <input type="password" class="text pass" name="verify_pass" placeholder="Confirm Password" />
         </div>
         <div class="field">
-        {{#ikey}}
-            <input type="text" class="text" name="invite" value="{{ikey}}" />
-            <a href="#" id="clear-ikey" class="clear-invite">Clear Invite Code</a>
-        {{/ikey}}
-        {{^ikey}}
-            <input type="text" class="text" name="beta" placeholder="Beta Code" />
-        {{/ikey}}
+            <input type="text" class="text" name="beta" placeholder="Beta Code" value="{{ikey}}"/>
         </div>
         <div class="field">
             <label for="tos" class="chk">
