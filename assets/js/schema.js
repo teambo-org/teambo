@@ -1,39 +1,43 @@
 Teambo.schema = (function(t){
   "use strict";
 
-  var validate_property = function(rules, prop, orig, key) {
+  var validate_property = function(rules, val, orig, key) {
     var errs = [];
-    var type = typeof prop;
+    var type = typeof val;
     if(type === 'object') {
-      type = Array.isArray(prop) ? 'array' : type;
+      type = Array.isArray(val) ? 'array' : type;
     }
     if('alias' in rules) {
       return errs;
     }
+    t.app.log(rules);
     if(!('type' in rules)) {
       errs.push(key + " does not have a declared type");
-    } else if(type !== rules.type && (type != 'string' || rules.type != 'text')) {
+    } else if(val !== null && type !== rules.type && (type != 'string' || rules.type != 'text')) {
       errs.push(key + " does not match expected type: " + rules.type);
     }
     if('values' in rules) {
       if(type !== 'object') {
-        errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by value");
+        errs.push("Schema error: "+ key +" - valerties of type " + type + " cannot be constrained by value");
       }
-      Object.keys(prop).forEach(function (k) {
-        errs = errs.concat(validate_schema(rules.values, prop[k], orig[k], key));
+      Object.keys(val).forEach(function (k) {
+        errs = errs.concat(validate_schema(rules.values, val[k], orig[k], key));
       });
     }
-    if('required' in rules && rules.required && !prop) {
+    if('required' in rules && rules.required && !val) {
       errs.push(key + " is required and is not present");
+    } else {
+      return errs
     }
-    if(('minLength' in rules || 'maxLength' in rules) && !(rules.empty && !prop)) {
+    // nothing below this line is evaluated if
+    if(('minLength' in rules || 'maxLength' in rules) && (val !== null || !rules.empty)) {
       if(type !== 'string' && type !== 'array') {
-        errs.push("Schema error: "+ key +" - properties of type " + type + " cannot be constrained by length");
+        errs.push("Schema error: "+ key +" - valerties of type " + type + " cannot be constrained by length");
       }
-      if('minLength' in rules && prop.length > 0 && prop.length < rules.minLength) {
+      if('minLength' in rules && !val || val.length < rules.minLength) {
         errs.push(key + " must have minimum length of " + rules.minLength);
       }
-      if('maxLength' in rules && prop.length > rules.maxLength) {
+      if('maxLength' in rules && val && val.length > rules.maxLength) {
         errs.push(key + " must have maximum length of " + rules.maxLength);
       }
     }

@@ -11,13 +11,13 @@
             {{^status}}
             <a href="#{{url}}/edit" class="trigger">
                 <i class="icon-down-open-1 nav color-hi-40"></i>
-                <div class="img"><i class="icon-check-empty"></i></div>
+                <div class="img color-90"><i class="icon-check-empty"></i></div>
                 <div class="name">Ready</div>
             </a>
             {{/status}}
             <div class="options">
                 {{#model.item.statuses}}
-                <a href="#{{name}}" data-value="{{key}}">
+                <a href="#{{name}}" data-value="{{key}}" class="{{#active}}hi-05{{/active}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
                     <div class="name">{{label}}</div>
                 </a>
@@ -41,7 +41,7 @@
             {{/folder}}
             <div class="options">
                 {{#model.folder.all}}
-                <a href="#{{url}}" data-value="{{id}}">
+                <a href="#{{url}}" data-value="{{id}}" class="{{#active}}hi-05{{/active}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
                     <div class="name">{{opts.name}}</div>
                 </a>
@@ -64,19 +64,19 @@
             <a href="#{{url}}" class="trigger color-30">
                 <i class="icon-down-open-1 nav"></i>
                 <div class="img"><i class="icon-flag-1"></i></div>
-                <div class="name">(none)</div>
+                <div class="name">(no plan)</div>
             </a>
             {{/plan}}
             <div class="options">
                 {{#model.plan.all}}
-                <a href="#{{url}}" data-value="{{id}}">
+                <a href="#{{url}}" data-value="{{id}}" class="{{#active}}hi-05{{/active}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="icon-{{icon}}"></i></div>
                     <div class="name">{{opts.name}}</div>
                 </a>
                 {{/model.plan.all}}
                 <a href="#" data-value="">
                     <div class="img {{#plan}}color-30{{/plan}}"><i class="icon-flag-1"></i></div>
-                    <div class="name">(none)</div>
+                    <div class="name">(no plan)</div>
                 </a>
             </div>
         </li>
@@ -97,7 +97,7 @@
             {{/member}}
             <div class="options bg">
                 {{#model.member.all}}
-                <a href="#{{url}}" data-value="{{id}}">
+                <a href="#{{url}}" data-value="{{id}}" class="{{#active}}hi-05{{/active}}">
                     <div class="img {{^active}}color-30{{/active}}"><i class="{{icon}}"></i></div>
                     <div class="name">{{opts.name}}</div>
                 </a>
