@@ -51,7 +51,7 @@ Teambo.model.folder = (function(t){
     description: { type: 'text',   required: false, maxLength: 65535, searchable: true }
   });
 
-  t.model.extend(model);
+  t.model._extend(model);
 
   model.getActiveId = function() {
     return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.folder_id : null);

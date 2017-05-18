@@ -44,7 +44,7 @@ Teambo.model.member = (function(t){
     icon:        { type: 'string', required: false, maxLength: 32 }
   });
 
-  t.model.extend(model);
+  t.model._extend(model);
 
   model.track_history = false;
 

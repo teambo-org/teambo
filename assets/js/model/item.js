@@ -53,7 +53,7 @@ Teambo.model.item = (function(t){
     bucket_id:   { alias: "folder_id" }
   });
 
-  t.model.extend(model);
+  t.model._extend(model);
 
   model.getByFolder = function(folder_id) {
     var ret = [];

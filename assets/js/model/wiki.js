@@ -42,11 +42,11 @@ Teambo.model.wiki = (function(t){
 
   model.schema = new t.schema({
     parent_id: { type: 'string', required: false, minLength: 8, maxLength: 8, empty: true },
-    name:      { type: "string", required: true,  maxLength: 256, searchable: true },
-    text:      { type: "text",   required: false, maxLength: 65535, searchable: true }
+    name:      { type: 'string', required: true,  maxLength: 256, searchable: true },
+    text:      { type: 'text',   required: false, maxLength: 65535, searchable: true }
   });
 
-  t.model.extend(model);
+  t.model._extend(model);
 
   model.top = function() {
     return model.allByParent(null);

@@ -91,7 +91,7 @@ Teambo.model.plan = (function(t){
     end:   { type: 'string', required: false, minLength: 10, maxLength: 10, empty: true }
   });
 
-  t.model.extend(model);
+  t.model._extend(model);
 
   model.getActiveId = function() {
     return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.plan_id : null);

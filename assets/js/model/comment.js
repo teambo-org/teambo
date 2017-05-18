@@ -38,7 +38,7 @@ Teambo.model.comment = (function(t){
     member_id: { type: 'string', required: true, minLength: 8, maxLength: 8 }
   });
 
-  t.model.extend(model);
+  t.model._extend(model);
 
   model.allByModel = function(type, id) {
     var ret = [];
