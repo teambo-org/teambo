@@ -6,6 +6,8 @@ form.ext.std .field label.chk { width: 25em; box-sizing: border-box; max-width: 
 form.ext.std .field label.chk input.chk { transform: scale(1.5); }
 form.ext.std .field label.chk input.chk:active { transform: scale(1.5); background: rgba(0,0,0,0.15); }
 form.ext.std .field span.alert { color: #a00; font-weight: bold; }
+form.ext.std input.error,
+form.ext.std input.error:focus { outline: 4px solid rgba(255,0,0,0.5); }
 
 .external .subtext { max-width: 30em; margin: 0 auto; padding: 0.5em 0; text-align: center; color: rgba(0,0,0,0.5); }
 .external .subtext p { font-size: 0.9em; }

@@ -3,10 +3,10 @@
     <form id="auth" name="auth" method="POST" class="std ext" data-vkey="{{vkey}}">
         <div id="status"></div>
         <div class="field">
-            <input type="email" class="text required" name="email" placeholder="Email Address" />
+            <input type="email" class="text required" name="email" placeholder="Email Address" value="{{email}}" />
         </div>
         <div class="field">
-            <input type="password" class="text pass required min-len-8" name="pass" placeholder="Password" />
+            <input type="password" class="text pass required min-len-8" name="pass" placeholder="Password" value="{{pass}}" />
         </div>
         {{#app.remember_me}}
         <div class="field">

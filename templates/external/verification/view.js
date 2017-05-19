@@ -8,7 +8,6 @@ function(t){
   var pass  = form.getAttribute('data-pass');
   var ikey  = form.getAttribute('data-ikey');
   var ichk;
-  form.verify_pass.focus();
 
   if(ikey) {
     localforage.getItem('ikey-data').then(function(d) {
@@ -19,6 +18,11 @@ function(t){
   }
 
   form.pass.value = pass;
+  if(pass) {
+    form.verify_pass.focus();
+  } else {
+    form.pass.focus();
+  }
 
   var pass_meter = document.getElementById('pass-meter');
   var pass_meter_bar = document.getElementById('pass-meter-bar');
@@ -57,6 +61,14 @@ function(t){
   }
   zxcvbn_init();
 
+  var clearError = function(e) {
+    e.target.classList.remove('error');
+  }
+  form.pass.addEventListener('input', clearError);
+  form.verify_pass.addEventListener('input', clearError);
+  form.beta.addEventListener('input', clearError);
+  form.tos.addEventListener('change', clearError);
+
   form.addEventListener('submit', function(e){
     var verify_pass  = form.verify_pass.value;
     var beta  = form.beta ? form.beta.value : '';
@@ -64,21 +76,25 @@ function(t){
     if(!pass_is_good) {
       form.error.msg('Password is not secure enough', pass_feedback ? pass_feedback : 'You must use a strong password');
       form.pass.focus();
+      form.pass.classList.add('error');
       return;
     }
     if(verify_pass !== pass) {
       form.error.msg('Password does not match', 'Please confirm the password you entered on the previous screen or return to the last step');
       form.verify_pass.focus();
+      form.verify_pass.classList.add('error');
       return;
     }
     if(!beta) {
       form.error.msg('Beta Code Required', 'This application is in beta<br/>A beta code is required in order to create an account');
       form.beta.focus();
+      form.beta.classList.add('error');
       return;
     }
     if(!tos_accepted) {
       form.error.msg('You must accept Terms of Service', 'You must accept the Terms of Service and Privacy Policy<br>in order to use this website');
       form.tos.focus();
+      form.tos.classList.add('error');
       return;
     }
     form.disable();
@@ -104,7 +120,12 @@ function(t){
           form.beta.focus();
         }
       } else if(xhr.status == 409) {
-        form.error.msg('Account already exists', 'An account already exists with that email address and password<br/><a href="#/login">Click here to log in</a>');
+        form.error.msg('Account already exists', 'An account already exists with that email address and password<br/><a href="#/login" id="back-to-login" class="create-account"><i class="icon-angle-left"></i>Back to Login<i class="icon-blank"></i></a>');
+        document.getElementById('back-to-login').onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          t.app.replaceUrl('/login', {email: email, pass: form.pass.value});
+        };
       } else if(xhr.status == 404 && ikey) {
           form.error.msg('Invite Code Expired', 'You can still create an account if you have a beta code');
       } else {
