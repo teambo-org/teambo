@@ -19,7 +19,7 @@ func Static(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/.perf" {
 		return
 	}
-	if r.URL.Path == "/min.js" {
+	if r.URL.Path == "/app.js" {
 		compile_js(w, r)
 		return
 	}

@@ -32,6 +32,7 @@ Teambo.app = (function(t){
         window.onhashchange = app.refresh;
         app.refresh();
         t.audio.loadAll(opts.audio);
+        t.async.loadJs(opts.jsasync);
       }).catch(function(e) {
         app.trace(e);
         t.acct.deAuth();

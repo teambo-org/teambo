@@ -56,6 +56,7 @@ var jsapp = []string{
 	"/js/app.js",
 	"/js/array.js",
 	"/js/object.js",
+	"/js/async.js",
 	"/js/promise.js",
 	"/js/crypto.js",
 	"/js/event.js",
@@ -131,10 +132,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	p := Page{}
 	if util.Config("static.min") == "true" && min != "0" {
 		p = Page{
-			// JSLIB:    hash_version(jslib),
 			JSLIB:    []string{"/lib.js?v=" + js_min_lib_version(jslib)},
 			JSASYNC:  hash_version(jsasync),
-			JSAPP:    []string{"/min.js?v=" + js_min_version(jsapp)},
+			JSAPP:    []string{"/app.js?v=" + js_min_version(jsapp)},
 			JSINIT:   []string{},
 			CSS:      []string{"/min.css?v=" + css_min_version()},
 			MANIFEST: manifest,
@@ -322,10 +322,12 @@ func append_js_init(w io.Writer) {
 			app[k] = true
 		}
 	}
+	jsasync_json, _ := json.Marshal(jsasync)
 	app_json, _ := json.Marshal(app)
 	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " +
 		"'audio': " + string(audio) + ", " +
+		"'jsasync': " + string(jsasync_json) + ", " +
 		"'app': " + string(app_json)
 	js := "Teambo.app.init({" + js_data + "});"
 	if util.Config("static.min") == "true" {
