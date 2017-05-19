@@ -202,6 +202,16 @@
 #dashboard .left a.nav-section { font-weight: 500; }
 #dashboard .left .scrollable { overflow-y: auto; position: absolute; top: 2em; left: 0; right: 0; bottom: 2em; }
 
+#dashboard .left i.nav { cursor: pointer; display: none; }
+#dashboard .left .section:hover .toggle-open { display: block; }
+#dashboard .left .section:hover .toggle-close { display: none; }
+#dashboard .left .open .section:hover .toggle-open { display: none; }
+#dashboard .left .open .section:hover .toggle-close { display: block; }
+#dashboard .left .open .totals { display: none; }
+#dashboard .left .section:hover .totals { display: none; }
+#dashboard .left .subsection { display: none; }
+#dashboard .left .open .subsection { display: block; }
+
 #dashboard .side .subsection { font-size: 0.9em; }
 #dashboard .side .subsection i { opacity: 0.3; }
 #dashboard .side .subsection .img { background: none; }
@@ -224,9 +234,9 @@ ul.items i.icon-check-empty { opacity: 0.5; }
 form.std.remove p { text-align: center; }
 
 @media (max-width: 600px) {
-    #dashboard .right { width: 2em; }
-    #dashboard .main { right: 2em; }
-    #dashboard .chat { right: 2em; }
+    #dashboard .right { width: 2em; font-size: 1.5em; }
+    #dashboard .main { right: 3em; }
+    #dashboard .chat { right: 3em; }
     #dashboard .right .section { font-size: 1em; }
     #dashboard .right .name { display: none; }
     #dashboard .right .subsection { display: none; }
@@ -236,17 +246,20 @@ form.std.remove p { text-align: center; }
 }
 /* < 900 */
 @media (max-width: 900px) {
-    #dashboard .main div.left { width: 2em; }
-    #dashboard .main .area { margin-left: 2em; }
+    #dashboard .main div.left { width: 2em; font-size: 1.5em; }
+    #dashboard .main .area { margin-left: 3em; }
     #dashboard .main .left .scrollable { top: 2em; }
     #dashboard .main div.left .section { font-size: 1em; }
     #dashboard .main div.left .name { display: none; }
-    #dashboard .main div.left i.nav { display: none; }
-    #dashboard .main div.left .subsection { display: none; }
-    #dashboard .chat .nav { width: 2em; }
-    #dashboard .chat .nav ul.channels li a { display: block; padding: 0; width: 2em; text-align: center; }
+    #dashboard .main div.left .scrollable i.nav { display: none; }
+    #dashboard .main div.left .scrollable .section:hover i.nav { display: none; }
+    #dashboard .main div.left .scrollable .totals { display: none; }
+    #dashboard .main div.left .scrollable .subsection { display: none; }
+    #dashboard .main div.left .scrollable .open .subsection { display: none; }
+    #dashboard .chat .nav { width: 3em; }
+    #dashboard .chat .nav ul.channels li a { display: block; padding: 0; width: 3em; text-align: center; }
     #dashboard .chat .nav ul.channels .name { display: none; }
-    #dashboard .chat .area { left: 2em; }
+    #dashboard .chat .area { left: 3em; }
     #dashboard form.filter select { width: 100%; margin: 0; }
     #dashboard form.filter a.clear { width: 100%; display: block; text-align: center; padding: 0.5em 0 0; margin: 0; }
 }

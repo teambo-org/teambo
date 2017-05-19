@@ -5,87 +5,120 @@
     </a>
 </div>
 <div class="scrollable">
-    <div class="section hi-10">
-        <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/plan" class="nav-section" data-keybind="p">
-            <div class="img"><i class="icon-calendar-check-o"></i></div>
-            <div class="name">Planning</div>
-        </a>
+    <div class="collapsible {{#ui.left_toggle.plan}}open{{/ui.left_toggle.plan}}" data-toggle-target="plan">
+        <div class="section hi-10">
+            <div class="totals">
+            {{#model.plan.all.length}}
+                {{model.plan.all.length}}
+            {{/model.plan.all.length}}
+            </div>
+            <i class="icon-minus-1 nav color-hi-30 toggle-close" data-toggle="plan"></i>
+            <i class="icon-down-open-1 nav color-hi-30 toggle-open" data-toggle="plan"></i>
+            <a href="#{{team.url}}/plan" class="nav-section" data-keybind="p">
+                <div class="img"><i class="icon-calendar-check-o"></i></div>
+                <div class="name">Planning</div>
+            </a>
+        </div>
+        <div class="section plans subsection">
+        {{#model.plan.all}}
+            <a href="#{{url}}" class="folder {{active}}" data-obj="plan-{{id}}">
+                <div class="img"><i class="icon-flag-1"></i></div>
+                <div class="name">{{opts.name}}</div>
+                <div class="progress hi-10" data-progress="{{progress}}"></div>
+            </a>
+        {{/model.plan.all}}
+        </div>
     </div>
-    <div class="section plans subsection">
-    {{#model.plan.all}}
-        <a href="#{{url}}" class="folder {{active}}" data-obj="plan-{{id}}">
-            <div class="img"><i class="icon-flag-1"></i></div>
-            <div class="name">{{opts.name}}</div>
-            <div class="progress hi-10" data-progress="{{progress}}"></div>
-        </a>
-    {{/model.plan.all}}
+    <div class="collapsible {{#ui.left_toggle.item}}open{{/ui.left_toggle.item}}" data-toggle-target="item">
+        <div class="section hi-10">
+            <div class="totals">
+            {{#model.item.all.length}}
+                {{model.item.all.length}}
+            {{/model.item.all.length}}
+            </div>
+            <i class="icon-minus-1 nav color-hi-30 toggle-close" data-toggle="item"></i>
+            <i class="icon-down-open-1 nav color-hi-30 toggle-open" data-toggle="item"></i>
+            <a href="#{{team.url}}/folders" class="nav-section" data-keybind="i">
+                <div class="img"><i class="icon-archive"></i></div>
+                <div class="name">Items</div>
+            </a>
+        </div>
+        <div class="section folders subsection">
+        {{#model.folder.list}}
+            <a href="#{{url}}" class="folder {{active}}" data-obj="folder-{{id}}">
+                <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
+                <div class="name">{{opts.name}}</div>
+                <div class="progress hi-10" data-progress="{{progress}}"></div>
+            </a>
+        {{/model.folder.list}}
+        </div>
     </div>
-    <div class="section hi-10">
-        <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/folders" class="nav-section" data-keybind="i">
-            <div class="img"><i class="icon-archive"></i></div>
-            <div class="name">Items</div>
-        </a>
+    <div class="collapsible {{#ui.left_toggle.wiki}}open{{/ui.left_toggle.wiki}}" data-toggle-target="wiki">
+        <div class="section hi-10">
+            <div class="totals">
+            {{#model.wiki.all.length}}
+                {{model.wiki.all.length}}
+            {{/model.wiki.all.length}}
+            </div>
+            <i class="icon-minus-1 nav color-hi-30 toggle-close" data-toggle="wiki"></i>
+            <i class="icon-down-open-1 nav color-hi-30 toggle-open" data-toggle="wiki"></i>
+            <a href="#{{team.url}}/wiki" class="nav-section" data-keybind="k">
+                <div class="img"><i class="icon-book"></i></div>
+                <div class="name">Wiki</div>
+            </a>
+        </div>
+        <div class="section wiki subsection">
+        {{#model.wiki.top}}
+            <a href="#{{url}}" class="folder {{active}}" data-obj="wiki-{{id}}">
+                <div class="img"><i class="icon-{{icon}}"></i></div>
+                <div class="name">{{opts.name}}</div>
+            </a>
+        {{/model.wiki.top}}
+        </div>
     </div>
-    <div class="section folders subsection">
-    {{#model.folder.list}}
-        <a href="#{{url}}" class="folder {{active}}" data-obj="folder-{{id}}">
-            <div class="img"><i class="icon-folder"></i><i class="icon-folder-open"></i></div>
-            <div class="name">{{opts.name}}</div>
-            <div class="progress hi-10" data-progress="{{progress}}"></div>
-        </a>
-    {{/model.folder.list}}
-    </div>
-    <div class="section hi-10">
-        <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/wiki" class="nav-section" data-keybind="k">
-            <div class="img"><i class="icon-book"></i></div>
-            <div class="name">Wiki</div>
-        </a>
-    </div>
-    <div class="section wiki subsection">
-    {{#model.wiki.top}}
-        <a href="#{{url}}" class="folder {{active}}" data-obj="wiki-{{id}}">
-            <div class="img"><i class="icon-{{icon}}"></i></div>
-            <div class="name">{{opts.name}}</div>
-        </a>
-    {{/model.wiki.top}}
-    </div>
-    <div class="section hi-10">
-        <i class="icon-down-open-1 nav on color-hi-40"></i>
-        <a href="#{{team.url}}/members" class="nav-section" data-keybind="m">
-            <div class="img"><i class="icon-users"></i></div>
-            <div class="name">Members</div>
-        </a>
-    </div>
-    <div class="section members subsection">
-    {{#model.member.all}}
-    {{#opts.pubKey}}
-        <a href="#{{url}}" class="member {{active}}" data-obj="member-{{id}}">
-            <div class="img"><i class="{{icon}}"></i></div>
-            <div class="name">{{opts.name}}</div>
-        </a>
-    {{/opts.pubKey}}
-    {{/model.member.all}}
+    <div class="collapsible {{#ui.left_toggle.member}}open{{/ui.left_toggle.member}}" data-toggle-target="member">
+        <div class="section hi-10">
+            <div class="totals">
+                {{model.member.all.length}}
+            </div>
+            <i class="icon-minus-1 nav color-hi-30 toggle-close" data-toggle="member"></i>
+            <i class="icon-down-open-1 nav color-hi-30 toggle-open" data-toggle="member"></i>
+            <a href="#{{team.url}}/members" class="nav-section" data-keybind="m">
+                <div class="img"><i class="icon-users"></i></div>
+                <div class="name">Members</div>
+            </a>
+        </div>
+        <div class="section members subsection">
+        {{#model.member.all}}
+        {{#opts.pubKey}}
+            <a href="#{{url}}" class="member {{active}}" data-obj="member-{{id}}">
+                <div class="img"><i class="{{icon}}"></i></div>
+                <div class="name">{{opts.name}}</div>
+            </a>
+        {{/opts.pubKey}}
+        {{/model.member.all}}
+        </div>
     </div>
     <!--
     <div class="section hi-10">
-        <i class="icon-down-open-1 nav color-hi-40"></i>
+        <i class="icon-down-open-1 nav color-hi-30"></i>
         <a href="#{{team.url}}/archives" class="nav-section">
             <div class="img"><i class="icon-trash"></i></div>
             <div class="name">Archives</div>
         </a>
     </div>
     -->
-    {{#team.isAdmin}}
-    <div class="section hi-10">
-        <i class="icon-down-open-1 nav color-hi-40"></i>
-        <a href="#{{team.url}}/edit" class="nav-section" data-keybind="t">
-            <div class="img"><i class="icon-wrench"></i></div>
-            <div class="name">Settings</div>
-        </a>
+    <div class="collapsible {{#ui.left_toggle.settings}}open{{/ui.left_toggle.settings}}" data-toggle-target="settings">
+        {{#team.isAdmin}}
+        <div class="section hi-10">
+            <i class="icon-minus-1 nav color-hi-30 toggle-close" data-toggle="settings"></i>
+            <i class="icon-down-open-1 nav color-hi-30 toggle-open" data-toggle="settings"></i>
+            <a href="#{{team.url}}/edit" class="nav-section" data-keybind="t">
+                <div class="img"><i class="icon-wrench"></i></div>
+                <div class="name">Settings</div>
+            </a>
+        </div>
+        {{/team.isAdmin}}
     </div>
-    {{/team.isAdmin}}
 </div>
 <div id="status"></div>

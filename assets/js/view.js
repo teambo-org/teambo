@@ -32,6 +32,9 @@ Teambo.view = (function(t){
         }
         return new Date(ts).toISOString().slice(0, 16).replace('T', '&nbsp;&nbsp;');
       };
+    },
+    ui: {
+      left_toggle: {plan: true, item: true, wiki: true, member: true, settings: true}
     }
   };
 
@@ -207,6 +210,16 @@ Teambo.view = (function(t){
       tar.parentNode.scrollTop = 0;
     }
   };
+
+  t.event.on('team-init', function(team) {
+    return t.team.findCached('left_toggle').then(function(val) {
+      var data = {};
+      if(val) {
+        data = JSON.parse(val);
+      }
+      obj.ui.left_toggle = t.object.extend(obj.ui, data);
+    });
+  });
 
   var view = {
     init: init,
