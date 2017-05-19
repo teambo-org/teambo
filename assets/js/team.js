@@ -214,7 +214,9 @@ Teambo.team = (function(t){
       return team.summaries[this.id];
     },
     sha: function(args) {
-      return t.crypto.sha([t.salt, t.acct.current.id, this.id].concat(args).join('-'));
+      args = args ? args : [];
+      var cacheKey = [t.salt, t.acct.current.id, this.id].concat(args).join('-');
+      return t.crypto.sha(cacheKey);
     }
   };
 
@@ -307,7 +309,8 @@ Teambo.team = (function(t){
         reject();
         return;
       }
-      var cacheKey = t.crypto.sha([t.salt, t.acct.current.id, id].join('-'));
+      var args = [t.salt, t.acct.current.id, id].join('-');
+      var cacheKey = t.crypto.sha(args);
       localforage.getItem(cacheKey).then(function (ct) {
         if (ct) {
           fulfill(new team(ct, d.mkey, d.key));
