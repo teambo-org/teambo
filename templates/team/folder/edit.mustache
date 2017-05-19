@@ -14,11 +14,11 @@
     <form id="folder-edit" name="folder_edit" method="POST" class="std" data-folder_id="{{id}}">
         <div class="field">
             <label for="folder_name">Name</label>
-            <input id="folder_name" type="text" class="text required min-len-2" name="name" autocomplete="off" placeholder="Folder Name" value="{{opts.name}}" />
+            <input id="folder_name" type="text" class="text required large min-len-2" name="name" autocomplete="off" placeholder="Folder Name" value="{{opts.name}}" />
         </div>
         <div class="field">
             <label for="folder_description">Description</label>
-            <textarea id="folder_description" class="text" name="description">{{opts.description}}</textarea>
+            <textarea id="folder_description" class="text large" name="description">{{opts.description}}</textarea>
         </div>
         <div class="field submit">
             <input type="submit" class="submit" value="Save" />
