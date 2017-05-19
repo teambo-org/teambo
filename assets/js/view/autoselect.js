@@ -12,14 +12,19 @@ Teambo.view.autoselect = (function(t){
         e.stopPropagation();
         // trigger.focus();
         options.firstElementChild.focus();
-        el.classList.add('open');
+        el.classList.toggle('open');
+      });
+      trigger.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
       });
       // trigger.addEventListener('blur', function(e) {
         // el.classList.remove('open');
       // });
       var blurfn = function(e) {
         var a = t.dom.matchParent(e.target, '.options');
-        if(!a) {
+        if(!a && a != trigger) {
+          e.stopPropagation();
           el.classList.remove('open');
         }
       };
