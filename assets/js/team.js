@@ -16,7 +16,7 @@ Teambo.team = (function(t){
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
       last_seen: data.last_seen ? data.last_seen : 0,
-      admin: false,
+      admin: data.admin ? data.admin : false,
       encrypt: function(data, config) {
         return t.crypto.encrypt(data, key, config);
       },
@@ -36,7 +36,7 @@ Teambo.team = (function(t){
         return '/'+data.id;
       },
       isAdmin: function() {
-        return team.admin;
+        return self.admin;
       },
       queue: new t.offline.queue(this)
     });
@@ -132,7 +132,7 @@ Teambo.team = (function(t){
       });
     },
     cache: function() {
-      return localforage.setItem(this.sha(), this.encrypted({last_seen: this.last_seen}));
+      return localforage.setItem(this.sha(), this.encrypted({last_seen: this.last_seen, admin: this.admin}));
     },
     uncache: function() {
       return localforage.removeItem(this.sha());
@@ -143,8 +143,7 @@ Teambo.team = (function(t){
         id:    this.id,
         opts:  this.opts,
         hist:  this.hist,
-        iv:    this.iv,
-        admin: this.admin
+        iv:    this.iv
       };
       t.object.extend(data, override);
       var config = {};
