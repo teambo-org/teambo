@@ -6,7 +6,7 @@ Teambo.manifest = (function(t){
       window.applicationCache.addEventListener('updateready', function(e) {
         if(window.applicationCache.status === window.applicationCache.UPDATEREADY
         || window.applicationCache.status === window.applicationCache.CHECKING) {
-          if(!t.app.moved && !t.app.editing && (!t.team.current || !t.team.current.queue || !t.team.current.queue.processing)) {
+          if(!t.app.moved && !t.app.editing && (!t.team.current || !t.team.current.queue || !t.team.current.queue.processing())) {
             t.app.reload();
           } else {
             t.app.updateready = true;
