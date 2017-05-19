@@ -92,6 +92,7 @@
 .icon-floppy { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe84f;&nbsp;'); }
 .icon-giraffe { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe850;&nbsp;'); }
 .icon-lock-open-alt { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf075;&nbsp;'); }
+.icon-twitter { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf099;&nbsp;'); }
 .icon-coffee { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf0f4;&nbsp;'); }
 .icon-angle-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf104;&nbsp;'); }
 .icon-angle-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf105;&nbsp;'); }
@@ -113,6 +114,7 @@
 .icon-steam { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf1b6;&nbsp;'); }
 .icon-database { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf1c0;&nbsp;'); }
 .icon-rebel { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf1d0;&nbsp;'); }
+.icon-git { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf1d3;&nbsp;'); }
 .icon-chart-area { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf1fe;&nbsp;'); }
 .icon-heartbeat { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf21e;&nbsp;'); }
 .icon-battery-4 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf240;&nbsp;'); }

@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'teambo';
-  src: url('../font/teambo.eot?52278618');
-  src: url('../font/teambo.eot?52278618#iefix') format('embedded-opentype'),
-       url('../font/teambo.woff2?52278618') format('woff2'),
-       url('../font/teambo.woff?52278618') format('woff'),
-       url('../font/teambo.ttf?52278618') format('truetype'),
-       url('../font/teambo.svg?52278618#teambo') format('svg');
+  src: url('../font/teambo.eot?44529704');
+  src: url('../font/teambo.eot?44529704#iefix') format('embedded-opentype'),
+       url('../font/teambo.woff2?44529704') format('woff2'),
+       url('../font/teambo.woff?44529704') format('woff'),
+       url('../font/teambo.ttf?44529704') format('truetype'),
+       url('../font/teambo.svg?44529704#teambo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'teambo';
-    src: url('../font/teambo.svg?52278618#teambo') format('svg');
+    src: url('../font/teambo.svg?44529704#teambo') format('svg');
   }
 }
 */
@@ -137,6 +137,7 @@
 .icon-floppy:before { content: '\e84f'; } /* '' */
 .icon-giraffe:before { content: '\e850'; } /* '' */
 .icon-lock-open-alt:before { content: '\f075'; } /* '' */
+.icon-twitter:before { content: '\f099'; } /* '' */
 .icon-coffee:before { content: '\f0f4'; } /* '' */
 .icon-angle-left:before { content: '\f104'; } /* '' */
 .icon-angle-right:before { content: '\f105'; } /* '' */
@@ -158,6 +159,7 @@
 .icon-steam:before { content: '\f1b6'; } /* '' */
 .icon-database:before { content: '\f1c0'; } /* '' */
 .icon-rebel:before { content: '\f1d0'; } /* '' */
+.icon-git:before { content: '\f1d3'; } /* '' */
 .icon-chart-area:before { content: '\f1fe'; } /* '' */
 .icon-heartbeat:before { content: '\f21e'; } /* '' */
 .icon-battery-4:before { content: '\f240'; } /* '' */

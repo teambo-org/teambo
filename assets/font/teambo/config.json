@@ -725,6 +725,18 @@
       "src": "entypo"
     },
     {
+      "uid": "e7cb72a17f3b21e3576f35c3f0a7639b",
+      "css": "git",
+      "code": 61907,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "627abcdb627cb1789e009c08e2678ef9",
+      "css": "twitter",
+      "code": 61593,
+      "src": "fontawesome"
+    },
+    {
       "uid": "f612e05753726a3004f30321831a7fda",
       "css": "ruby",
       "code": 59470,

@@ -81,6 +81,7 @@
 .icon-floppy:before { content: '\e84f'; } /* '' */
 .icon-giraffe:before { content: '\e850'; } /* '' */
 .icon-lock-open-alt:before { content: '\f075'; } /* '' */
+.icon-twitter:before { content: '\f099'; } /* '' */
 .icon-coffee:before { content: '\f0f4'; } /* '' */
 .icon-angle-left:before { content: '\f104'; } /* '' */
 .icon-angle-right:before { content: '\f105'; } /* '' */
@@ -102,6 +103,7 @@
 .icon-steam:before { content: '\f1b6'; } /* '' */
 .icon-database:before { content: '\f1c0'; } /* '' */
 .icon-rebel:before { content: '\f1d0'; } /* '' */
+.icon-git:before { content: '\f1d3'; } /* '' */
 .icon-chart-area:before { content: '\f1fe'; } /* '' */
 .icon-heartbeat:before { content: '\f21e'; } /* '' */
 .icon-battery-4:before { content: '\f240'; } /* '' */
