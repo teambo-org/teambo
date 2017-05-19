@@ -5,7 +5,7 @@ Teambo.socket.inviteResponse = (function (t) {
     url: function() {
       var team = t.team.current;
       if(!team) {
-        return
+        return;
       }
       var ikeys = get_invite_keys();
       if(!ikeys) {
