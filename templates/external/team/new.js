@@ -11,6 +11,7 @@ function(t){
     t.team.create(name).then(function(team){
       t.app.gotoUrl('/'+team.id);
     }).catch(function(e){
+      t.app.log(e);
       form.enable();
       form.error.msg("Team could not be created", "Please try again");
     });
