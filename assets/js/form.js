@@ -66,10 +66,11 @@ Teambo.form = (function(t){
         msg: function(msg, ex) {
           error.innerHTML = t.view.renderTemplate('util/error', {msg: msg, ex: ex});
           error.style.display = 'block';
+          error.style.visibility = 'visible';
         },
         hide: function() {
           if(error) {
-            error.style.display = 'none';
+            error.style.visibility = 'hidden';
           }
         }
       },
