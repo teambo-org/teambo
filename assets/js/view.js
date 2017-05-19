@@ -217,7 +217,7 @@ Teambo.view = (function(t){
       if(val) {
         data = JSON.parse(val);
       }
-      obj.ui.left_toggle = t.object.extend(obj.ui, data);
+      obj.ui.left_toggle = t.object.extend(obj.ui.left_toggle, data);
     });
   });
 
