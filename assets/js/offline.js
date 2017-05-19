@@ -5,7 +5,7 @@ Teambo.offline = (function (t) {
     var self = this;
     var events = [];
     var processing = false;
-    var cacheKey = t.crypto.sha(team.id+'queue'+t.salt);
+    var cacheKey = team.sha(['offline.queue']);
     t.object.extend(this, {
       init:  function() {
         return self.wake().then(function(data) {

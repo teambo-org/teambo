@@ -54,7 +54,7 @@ describe("Item", function() {
         item.remove().then(function(b){
           Teambo.model.item.findAll().then(function(items) {
             expect(items.length).toBe(1);
-            var hash = Teambo.crypto.sha(Teambo.team.current.id+item_id+Teambo.salt);
+            var hash = Teambo.team.current.sha('folder', item_id);
             localforage.getItem(hash).then(function(val){
               expect(val).toBe(null);
               done();

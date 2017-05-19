@@ -89,6 +89,10 @@ func Team(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	if team.Ciphertext != "" {
+		res["admin"] = team.IsAdmin(mkey)
+	}
+
 	res["team"] = team
 	res_json, _ := json.Marshal(res)
 	w.Write([]byte(string(res_json)))

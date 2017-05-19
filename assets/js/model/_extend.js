@@ -132,7 +132,7 @@ Teambo.model._extend = (function(t){
           fulfill(m);
           return;
         }
-        t.team.findCached(id).then(function(ct){
+        t.team.findCached(model.type+'-'+id).then(function(ct){
           if(ct) {
             fulfill(new model(ct));
           } else {
@@ -224,7 +224,7 @@ Teambo.model._extend = (function(t){
     model.uncache = function(id) {
       t.array.deleteByProperty(model.all, 'id', id);
       return new Promise(function (fulfill, reject) {
-        t.team.uncache(id).then(function() {
+        t.team.uncache(model.type + '-' + id).then(function() {
           fulfill();
         });
       });

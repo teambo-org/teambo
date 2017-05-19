@@ -107,7 +107,7 @@ Teambo.model._prototype = (function(t){
           if(!updated) {
             model.all.push(self);
           }
-          t.team.cache(self.id, self.encrypted()).then(function(){
+          t.team.cache(model.type + '-' + self.id, self.encrypted()).then(function(){
             fulfill(self);
           });
         });

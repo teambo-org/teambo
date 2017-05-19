@@ -16,124 +16,12 @@ Teambo.team = (function(t){
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
       last_seen: data.last_seen ? data.last_seen : 0,
-      save: function() {
-        if(!mkey) {
-          return Promise.reject('No mkey');
-        }
-        return new Promise(function(fulfill, reject) {
-          var errs = team.schema.validate(data.opts, self.orig);
-          if(errs.length) {
-            reject(errs);
-            return;
-          }
-          var iv = t.crypto.iv();
-          var new_ct = self.encrypted({iv: iv});
-          t.socket.team.ignore(['team', self.id, iv].join('-'));
-          t.xhr.post('/team', {
-            data: {
-              team_id: self.id,
-              mkey: mkey,
-              ct: new_ct,
-              iv: self.iv
-            }
-          }).then(function(xhr){
-            if(xhr.status == 200) {
-              self.iv = iv;
-              self.orig = t.object.clone(self.opts);
-              self.cache();
-              fulfill(xhr);
-            } else {
-              reject(xhr);
-            }
-          }).catch(reject);
-        });
-      },
-      update: function(opts) {
-        t.object.extend(self.opts, opts);
-        return new Promise(function(fulfill, reject) {
-          self.save().then(function(xhr) {
-            fulfill(self)
-          }).catch(function(xhr) {
-            if(xhr.status === 409) {
-              var opts = t.team.current.opts;
-              team.refresh(self.id).then(function(new_m){
-                new_m.update(self.diff()).then(function(){
-                  fulfill(new_m);
-                }).catch(function(){
-                  reject(xhr);
-                });
-              });
-            } else {
-              self.opts = t.object.clone(self.orig);
-              reject(e);
-            }
-          });
-        });
-      },
-      remove: function(name) {
-        if(name != self.opts.name || !t.app.online) {
-          return Promise.reject();
-        }
-        return new Promise(function(fulfill, reject) {
-          var data = {
-            team_id: t.team.current.id,
-            mkey:    t.team.current.mkey
-          };
-          t.xhr.post('/team/remove', {
-            data: data
-          }).then(function(xhr){
-            if(xhr.status == 204) {
-              var p = [];
-              t.model.types.forEach(function(type){
-                p.push(t.model[type].uncacheAll());
-              });
-              Promise.all(p).then(function() {
-                uncacheTeam().then(function(){
-                  t.array.deleteByProperty(t.acct.current.teams, 'id', self.id);
-                  t.acct.current.save().then(function(){
-                    fulfill();
-                  });
-                });
-              });
-            } else {
-              reject(xhr);
-            }
-          }).catch(reject);
-        });
-      },
-      cache: function() {
-        var hash = t.crypto.sha(self.id+t.salt);
-        return localforage.setItem(hash, self.encrypted({last_seen: self.last_seen}));
-      },
-      encrypted: function(override) {
-        var override = override ? override : {};
-        var data = {
-          id:    self.id,
-          opts:  self.opts,
-          hist:  self.hist,
-          iv:    self.iv
-        };
-        t.object.extend(data, override);
-        var config = {};
-        if(override.iv) {
-          config.iv = override.iv;
-        }
-        return self.encrypt(data, config);
-      },
+      admin: false,
       encrypt: function(data, config) {
         return t.crypto.encrypt(data, key, config);
       },
       decrypt: function(ct) {
         return t.crypto.decrypt(ct, key);
-      },
-      diff: function() {
-        var diff = {};
-        for(var i in self.opts) {
-          if(self.orig[i] != self.opts[i]) {
-            diff[i] = self.opts[i];
-          }
-        }
-        return diff;
       },
       theme: function() {
         if(typeof(self.opts.theme) === "object") {
@@ -147,66 +35,188 @@ Teambo.team = (function(t){
       url: function() {
         return '/'+data.id;
       },
-      lastSeen: function(ts) {
-        if(ts && ts > self.last_seen || ts === 0) {
-          self.last_seen = ts;
-          self.cache();
-        }
-        return self.last_seen;
-      },
       isAdmin: function() {
-        var team = t.array.findByProperty(t.acct.current.teams, 'id', self.id);
-        return team && team.admin;
+        return team.admin;
       },
-      isCached: function() {
-        return new Promise(function(fulfill, reject) {
-          var hash = t.crypto.sha(self.id+'item_ids'+t.salt);
-          localforage.getItem(hash).then(function(ct) {
-            if(ct) {
-              fulfill();
-            } else {
-              reject();
-            }
-          });
-        });
-      },
-      rsaTPO: function(pubKey) {
-        var rsa = new RSAKey();
-        var e = 65537;
-        rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
-        return t.crypto.hextob64(rsa.encrypt(self.id+'-'+key));
-      },
-      init: function() {
-        return team.init(self.id);
-      },
-      getSummary: function() {
-        if(!self.last_seen) {
-          return Promise.resolve();
-        }
-        return new Promise(function(fulfill, reject) {
-          t.xhr.get('/team/summary', {
-            data: {
-              team_id: self.id,
-              mkey: self.mkey,
-              ts: self.last_seen
-            }
-          }).then(function(xhr) {
-            if(xhr.status == 200) {
-              team.summaries[self.id] = JSON.parse(xhr.responseText);
-            }
-            fulfill();
-          }).catch(fulfill);
-        });
-      },
-      summary: function() {
-        return team.summaries[self.id];
-      }
+      queue: new t.offline.queue(this)
     });
-    var uncacheTeam = function() {
-      var hash = t.crypto.sha(self.id+t.salt);
-      return localforage.removeItem(hash);
-    };
-    this.queue = new t.offline.queue(this);
+  };
+
+  team.prototype = {
+    save: function() {
+      if(!this.mkey) {
+        return Promise.reject('No mkey');
+      }
+      var self = this;
+      return new Promise(function(fulfill, reject) {
+        var errs = team.schema.validate(self.opts, self.orig);
+        if(errs.length) {
+          reject(errs);
+          return;
+        }
+        var iv = t.crypto.iv();
+        var new_ct = self.encrypted({iv: iv});
+        t.socket.team.ignore(['team', self.id, iv].join('-'));
+        t.xhr.post('/team', {
+          data: {
+            team_id: self.id,
+            mkey: self.mkey,
+            ct: new_ct,
+            iv: self.iv
+          }
+        }).then(function(xhr){
+          if(xhr.status == 200) {
+            self.iv = iv;
+            self.orig = t.object.clone(self.opts);
+            self.cache();
+            fulfill(xhr);
+          } else {
+            reject(xhr);
+          }
+        }).catch(reject);
+      });
+    },
+    update: function(opts) {
+      t.object.extend(this.opts, opts);
+      var self = this;
+      return new Promise(function(fulfill, reject) {
+        self.save().then(function(xhr) {
+          fulfill(self);
+        }).catch(function(xhr) {
+          if(xhr.status === 409) {
+            var opts = t.team.current.opts;
+            team.refresh(self.id).then(function(new_m){
+              new_m.update(self.diff()).then(function(){
+                fulfill(new_m);
+              }).catch(function(){
+                reject(xhr);
+              });
+            });
+          } else {
+            self.opts = t.object.clone(self.orig);
+            reject(e);
+          }
+        });
+      });
+    },
+    remove: function(name) {
+      if(name != this.opts.name || !t.app.online) {
+        return Promise.reject();
+      }
+      var self = this;
+      return new Promise(function(fulfill, reject) {
+        var data = {
+          team_id: t.team.current.id,
+          mkey:    t.team.current.mkey
+        };
+        t.xhr.post('/team/remove', {
+          data: data
+        }).then(function(xhr){
+          if(xhr.status == 204) {
+            var p = [];
+            t.model.types.forEach(function(type){
+              p.push(t.model[type].uncacheAll());
+            });
+            Promise.all(p).then(function() {
+              self.uncache().then(function(){
+                t.array.deleteByProperty(t.acct.current.teams, 'id', self.id);
+                t.acct.current.save().then(function(){
+                  fulfill();
+                });
+              });
+            });
+          } else {
+            reject(xhr);
+          }
+        }).catch(reject);
+      });
+    },
+    cache: function() {
+      return localforage.setItem(this.sha(), this.encrypted({last_seen: this.last_seen}));
+    },
+    uncache: function() {
+      return localforage.removeItem(this.sha());
+    },
+    encrypted: function(override) {
+      var override = override ? override : {};
+      var data = {
+        id:    this.id,
+        opts:  this.opts,
+        hist:  this.hist,
+        iv:    this.iv,
+        admin: this.admin
+      };
+      t.object.extend(data, override);
+      var config = {};
+      if(override.iv) {
+        config.iv = override.iv;
+      }
+      return this.encrypt(data, config);
+    },
+    rsaTPO: function(pubKey) {
+      var rsa = new RSAKey();
+      var e = 65537;
+      rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
+      return t.crypto.hextob64(rsa.encrypt(this.id+'-'+key));
+    },
+    init: function() {
+      return team.init(this.id);
+    },
+    getSummary: function() {
+      if(!this.last_seen) {
+        return Promise.resolve();
+      }
+      var self = this;
+      return new Promise(function(fulfill, reject) {
+        t.xhr.get('/team/summary', {
+          data: {
+            team_id: self.id,
+            mkey: self.mkey,
+            ts: self.last_seen
+          }
+        }).then(function(xhr) {
+          if(xhr.status == 200) {
+            team.summaries[self.id] = JSON.parse(xhr.responseText);
+          }
+          fulfill();
+        }).catch(fulfill);
+      });
+    },
+    lastSeen: function(ts) {
+      if(ts && ts > self.last_seen || ts === 0) {
+        this.last_seen = ts;
+        this.cache();
+      }
+      return self.last_seen;
+    },
+    diff: function() {
+      var diff = {};
+      for(var i in this.opts) {
+        if(this.orig[i] != this.opts[i]) {
+          diff[i] = this.opts[i];
+        }
+      }
+      return diff;
+    },
+    isCached: function() {
+      var self = this;
+      return new Promise(function(fulfill, reject) {
+        var hash = self.sha('item_ids');
+        localforage.getItem(hash).then(function(ct) {
+          if(ct) {
+            fulfill();
+          } else {
+            reject();
+          }
+        });
+      });
+    },
+    summary: function() {
+      return team.summaries[this.id];
+    },
+    sha: function(args) {
+      return t.crypto.sha([t.salt, t.acct.current.id, this.id].concat(args).join('-'));
+    }
   };
 
   team.current = null;
@@ -298,13 +308,16 @@ Teambo.team = (function(t){
         reject();
         return;
       }
-      localforage.getItem(t.crypto.sha(id + t.salt)).then(function (ct) {
+      var cacheKey = t.crypto.sha([t.salt, t.acct.current.id, id].join('-'));
+      localforage.getItem(cacheKey).then(function (ct) {
         if (ct) {
           fulfill(new team(ct, d.mkey, d.key));
         } else {
           team.fetch(id, d.mkey).then(function(data) {
             if(data.team) {
+              // TODO: Add 'admin' parameter to API endpoint and collect it here
               var fetched_team = new team(data.team.ct, d.mkey, d.key);
+              fetched_team.admin = data.admin;
               fetched_team.cache().then(function() {
                 fulfill(fetched_team);
               });
@@ -392,21 +405,21 @@ Teambo.team = (function(t){
     });
   };
 
-  team.findCached = function(id) {
+  team.findCached = function(key) {
     if(!team.current) return Promise.reject();
-    var hash = t.crypto.sha(team.current.id+id+t.salt);
+    var hash = team.current.sha(key);
     return localforage.getItem(hash);
   };
 
-  team.cache = function(id, ct) {
+  team.cache = function(key, ct) {
     if(!team.current) return Promise.reject();
-    var hash = t.crypto.sha(team.current.id+id+t.salt);
+    var hash = team.current.sha(key);
     return localforage.setItem(hash, ct);
   };
 
-  team.uncache = function(id) {
+  team.uncache = function(key) {
     if(!team.current) return Promise.reject();
-    var hash = t.crypto.sha(team.current.id+id+t.salt);
+    var hash = team.current.sha(key);
     return localforage.removeItem(hash);
   };
 
