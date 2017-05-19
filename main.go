@@ -109,6 +109,7 @@ func main() {
 
 func redirectToHttps(config map[string]string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "https://"+config["app.host"], http.StatusMovedPermanently)
+		// http.Redirect(w, r, "https://"+config["app.host"], http.StatusMovedPermanently) 301
+		http.Redirect(w, r, "https://"+config["app.host"], http.StatusFound)
 	}
 }
