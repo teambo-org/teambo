@@ -221,7 +221,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 		p = Page{
 			JSLIB:   []string{"/lib.js?v=" + js_min_lib_version(jslib)},
 			JSASYNC: hash_version(jsasync),
-			JSAPP:   []string{"/min.js?v=" + js_min_version(jsapp)},
+			JSAPP:   []string{"/app.js?v=" + js_min_version(jsapp)},
 			JSINIT:  []string{},
 			CSS:     []string{"/min.css?v=" + css_min_version()},
 			AUDIO:   find_audio(),
