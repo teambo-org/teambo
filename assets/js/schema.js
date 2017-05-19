@@ -10,7 +10,6 @@ Teambo.schema = (function(t){
     if('alias' in rules) {
       return errs;
     }
-    t.app.log(rules);
     if(!('type' in rules)) {
       errs.push(key + " does not have a declared type");
     } else if(val !== null && type !== rules.type && (type != 'string' || rules.type != 'text')) {
