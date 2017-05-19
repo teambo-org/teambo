@@ -159,9 +159,10 @@ Teambo.acct = (function (t) {
   acct.current = null;
 
   acct.init = function () {
-    window.onbeforeunload = function(){
-      acct.deAuth();
-    };
+    // Session hopping. Too many race conditions and edge cases
+    // window.onbeforeunload = function(){
+      // acct.deAuth();
+    // };
     return acct.wake();
   };
 

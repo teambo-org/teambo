@@ -26,9 +26,6 @@
 #dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; display: none; }
 #dashboard .section div.totals { float: right; opacity: 0.5; font-size: 0.7em; line-height: 2.9em; padding: 0 1em; text-align: center; }
 #dashboard .section div.totals .sep { opacity: 0.5; }
-#dashboard .section i.nav.on,
-#dashboard .section:hover i.nav { display: block; }
-#dashboard .section:hover div.totals { display: none; }
 #dashboard .section > a { display: block; }
 
 #dashboard .chat:before { content: ""; position: absolute; left: -2em; top: 0; right: 0; height: 200%; }
