@@ -76,6 +76,9 @@ form.ext.std .field span.alert { color: #a00; font-weight: bold; }
 .about #shadow { position: fixed; top: 0; right: 0; left: 0; background: #fff; padding: 0 1em; z-index: 1098; max-width: 100%; box-shadow: 0 0 1.5em rgba(0,0,0,0.1); height: 4em; }
 .about #shadow-mask { position: absolute; top: 0; right: 0; left: 0; background: #fff; padding: 0 1em; z-index: 1099; max-width: 100%; height: 5em; }
 .about #return { position: fixed; top: 0; right: 0; left: 0; background: #fff; padding: 0 1em; z-index: 1100; max-width: 100%; height: 4em; }
+.about #return nav { position: fixed; right: 1em; top: 1em; }
+.about #return nav a { width: 2em; color: #fff; float: left; height: 2em; line-height: 2em; border-radius: 0.2em; opacity: 0.4; }
+.about #return nav .github { background: #000; }
 .about ul { text-align: left; padding: 0.7em 1em; font-size: 0.9em; background: rgba(0,0,0,0.05); list-style: none; }
 .about ul li { text-align: left; padding: 0.4em 0; font-size: 1em; }
 .about ul li i.icon-angle-right { color: rgba(0,0,0,0.2); }
@@ -94,3 +97,6 @@ form.ext.std .field span.alert { color: #a00; font-weight: bold; }
 .about section #dashboard .main nav { margin-top: 0; }
 .about section #dashboard .main h1 { font-size: 1.4em; }
 .about section #dashboard .main span.name { line-height: 1.18em; }
+
+.about .github-banner { position: fixed; top: 0; right: 0; border: 0; display: block; z-index: 1200; }
+
