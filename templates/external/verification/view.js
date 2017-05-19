@@ -30,9 +30,12 @@ function(t){
   var pass_feedback;
   var zxcvbn_present;
   var zxcvbn_init = function() {
-    if(!zxcvbn) {
+    if(!('zxcvbn' in window)) {
+      form.disable();
       setTimeout(zxcvbn_init, 1000);
+      return;
     }
+    form.enable();
     zxcvbn_present = true;
     var check;
     form.pass.addEventListener('input', function(e) {
