@@ -159,6 +159,7 @@ Teambo.acct = (function (t) {
   acct.current = null;
 
   acct.init = function () {
+    window.addEventListener('beforeunload', acct.deAuth);
     return acct.wake();
   };
 
