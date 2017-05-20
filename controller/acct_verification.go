@@ -54,14 +54,6 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// TODO : Add rate limiting for acct auth & verification per email address
-
-		acct, _ := model.FindAcct(akey)
-		if acct.Ciphertext != "" && acct.Ciphertext != "new" {
-			error_out(w, "Account already exists", 409)
-			return
-		}
-
 		if ikey != "" && ihash != "" {
 			invite, _ := model.InviteFind(ikey)
 			if invite.Hash == "" {
@@ -83,6 +75,14 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Invalid Beta Code", 403)
 				return
 			}
+		}
+
+		// TODO : Add rate limiting for acct auth & verification per email address
+
+		acct, _ := model.FindAcct(akey)
+		if acct.Ciphertext != "" && acct.Ciphertext != "new" {
+			error_out(w, "Account already exists", 409)
+			return
 		}
 
 		vkey = util.RandStr(16)
