@@ -9,7 +9,11 @@ function(t){
     form.disable();
     item.remove().then(function(){
       t.view.updateSideNav();
-      t.app.gotoUrl(folder.url());
+      if(t.plan.current) {
+        t.app.gotoUrl(plan.url());
+      } else {
+        t.app.gotoUrl(folder.url());
+      }
     }).catch(function(e){
       form.enable();
       form.error.msg("Item could not be removed.", "Please try again");
