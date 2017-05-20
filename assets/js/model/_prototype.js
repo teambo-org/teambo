@@ -59,7 +59,7 @@ Teambo.model._prototype = (function(t){
           }).catch(function(xhr) {
             if(xhr.status === 409 && auto_refresh) {
               self.refresh().then(function(new_m) {
-                var diff = model.schema.diff(new_m.opts, opts);
+                var diff = model.schema.keyDiff(new_m.opts, opts);
                 new_m.update(diff).then(function(){
                   fulfill(new_m);
                 }).catch(function(){
@@ -67,7 +67,7 @@ Teambo.model._prototype = (function(t){
                 });
               });
             } else if(xhr.status === 0) {
-              var diff = model.schema.diff(self.orig, opts);
+              var diff = model.schema.keyDiff(self.orig, opts);
               self.orig = t.object.clone(self.opts);
               self.cache().then(function() {
                 t.team.current.queue.process({type: model.type + '.offline.update', opts: diff, id: self.id});

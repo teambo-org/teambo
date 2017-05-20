@@ -71,6 +71,15 @@ Teambo.schema = (function(t){
       validate: function(data, orig) {
         return validate_schema(rules, data, orig);
       },
+      keyDiff: function(orig, opts) {
+        var diff = {};
+        for(var i in opts) {
+          if(orig[i] != opts[i]) {
+            diff[i] = opts[i];
+          }
+        }
+        return diff;
+      },
       diff: function(orig, opts) {
         var diff = {};
         for(var i in opts) {
