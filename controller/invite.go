@@ -14,6 +14,8 @@ import (
 	"net/url"
 	"time"
 	"strings"
+	"html/template"
+	"bytes"
 	// "fmt"
 )
 
@@ -39,24 +41,30 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 		error_out(w, "Invite could not be sent", 500)
 		return
 	}
+
+	subject := "Teambo Invite"
 	scheme := "http"
 	if util.Config("ssl.active") == "true" {
 		scheme = scheme + "s"
 	}
-
-	subject := "Teambo Invite"
 	link := scheme + "://" + util.Config("app.host") + "/#/invite?ikey="+ikey+"&chk="+chk
-	body := "You have been invited to join a team on Teambo<br/><br/>"
 	if team_name != "" {
-		body = body + "Team: <b>" + team_name + "</b><br/>"
 		link = link + "&name=" + url.QueryEscape(team_name)
 	}
-	if sender_name != "" && sender_email != "" {
-		body = body + "Admin: " + sender_name + " &lt; " + sender_email + " &gt; " + "<br/>"
+
+	t, err := template.ParseFiles("templates/email/invite.html")
+	data := map[string]interface{}{
+		"team_name": team_name,
+		"link": link,
+		"sender_name": sender_name,
+		"sender_email": sender_email,
 	}
-	body = body + "<br/>"
-	body = body + "Click the link below within the next 72 hours to respond:<br/>"
-	body = body + "<a href='" + link + "'>" + link + "</a>"
+	buf := new(bytes.Buffer)
+	if err = t.Execute(buf, data); err != nil {
+		return
+	}
+	body := buf.String()
+
 	err = util.SendMail(email, subject, body)
 	if err != nil {
 		invite.Delete()

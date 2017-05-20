@@ -1,0 +1,23 @@
+<img src="https://teambo.com/i/icon/teambo192.png" style="width: 192px; height: 192px; margin: 2em auto; display: block;">
+{{if .team_name}}
+<p style="font-family: arial; text-align: center; font-size: 1.3em;">
+    {{.team_name}}
+</p>
+{{end}}
+<div style="padding: 1em 0; background: rgba(0,0,0,0.1); color: rgba(0,0,0,0.7); max-width: 32em; margin: 0 auto;">
+<p style="font-family: arial; text-align: center;">
+    You have been invited to join a team on Teambo<br/>
+</p>
+<p style="font-family: arial; text-align: center;">
+    <a href='{{.link}}' style="font-size: 0.9em; display: block; padding: 1em 0;">{{.link}}</a>
+</p>
+<p style="font-family: arial; text-align: center; color: rgba(0,0,0,0.5);">
+    Click the link above in the next 72 hours to respond
+</p>
+</div>
+{{if .sender_name}}
+<p style="font-family: arial; text-align: center; color: rgba(0,0,0,0.7);">
+    Invite sent by<br/>
+    {{.sender_name}} &lt;{{.sender_email}}&gt;
+</p>
+{{end}}
