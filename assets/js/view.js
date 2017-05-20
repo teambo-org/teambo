@@ -73,7 +73,6 @@ Teambo.view = (function(t){
   };
 
   var updateSideNav = function() {
-    console.log('updating side nav');
     render('right', 'team/layout/right');
     render('left',  'team/layout/left');
     render('chat',  'team/layout/chat');
