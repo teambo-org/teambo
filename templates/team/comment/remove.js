@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  var form = new t.form(document.remove);
+  var form = new t.form(document.comment_remove);
   var comment_id = form.comment_id.value;
   var comment = t.model.comment.get(comment_id);
   var parentModel = comment.parentModel();
