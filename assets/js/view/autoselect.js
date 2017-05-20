@@ -30,6 +30,10 @@ Teambo.view.autoselect = (function(t){
       };
       document.addEventListener('focusin', blurfn);
       document.addEventListener('click', blurfn);
+      options.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      });
       options.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
