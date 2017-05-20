@@ -209,7 +209,8 @@ Teambo.model._extend = (function(t){
           data: {
             team_id: team_id,
             mkey: mkey
-          }
+          },
+          timeout: 30*1000
         }).then(function(xhr) {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText);
