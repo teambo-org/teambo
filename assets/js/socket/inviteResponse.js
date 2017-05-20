@@ -39,6 +39,7 @@ Teambo.socket.inviteResponse = (function (t) {
       if(member) {
         member.update({invite_key: ''}).then(function(member) {
           t.view.emit('member-updated', {id: member.id, iv: member.iv, member: member});
+          t.view.updateSideNav();
         });
       }
     } else {
@@ -51,6 +52,7 @@ Teambo.socket.inviteResponse = (function (t) {
       if(member) {
         t.model.invite.accept(member, e.pubKey).then(function(member) {
           t.view.emit('member-updated', {id: member.id, iv: member.iv, member: member});
+          t.view.updateSideNav();
         });
       }
     }
