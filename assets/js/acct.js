@@ -308,7 +308,7 @@ Teambo.acct = (function (t) {
           } else {
             reject(xhr);
           }
-        });
+        }).catch(reject);
       });
     },
     confirm : function(vkey, email, pass) {

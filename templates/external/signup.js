@@ -9,7 +9,7 @@ function(t){
   var email;
 
   var form_submit_signup = function(email) {
-    t.app.replaceUrl('/verification', {email: email, pass: pass, ikey: ikey});
+    t.app.gotoUrl('/verification', {email: email, pass: pass, ikey: ikey});
   };
 
   var form_init = function(form_submit_fn) {

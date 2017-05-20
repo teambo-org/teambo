@@ -28,7 +28,7 @@ function(t){
       document.getElementById('reset').onclick = function(e) {
         e.preventDefault();
         e.stopPropagation();
-        t.app.replaceUrl('/verification', {reset: true, email: email, pass: pass, ikey: ikey});
+        t.app.gotoUrl('/verification', {reset: true, email: email, pass: pass, ikey: ikey});
       };
     }
     t.acct.auth(email, pass).then(function(xhr){
