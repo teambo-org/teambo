@@ -282,9 +282,11 @@ Teambo.model._extend = (function(t){
               t.view.updateSideNav();
               fulfill();
             }).catch(function() {
+              t.app.trace(e);
               fulfill();
             });
-          }).catch(function(err) {
+          }).catch(function(e) {
+            t.app.trace(e);
             fulfill();
           });
         }

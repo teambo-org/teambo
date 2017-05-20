@@ -83,13 +83,9 @@ Teambo.view = (function(t){
     var el = document.getElementById('status');
     if(el) {
       el.innerHTML = renderTemplate('team/layout/status');
-      if(t.app.online) {
-        el.classList.add('online');
-        el.classList.remove('offline');
-      } else {
-        el.classList.remove('online');
-        el.classList.add('offline');
-      }
+      el.classList.remove('online');
+      el.classList.remove('offline');
+      el.classList.add(t.app.online ? 'online' : 'offline');
     }
   };
 

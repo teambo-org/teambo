@@ -113,7 +113,7 @@ Teambo.app = (function(t){
         app.last_hash = hash;
         app.loaded = true;
       }).catch(function(e){
-        t.app.log(e);
+        t.app.trace(e);
         t.app.gotoUrl('/'+window.location.hash.split('/').slice(1, -2).join('/'));
       });
     };
