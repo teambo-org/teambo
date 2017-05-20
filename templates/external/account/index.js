@@ -99,13 +99,15 @@ function(t){
         Promise.all(p).then(function() {
           renderTeams(teams, orig_html);
         }).catch(function() {
-          var p = [];
+          var fns = [];
+          var args = [];
           teams.forEach(function(team) {
             if(!team.missing) {
-              p.push(team.init);
+              fns.push(t.team.init);
+              args.push(team.id);
             }
           });
-          t.promise.serial(p).then(function() {
+          t.promise.serial(fns, args).then(function() {
             teams.forEach(function(team) {
               if(!team.last_seen) {
                 team.lastSeen(t.time());

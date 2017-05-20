@@ -38,6 +38,9 @@ Teambo.team = (function(t){
       isAdmin: function() {
         return self.admin;
       },
+      summary: function() {
+        return team.summaries[this.id];
+      },
       queue: new t.offline.queue(this)
     });
   };
@@ -182,11 +185,11 @@ Teambo.team = (function(t){
       });
     },
     lastSeen: function(ts) {
-      if(ts && ts > self.last_seen || ts === 0) {
+      if(ts && ts > this.last_seen || ts === 0) {
         this.last_seen = ts;
         this.cache();
       }
-      return self.last_seen;
+      return this.last_seen;
     },
     diff: function() {
       var diff = {};
@@ -209,9 +212,6 @@ Teambo.team = (function(t){
           }
         });
       });
-    },
-    summary: function() {
-      return team.summaries[this.id];
     },
     sha: function(args) {
       args = args ? args : [];

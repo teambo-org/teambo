@@ -2,14 +2,17 @@ Teambo.promise = (function (t) {
   "use strict";
 
   var promise = {
-    serial: function(fns) {
+    serial: function(fns, args) {
+      args = args ? args : [];
       return new Promise(function(fulfill, reject) {
         if(fns.length) {
           // Pop the first function and set it off
           var fn = fns.shift();
-          fn().then(function() {
+          var a = args.shift();
+          a = Array.isArray(a) ? a : [a];
+          fn.apply(this, a).then(function() {
             // If it succeeded, we continue processing the list recursively
-            promise.serial(fns).then(function() {
+            promise.serial(fns, args).then(function() {
               // Cascade success
               fulfill();
             }).catch(function(e) {
