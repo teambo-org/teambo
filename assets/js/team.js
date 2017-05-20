@@ -41,7 +41,14 @@ Teambo.team = (function(t){
       summary: function() {
         return team.summaries[this.id];
       },
-      queue: new t.offline.queue(this)
+      queue: new t.offline.queue(this),
+      rsaTPO: function(pubKey) {
+        if(!pubKey) return;
+        var rsa = new RSAKey();
+        var e = 65537;
+        rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
+        return t.crypto.hextob64(rsa.encrypt(this.id+'-'+key));
+      }
     });
   };
 
@@ -154,12 +161,6 @@ Teambo.team = (function(t){
         config.iv = override.iv;
       }
       return this.encrypt(data, config);
-    },
-    rsaTPO: function(pubKey) {
-      var rsa = new RSAKey();
-      var e = 65537;
-      rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
-      return t.crypto.hextob64(rsa.encrypt(this.id+'-'+key));
     },
     init: function() {
       return team.init(this.id);
@@ -283,6 +284,7 @@ Teambo.team = (function(t){
               theme: 'Default'
             }
           }, data.mkey, key);
+          new_team.admin = true;
           new_team.orig = {};
           new_team.save().then(function(){
             acct.teams.push({id: new_team.id, mkey: data.mkey, key: key, admin: true});

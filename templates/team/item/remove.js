@@ -9,12 +9,13 @@ function(t){
     form.disable();
     item.remove().then(function(){
       t.view.updateSideNav();
-      if(t.plan.current) {
-        t.app.gotoUrl(plan.url());
+      if(t.model.plan.current) {
+        t.app.gotoUrl(t.model.plan.current.url());
       } else {
         t.app.gotoUrl(folder.url());
       }
     }).catch(function(e){
+      t.app.trace(e);
       form.enable();
       form.error.msg("Item could not be removed.", "Please try again");
     });

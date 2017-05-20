@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+	"regexp"
 	// "log"
 )
 
@@ -150,6 +151,7 @@ func Members(w http.ResponseWriter, r *http.Request) {
 	team_id := r.FormValue("team_id")
 	mkey := r.FormValue("mkey")
 	id := r.FormValue("id")
+	ct := r.FormValue("ct")
 
 	team, err := auth_team(w, r)
 	if err != nil {
@@ -163,29 +165,33 @@ func Members(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		obj := model.TeamObject{}
 
-		if id == "" {
-			if !team.IsAdmin(mkey) {
-				error_out(w, "Only a team admin can create a new Member", 403)
+		if !team.IsAdmin(mkey) {
+			error_out(w, "Only a team admin can create a new Member", 403)
+			return
+		}
+
+		if id != "" && ct != "" {
+			id_regex := "^[0-9a-zA-Z]{8}$"
+			match, err := regexp.MatchString(id_regex, id)
+			if !match {
+				http.Error(w, "Malformed Object ID", 400)
 				return
 			}
-			obj = members.NewObject("")
-			err = obj.Save()
-			if err != nil {
-				error_out(w, "Object could not be created", 500)
-				return
-			}
-		} else {
+
 			obj = members.NewObject(id)
 			if obj.Id != id {
 				error_out(w, "Object already exists", 409)
 				return
 			}
-			obj.Ciphertext = "new"
+			obj.Ciphertext = ct
 			err = obj.Save()
 			if err != nil {
 				error_out(w, "Object could not be saved", 500)
 				return
 			}
+		} else {
+			error_out(w, "Object ID and Ciphertext must be specified", 400)
+			return
 		}
 
 		res, _ = json.Marshal(obj)

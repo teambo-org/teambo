@@ -48,35 +48,30 @@ Teambo.model._extend = (function(t){
         };
         if(id) {
           data.id = id;
+        } else {
+          data.id = t.crypto.tempKey();
         }
-        t.xhr.post('/team/'+model.type+'s', {
-          data: data
-        }).then(function(xhr){
-          if(xhr.status == 200) {
-            var data = JSON.parse(xhr.responseText);
-            var m = new model({
-              id:   data.id,
-              opts: opts,
-              iv:  'new'
-            });
-            m.orig = {};
-            m.save().then(function() {
-              model.cacheIds().then(function() {
-                fulfill(m);
-              });
-            }).catch(function(e) {
-              reject(e);
-            });
-          } else if(xhr.status === 409) {
-            id = t.crypto.tempKey();
-            model.create(opts, id).then(function(m) {
+        var m = new model({
+          id:   data.id,
+          opts: opts
+        });
+        m.orig = {};
+        m.save().then(function(res){
+          if(res.id == m.id) {
+            model.cacheIds().then(function() {
               fulfill(m);
+            });
+          } else if(res.status === 409) {
+            model.create(opts).then(function(new_m) {
+              fulfill(new_m);
             }).catch(reject);
           } else {
             reject(xhr);
           }
-        }).catch(function(xhr) {
-          if(!id) {
+        }).catch(function(e) {
+          if(e.status === 403) {
+            model.clearAll();
+          } else if(!id && e.status === 0) {
             var id = t.crypto.tempKey();
             var m = new model({id: id, opts: opts});
             var member_id = t.acct.current.member().id;
@@ -251,7 +246,7 @@ Teambo.model._extend = (function(t){
           }
           m.uncache().then(function() {
             model.cacheIds().then(function(){
-              if(model.type == 'member' && m.opts.pubKey == t.acct.current.rsa.pubTPO().n && !t.acct.current.member()) {
+              if(model.type == 'member' && m.opts.pubKey == t.acct.current.rsa.pubTPO().n) {
                 t.model.uncacheAll().then(function() {
                   t.app.replaceUrl('/team/inaccessible', {tid: t.team.current.id});
                   fulfill();
@@ -302,12 +297,21 @@ Teambo.model._extend = (function(t){
     });
 
     t.event.on('pre-nav', function(route) {
-      var k = model.type + '_id';
-      if(route && route.data && k in route.data) {
-        model.current = model.get(route.data[k]);
-      } else {
-        model.current = null;
-      }
+      return new Promise(function(fulfill, reject) {
+        var k = model.type + '_id';
+        if(route && route.data && k in route.data) {
+          var m = model.get(route.data[k]);
+          if(m) {
+            model.current = m;
+            fulfill();
+          } else {
+            reject();
+          }
+        } else {
+          model.current = null;
+          fulfill();
+        }
+      });
     });
 
     t.event.on('nav', function(route) {

@@ -25,13 +25,18 @@ Teambo.model._prototype = (function(t){
           }
           var new_ct = self.encrypted(iv);
           t.socket.team.ignore([model.type, self.id, iv].join('-'));
-          t.xhr.post('/team/'+model.type, {
+          if(!self.iv) {
+            var url = '/team/'+model.type+'s';
+          } else {
+            var url = '/team/'+model.type;
+          }
+          t.xhr.post(url, {
             data: {
               team_id: t.team.current.id,
               mkey: t.team.current.mkey,
               id: self.id,
               ct: new_ct,
-              iv: self.iv
+              iv: self.iv ? self.iv : ""
             }
           }).then(function(xhr){
             if(xhr.status == 200) {

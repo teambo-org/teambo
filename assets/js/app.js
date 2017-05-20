@@ -99,35 +99,39 @@ Teambo.app = (function(t){
         app.target = "page";
       }
       app.editing = false;
-      t.event.emit('pre-nav', route);
-      if(t.view.render(app.target, route.tpl, data) === false) {
-        return;
-      }
-      if(app.loaded && !silent) {
-        t.audio.play('click', 1);
-      }
-      t.event.emit('nav', route);
-      if(app.last_hash != '' && app.last_hash != hash) {
-        app.moved = true;
-      }
-      app.last_hash = hash;
-      app.loaded = true;
+      t.event.all('pre-nav', route).then(function(){
+        if(t.view.render(app.target, route.tpl, data) === false) {
+          return;
+        }
+        if(app.loaded && !silent) {
+          t.audio.play('click', 1);
+        }
+        t.event.emit('nav', route);
+        if(app.last_hash != '' && app.last_hash != hash) {
+          app.moved = true;
+        }
+        app.last_hash = hash;
+        app.loaded = true;
+      }).catch(function(e){
+        t.app.log(e);
+        t.app.gotoUrl('/'+window.location.hash.split('/').slice(1, -2).join('/'));
+      });
     };
     if(p.length) {
       Promise.all(p).then(nav).catch(function(e) {
         if(e && e.status) {
           if(e.status === 403) {
             t.model.uncacheAll().then(function() {
-              app.replaceUrl('/team/inaccessible', {tid: data.team_id});
+              app.gotoUrl('/team/inaccessible', {tid: data.team_id});
               return;
             });
           } else if(e.status === 404) {
-            app.replaceUrl('/team/missing', {tid: data.team_id});
-              return;
+            app.gotoUrl('/team/missing', {tid: data.team_id});
+            return;
           }
         }
         app.trace(e);
-        app.gotoUrl('/account');
+        app.gotoUrl('/team/error', {tid: data.team_id});
       });
     } else {
       nav();

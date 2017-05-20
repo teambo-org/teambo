@@ -81,8 +81,11 @@ form.std .full { width: 100%; box-sizing: border-box; }
 form.std textarea.large { height: 8em; }
 form.std textarea.tall { height: 24em; }
 form.std textarea.med-tall { height: 12em; }
+form.std a.btn { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; display: inline-block; text-decoration: none; }
 form.std input.submit { border: none; background: rgba(0,0,0,0.5); color: #fff; padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std input.submit[disabled] { background: rgba(0,0,0,0.2); }
+form.std a.btn:hover,
+form.std input.submit:hover { background: rgba(0,0,0,0.6); }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel:hover { opacity: 1; }
 form.std p { margin: 0; font-size: 0.9em; }

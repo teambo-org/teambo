@@ -1,0 +1,25 @@
+<div class="external require-auth c">
+    <div id="logo" class="logo"></div>
+    <form name="remove_team" class="std ext" data-team_id="{{tid}}">
+        <div class="field first">
+            <p class="error">Something went wrong</p>
+            <p class="ex">
+                An error occured in the application. It's hard to say exactly what happened, but
+                there is one thing you can try before removing the team. Click the Hard Refresh
+                button below to reset your browser cache. You will have to log in again but it
+                might resolve the issue. If not, you may have to remove the team.
+            </p>
+        </div>
+        <div class="field submit">
+            <a href="#/account" data-keybind="escape q"><i class="icon-angle-left"></i>Back to account</a>
+            <br/><br/><br/>
+            {{^admin}}
+            <a href="#" id="hard-reset" class="btn">Hard Reset</a>
+            {{/admin}}
+            <br/><br/><br/><br/>
+            {{^admin}}
+            <input type="submit" class="submit" value="Remove Team" />
+            {{/admin}}
+        </div>
+    </form>
+</div>

@@ -5,29 +5,31 @@
         <div class="comment hi-05" id="comment-{{id}}">
             <div class="author section hi-05">
                 {{#editable}}
-                <div class="control section">
-                    <a href="#{{url}}/edit" title="Edit">
-                        <div class="img"><i class="icon-pencil"></i></div>
+                    <a href="#{{url}}/edit">
+                    {{#member}}
+                        <div class="img"><i class="{{icon}}"></i></div>
+                        <div class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+                    {{/member}}
+                    {{^member}}
+                        <div class="img"><i class="icon-user-1"></i></div>
+                        <div class="name">{{opts.member_id}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+                    {{/member}}
                     </a>
-                    <a href="#{{url}}/remove" title="Remove">
-                        <div class="img"><i class="icon-cancel"></i></div>
-                    </a>
-                </div>
                 {{/editable}}
-                {{#member}}
-                <a>
-                    <div class="img"><i class="{{icon}}"></i></div>
-                    <div class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
-                </a>
-                {{/member}}
-                {{^member}}
-                <a>
-                    <div class="img"><i class="icon-user-1"></i></div>
-                    <div class="name">{{opts.member_id}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
-                </a>
-                {{/member}}
+                {{^editable}}
+                    <span>
+                    {{#member}}
+                        <div class="img"><i class="{{icon}}"></i></div>
+                        <div class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+                    {{/member}}
+                    {{^member}}
+                        <div class="img"><i class="icon-user-1"></i></div>
+                        <div class="name">{{opts.member_id}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+                    {{/member}}
+                    </span>
+                {{/editable}}
             </div>
-            <div class="message">{{opts.text}}</div>
+            <div class="message">{{#nl2br}}{{#linkify}}{{opts.text}}{{/linkify}}{{/nl2br}}</div>
         </div>
     {{/comments}}
     </div>

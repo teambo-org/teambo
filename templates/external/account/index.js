@@ -26,10 +26,19 @@ function(t){
     t.acct.current.invites.forEach(function(invite) {
       html += t.view.renderTemplate('external/invite/_li', {invite: invite});
     });
-    el.innerHTML = orig_html + html;
+    if(el) {
+      el.innerHTML = orig_html + html;
+    } else {
+      return;
+    }
     var theme_styles = t.view.renderTemplate('external/account/_themes', {teams: teams, default_theme: t.themes["Default"]}),
       url = sjcl.codec.base64.fromBits(sjcl.codec.utf8String.toBits(theme_styles));
-    document.getElementById('account-themes').href = "data:text/css;base64,"+url;
+    var theme_el = document.getElementById('account-themes');
+    if (theme_el) {
+      theme_el.href = "data:text/css;base64,"+url;
+    } else {
+      return;
+    }
 
     var anchors = el.querySelectorAll('a');
     var disabled = false;
@@ -45,7 +54,13 @@ function(t){
     if(anchors.length) {
       anchors[0].focus();
     }
-    document.getElementById('team-new').style.display = "block";
+
+    var team_new_el = document.getElementById('team-new');
+    if (team_new_el) {
+      team_new_el.style.display = "block";
+    } else {
+      return;
+    }
 
     t.socket.acct.start();
 
