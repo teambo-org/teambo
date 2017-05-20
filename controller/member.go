@@ -189,6 +189,14 @@ func Members(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Object could not be saved", 500)
 				return
 			}
+
+			parts := strings.Split(ct, " ")
+			iv := parts[0]
+			if iv != "new" {
+				log_str, _ := obj.Log(iv)
+				logs := model.TeamLogParse([]string{log_str})
+				socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
+			}
 		} else {
 			error_out(w, "Object ID and Ciphertext must be specified", 400)
 			return

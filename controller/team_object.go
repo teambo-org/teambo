@@ -155,13 +155,13 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 	return
 }
 
-func HandleTeamObjects(bucket_name string) func(http.ResponseWriter, *http.Request) {
+func HandleTeamObjects(bucket_name string, log_changes bool) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		TeamObjects(bucket_name, w, r)
+		TeamObjects(bucket_name, log_changes, w, r)
 	}
 }
 
-func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
+func TeamObjects(bucket_name string, log_changes bool, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	team_id := r.FormValue("team_id")
@@ -204,6 +204,14 @@ func TeamObjects(bucket_name string, w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				error_out(w, "Object could not be saved", 500)
 				return
+			}
+
+			parts := strings.Split(ct, " ")
+			iv := parts[0]
+			if log_changes && iv != "new" {
+				log_str, _ := obj.Log(iv)
+				logs := model.TeamLogParse([]string{log_str})
+				socket.TeamHub.Broadcast <- socket.JsonMessage(team_id, logs[0])
 			}
 		} else {
 			error_out(w, "Object ID and Ciphertext must be specified", 400)
