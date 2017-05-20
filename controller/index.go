@@ -322,7 +322,7 @@ func append_js_init(w io.Writer) {
 			app[k] = true
 		}
 	}
-	jsasync_json, _ := json.Marshal(jsasync)
+	jsasync_json, _ := json.Marshal(hash_version(jsasync))
 	app_json, _ := json.Marshal(app)
 	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " +
