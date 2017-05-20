@@ -137,10 +137,8 @@ func (c *connection) Write(mt int, m wsmessage) error {
 
 func (c *connection) Writer() {
 	pinger := time.NewTicker(pingPeriod)
-	timesync := time.NewTicker(timeSyncPeriod)
 	defer func() {
 		pinger.Stop()
-		timesync.Stop()
 		c.ws.Close()
 	}()
 	for {
@@ -155,11 +153,6 @@ func (c *connection) Writer() {
 			}
 		case <-pinger.C:
 			if err := c.Write(websocket.PingMessage, wsmessage{"", ""}); err != nil {
-				return
-			}
-		case <-timesync.C:
-			var msg = JsonMessage("", map[string]interface{}{"type": "timesync"})
-			if err := c.Write(websocket.TextMessage, msg); err != nil {
 				return
 			}
 		}
