@@ -177,11 +177,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Public-Key-Pins", keys+"max-age=30")
 	}
 
-	if util.Config("static.cache") == "true" {
+	// Index page can be cached by reverse proxy if cache is cleared after every deploy
+	// X-Cache-Edge works like s-maxage in that rpc caches but tells clients not to
+	// if util.Config("static.cache") == "true" {
 		// w.Header().Set("X-Cache-Edge", "0")
-		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
-		w.Header().Set("Cache-Control", "max-age=315360000")
-	}
+		// w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
+		// w.Header().Set("Cache-Control", "max-age=315360000")
+	// }
 
 	err = t.Execute(w, p)
 	if err != nil {
