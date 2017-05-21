@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
+	"github.com/tdewolff/minify"
+	cssminify "github.com/tdewolff/minify/css"
 	// "encoding/json"
 	// "fmt"
 )
@@ -29,6 +31,10 @@ func Static(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.URL.Path == "/min.css" {
 		compile_css(w, r)
+		return
+	}
+	if r.URL.Path == "/font.css" {
+		compile_font_css(w, r)
 		return
 	}
 	path := "assets" + r.URL.Path
@@ -95,8 +101,27 @@ func compile_css(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
 	w.Header().Set("Content-Type", mime.TypeByExtension(".css"))
+	m := minify.New()
+	m.AddFunc("text/css", cssminify.Minify)
 	for _, v := range css {
 		src, _ := ioutil.ReadFile("assets" + v)
-		w.Write(src)
+		min, _ := m.String("text/css", string(src))
+		w.Write([]byte(min))
+	}
+}
+
+func compile_font_css(w http.ResponseWriter, r *http.Request) {
+	version := r.FormValue("v")
+	if util.Config("static.cache") == "true" && version != "" {
+		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
+		w.Header().Set("Cache-Control", "max-age=315360000")
+	}
+	w.Header().Set("Content-Type", mime.TypeByExtension(".css"))
+	m := minify.New()
+	m.AddFunc("text/css", cssminify.Minify)
+	for _, v := range cssfont {
+		src, _ := ioutil.ReadFile("assets" + v)
+		min, _ := m.String("text/css", string(src))
+		w.Write([]byte(min))
 	}
 }

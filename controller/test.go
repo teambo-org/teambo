@@ -50,7 +50,8 @@ func Test(w http.ResponseWriter, r *http.Request) {
 			JSASYNC: hash_version(jsasync),
 			JSAPP:   []string{"/min.js?v=" + js_min_version(jsapp)},
 			JSINIT:  []string{},
-			CSS:     []string{"/min.css?v=" + css_min_version()},
+			CSS:      []string{"/min.css?v=" + css_min_version(css)},
+			CSSFONT:  []string{"/font.css?v=" + css_min_version(cssfont)},
 		}
 	} else {
 		p = Page{
@@ -58,7 +59,8 @@ func Test(w http.ResponseWriter, r *http.Request) {
 			JSASYNC: hash_version(jsasync),
 			JSAPP:   hash_version(jsapp),
 			JSINIT:  append([]string{"/init.js?v=" + jsinit_version()}, hash_version(tests)...),
-			CSS:     hash_version(tcss),
+			CSS:      hash_version(css),
+			CSSFONT:  hash_version(cssfont),
 		}
 	}
 

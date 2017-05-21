@@ -26,6 +26,7 @@ type Page struct {
 	JSASYNC  []string
 	JSINIT   []string
 	CSS      []string
+	CSSFONT  []string
 	AUDIO    []string
 	MANIFEST []string
 	IMAGE    []string
@@ -107,9 +108,11 @@ var jsasync = []string{
 var jsinit = []string{
 	"/init.js",
 }
-var css = []string{
+var cssfont = []string{
 	"/css/font.css",
 	"/css/font-semibold.css",
+}
+var css = []string{
 	"/css/default.css",
 	"/css/external.css",
 	"/css/dashboard.css",
@@ -137,7 +140,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			JSASYNC:  hash_version(jsasync),
 			JSAPP:    []string{"/app.js?v=" + js_min_version(jsapp)},
 			JSINIT:   []string{},
-			CSS:      []string{"/min.css?v=" + css_min_version()},
+			CSS:      []string{"/min.css?v=" + css_min_version(css)},
+			CSSFONT:  []string{"/font.css?v=" + css_min_version(cssfont)},
 			MANIFEST: manifest,
 		}
 	} else {
@@ -147,6 +151,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			JSASYNC:  hash_version(jsasync),
 			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
 			CSS:      hash_version(css),
+			CSSFONT:  hash_version(cssfont),
 			MANIFEST: manifest,
 		}
 	}
@@ -226,7 +231,8 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 			JSASYNC: hash_version(jsasync),
 			JSAPP:   []string{"/app.js?v=" + js_min_version(jsapp)},
 			JSINIT:  []string{},
-			CSS:     []string{"/min.css?v=" + css_min_version()},
+			CSS:     []string{"/min.css?v=" + css_min_version(css)},
+			CSSFONT: []string{"/font.css?v=" + css_min_version(cssfont)},
 			AUDIO:   find_audio(),
 			IMAGE:   find_images(),
 			FONT:    find_fonts(),
@@ -238,6 +244,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 			JSASYNC:  hash_version(jsasync),
 			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
 			CSS:      hash_version(css),
+			CSSFONT:  hash_version(cssfont),
 			AUDIO:    find_audio(),
 			IMAGE:    find_images(),
 			FONT:     find_fonts(),
@@ -351,9 +358,9 @@ func hash_version(sources []string) []string {
 	return ret
 }
 
-func css_min_version() string {
+func css_min_version(files []string) string {
 	hasher := md5.New()
-	for _, v := range css {
+	for _, v := range files {
 		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, hasher)
 	}

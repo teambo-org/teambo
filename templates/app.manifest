@@ -10,6 +10,8 @@ CACHE:
 {{end}}{{range .JSINIT}}
 {{.}}
 {{end}}
+{{range .CSSFONT}}{{.}}
+{{end}}
 {{range .CSS}}{{.}}
 {{end}}
 {{range .AUDIO}}/audio/{{.}}.mp3
