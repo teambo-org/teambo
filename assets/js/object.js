@@ -14,8 +14,8 @@ Teambo.object = (function (t) {
       return object.extend({}, obj);
     },
     watchable: function(obj){
-      if(!Object.prototype.watch) {
-        Object.defineProperty(obj, "watch", {
+      if(!Object.prototype.watchProperty) {
+        Object.defineProperty(obj, "watchProperty", {
           enumerable: false,
           configurable: true,
           writable: false,
@@ -39,8 +39,8 @@ Teambo.object = (function (t) {
           }
         });
       }
-      if(!Object.prototype.unwatch) {
-        Object.defineProperty(obj, "unwatch", {
+      if(!Object.prototype.unwatchProperty) {
+        Object.defineProperty(obj, "unwatchProperty", {
           enumerable: false,
           configurable: true,
           writable: false,

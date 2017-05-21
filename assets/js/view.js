@@ -98,13 +98,13 @@ Teambo.view = (function(t){
     obj.model = t.model;
     obj.chat = t.chat;
 
-    t.app.watch('online', function(prop, old_val, new_val) {
+    t.app.watchProperty('online', function(prop, old_val, new_val) {
       if(old_val != new_val) {
         updateStatus();
       }
     });
 
-    t.app.watch('updateready', function(prop, old_val, new_val) {
+    t.app.watchProperty('updateready', function(prop, old_val, new_val) {
       if(old_val != new_val) {
         updateStatus();
       }
