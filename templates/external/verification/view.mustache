@@ -6,7 +6,7 @@
             <p class="email">{{email}}</p>
             <p class="warning">
                 In order to create a new account you will first need to confirm your
-                new password and verify your email address.
+                new password{{^ikey}} and verify your email address{{/ikey}}.
             </p>
             <p class="exc">
                 <span class="alert">DO NOT FORGET YOUR PASSWORD</span><br/>
@@ -30,7 +30,7 @@
             </label>
         </div>
         <div class="field submit">
-            <input type="submit" class="submit" value="Send Verification Email" />
+            <input type="submit" class="submit" value="{{#ikey}}Submit{{/ikey}}{{^ikey}}Send Verification Email{{/ikey}}" />
             <br/><br/>
             <a class="cancel" href="#/login" data-keybind="escape q">cancel</a>
         </div>

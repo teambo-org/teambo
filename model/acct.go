@@ -39,9 +39,6 @@ func FindAcct(akey string) (item Acct, err error) {
 		b := tx.Bucket([]byte("acct"))
 
 		v := b.Get([]byte(akey))
-		if err != nil {
-			return err
-		}
 
 		ct = string(v)
 

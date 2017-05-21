@@ -14,11 +14,11 @@ function(t){
   }
 
   if(ikey) {
-    localforage.getItem('ikey-data').then(function(d) {
-      if(d && d.chk) {
-        ichk = d.chk;
-      }
-    });
+    var d = sessionStorage.getItem('ikey-data');
+    var d = d ? JSON.parse(d) : {};
+    if(d && d.chk) {
+      ichk = d.chk;
+    }
   }
 
   form.pass.value = pass;
@@ -28,7 +28,6 @@ function(t){
     form.pass.focus();
   }
 
-  var pass_meter = document.getElementById('pass-meter');
   var pass_meter_bar = document.getElementById('pass-meter-bar');
   var pass_is_good;
   var pass_feedback;
@@ -105,18 +104,36 @@ function(t){
       return;
     }
     form.disable();
-    var data = {beta: beta};
+    var data = {};
     if(ikey == form.beta.value) {
       data['ikey'] = ikey;
       data['ichk'] = ichk;
+    } else {
+      data['beta'] = beta;
     }
     t.acct.verification.send(email, pass, data).then(function(xhr) {
-      t.app.replaceUrl('/verification/sent', {email: email});
+      var data = JSON.parse(xhr.responseText);
+      if('vkey' in data) {
+        t.acct.verification.confirm(data.vkey, email, pass).then(function(){
+          t.acct.current.cacheAuth();
+          t.app.gotoUrl('/account');
+        }).catch(function(e) {
+          t.app.trace(e);
+          t.app.replaceUrl('/verification/failed');
+        });
+      } else {
+        t.app.replaceUrl('/verification/sent', {email: email});
+      }
     }).catch(function(xhr){
       form.enable();
       if(xhr.status === 403) {
-        if(ikey) {
-          form.error.msg('Invite Code does not match', 'Make sure you are using the correct email address');
+        if(ikey == beta) {
+          var res = JSON.parse(xhr.responseText);
+          if(res.error == "Invite Code already redeemed") {
+            form.error.msg(res.error, 'You have already redeemed this invite code');
+          } else {
+            form.error.msg('Invite Code does not match', 'Make sure you are using the correct email address');
+          }
         } else {
           form.error.msg('Invalid Beta Code', 'You need a team invite or a valid beta code to create a new account. If you received a team invite, start over by clicking the link in the email');
           form.beta.focus();
@@ -128,8 +145,8 @@ function(t){
           e.stopPropagation();
           t.app.gotoUrl('/login', {email: email, pass: form.pass.value});
         };
-      } else if(xhr.status === 404 && ikey) {
-        form.error.msg('Invite Code Expired', 'You can still create an account if you have a beta code');
+      } else if(xhr.status === 404 && ikey == beta) {
+        form.error.msg('Invite Code Expired', 'You can still create an account if you have a beta code<br>or you can go back and log in to an existing account');
       } else if(xhr.status === 0) {
         form.error.msg('Verification could not be sent', 'You must be online in order to create an account');
       } else {

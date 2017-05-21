@@ -12,17 +12,15 @@ function(t){
 
   if(!t.acct.isAuthed()) {
     if(data.ikey) {
-      localforage.setItem('ikey-data', data);
+      sessionStorage.setItem('ikey-data', JSON.stringify(data));
     }
-    t.app.gotoUrl('/login');
+    t.app.gotoUrl('/login', {ikey: data.ikey});
   } else if(!data.ikey) {
-    form.disable();
-    localforage.getItem('ikey-data').then(function(d) {
-      if(d && d.ikey) {
-        data = d;
-      }
-      form.enable();
-    });
+    var d = sessionStrorage.getItem('ikey-data');
+    var d = d ? JSON.parse(d) : {};
+    if(d && d.ikey) {
+      data = d;
+    }
   }
 
   var decline = document.getElementById('decline');
@@ -30,13 +28,13 @@ function(t){
     decline.addEventListener('mousedown', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      localforage.removeItem('ikey-data');
+      sessionStorage.removeItem('ikey-data');
       t.app.gotoUrl('/account');
     });
   }
 
   form.addEventListener('submit', function(e){
-    localforage.removeItem('ikey-data')
+    sessionStorage.removeItem('ikey-data');
     form.disable();
     t.model.invite.respond(data).then(function(xhr) {
       if(xhr.status == 201) {
@@ -52,9 +50,8 @@ function(t){
       }
     }).catch(function(xhr){
       if(xhr.status == 403) {
-        form.error.msg("Email Address does not match", "Are you logged into the correct account?");
+        form.error.msg("Email Address does not match", "Log in using the correct email address<br>to accept this invite");
       } else if(xhr.status == 404) {
-        localforage.removeItem('ikey-data');
         t.app.gotoUrl('/account')
       } else {
         form.enable();

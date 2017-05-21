@@ -139,13 +139,7 @@ function(t){
     });
   };
 
-  localforage.getItem('ikey-data').then(function(d) {
-    if(d && d.ikey) {
-      t.app.replaceUrl('/invite', d);
-    } else {
-      findTeams();
-    }
-  });
+  findTeams();
 
   t.view.updateStatus();
 

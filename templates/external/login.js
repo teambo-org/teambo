@@ -9,11 +9,12 @@ function(t){
   var pass;
   var ikey;
 
-  localforage.getItem('ikey-data').then(function(d) {
-    if(d && d.ikey) {
-      ikey = d.ikey;
-    }
-  });
+  var d = sessionStorage.getItem('ikey-data');
+  var d = d ? JSON.parse(d) : {};
+  if(d && d.ikey) {
+    ikey = d.ikey;
+    form.error.msg('', '<br/>Log in or create an account to accept the invite');
+  }
 
   document.getElementById('signup').onclick = function(e) {
     e.preventDefault();
@@ -77,9 +78,9 @@ function(t){
       pass  = form.pass.value;
       form.disable();
       form_submit_fn(email, pass);
+      form.pass.oninput = form.error.hide;
     });
     form.email.focus();
-    form.pass.oninput = form.error.hide;
   }
 
   if(vkey != '') {
@@ -104,10 +105,6 @@ function(t){
       localforage.removeItem('verification');
     }
     form_init(form_submit_login);
-  }
-
-  if(t.acct.isAuthed()) {
-    t.app.gotoUrl('/account');
   }
 
   t.view.updateStatus();

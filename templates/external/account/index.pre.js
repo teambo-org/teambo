@@ -11,4 +11,11 @@ function(t){
     return false;
   }
 
+  var d = sessionStorage.getItem('ikey-data');
+  var d = d ? JSON.parse(d) : {};
+  if(d && d.ikey) {
+    t.app.gotoUrl('/invite', d);
+    return false;
+  }
+
 }

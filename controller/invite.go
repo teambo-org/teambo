@@ -42,6 +42,13 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Limit invite codes here
+	if !invite.MakeRedeemable() {
+		invite.Delete()
+		error_out(w, "Invite could not be sent", 500)
+		return
+	}
+
 	subject := "Teambo Invite"
 	scheme := "http"
 	if util.Config("ssl.active") == "true" {

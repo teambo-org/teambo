@@ -34,6 +34,40 @@ func (o *Invite) Delete() (err error) {
 	return nil
 }
 
+func (o *Invite) Redeem() bool {
+	redeemed := false
+	ts := fmt.Sprintf("%d", time.Now().UnixNano())
+	db_invite_update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("invite_redeemed"))
+		v := b.Get([]byte(o.Id))
+		if string(v) != "0" {
+			return nil
+		}
+		err := b.Put([]byte(o.Id), []byte(ts))
+		if err != nil {
+			return err
+		}
+		redeemed = true
+		return nil
+	})
+	return redeemed
+}
+
+func (o *Invite) MakeRedeemable() bool {
+	err := db_invite_update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("invite_redeemed"))
+		err := b.Put([]byte(o.Id), []byte("0"))
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func InviteCreate(id string, hash string, ttl int64) (item Invite, err error) {
 	ts := time.Now().UnixNano() + ttl
 	v := fmt.Sprintf("%d", ts)
