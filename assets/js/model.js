@@ -6,6 +6,9 @@ Teambo.model = (function(t){
     if(typeof data == 'string') {
       var iv = data.split(' ')[0];
       data = t.team.decrypt(data);
+      if(!data) {
+        return;
+      }
       data.iv = data.iv ? data.iv : iv;
     }
     t.object.extend(this, {

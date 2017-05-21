@@ -13,7 +13,7 @@ function(t){
 
   var el = document.getElementById('teams');
   var renderTeams = function(teams, orig_html) {
-    t.team.reset();
+    // t.team.reset();
     logo.classList.remove('spinner');
     var html = '';
     teams.forEach(function(team) {

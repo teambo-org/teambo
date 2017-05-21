@@ -65,6 +65,9 @@ func (tb TeamBucket) All() (o []TeamObject, err error) {
 			return nil
 		}
 		b.ForEach(func(k, v []byte) error {
+			if string(v) == "new" {
+				return nil
+			}
 			o = append(o, TeamObject{tb.TeamId, tb.Name, string(k), string(v)})
 			return nil
 		})

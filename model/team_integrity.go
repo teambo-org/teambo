@@ -35,6 +35,9 @@ func (ti *teamIntegrity) Init() (err error) {
 			b.ForEach(func(k, ct []byte) error {
 				parts := strings.Split(string(ct), " ")
 				iv := parts[0]
+				if iv == "new" {
+					return nil
+				}
 				ti.Ivs = append(ti.Ivs, bucket_name + "-" + string(k) + "-" + iv)
 				return nil
 			})

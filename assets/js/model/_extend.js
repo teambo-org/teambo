@@ -15,6 +15,7 @@ Teambo.model._extend = (function(t){
 
     model.ids = function() {
       var ids = [];
+      t.app.log(model.type);
       model.all.sort(model.nameSort).forEach(function(m) {
         ids.push(m.id);
       });
@@ -22,6 +23,7 @@ Teambo.model._extend = (function(t){
     };
 
     model.nameSort = function(a, b) {
+      if(!a.opts || !b.opts) return -1;
       return a.opts.name > b.opts.name ? 1 : a.opts.name < b.opts.name ? -1 : 0;
     };
 
@@ -129,7 +131,14 @@ Teambo.model._extend = (function(t){
         }
         t.team.findCached(model.type+'-'+id).then(function(ct){
           if(ct) {
-            fulfill(new model(ct));
+            var m = new model(ct);
+            if(m.id) {
+              fulfill(new model(ct));
+            } else {
+              model.uncache(id).then(function() {
+                fulfill();
+              });
+            }
           } else {
             model.fetch(id, team.id, team.mkey).then(function(ct) {
               fulfill(new model(ct));
@@ -139,7 +148,7 @@ Teambo.model._extend = (function(t){
                   fulfill();
                 });
               } else {
-                reject(xhr);
+                fulfill();
               }
             });
           }
@@ -161,7 +170,7 @@ Teambo.model._extend = (function(t){
             for(var i in ids) {
               if(!ids[i]) continue;
               p.push(model.find(ids[i]).then(function(o){
-                if(o) {
+                if(o && o.id) {
                   ret.push(o);
                 }
               }));
