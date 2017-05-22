@@ -2,7 +2,7 @@ Teambo.manifest = (function(t){
   "use strict";
 
   var init = function() {
-    if(window.applicationCache.status !== 0) {
+    if('applicationCache' in window && window.applicationCache.status !== 0) {
       window.applicationCache.addEventListener('updateready', function(e) {
         if(window.applicationCache.status === window.applicationCache.UPDATEREADY
         || window.applicationCache.status === window.applicationCache.CHECKING) {
@@ -40,6 +40,8 @@ Teambo.manifest = (function(t){
       } else {
         startCacheCheck();
       }
+    } else {
+      t.app.online = true;
     }
   }
 
