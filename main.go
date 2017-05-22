@@ -12,6 +12,9 @@ import (
 	"time"
 	"runtime"
 	"strconv"
+	"context"
+	"os"
+	"os/signal"
 )
 
 type Response map[string]interface{}
@@ -97,13 +100,24 @@ func main() {
 	go socket.InviteAcceptanceHub.Run()
 	go socket.AcctHub.Run()
 
+	stop := make(chan os.Signal)
+	signal.Notify(stop, os.Interrupt)
+
+	h := &http.Server{}
 	if config["ssl.active"] == "true" {
 		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(redirectToHttps(config)))
-		http.Handle("/", StaticHandler{})
-		log.Fatal(http.ListenAndServeTLS(":"+config["port.https"], config["ssl.crt"], config["ssl.key"], nil))
+		h = &http.Server{Addr: ":"+config["port.https"], Handler: StaticHandler{}}
+		go h.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"])
 	} else {
-		http.Handle("/", StaticHandler{})
-		log.Fatal(http.ListenAndServe(":"+config["port.http"], nil))
+		h = &http.Server{Addr: ":"+config["port.http"], Handler: StaticHandler{}}
+		go h.ListenAndServe()
+	}
+	<-stop
+	log.Println("\nShutting down the server...")
+	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	err = h.Shutdown(ctx)
+	if err != nil {
+		log.Println(err)
 	}
 }
 
