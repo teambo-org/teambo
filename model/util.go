@@ -9,6 +9,7 @@ import (
 func GlobalInit() error {
 	err := db_update(func(tx *bolt.Tx) error {
 		tx.CreateBucketIfNotExists([]byte("acct"))
+		tx.CreateBucketIfNotExists([]byte("acct_protection"))
 		tx.CreateBucketIfNotExists([]byte("verification"))
 		tx.CreateBucketIfNotExists([]byte("verification_expires"))
 		tx.CreateBucketIfNotExists([]byte("beta_code"))

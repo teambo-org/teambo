@@ -26,8 +26,9 @@ Teambo.acct = (function (t) {
           var new_ct = self.encrypted({iv: iv});
           t.xhr.post('/acct', {
             data: {
+              id:   self.id,
               akey: akey,
-              ct:   self.encrypted(),
+              ct:   new_ct,
               iv:   self.iv
             }
           }).then(function (xhr) {
@@ -44,9 +45,45 @@ Teambo.acct = (function (t) {
           });
         });
       },
+      changePassword: function(cur_pass, new_pass) {
+        if (!cur_pass) return Promise.reject('Current password missing');
+        if (!new_pass) return Promise.reject('New password missing');
+        return new Promise(function (fulfill, reject) {
+          var pkey = t.crypto.pbk(cur_pass, self.id + key + self.id);
+          var new_key  = t.crypto.pbk(new_pass, self.email);
+          var new_akey = t.crypto.pbk(new_pass, self.id + new_key);
+          var new_pkey = t.crypto.pbk(new_pass, self.id + new_key + self.id);
+          var iv = t.crypto.iv();
+          var new_ct = self.encrypted({iv: iv, key: new_key});
+          t.xhr.post('/acct', {
+            data: {
+              id:       self.id,
+              akey:     akey,
+              pkey:     pkey,
+              new_akey: new_akey,
+              new_pkey: new_pkey,
+              ct:       new_ct,
+              iv:       self.iv
+            }
+          }).then(function (xhr) {
+            if (xhr.status === 200) {
+              key = new_key;
+              akey = new_akey;
+              self.iv = iv;
+              self.cache().then(function() {
+                fulfill(xhr);
+              });
+            } else {
+              reject(xhr);
+            }
+          }).catch(function (e) {
+            reject(e);
+          });
+        });
+      },
       cache: function () {
         var hash = t.crypto.sha(self.email + t.salt);
-        return localforage.setItem(hash, self.encrypted(self.iv));
+        return localforage.setItem(hash, self.encrypted({iv: self.iv}));
       },
       cacheAuth: function() {
         var hash = t.crypto.sha(self.email + t.salt);
@@ -61,24 +98,26 @@ Teambo.acct = (function (t) {
         var data = {hash: hash, akey: akey, key: key};
         return localforage.setItem('auth', t.crypto.encrypt(data, t.salt));
       },
-      encrypted: function (iv) {
+      encrypted: function (opts) {
+        opts = opts ? opts : {};
         var data = {
           email: self.email,
           id:    self.id,
           rsa:   self.rsa ? self.rsa.privTPO() : null,
-          key:   key,
-          akey:  akey,
           teams: self.teams,
           invites: self.invites,
           opts:  self.opts
         };
-        if(iv) {
-          data.iv = iv;
+        var config = {};
+        if(opts.iv) {
+          data.iv   = opts.iv;
+          config.iv = opts.iv;
         }
-        return self.encrypt(data);
+        return self.encrypt(data, opts, config);
       },
-      encrypt: function (data) {
-        return t.crypto.encrypt(data, key);
+      encrypt: function (data, opts, config) {
+        opts = opts ? opts : {};
+        return t.crypto.encrypt(data, opts.key ? opts.key : key, config);
       },
       decrypt: function (ct) {
         return t.crypto.decrypt(ct, key);
@@ -135,7 +174,7 @@ Teambo.acct = (function (t) {
         }
         return new Promise(function (fulfill, reject) {
           t.xhr.post('/acct/auth', {
-            data: {akey: akey}
+            data: {id: self.id, akey: akey}
           }).then(function(xhr) {
             if(xhr.status == 200) {
               var data = JSON.parse(xhr.responseText);
@@ -159,7 +198,7 @@ Teambo.acct = (function (t) {
   acct.current = null;
 
   acct.init = function () {
-    // Session hopping. Too many race conditions and edge cases
+    // Session hopping - Too many race conditions and edge cases
     // window.onbeforeunload = function(){
       // acct.deAuth();
     // };
@@ -174,6 +213,7 @@ Teambo.acct = (function (t) {
           var data = t.crypto.decrypt(ct, auth.key);
           if (data) {
             acct.current = new acct(data, auth.akey, auth.key);
+            // Session hopping
             // sessionStorage.removeItem('auth');
             fulfill();
           } else {
@@ -217,7 +257,7 @@ Teambo.acct = (function (t) {
     return new Promise(function (fulfill, reject) {
       if(t.app.online) {
         var p = t.xhr.post('/acct/auth', {
-          data: {akey: akey}
+          data: {id: id, akey: akey}
         });
       } else {
         var p = Promise.reject();
@@ -312,11 +352,11 @@ Teambo.acct = (function (t) {
       });
     },
     confirm : function(vkey, email, pass) {
-      var id, key, akey;
+      var id, key, akey, pkey;
       return new Promise(function (fulfill, reject) {
         var send_confirmation = function () {
           t.xhr.post('/acct/verification', {
-            data: {akey: akey, vkey: vkey}
+            data: {id: id, akey: akey, vkey: vkey, pkey: pkey}
           }).then(function (xhr){
             if(xhr.status == 200) {
               if(t.app.easy_verification) {
@@ -326,7 +366,8 @@ Teambo.acct = (function (t) {
                 email: email,
                 id:    id,
                 teams: [],
-                opts:  {}
+                opts:  {},
+                iv:    "new"
               }, akey, key);
               acct.current.save().then(function (xhr){
                 fulfill(xhr);
@@ -348,6 +389,7 @@ Teambo.acct = (function (t) {
                 id    = t.crypto.sha(email);
                 key   = v.key;
                 akey  = v.akey;
+                pkey  = v.pkey;
                 send_confirmation();
               } else {
                 reject("Verification not found");
@@ -360,6 +402,7 @@ Teambo.acct = (function (t) {
           id   = t.crypto.sha(email);
           key  = t.crypto.pbk(pass, email);
           akey = t.crypto.pbk(pass, id + key);
+          pkey = t.crypto.pbk(pass, id + key + id);
           send_confirmation();
         }
       });

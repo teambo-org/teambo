@@ -15,7 +15,6 @@ Teambo.model._extend = (function(t){
 
     model.ids = function() {
       var ids = [];
-      t.app.log(model.type);
       model.all.sort(model.nameSort).forEach(function(m) {
         ids.push(m.id);
       });

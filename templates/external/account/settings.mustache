@@ -1,0 +1,32 @@
+<div class="external account require-auth c">
+    <div id="logo" class="logo"></div>
+    <div class="nav">
+        <a class="logout" href="#/logout"><i class="icon-power" title="Log Out"></i></a>
+        <p>Logged in as <a href="#/account">{{acct.current.email}}</a></p>
+    </div>
+    <div class="main">
+        <div id="status"></div>
+        <div id="form-wrap">
+            <form id="account-password" name="account_password" method="POST" class="std ext">
+                <h3>Change Password</h3>
+                <div class="field">
+                    <input type="password" class="text required min-len-8" name="cur_pass" placeholder="Current Password" />
+                </div>
+                <div class="field">
+                    <input type="password" class="text required min-len-8" name="pass" placeholder="New Password" />
+                    <div id="pass-meter"><div id="pass-meter-bar"></div></div>
+                </div>
+                <div class="field">
+                    <input type="password" class="text required min-len-8" name="pass_confirm" placeholder="Confirm New Password" />
+                </div>
+                <div class="field submit">
+                    <input type="submit" class="submit" value="Update Password" />
+                </div>
+                <div class="error"></div>
+            </form>
+        </div>
+        <div class="subtext">
+            <a href="#/account" class="bot-nav"><i class="icon-angle-left"></i>Back to Account<i class="icon-blank"></i></a>
+        </div>
+    </div>
+</div>

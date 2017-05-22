@@ -42,7 +42,7 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Limit invite codes here
+	// Limit invite codes per account here
 	if !invite.MakeRedeemable() {
 		invite.Delete()
 		error_out(w, "Invite could not be sent", 500)

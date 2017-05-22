@@ -23,6 +23,7 @@ Teambo.form = (function(t){
       for(i = 0; field = required_fields[i]; i++) {
         if(!field.value) {
           form.error.msg(getFieldName(field) + " is required");
+          field.focus();
           e.stopImmediatePropagation();
           return;
         }
@@ -39,6 +40,7 @@ Teambo.form = (function(t){
         }
         if(minlen && field.value.length < minlen && (field.value.length > 0 || field.classList.contains('required'))) {
           form.error.msg(getFieldName(field) + " must be at least "+minlen+" characters");
+          field.focus();
           e.stopImmediatePropagation();
           return;
         }
@@ -70,7 +72,8 @@ Teambo.form = (function(t){
         },
         hide: function() {
           if(error) {
-            error.style.visibility = 'hidden';
+            error.style.display = 'none';
+            // error.style.visibility = 'hidden';
           }
         }
       },

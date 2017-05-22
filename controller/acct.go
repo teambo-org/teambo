@@ -12,8 +12,13 @@ import (
 )
 
 func Acct(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("id")
 	akey := r.FormValue("akey")
+	iv := r.FormValue("iv")
 	ct := r.FormValue("ct")
+	new_akey := r.FormValue("new_akey")
+	pkey := r.FormValue("pkey")
+	new_pkey := r.FormValue("new_pkey")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -22,30 +27,78 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	acct, _ := model.FindAcct(akey)
+	acct, _ := model.FindAcct(id, akey)
 	if acct.Ciphertext == "" {
+		// TODO: Treat as failed login attempt for throttling
 		error_out(w, "Account not found", 404)
 		return
 	}
 
-	acct, err := model.CreateAcct(akey, ct)
-	if err != nil {
-		error_out(w, "Account could not be saved", 500)
+	if !strings.HasPrefix(acct.Ciphertext, iv) {
+		error_out(w, "Account version does not match", 409)
 		return
 	}
 
-	parts := strings.Split(ct, " ")
+	if new_akey != "" && new_akey != akey {
+		if akey == new_akey {
+			error_out(w, "New access key must be different", 400)
+			return
+		}
+		if pkey == "" {
+			error_out(w, "Account protection token required", 400)
+			return
+		}
+		if new_pkey == "" {
+			error_out(w, "New account protection token required", 400)
+			return
+		}
+		protection, err := model.FindAcctProtection(id, akey)
+		if err != nil {
+			error_out(w, "Account could not be saved", 500)
+			return
+		}
+		if !protection.Validate(pkey) {
+			// TODO: Treat as failed login attempt for throttling
+			error_out(w, "Account protection token does not match", 403)
+			return
+		}
+		new_acct, _ := model.FindAcct(id, new_akey)
+		if new_acct.Ciphertext != "" {
+			error_out(w, "Account already exists", 409)
+			return
+		}
+		err = acct.Move(new_akey, new_pkey, ct)
+		if err != nil {
+			error_out(w, "Account could not be saved", 500)
+			return
+		}
+	} else {
+		err := acct.Update(ct)
+		if err != nil {
+			error_out(w, "Account could not be saved", 500)
+			return
+		}
+	}
+
+	parts := strings.Split(acct.Ciphertext, " ")
 	acct_iv := parts[0]
 
-	socket.AcctHub.Broadcast <- socket.JsonMessage(akey, map[string]interface{}{
-		"iv": acct_iv,
-	})
+	if acct.Akey != akey {
+		socket.AcctHub.Broadcast <- socket.JsonMessagePure(acct.Hkey, map[string]interface{}{
+			"moved": true,
+		})
+	} else {
+		socket.AcctHub.Broadcast <- socket.JsonMessagePure(acct.Hkey, map[string]interface{}{
+			"iv": acct_iv,
+		})
+	}
 
 	res, _ := json.Marshal(acct)
 	w.Write([]byte(string(res)))
 }
 
 func AcctAuth(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("id")
 	akey := r.FormValue("akey")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -57,7 +110,7 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: Check authentication failure limit and disallow authentication if necessary
 
-	acct, err := model.FindAcct(akey)
+	acct, err := model.FindAcct(id, akey)
 	if err != nil {
 		error_out(w, "Account could not be retrieved", 500)
 		return
@@ -72,6 +125,7 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 }
 
 func AcctSocket(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("id")
 	akey := r.FormValue("akey")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -81,7 +135,7 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	acct, err := model.FindAcct(akey)
+	acct, err := model.FindAcct(id, akey)
 	if err != nil {
 		error_out(w, "Account could not be retrieved", 500)
 		return
@@ -104,18 +158,18 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := socket.CreateConnection([]string{akey}, ws)
+	c := socket.CreateConnection([]string{acct.Hkey}, ws)
 
 	parts := strings.Split(acct.Ciphertext, " ")
 	acct_iv := parts[0]
 
 	if acct.Ciphertext == "" {
-		c.Write(websocket.TextMessage, socket.JsonMessage(akey, map[string]interface{}{
+		c.Write(websocket.TextMessage, socket.JsonMessagePure(acct.Hkey, map[string]interface{}{
 			"iv": "removed",
 		}))
 		return
 	} else {
-		c.Write(websocket.TextMessage, socket.JsonMessage(akey, map[string]interface{}{
+		c.Write(websocket.TextMessage, socket.JsonMessagePure(acct.Hkey, map[string]interface{}{
 			"iv": acct_iv,
 		}))
 	}

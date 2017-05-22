@@ -14,7 +14,11 @@ Teambo.socket.acct = (function (t) {
       socket.stop();
       t.acct.deAuth();
       t.app.gotoUrl('/login');
-    } else {
+    } else if(e.iv == 'moved') {
+      socket.stop();
+      t.acct.deAuth();
+      t.app.gotoUrl('/login', {passchange: true});
+    } else if(e.iv) {
       t.acct.current.refresh(e.iv).then(function(new_acct) {
         if(new_acct) {
           t.acct.current = new_acct;

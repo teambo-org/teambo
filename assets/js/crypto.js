@@ -40,10 +40,12 @@ Teambo.crypto = (function(t, sjcl){
       var iter = 'iter' in opts ? opts.iter : 10000;
       var passBitArray = sjcl.codec.base64.toBits(key);
       var config = {
+        cipher: 'aes',
         mode: 'ccm',
         iter: iter,
         ks: 256,
-        ts: 64
+        ts: 64,
+        v: 1
       };
       if('iv' in opts) {
         config.iv = opts.iv;
@@ -59,15 +61,14 @@ Teambo.crypto = (function(t, sjcl){
           ct = data.split(" ")[1],
           passBitArray = sjcl.codec.base64.toBits(key);
         var json = sjcl.decrypt(passBitArray, sjcl.json.encode({
-          iv: iv,
-          v: 1,
+          cipher: 'aes',
+          mode: 'ccm',
           iter: iter,
           ks: 256,
           ts: 64,
-          mode: "ccm",
-          adata: "",
-          cipher: "aes",
-          ct: ct
+          iv: iv,
+          ct: ct,
+          v: 1
         }));
         return JSON.parse(json);
       } catch(e) {

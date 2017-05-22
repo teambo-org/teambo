@@ -44,7 +44,6 @@ Teambo.socket.team = (function (t) {
         if(hash != e.hash) {
           t.app.log('Integrity hash invalid');
           t.model.integrityCheck(ivs).then(function(iv_events){
-            t.app.log(iv_events);
             t.app.log('Applying ' + iv_events.length + ' updates from integrity check');
             events = events.concat(iv_events);
             done();

@@ -6,17 +6,28 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"crypto/sha256"
+	"encoding/base64"
 	// "fmt"
+	// "log"
 )
 
 func AcctVerification(w http.ResponseWriter, r *http.Request) {
-	email := r.FormValue("email")
-	akey := r.FormValue("akey")
-	vkey := r.FormValue("vkey")
-	bypass := r.FormValue("bypass")
+	email     := r.FormValue("email")
+	akey      := r.FormValue("akey")
+	id        := r.FormValue("id")
+	vkey      := r.FormValue("vkey")
+	bypass    := r.FormValue("bypass")
 	beta_code := r.FormValue("beta")
-	ikey := r.FormValue("ikey")
-	ihash := r.FormValue("ihash")
+	ikey      := r.FormValue("ikey")
+	ihash     := r.FormValue("ihash")
+	pkey      := r.FormValue("pkey")
+
+	if id == "" && email != "" {
+		h := sha256.New()
+		h.Write([]byte(email))
+		id = base64.StdEncoding.EncodeToString(h.Sum(nil))
+	}
 
 	verification_required := true
 	if bypass != "" {
@@ -29,7 +40,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	if vkey != "" {
-		v, err := model.FindAcctVerification(akey)
+		v, err := model.FindAcctVerification(id, akey)
 		if err != nil {
 			error_out(w, "Verification could not be completed", 500)
 			return
@@ -38,7 +49,11 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			error_out(w, "Verification has expired", 404)
 			return
 		}
-		_, err = model.CreateAcct(akey, "new")
+		if pkey == "" {
+			error_out(w, "Password protection token required", 400)
+			return
+		}
+		_, err = model.CreateAcct(id, akey, pkey, "new")
 		if err != nil {
 			error_out(w, "Account could not be created", 500)
 			return
@@ -49,11 +64,10 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 		})
 		http.Error(w, string(msg), 200)
 	} else {
-		if (email == "") || akey == "" {
+		if email == "" || akey == "" {
 			error_out(w, "Email and access key required", 400)
 			return
 		}
-
 		if ikey != "" && ihash != "" {
 			invite, _ := model.InviteFind(ikey)
 			if invite.Hash == "" {
@@ -76,7 +90,6 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Beta code required", 400)
 				return
 			}
-
 			beta, _ := model.FindBetaCode(beta_code)
 			if beta.Found == "" {
 				error_out(w, "Invalid Beta Code", 403)
@@ -84,16 +97,21 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		// TODO : Add rate limiting for acct auth & verification per email address
+		// TODO: Add rate limiting for auth
+		// Check account failed loggin log entry count by id
+		// Reject if more than ... 5?
+		// Remember... verification is a fallback to unlock locked accounts
 
-		acct, _ := model.FindAcct(akey)
+		acct, _ := model.FindAcct(id, akey)
 		if acct.Ciphertext != "" && acct.Ciphertext != "new" {
 			error_out(w, "Account already exists", 409)
 			return
+		} else {
+			// Treat as failed login attempt
 		}
 
 		vkey = util.RandStr(16)
-		_, err = model.CreateAcctVerification(akey, vkey)
+		_, err = model.CreateAcctVerification(id, akey, vkey)
 		if err != nil {
 			error_out(w, "Verification could not be sent", 500)
 			return
@@ -109,6 +127,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				"vkey":    vkey,
 			})
 		} else {
+			// TODO: move email to template
 			// TODO: move emails to background job
 			subject := "Teambo Account Verification"
 			url := scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey

@@ -32,6 +32,11 @@ func JsonMessage(channel_id string, data map[string]interface{}) wsmessage {
 	return wsmessage{channel_id, string(json_bytes)}
 }
 
+func JsonMessagePure(channel_id string, data map[string]interface{}) wsmessage {
+	json_bytes, _ := json.Marshal(data)
+	return wsmessage{channel_id, string(json_bytes)}
+}
+
 type hub struct {
 	connections map[string]map[*connection]bool
 	Broadcast   chan wsmessage

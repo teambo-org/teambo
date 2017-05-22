@@ -25,7 +25,7 @@ function(t){
   var form_submit_login = function(email, pass) {
     var password_incorrect = function() {
       form.enable();
-      form.error.msg('Incorrect email address or password', 'If you forgot your password, you may want to<br/><a href="" id="reset" class="create-account">Create a New Account<i class="icon-angle-right"></i></a>');
+      form.error.msg('Incorrect email address or password', 'If you forgot your password, you may want to<br/><a href="" id="reset" class="bot-nav">Create a New Account<i class="icon-angle-right"></i></a>');
       document.getElementById('reset').onclick = function(e) {
         e.preventDefault();
         e.stopPropagation();
