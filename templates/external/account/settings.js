@@ -35,11 +35,11 @@ function(t){
     if(result.feedback.suggestions.length > 0) {
       pass_feedback = result.feedback.suggestions[0];
     }
-    pass_is_good = result.score >= 3;
+    pass_is_good = result.score >= 4;
     update_bar(pass.length > 0 ? result.score : null);
   };
   var update_bar = function(score) {
-    pass_meter_bar.style.width = score !== null ? 100*Math.min((score + 1) / 4, 1) + '%' : '0%';
+    pass_meter_bar.style.width = score !== null ? 100*Math.min((score + 1) / 5, 1) + '%' : '0%';
     pass_meter_bar.style.backgroundColor = ['#900', '#960', '#990', '#690', '#090'][score];
   }
   zxcvbn_init();
