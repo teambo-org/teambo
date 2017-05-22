@@ -3,6 +3,7 @@ package model
 import (
 	// "bytes"
 	"github.com/boltdb/bolt"
+	"log"
 )
 
 type AcctProtection struct {
