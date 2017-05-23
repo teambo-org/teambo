@@ -4,51 +4,29 @@ function(t){
   var el = document.getElementById('account-password');
   var form = t.form(el);
 
-  var pass_meter_bar = document.getElementById('pass-meter-bar');
   var pass;
   var pass_is_good;
   var pass_feedback;
-  var zxcvbn_present;
-  var zxcvbn_init = function() {
-    if(!('zxcvbn' in window)) {
-      form.disable();
-      setTimeout(zxcvbn_init, 1000);
-      return;
-    }
-    form.enable();
-    zxcvbn_present = true;
-    var check;
-    form.pass.addEventListener('input', function(e) {
-      form.error.hide();
-      clearTimeout(check);
-      check = setTimeout(check_password, 200);
-    });
-    form.pass.addEventListener('change', function(e) {
-      clearTimeout(check);
-      check = setTimeout(check_password, 200);
-    });
-    check_password();
-  };
-  var check_password = function() {
-    pass = form.pass.value;
-    var result = zxcvbn(pass);
+  var passmeter = new t.view.passmeter(form, 'pass', 4);
+  passmeter.on('change', function(result) {
+    pass = result.password;
+    pass_is_good = result.is_good;
     if(result.feedback.suggestions.length > 0) {
       pass_feedback = result.feedback.suggestions[0];
     }
-    pass_is_good = result.score >= 4;
-    update_bar(pass.length > 0 ? result.score : null);
-  };
-  var update_bar = function(score) {
-    pass_meter_bar.style.width = score !== null ? 100*Math.min((score + 1) / 5, 1) + '%' : '0%';
-    pass_meter_bar.style.backgroundColor = ['#900', '#960', '#990', '#690', '#090'][score];
-  }
-  zxcvbn_init();
+  });
 
   form.addEventListener('submit', function(e){
     var cur_pass     = form.cur_pass.value;
     var pass_confirm = form.pass_confirm.value;
     if(!pass_is_good) {
       form.error.msg('Password is not strong enough', pass_feedback ? pass_feedback : 'You must use a strong password');
+      form.pass.focus();
+      form.pass.classList.add('error');
+      return;
+    }
+    if(cur_pass === pass) {
+      form.error.msg('New password must be different', 'In order to change your password, your new password must be different');
       form.pass.focus();
       form.pass.classList.add('error');
       return;

@@ -87,6 +87,7 @@ var jsapp = []string{
 	"/js/view/toggle.js",
 	"/js/view/history.js",
 	"/js/view/comment.js",
+	"/js/view/passmeter.js",
 	"/js/model/_prototype.js",
 	"/js/model/_extend.js",
 	"/js/model/comment.js",
