@@ -13,6 +13,12 @@
       e.preventDefault();
       return window.location.hash = "";
     }
+    if(e.ctrlKey && key === 'l') {
+      e.preventDefault();
+      t.acct.deAuth();
+      t.app.gotoUrl('/login');
+      return;
+    }
     if(key === "f5" || e.ctrlKey && key === 'r') {
       return pageReload(e);
     }
