@@ -144,6 +144,8 @@ Teambo.model._extend = (function(t){
               if(new_m.id) {
                 fulfill(new_m);
               } else {
+                // Ciphertext malformed. Push model to quarantine for manual removal?
+                // Ignore for now even though integrity cache includes malformed object
                 fulfill();
               }
             }).catch(function(xhr) {
