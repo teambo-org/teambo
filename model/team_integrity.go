@@ -24,6 +24,7 @@ type teamIntegrity struct {
 func (ti *teamIntegrity) Init() (err error) {
 	ti.mutex = &sync.Mutex{}
 	ti.mutex.Lock()
+	defer ti.mutex.Unlock()
 	ti.bucket_names = map[string]bool{}
 	err = db_team_view(ti.TeamId, func(tx *bolt.Tx) error {
 		for _, bucket_name := range ti.Buckets {
@@ -44,7 +45,6 @@ func (ti *teamIntegrity) Init() (err error) {
 		}
 		return nil
 	})
-	ti.mutex.Unlock()
 	if err != nil {
 		return err
 	}
@@ -59,8 +59,9 @@ func (ti *teamIntegrity) ExpirationReset() {
 
 func (ti *teamIntegrity) Hash() string {
 	ti.mutex.Lock()
+	defer ti.mutex.Unlock()
 	if ti.Cache != "" {
-		ti.mutex.Unlock()
+		ti.ExpirationReset()
 		return ti.Cache
 	}
 	hasher := sha256.New()
@@ -68,8 +69,7 @@ func (ti *teamIntegrity) Hash() string {
 		hasher.Write([]byte(k))
 	}
 	ti.Cache = base64.StdEncoding.EncodeToString(hasher.Sum(nil))
-	ti.mutex.Unlock()
-	ti.Expires = time.Now().UnixNano() + ti.TTL
+	ti.ExpirationReset()
 	return ti.Cache
 }
 
@@ -82,6 +82,7 @@ func (ti *teamIntegrity) Insert(model string, key string, ct string) {
 	id := model + "-" + key
 	new_k := id + "-" + iv
 	ti.mutex.Lock()
+	defer ti.mutex.Unlock()
 	for i, k := range ti.Ivs {
 		if strings.HasPrefix(k, id) {
 			// replace
@@ -94,7 +95,6 @@ func (ti *teamIntegrity) Insert(model string, key string, ct string) {
 		}
 	}
 	ti.Cache = ""
-	ti.mutex.Unlock()
 	ti.ExpirationReset()
 	return
 }
@@ -105,6 +105,7 @@ func (ti *teamIntegrity) Remove(model string, key string) {
 	}
 	id := model + "-" + key
 	ti.mutex.Lock()
+	defer ti.mutex.Unlock()
 	for i, k := range ti.Ivs {
 		if strings.HasPrefix(k, id) {
 			// remove
@@ -116,7 +117,6 @@ func (ti *teamIntegrity) Remove(model string, key string) {
 		}
 	}
 	ti.Cache = ""
-	ti.mutex.Unlock()
 	ti.ExpirationReset()
 	return
 }
@@ -124,6 +124,8 @@ func (ti *teamIntegrity) Remove(model string, key string) {
 func (ti *teamIntegrity) DiffLog(ivs []string) []map[string]interface{} {
 	local_iv_map  := map[string]bool{}
 	remote_iv_map := map[string]bool{}
+	ti.mutex.Lock()
+	defer ti.mutex.Unlock()
 	for _, iv := range ivs {
 		remote_iv_map[iv] = true
 	}
