@@ -6,10 +6,10 @@ Teambo.view.passmeter = (function(t){
     var pass;
     var self = this;
     var zxcvbn_present;
-    this.init = function() {
+    var init = function() {
       if(!('zxcvbn' in window)) {
         form_el.disable();
-        setTimeout(zxcvbn_init, 1000);
+        setTimeout(init, 1000);
         return;
       }
       form_el.enable();
@@ -26,10 +26,10 @@ Teambo.view.passmeter = (function(t){
       });
       check_password();
     };
+    this.init = init;
     var check_password = function() {
       pass = form_el[target_name].value;
       var result = zxcvbn(pass);
-      console.log(result);
       result.is_good = result.score >= minimum;
       update_bar(pass.length > 0 ? result.score : -1);
       self.emit('change', result);
