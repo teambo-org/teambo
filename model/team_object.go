@@ -65,7 +65,6 @@ func (o TeamObject) Remove() (err error) {
 }
 
 func (o TeamObject) Log(iv string) (log string, err error) {
-	// Add bucket name, id, and iv to integrity hash
 	db_team_update(o.TeamId, func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte("log"))
 		ts := time.Now().UnixNano()
