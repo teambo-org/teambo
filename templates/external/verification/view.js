@@ -38,6 +38,7 @@ function(t){
       pass_feedback = result.feedback.suggestions[0];
     }
   });
+  passmeter.init();
 
   var clearError = function(e) {
     e.target.classList.remove('error');

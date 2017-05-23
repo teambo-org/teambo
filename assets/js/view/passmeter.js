@@ -6,7 +6,7 @@ Teambo.view.passmeter = (function(t){
     var pass;
     var self = this;
     var zxcvbn_present;
-    var zxcvbn_init = function() {
+    this.init = function() {
       if(!('zxcvbn' in window)) {
         form_el.disable();
         setTimeout(zxcvbn_init, 1000);
@@ -39,7 +39,6 @@ Teambo.view.passmeter = (function(t){
       pass_meter_bar.style.backgroundColor = ['#900', '#960', '#990', '#690', '#090'][score];
     }
     t.event.extend(this);
-    zxcvbn_init();
   };
 
   return passmeter;

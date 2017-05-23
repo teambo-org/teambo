@@ -15,6 +15,7 @@ function(t){
       pass_feedback = result.feedback.suggestions[0];
     }
   });
+  passmeter.init();
 
   form.addEventListener('submit', function(e){
     var cur_pass     = form.cur_pass.value;
