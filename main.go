@@ -113,7 +113,7 @@ func main() {
 		go h.ListenAndServe()
 	}
 	<-stop
-	log.Println("\nShutting down the server...")
+	log.Println("Shutting down the server...")
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	err = h.Shutdown(ctx)
 	if err != nil {

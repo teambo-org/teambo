@@ -34,6 +34,8 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	orig_hkey := acct.Hkey
+
 	if !strings.HasPrefix(acct.Ciphertext, iv) {
 		error_out(w, "Account version does not match", 409)
 		return
@@ -83,9 +85,9 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(acct.Ciphertext, " ")
 	acct_iv := parts[0]
 
-	if acct.Akey != akey {
-		socket.AcctHub.Broadcast <- socket.JsonMessagePure(acct.Hkey, map[string]interface{}{
-			"moved": true,
+	if acct.Hkey != orig_hkey {
+		socket.AcctHub.Broadcast <- socket.JsonMessagePure(orig_hkey, map[string]interface{}{
+			"iv": "moved",
 		})
 	} else {
 		socket.AcctHub.Broadcast <- socket.JsonMessagePure(acct.Hkey, map[string]interface{}{

@@ -39,6 +39,7 @@ function(t){
     }
     form.disable();
     t.acct.current.changePassword(cur_pass, pass).then(function(xhr) {
+      t.acct.current.cacheAuth()
       t.app.replaceUrl('/account/password-saved');
     }).catch(function(xhr){
       form.enable();

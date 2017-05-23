@@ -70,6 +70,8 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external form.std #pass-meter { width: 20em; margin: 0 auto; height: 0.5em; background: rgba(0,0,0,0.1); }
 .external form.std #pass-meter-bar { height: 0.5em; }
 
+.external .main .link { text-decoration: underline; }
+
 .keygen { padding: 2em 0 3em;  }
 .keygen h3 { text-align: center; border: none; margin: 0; }
 .keygen p { text-align: center; margin: 0; }
