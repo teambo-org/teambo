@@ -83,6 +83,7 @@ func (ti *teamIntegrity) Insert(model string, key string, ct string) {
 	new_k := id + "-" + iv
 	ti.mutex.Lock()
 	defer ti.mutex.Unlock()
+	var orig_len = len(ti.Ivs)
 	for i, k := range ti.Ivs {
 		if strings.HasPrefix(k, id) {
 			// replace
@@ -93,6 +94,9 @@ func (ti *teamIntegrity) Insert(model string, key string, ct string) {
 			ti.Ivs = append(ti.Ivs[:i], append([]string{new_k}, ti.Ivs[i:]...)...)
 			break
 		}
+	}
+	if orig_len == len(ti.Ivs) {
+		ti.Ivs = append(ti.Ivs, new_k)
 	}
 	ti.Cache = ""
 	ti.ExpirationReset()
