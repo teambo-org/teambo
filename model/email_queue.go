@@ -10,6 +10,7 @@ import (
 type emailQueue struct {
 	queue       []email
 	mutex       *sync.Mutex
+	ticker      *time.Ticker
 	processing  bool
 	maxAttempts int64
 }
@@ -29,12 +30,25 @@ type email struct {
 }
 
 func (eq *emailQueue) Init() {
-	ticker := time.NewTicker(time.Second)
+	eq.ticker = time.NewTicker(time.Second)
 	go func() {
-		for _ = range ticker.C {
+		for _ = range eq.ticker.C {
 			eq.ProcessQueue()
 		}
 	}()
+	return
+}
+
+func (eq *emailQueue) Stop() {
+	eq.ticker.Stop()
+	if eq.processing {
+		ticker := time.NewTicker(100 * time.Millisecond)
+		for _ = range ticker.C {
+			if !eq.processing {
+				return
+			}
+		}
+	}
 	return
 }
 

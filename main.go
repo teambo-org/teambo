@@ -78,6 +78,8 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
+	log.Println("Stopping email queue...")
+	model.EmailQueue.Stop()
 }
 
 func redirectToHttps(config map[string]string) func(http.ResponseWriter, *http.Request) {
