@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"crypto/sha256"
 	"encoding/base64"
+	"html/template"
+	"bytes"
 	// "fmt"
 	// "log"
 )
@@ -95,7 +97,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				error_out(w, "Beta code required", 400)
 				return
 			}
-			beta, _ := model.FindBetaCode(beta_code)
+			beta, _ = model.FindBetaCode(beta_code)
 			if beta.Found == "" {
 				error_out(w, "Invalid Beta Code", 403)
 				return
@@ -132,11 +134,20 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				"vkey":    vkey,
 			})
 		} else {
-			// TODO: move email to template
-			// TODO: move emails to background job
 			subject := "Teambo Account Verification"
-			url := scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey
-			body := "Click the link below to verify your new Teambo account:<br/><br/><a href='" + url + "'>" + url + "</a>"
+
+			t, err := template.ParseFiles("templates/email/verification.html")
+			data := map[string]interface{}{
+				"email": email,
+				"link": scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey,
+			}
+			buf := new(bytes.Buffer)
+			if err = t.Execute(buf, data); err != nil {
+				return
+			}
+			body := buf.String()
+
+			// TODO: move emails to background job
 			err = util.SendMail(email, subject, body)
 			if err != nil {
 				error_out(w, err.Error(), 500)
