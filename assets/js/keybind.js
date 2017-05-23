@@ -13,7 +13,7 @@
       e.preventDefault();
       return window.location.hash = "";
     }
-    if(e.ctrlKey && key === 'l') {
+    if(e.ctrlKey && key === 'delete') {
       e.preventDefault();
       t.acct.deAuth();
       t.app.gotoUrl('/login');
