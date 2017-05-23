@@ -132,7 +132,7 @@ Teambo.model._extend = (function(t){
           if(ct) {
             var m = new model(ct);
             if(m.id) {
-              fulfill(new model(ct));
+              fulfill(m);
             } else {
               model.uncache(id).then(function() {
                 fulfill();
@@ -140,7 +140,12 @@ Teambo.model._extend = (function(t){
             }
           } else {
             model.fetch(id, team.id, team.mkey).then(function(ct) {
-              fulfill(new model(ct));
+              var new_m = new model(ct);
+              if(new_m.id) {
+                fulfill(new_m);
+              } else {
+                fulfill();
+              }
             }).catch(function(xhr) {
               if(xhr.status === 404) {
                 model.uncache(id).then(function() {
@@ -191,8 +196,10 @@ Teambo.model._extend = (function(t){
               var p = [];
               data.forEach(function(o) {
                 var m = new model(o.ct);
-                ret.push(m);
-                p.push(m.cache());
+                if(m && m.id) {
+                  ret.push(m);
+                  p.push(m.cache());
+                }
               });
               Promise.all(p).then(function() {
                 model.all = ret;
