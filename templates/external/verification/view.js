@@ -110,6 +110,7 @@ function(t){
         } else {
           form.error.msg('Invalid Beta Code', 'You need a team invite or a valid beta code to create a new account. If you received a team invite, start over by clicking the link in the email');
           form.beta.focus();
+          form.beta.classList.add('error');
         }
       } else if(xhr.status === 409) {
         form.error.msg('Account already exists', 'An account already exists with that email address and password<br/><a href="#/login" id="back-to-login" class="bot-nav"><i class="icon-angle-left"></i>Back to Login<i class="icon-blank"></i></a>');
