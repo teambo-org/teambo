@@ -21,57 +21,15 @@ type Response map[string]interface{}
 
 type StaticHandler struct{}
 
-var routes = map[string]func(http.ResponseWriter, *http.Request){
-	"/":                    controller.Index,
-	"/acct":                controller.Acct,
-	"/acct/auth":           controller.AcctAuth,
-	"/acct/verification":   controller.AcctVerification,
-	"/acct/socket":         controller.AcctSocket,
-	"/invite":              controller.Invite,
-	"/invite/response":     controller.InviteResponse,
-	"/invite/acceptance":   controller.InviteAcceptance,
-	"/team":                controller.Team,
-	"/team/summary":        controller.TeamSummary,
-	"/team/integrity":      controller.TeamIntegrity,
-	"/team/remove":         controller.TeamRemove,
-	"/team/socket":         controller.TeamSocket,
-	"/team/members":        controller.Members,
-	"/team/member":         controller.Member,
-	"/team/member/remove":  controller.MemberRemove,
-	"/team/folders":        controller.HandleTeamObjects("folder", true),
-	"/team/folder":         controller.HandleTeamObject("folder", true),
-	"/team/folder/remove":  controller.HandleTeamObjectRemove("folder", true),
-	"/team/items":          controller.HandleTeamObjects("item", true),
-	"/team/item":           controller.HandleTeamObject("item", true),
-	"/team/item/remove":    controller.HandleTeamObjectRemove("item", true),
-	"/team/comments":       controller.HandleTeamObjects("comment", true),
-	"/team/comment":        controller.HandleTeamObject("comment", true),
-	"/team/comment/remove": controller.HandleTeamObjectRemove("comment", true),
-	"/team/plans":          controller.HandleTeamObjects("plan", true),
-	"/team/plan":           controller.HandleTeamObject("plan", true),
-	"/team/plan/remove":    controller.HandleTeamObjectRemove("plan", true),
-	"/team/wikis":          controller.HandleTeamObjects("wiki", true),
-	"/team/wiki":           controller.HandleTeamObject("wiki", true),
-	"/team/wiki/remove":    controller.HandleTeamObjectRemove("wiki", true),
-	"/app.manifest":        controller.Manifest,
-	"/app.manifestweb":     controller.WebManifest,
-	"/init.js":             controller.Initjs,
-	"/test":                controller.Test,
-}
-
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=0, no-cache, must-revalidate")
 	// start := time.Now()
-
-	// log.Println(r.URL.Path)
-
 	if handle, ok := routes[r.URL.Path]; ok {
 		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond)))
 		handle(w, r)
 	} else {
 		controller.Static(w, r)
 	}
-
 	// log.Printf("%d %s", time.Since(start).Nanoseconds(), r.URL.Path)
 }
 
