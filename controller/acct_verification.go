@@ -147,12 +147,8 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			}
 			body := buf.String()
 
-			// TODO: move emails to background job
-			err = util.SendMail(email, subject, body)
-			if err != nil {
-				error_out(w, err.Error(), 500)
-				return
-			}
+			model.EmailQueue.Push(email, subject, body)
+
 			msg, _ = json.Marshal(map[string]bool{
 				"success": true,
 			})

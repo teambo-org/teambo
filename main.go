@@ -94,6 +94,7 @@ func main() {
 	}
 
 	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
+	model.EmailQueue.Init()
 
 	go socket.TeamHub.Run()
 	go socket.InviteResponseHub.Run()
