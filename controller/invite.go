@@ -72,12 +72,8 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 	}
 	body := buf.String()
 
-	err = util.SendMail(email, subject, body)
-	if err != nil {
-		invite.Delete()
-		error_out(w, "Invite could not be sent", 500)
-		return
-	}
+	model.EmailQueue.Push(email, subject, body)
+
 	msg, _ := json.Marshal(map[string]string{
 		"ikey": ikey,
 	})
