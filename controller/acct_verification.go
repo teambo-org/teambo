@@ -17,6 +17,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	akey      := r.FormValue("akey")
 	id        := r.FormValue("id")
 	vkey      := r.FormValue("vkey")
+	ct        := r.FormValue("ct")
 	bypass    := r.FormValue("bypass")
 	beta_code := r.FormValue("beta")
 	ikey      := r.FormValue("ikey")
@@ -53,7 +54,11 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			error_out(w, "Password protection token required", 400)
 			return
 		}
-		_, err = model.CreateAcct(id, akey, pkey, "new")
+		if ct == "" {
+			error_out(w, "Account Ciphertext required", 400)
+			return
+		}
+		_, err = model.CreateAcct(id, akey, pkey, ct)
 		if err != nil {
 			error_out(w, "Account could not be created", 500)
 			return
