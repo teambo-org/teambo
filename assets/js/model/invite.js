@@ -110,9 +110,8 @@ Teambo.model.invite = (function(t){
         key: parts[1]
       };
       t.array.deleteByProperty(t.acct.current.teams, 'id', team_data.id);
-      t.acct.current.teams.push(team_data);
       t.array.deleteByProperty(t.acct.current.invites, 'ikey', ikey);
-      return t.acct.current.save();
+      return t.acct.current.addTeam(team_data);
     } else {
       var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', ikey);
       if(invite) {

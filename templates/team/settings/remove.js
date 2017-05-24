@@ -16,7 +16,9 @@ function(t){
     form.disable();
     if(confirm("Are you sure you wish to delete this team? This cannot be undone.")) {
       team.remove(data.name).then(function(){
-        t.app.gotoUrl('/account');
+        t.acct.current.removeTeam(team).then(function() {
+          t.app.gotoUrl('/account');
+        });
       }).catch(function(e){
         form.enable();
         form.error.msg("Team could not be deleted.", "Please try again");

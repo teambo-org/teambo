@@ -116,8 +116,8 @@ Teambo.team = (function(t){
       var self = this;
       return new Promise(function(fulfill, reject) {
         var data = {
-          team_id: t.team.current.id,
-          mkey:    t.team.current.mkey
+          team_id: self.id,
+          mkey:    self.mkey
         };
         t.xhr.post('/team/remove', {
           data: data
@@ -129,10 +129,7 @@ Teambo.team = (function(t){
             });
             Promise.all(p).then(function() {
               self.uncache().then(function(){
-                t.array.deleteByProperty(t.acct.current.teams, 'id', self.id);
-                t.acct.current.save().then(function(){
-                  fulfill();
-                });
+                fulfill();
               });
             });
           } else {
@@ -287,16 +284,18 @@ Teambo.team = (function(t){
           new_team.admin = true;
           new_team.orig = {};
           new_team.save().then(function(){
-            acct.teams.push({id: new_team.id, mkey: data.mkey, key: key, admin: true});
-            acct.save().then(function(){
+            var team_data = {id: new_team.id, mkey: data.mkey, key: key, admin: true};
+            acct.addTeam(team_data).then(function(){
               createFirstMember(new_team, data.member_id).then(function() {
                 fulfill(new_team);
-              });
-            }).catch(reject);
-          }).catch(function(e){
-            t.array.deleteByProperty(acct.teams, 'id', new_team.id);
-            reject(e);
-          });
+              }).catch(reject);
+            }).catch(function(e){
+              acct.removeTeam(team_data).then(function() {
+                new_team.remove(new_team.opts.name);
+                reject(e);
+              }).catch(reject);
+            });
+          }).catch(reject);
         } else {
           reject(xhr);
         }

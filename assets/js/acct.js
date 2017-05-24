@@ -169,7 +169,7 @@ Teambo.acct = (function (t) {
         return "/acct/socket?id="+encodeURIComponent(self.id)+"&akey="+encodeURIComponent(akey);
       },
       refresh: function(iv) {
-        if(!iv || self.iv == iv) {
+        if(self.iv == iv) {
           return Promise.resolve();
         }
         return new Promise(function (fulfill, reject) {
@@ -191,6 +191,51 @@ Teambo.acct = (function (t) {
             reject(xhr);
           });
         });
+      },
+      addTeam: function(team, retry) {
+        if(t.array.findByProperty(self.teams, 'id', team.id)) {
+          return Promise.resolve();
+        }
+        return new Promise(function(fulfill, reject) {
+          self.teams.push(team);
+          self.save().then(function(){
+            fulfill(self);
+          }).catch(function(e) {
+            if(!retry && e.status && e.status === 409) {
+              self.refresh().then(function(new_acct) {
+                new_acct.addTeam(team, true).then(function(new_acct){
+                  fulfill(new_acct);
+                });
+              }).catch(reject);
+            } else {
+              reject(e);
+            }
+          });
+        });
+      },
+      removeTeam: function(team, retry) {
+        if(!t.array.findByProperty(self.teams, 'id', team.id)) {
+          return Promise.resolve();
+        }
+        return new Promise(function(fulfill, reject) {
+          t.array.deleteByProperty(self.teams, 'id', team.id);
+          self.save().then(function(){
+            fulfill(self);
+          }).catch(function(e) {
+            if(!retry && e.status && e.status === 409) {
+              self.refresh().then(function(new_acct) {
+                new_acct.removeTeam(team, true).then(function(new_acct){
+                  fulfill(new_acct);
+                });
+              }).catch(reject);
+            } else {
+              reject(e);
+            }
+          });
+        });
+      },
+      hasTeam: function(team_id) {
+        return t.array.findByProperty(self.teams, 'id', team_id);
       }
     });
   };
