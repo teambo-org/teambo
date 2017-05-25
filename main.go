@@ -5,6 +5,7 @@ import (
 	"./model"
 	"./socket"
 	"./util"
+	"./service"
 	"context"
 	"flag"
 	"fmt"
@@ -52,7 +53,7 @@ func main() {
 	}
 
 	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
-	model.EmailQueue.Init()
+	service.EmailQueue.Init()
 
 	go socket.TeamHub.Run()
 	go socket.InviteResponseHub.Run()
@@ -83,8 +84,8 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println("Stopping email queue...")
-	model.EmailQueue.Stop()
+	log.Println("Stopping Email Queue ...")
+	service.EmailQueue.Stop()
 }
 
 func redirectToHttps(config map[string]string) func(http.ResponseWriter, *http.Request) {

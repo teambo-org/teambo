@@ -2,6 +2,7 @@ package controller
 
 import (
 	"../model"
+	"../service"
 	"../util"
 	"bytes"
 	"crypto/sha256"
@@ -147,7 +148,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			}
 			body := buf.String()
 
-			model.EmailQueue.Push(email, subject, body)
+			service.EmailQueue.Push(email, subject, body)
 
 			msg, _ = json.Marshal(map[string]bool{
 				"success": true,

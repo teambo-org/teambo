@@ -2,6 +2,7 @@ package controller
 
 import (
 	"../model"
+	"../service"
 	"../socket"
 	"../util"
 	"crypto/sha256"
@@ -72,7 +73,7 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 	}
 	body := buf.String()
 
-	model.EmailQueue.Push(email, subject, body)
+	service.EmailQueue.Push(email, subject, body)
 
 	msg, _ := json.Marshal(map[string]string{
 		"ikey": ikey,
