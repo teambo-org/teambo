@@ -1,13 +1,13 @@
 package util
 
 import (
-	"bytes"
 	"bufio"
+	"bytes"
 	"io"
 )
 
 type Logfilter struct {
-	W io.Writer
+	W       io.Writer
 	Filters [][]byte
 }
 

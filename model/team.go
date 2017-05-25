@@ -3,9 +3,9 @@ package model
 import (
 	"../util"
 	// "bytes"
-	"log"
 	"fmt"
 	"github.com/boltdb/bolt"
+	"log"
 	"time"
 )
 

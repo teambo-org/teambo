@@ -1,24 +1,24 @@
 package model
 
 import (
-	"github.com/boltdb/bolt"
-	"time"
 	"crypto/sha256"
 	"encoding/base64"
+	"github.com/boltdb/bolt"
 	"strings"
 	"sync"
+	"time"
 	// "log"
 )
 
 type teamIntegrity struct {
-	TeamId  string
-	Buckets []string
-	Ivs     []string
-	TTL     int64
-	Expires int64
-	Cache   string
+	TeamId       string
+	Buckets      []string
+	Ivs          []string
+	TTL          int64
+	Expires      int64
+	Cache        string
 	bucket_names map[string]bool
-	mutex   *sync.Mutex
+	mutex        *sync.Mutex
 }
 
 func (ti *teamIntegrity) Init() (err error) {
@@ -31,7 +31,7 @@ func (ti *teamIntegrity) Init() (err error) {
 			ti.bucket_names[bucket_name] = true
 			b := tx.Bucket([]byte(bucket_name))
 			if b == nil {
-				continue;
+				continue
 			}
 			b.ForEach(func(k, ct []byte) error {
 				parts := strings.Split(string(ct), " ")
@@ -39,7 +39,7 @@ func (ti *teamIntegrity) Init() (err error) {
 				if iv == "new" {
 					return nil
 				}
-				ti.Ivs = append(ti.Ivs, bucket_name + "-" + string(k) + "-" + iv)
+				ti.Ivs = append(ti.Ivs, bucket_name+"-"+string(k)+"-"+iv)
 				return nil
 			})
 		}
@@ -89,7 +89,7 @@ func (ti *teamIntegrity) Insert(model string, key string, ct string) {
 			// replace
 			ti.Ivs = append(ti.Ivs[:i], append([]string{new_k}, ti.Ivs[i+1:]...)...)
 			break
-		} else if(k > id) {
+		} else if k > id {
 			// insert
 			ti.Ivs = append(ti.Ivs[:i], append([]string{new_k}, ti.Ivs[i:]...)...)
 			break
@@ -115,7 +115,7 @@ func (ti *teamIntegrity) Remove(model string, key string) {
 			// remove
 			ti.Ivs = append(ti.Ivs[:i], ti.Ivs[i+1:]...)
 			break
-		} else if(k > id) {
+		} else if k > id {
 			// early exit if not found
 			break
 		}
@@ -126,7 +126,7 @@ func (ti *teamIntegrity) Remove(model string, key string) {
 }
 
 func (ti *teamIntegrity) DiffLog(ivs []string) []map[string]interface{} {
-	local_iv_map  := map[string]bool{}
+	local_iv_map := map[string]bool{}
 	remote_iv_map := map[string]bool{}
 	ti.mutex.Lock()
 	defer ti.mutex.Unlock()
@@ -145,11 +145,11 @@ func (ti *teamIntegrity) DiffLog(ivs []string) []map[string]interface{} {
 			parts := strings.Split(iv, "-")
 			log = append(log, map[string]interface{}{
 				"channel_id": ti.TeamId,
-				"type": "log",
-				"model": parts[0],
-				"id": parts[1],
-				"iv": parts[2],
-				"ts": time.Now().UTC().UnixNano()/int64(time.Millisecond),
+				"type":       "log",
+				"model":      parts[0],
+				"id":         parts[1],
+				"iv":         parts[2],
+				"ts":         time.Now().UTC().UnixNano() / int64(time.Millisecond),
 			})
 		}
 	}
@@ -160,11 +160,11 @@ func (ti *teamIntegrity) DiffLog(ivs []string) []map[string]interface{} {
 		if _, ok := local_iv_map[model_id]; !ok {
 			log = append(log, map[string]interface{}{
 				"channel_id": ti.TeamId,
-				"type": "log",
-				"model": parts[0],
-				"id": parts[1],
-				"iv": "removed",
-				"ts": time.Now().UTC().UnixNano()/int64(time.Millisecond),
+				"type":       "log",
+				"model":      parts[0],
+				"id":         parts[1],
+				"iv":         "removed",
+				"ts":         time.Now().UTC().UnixNano() / int64(time.Millisecond),
 			})
 		}
 	}

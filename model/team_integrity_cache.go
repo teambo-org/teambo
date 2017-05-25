@@ -12,7 +12,7 @@ type teamIntegrityCache struct {
 	TTL     int64
 }
 
-var TeamIntegrityCache = teamIntegrityCache {
+var TeamIntegrityCache = teamIntegrityCache{
 	Teams:   map[string]*teamIntegrity{},
 	Buckets: []string{},
 	TTL:     6 * 60 * 60,
@@ -22,8 +22,8 @@ func (tic *teamIntegrityCache) Init(buckets []string) {
 	sort.Strings(buckets)
 	tic.Buckets = buckets
 	// Sweep cache for expired teams
-    // ticker := time.NewTicker(time.Minute)
-    ticker := time.NewTicker(10 * time.Minute)
+	// ticker := time.NewTicker(time.Minute)
+	ticker := time.NewTicker(10 * time.Minute)
 	go func() {
 		for _ = range ticker.C {
 			tic.PurgeExpired()

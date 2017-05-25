@@ -5,8 +5,8 @@ import (
 	"../socket"
 	"encoding/json"
 	"net/http"
-	"strings"
 	"regexp"
+	"strings"
 	// "log"
 )
 
@@ -88,8 +88,8 @@ func MemberRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	members     := model.TeamBucket{team_id, "member"}
-	comments    := model.TeamBucket{team_id, "comment"}
+	members := model.TeamBucket{team_id, "member"}
+	comments := model.TeamBucket{team_id, "comment"}
 	member_keys := model.TeamBucket{team_id, "member_key"}
 
 	if r.Method == "POST" {

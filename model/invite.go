@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"time"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Invite struct {
@@ -74,7 +74,7 @@ func InviteCreate(id string, hash string, ttl int64) (item Invite, err error) {
 	db_invite_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("invite"))
 
-		err := b.Put([]byte(id + "-" + hash), []byte(v))
+		err := b.Put([]byte(id+"-"+hash), []byte(v))
 		if err != nil {
 			return err
 		}
@@ -85,7 +85,6 @@ func InviteCreate(id string, hash string, ttl int64) (item Invite, err error) {
 		fmt.Println(err)
 		return item, err
 	}
-
 
 	item = Invite{id, hash, ts}
 	return item, nil

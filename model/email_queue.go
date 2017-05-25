@@ -3,8 +3,8 @@ package model
 import (
 	// "log"
 	"../util"
-	"time"
 	"sync"
+	"time"
 )
 
 type emailQueue struct {
@@ -15,7 +15,7 @@ type emailQueue struct {
 	maxAttempts int64
 }
 
-var EmailQueue = emailQueue {
+var EmailQueue = emailQueue{
 	queue:       []email{},
 	mutex:       &sync.Mutex{},
 	processing:  false,

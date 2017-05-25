@@ -4,13 +4,13 @@ import (
 	"../model"
 	"../socket"
 	// "../util"
-	"github.com/gorilla/websocket"
-	"net/http"
-	"time"
-	"strings"
 	"encoding/json"
-	"log"
 	"fmt"
+	"github.com/gorilla/websocket"
+	"log"
+	"net/http"
+	"strings"
+	"time"
 )
 
 func TeamSocket(w http.ResponseWriter, r *http.Request) {
@@ -39,9 +39,9 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	if err != nil || team.Id != team_id {
 		msg, _ := json.Marshal(map[string]interface{}{
 			"channel_id": team_id,
-			"code": 404,
-			"type": "error",
-			"msg": "Team could not be found",
+			"code":       404,
+			"type":       "error",
+			"msg":        "Team could not be found",
 		})
 		ws.WriteMessage(websocket.TextMessage, msg)
 		return
@@ -52,9 +52,9 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	if member_id == "" {
 		msg, _ := json.Marshal(map[string]interface{}{
 			"channel_id": team_id,
-			"code": 403,
-			"type": "error",
-			"msg": "You do not have access to this team",
+			"code":       403,
+			"type":       "error",
+			"msg":        "You do not have access to this team",
 		})
 		ws.WriteMessage(websocket.TextMessage, msg)
 		return
@@ -77,13 +77,13 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 		c.Write(websocket.TextMessage, socket.JsonMessage(team_id, map[string]interface{}{
 			"type": "integrity",
 			"hash": hash,
-			"ts": fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
+			"ts":   fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
 		}))
 	}
 
 	c.Write(websocket.TextMessage, socket.JsonMessage(team_id, map[string]interface{}{
 		"type": "timesync",
-		"ts": fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
+		"ts":   fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
 	}))
 
 	socket.TeamHub.Register <- c
@@ -109,7 +109,7 @@ func TeamIntegrity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	iv_list := strings.Split(ivs, ",");
+	iv_list := strings.Split(ivs, ",")
 
 	integrity, err := model.TeamIntegrityCache.Find(team_id)
 	if err != nil {

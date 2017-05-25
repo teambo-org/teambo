@@ -3,28 +3,28 @@ package controller
 import (
 	"../model"
 	"../util"
-	"encoding/json"
-	"errors"
-	"net/http"
+	"bytes"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"html/template"
-	"bytes"
+	"net/http"
 	// "fmt"
 	// "log"
 )
 
 func AcctVerification(w http.ResponseWriter, r *http.Request) {
-	email     := r.FormValue("email")
-	akey      := r.FormValue("akey")
-	id        := r.FormValue("id")
-	vkey      := r.FormValue("vkey")
-	ct        := r.FormValue("ct")
-	bypass    := r.FormValue("bypass")
+	email := r.FormValue("email")
+	akey := r.FormValue("akey")
+	id := r.FormValue("id")
+	vkey := r.FormValue("vkey")
+	ct := r.FormValue("ct")
+	bypass := r.FormValue("bypass")
 	beta_code := r.FormValue("beta")
-	ikey      := r.FormValue("ikey")
-	ihash     := r.FormValue("ihash")
-	pkey      := r.FormValue("pkey")
+	ikey := r.FormValue("ikey")
+	ihash := r.FormValue("ihash")
+	pkey := r.FormValue("pkey")
 
 	if id == "" && email != "" {
 		h := sha256.New()
@@ -139,7 +139,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			t, err := template.ParseFiles("templates/email/verification.html")
 			data := map[string]interface{}{
 				"email": email,
-				"link": scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey,
+				"link":  scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey,
 			}
 			buf := new(bytes.Buffer)
 			if err = t.Execute(buf, data); err != nil {
@@ -153,7 +153,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 				"success": true,
 			})
 		}
-		if(beta.Code != "" && beta.Found != "") {
+		if beta.Code != "" && beta.Found != "" {
 			beta.Delete()
 		}
 		http.Error(w, string(msg), 201)

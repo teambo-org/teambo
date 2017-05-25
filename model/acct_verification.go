@@ -2,16 +2,16 @@ package model
 
 import (
 	// "bytes"
-	"log"
 	"github.com/boltdb/bolt"
-	"time"
+	"log"
 	"strconv"
+	"time"
 )
 
 type AcctVerification struct {
-	Hkey    string `json:"-"`
-	Akey    string `json:"akey"`
-	Vkey    string `json:"vkey"`
+	Hkey string `json:"-"`
+	Akey string `json:"akey"`
+	Vkey string `json:"vkey"`
 }
 
 func (av *AcctVerification) Delete() (err error) {

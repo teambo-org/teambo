@@ -5,16 +5,16 @@ import (
 	"./model"
 	"./socket"
 	"./util"
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
-	"time"
-	"runtime"
-	"strconv"
-	"context"
 	"os"
 	"os/signal"
+	"runtime"
+	"strconv"
+	"time"
 )
 
 type Response map[string]interface{}
@@ -70,10 +70,10 @@ func main() {
 	h := &http.Server{}
 	if config["ssl.active"] == "true" {
 		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(redirectToHttps(config)))
-		h = &http.Server{Addr: ":"+config["port.https"], Handler: StaticHandler{}}
+		h = &http.Server{Addr: ":" + config["port.https"], Handler: StaticHandler{}}
 		go h.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"])
 	} else {
-		h = &http.Server{Addr: ":"+config["port.http"], Handler: StaticHandler{}}
+		h = &http.Server{Addr: ":" + config["port.http"], Handler: StaticHandler{}}
 		go h.ListenAndServe()
 	}
 	<-stop

@@ -2,14 +2,14 @@ package model
 
 import (
 	// "bytes"
-	"log"
 	"github.com/boltdb/bolt"
+	"log"
 	// "time"
 )
 
 type BetaCode struct {
-	Code    string `json:"code"`
-	Found   string `json:"found"`
+	Code  string `json:"code"`
+	Found string `json:"found"`
 }
 
 func (bc *BetaCode) Delete() (err error) {

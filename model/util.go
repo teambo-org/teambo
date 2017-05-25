@@ -78,9 +78,9 @@ func db_team_update(team_id string, fn func(*bolt.Tx) error) error {
 }
 
 func db_team_view(team_id string, fn func(*bolt.Tx) error) error {
-	var path = util.Config("app.data")+"/teams/"+team_id+".db"
+	var path = util.Config("app.data") + "/teams/" + team_id + ".db"
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-	  return err
+		return err
 	}
 	db, err := bolt.Open(path, 0644, nil)
 	if err != nil {
@@ -91,7 +91,7 @@ func db_team_view(team_id string, fn func(*bolt.Tx) error) error {
 }
 
 func db_team_delete(team_id string) error {
-	err := os.Remove(util.Config("app.data")+"/teams/"+team_id+".db")
+	err := os.Remove(util.Config("app.data") + "/teams/" + team_id + ".db")
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func db_team_delete(team_id string) error {
 }
 
 func db_team_exists(team_id string) bool {
-	if _, err := os.Stat(util.Config("app.data")+"/teams/"+team_id+".db"); err == nil {
+	if _, err := os.Stat(util.Config("app.data") + "/teams/" + team_id + ".db"); err == nil {
 		return true
 	}
 	return false

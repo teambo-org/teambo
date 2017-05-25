@@ -5,8 +5,8 @@ import (
 	"github.com/gorilla/websocket"
 	// "log"
 	// "net/http"
-	"time"
 	"encoding/json"
+	"time"
 )
 
 const (
@@ -113,9 +113,9 @@ func CreateConnection(ids []string, ws *websocket.Conn) *connection {
 }
 
 type connection struct {
-	channel_ids  []string
-	ws           *websocket.Conn
-	send         chan wsmessage
+	channel_ids []string
+	ws          *websocket.Conn
+	send        chan wsmessage
 }
 
 func (c *connection) Reader(hub hub) {

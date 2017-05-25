@@ -188,9 +188,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	// Index page can be cached by reverse proxy if cache is cleared after every deploy
 	// X-Cache-Edge works like s-maxage in that rpc caches resposne but tells clients not to
 	// if util.Config("static.cache") == "true" {
-		// w.Header().Set("X-Cache-Edge", "0")
-		// w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
-		// w.Header().Set("Cache-Control", "max-age=315360000")
+	// w.Header().Set("X-Cache-Edge", "0")
+	// w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
+	// w.Header().Set("Cache-Control", "max-age=315360000")
 	// }
 
 	err = t.Execute(w, p)
@@ -241,15 +241,15 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		p = Page{
-			JSLIB:    hash_version(jslib),
-			JSAPP:    hash_version(jsapp),
-			JSASYNC:  hash_version(jsasync),
-			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
-			CSS:      hash_version(css),
-			CSSFONT:  hash_version(cssfont),
-			AUDIO:    find_audio(),
-			IMAGE:    find_images(),
-			FONT:     find_fonts(),
+			JSLIB:   hash_version(jslib),
+			JSAPP:   hash_version(jsapp),
+			JSASYNC: hash_version(jsasync),
+			JSINIT:  []string{"/init.js?v=" + jsinit_version()},
+			CSS:     hash_version(css),
+			CSSFONT: hash_version(cssfont),
+			AUDIO:   find_audio(),
+			IMAGE:   find_images(),
+			FONT:    find_fonts(),
 		}
 	}
 	var b bytes.Buffer
@@ -302,11 +302,11 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 
 // json marshal with SetEscapeHTML to prevent ugly escaping
 func safe_json_marshal(content map[string]string) string {
-    buffer := &bytes.Buffer{}
-    encoder := json.NewEncoder(buffer)
-    encoder.SetEscapeHTML(false)
-    encoder.Encode(content)
-    return string(buffer.Bytes())
+	buffer := &bytes.Buffer{}
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+	encoder.Encode(content)
+	return string(buffer.Bytes())
 }
 
 func append_js_init(w io.Writer) {
@@ -330,7 +330,7 @@ func append_js_init(w io.Writer) {
 		"remember_me": false,
 	}
 	for k, _ := range app {
-		if util.Config("app." + k) == "true" {
+		if util.Config("app."+k) == "true" {
 			app[k] = true
 		}
 	}

@@ -16,7 +16,7 @@ func TeamLogSince(team_id string, ts string) (ret []string, err error) {
 		c := b.Cursor()
 		first := true
 		for k, v := c.Seek([]byte(ts)); k != nil; k, v = c.Next() {
-			if !first || !strings.HasPrefix(string(k), ts)  {
+			if !first || !strings.HasPrefix(string(k), ts) {
 				ret = append(ret, string(k)+"-"+string(v))
 			} else {
 				first = false

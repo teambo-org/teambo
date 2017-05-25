@@ -3,6 +3,8 @@ package controller
 import (
 	"../util"
 	"bitbucket.org/maxhauser/jsmin"
+	"github.com/tdewolff/minify"
+	cssminify "github.com/tdewolff/minify/css"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -10,8 +12,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
-	"github.com/tdewolff/minify"
-	cssminify "github.com/tdewolff/minify/css"
 	// "encoding/json"
 	// "fmt"
 )

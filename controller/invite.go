@@ -2,20 +2,20 @@ package controller
 
 import (
 	"../model"
-	"../util"
 	"../socket"
+	"../util"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	// "errors"
+	"bytes"
+	"html/template"
 	"log"
 	"net/http"
 	"net/url"
-	"time"
 	"strings"
-	"html/template"
-	"bytes"
+	"time"
 	// "fmt"
 )
 
@@ -31,7 +31,7 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 	chk := util.RandStr(16)
 
 	hasher := sha256.New()
-	hasher.Write([]byte(ikey+chk+email))
+	hasher.Write([]byte(ikey + chk + email))
 	hash := base64.StdEncoding.EncodeToString(hasher.Sum(nil))
 
 	ttl := int64(72 * time.Hour)
@@ -54,16 +54,16 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 	if util.Config("ssl.active") == "true" {
 		scheme = scheme + "s"
 	}
-	link := scheme + "://" + util.Config("app.host") + "/#/invite?ikey="+ikey+"&chk="+chk
+	link := scheme + "://" + util.Config("app.host") + "/#/invite?ikey=" + ikey + "&chk=" + chk
 	if team_name != "" {
 		link = link + "&name=" + url.QueryEscape(team_name)
 	}
 
 	t, err := template.ParseFiles("templates/email/invite.html")
 	data := map[string]interface{}{
-		"team_name": team_name,
-		"link": link,
-		"sender_name": sender_name,
+		"team_name":    team_name,
+		"link":         link,
+		"sender_name":  sender_name,
 		"sender_email": sender_email,
 	}
 	buf := new(bytes.Buffer)
@@ -130,7 +130,7 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 		})
 		http.Error(w, string(msg), 201)
 	} else if r.Method == "GET" {
-		if r.Header.Get("Origin") != scheme + "://" + util.Config("app.host") {
+		if r.Header.Get("Origin") != scheme+"://"+util.Config("app.host") {
 			http.Error(w, "Origin not allowed", 403)
 			return
 		}
@@ -211,7 +211,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		_, err = model.InviteAcceptanceCreate(ikey, ct + "-" + memberKey.Id)
+		_, err = model.InviteAcceptanceCreate(ikey, ct+"-"+memberKey.Id)
 		if err != nil {
 			error_out(w, "Invite could not be accepted", 500)
 			return
@@ -220,7 +220,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 		inviteResponse.Delete()
 
 		socket.InviteAcceptanceHub.Broadcast <- socket.JsonMessage(ikey, map[string]interface{}{
-			"ct": ct,
+			"ct":   ct,
 			"mkey": memberKey.Id,
 		})
 
@@ -229,7 +229,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 		})
 		http.Error(w, string(msg), 201)
 	} else if r.Method == "GET" {
-		if r.Header.Get("Origin") != scheme + "://" + util.Config("app.host") {
+		if r.Header.Get("Origin") != scheme+"://"+util.Config("app.host") {
 			http.Error(w, "Origin not allowed", 403)
 			return
 		}

@@ -11,7 +11,7 @@ import (
 
 type TeamBucket struct {
 	TeamId string
-	Name string
+	Name   string
 }
 
 func (tb TeamBucket) NewObject(id string) TeamObject {

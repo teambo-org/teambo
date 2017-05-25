@@ -7,11 +7,11 @@ import (
 )
 
 type AcctProtection struct {
-	Id      string `json:"id"`
-	Hkey    string `json:"-"`
-	PHkey   string `json:"-"`
-	Akey    string `json:"akey"`
-	Pkey    string `json:"pkey"`
+	Id    string `json:"id"`
+	Hkey  string `json:"-"`
+	PHkey string `json:"-"`
+	Akey  string `json:"akey"`
+	Pkey  string `json:"pkey"`
 }
 
 func (ap *AcctProtection) Delete() (err error) {

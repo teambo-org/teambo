@@ -60,9 +60,9 @@ func (a *Acct) Move(akey string, pkey string, ct string) (err error) {
 		return nil
 	})
 	if err == nil {
-		a.Hkey = hkey;
-		a.Akey = akey;
-		a.Ciphertext = ct;
+		a.Hkey = hkey
+		a.Akey = akey
+		a.Ciphertext = ct
 	}
 	return err
 }
@@ -82,7 +82,7 @@ func (a *Acct) Update(ct string) (err error) {
 		return nil
 	})
 	if err == nil {
-		a.Ciphertext = ct;
+		a.Ciphertext = ct
 	}
 	return err
 }
@@ -138,7 +138,7 @@ func FindAcct(id string, akey string) (item Acct, err error) {
 
 func acct_hkey(id string, akey string) string {
 	h := sha256.New()
-	h.Write([]byte(id+akey+util.Config("secret")))
+	h.Write([]byte(id + akey + util.Config("secret")))
 	hkey := base64.StdEncoding.EncodeToString(h.Sum(nil))
 	return hkey
 }
