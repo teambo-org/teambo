@@ -48,7 +48,7 @@ func TeamObject(bucket_name string, log_changes bool, w http.ResponseWriter, r *
 				return
 			}
 			if !strings.HasPrefix(obj.Ciphertext, iv) {
-				error_out(w, "Team version does not match", 409)
+				error_out(w, "Object version does not match", 409)
 				return
 			}
 			obj.Ciphertext = ct

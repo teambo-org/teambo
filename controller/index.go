@@ -186,7 +186,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Index page can be cached by reverse proxy if cache is cleared after every deploy
-	// X-Cache-Edge works like s-maxage in that rpc caches but tells clients not to
+	// X-Cache-Edge works like s-maxage in that rpc caches resposne but tells clients not to
 	// if util.Config("static.cache") == "true" {
 		// w.Header().Set("X-Cache-Edge", "0")
 		// w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")

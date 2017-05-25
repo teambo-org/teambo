@@ -84,8 +84,8 @@ Teambo.router = (function(t){
     find: function(url) {
       for (var i in routes) {
         if(routes[i].route.test(url)) {
-          var route = routes[i],
-            m = routes[i].route.exec(url);
+          var route = routes[i];
+          var m = routes[i].route.exec(url);
           route.data = {};
           for(var j in route.vars) {
             route.data[route.vars[j]] = m[parseInt(j)+1];
