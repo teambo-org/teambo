@@ -62,6 +62,11 @@ func main() {
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)
 
+	log.SetOutput(util.Logfilter{os.Stderr, [][]byte{
+		[]byte("http: TLS handshake error"),
+		[]byte("http2: server: error reading preface"),
+	}})
+
 	h := &http.Server{}
 	if config["ssl.active"] == "true" {
 		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(redirectToHttps(config)))
