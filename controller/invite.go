@@ -95,7 +95,6 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "POST" {
-		now := time.Now().UnixNano()
 		invite, err := model.InviteFind(ikey)
 		if err != nil {
 			error_out(w, "Invite could not be found", 500)
@@ -110,11 +109,6 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		invite.Delete()
-
-		if invite.Expiration < now {
-			error_out(w, "Invite has expired", 404)
-			return
-		}
 
 		_, err = model.InviteResponseCreate(ikey, pubKey)
 		if err != nil {
@@ -256,7 +250,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 				inviteResponse, _ := model.InviteResponseFind(k)
 				if inviteResponse.PubKey == "" {
 					c.Write(websocket.TextMessage, socket.JsonMessage(k, map[string]interface{}{
-						"ct": "expired",
+						"expired": true,
 					}))
 				}
 			}

@@ -45,6 +45,28 @@ func clear_invites() error {
 		return nil
 	})
 	fmt.Println("Deleted " + strconv.Itoa(n) + " invite acceptances")
+	n = 0
+	db.Update(func(tx *bolt.Tx) error {
+		c := tx.Bucket([]byte("invite_redeemed")).Cursor()
+		prefix := []byte("")
+		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
+			c.Delete()
+			n = n + 1
+		}
+		return nil
+	})
+	fmt.Println("Deleted " + strconv.Itoa(n) + " from invite_redeemed")
+	n = 0
+	db.Update(func(tx *bolt.Tx) error {
+		c := tx.Bucket([]byte("invite_expire")).Cursor()
+		prefix := []byte("")
+		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
+			c.Delete()
+			n = n + 1
+		}
+		return nil
+	})
+	fmt.Println("Deleted " + strconv.Itoa(n) + " from invite_expire")
 	return nil
 }
 

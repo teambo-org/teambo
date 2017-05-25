@@ -27,9 +27,7 @@ Teambo.socket.inviteResponse = (function (t) {
   };
 
   var handle = function(e) {
-    if(!e.pubKey) {
-      return;
-    } else if(e.pubKey == 'expired') {
+    if(e.expired) {
       var member;
       t.model.member.all.forEach(function(m){
         if(m.opts.invite_key == e.ikey) {
@@ -42,7 +40,7 @@ Teambo.socket.inviteResponse = (function (t) {
           t.view.updateSideNav();
         });
       }
-    } else {
+    } else if(e.pubKey) {
       var member;
       t.model.member.all.forEach(function(m){
         if(m.opts.invite_key == e.ikey) {

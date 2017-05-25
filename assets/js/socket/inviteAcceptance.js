@@ -23,9 +23,7 @@ Teambo.socket.inviteAcceptance = (function (t) {
   };
 
   var handle = function(e) {
-    if(!e.ct) {
-      return;
-    } else if(e.ct == 'expired') {
+    if(e.expired) {
       var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
       if(invite && !invite.expired) {
         t.array.deleteByProperty(t.acct.current.invites, 'ikey', e.ikey);
@@ -36,7 +34,7 @@ Teambo.socket.inviteAcceptance = (function (t) {
           t.app.refresh();
         });
       }
-    } else {
+    } else if(e.ct) {
       var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
       if(invite && !invite.failed) {
         t.socket.acct.stop();

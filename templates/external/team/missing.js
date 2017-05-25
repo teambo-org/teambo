@@ -8,6 +8,8 @@ function(t){
     t.app.gotoUrl('/account');
   }
 
+  var team = t.array.findByProperty(t.acct.current.teams, 'id', team_id);
+
   form.addEventListener("submit", function(e) {
     form.disable();
     var hard_confirm = "Are you sure you wish to remove this team? You are the admin which " +

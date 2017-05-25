@@ -54,6 +54,7 @@ func main() {
 
 	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
 	service.EmailQueue.Init()
+	service.InviteSweeper.Init()
 
 	go socket.TeamHub.Run()
 	go socket.InviteResponseHub.Run()
@@ -78,7 +79,7 @@ func main() {
 		go h.ListenAndServe()
 	}
 	<-stop
-	log.Println("Shutting down the server...")
+	log.Println("Shutting down HTTP server ...")
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	err = h.Shutdown(ctx)
 	if err != nil {
@@ -86,6 +87,8 @@ func main() {
 	}
 	log.Println("Stopping Email Queue ...")
 	service.EmailQueue.Stop()
+	log.Println("Stopping Invite Sweeper ...")
+	service.InviteSweeper.Stop()
 }
 
 func redirectToHttps(config map[string]string) func(http.ResponseWriter, *http.Request) {

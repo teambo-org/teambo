@@ -24,6 +24,7 @@ func GlobalInit() error {
 		tx.CreateBucketIfNotExists([]byte("invite_response"))
 		tx.CreateBucketIfNotExists([]byte("invite_acceptance"))
 		tx.CreateBucketIfNotExists([]byte("invite_redeemed"))
+		tx.CreateBucketIfNotExists([]byte("invite_expire"))
 		return nil
 	})
 	if err != nil {

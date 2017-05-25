@@ -4,33 +4,22 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"strconv"
-	"strings"
 	"time"
 )
 
 type Invite struct {
-	Id         string `json:"id"`
-	Hash       string `json:"hash"`
-	Expiration int64  `json:"ts"`
+	Id   string `json:"id"`
+	Hash string `json:"hash"`
 }
 
 func (o *Invite) Delete() (err error) {
 	db_invite_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("invite"))
-		c := b.Cursor()
-
-		prefix := []byte(o.Id)
-		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			b.Delete(k)
-		}
+		tx.Bucket([]byte("invite")).Delete([]byte(o.Id))
+		tx.Bucket([]byte("invite_response")).Delete([]byte(o.Id))
+		tx.Bucket([]byte("invite_acceptance")).Delete([]byte(o.Id))
+		tx.Bucket([]byte("invite_redeemed")).Delete([]byte(o.Id))
 		return nil
 	})
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
 	return nil
 }
 
@@ -69,16 +58,18 @@ func (o *Invite) MakeRedeemable() bool {
 }
 
 func InviteCreate(id string, hash string, ttl int64) (item Invite, err error) {
-	ts := time.Now().UnixNano() + ttl
-	v := fmt.Sprintf("%d", ts)
+	ts := fmt.Sprintf("%d", time.Now().UnixNano() + ttl)
 	db_invite_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("invite"))
-
-		err := b.Put([]byte(id+"-"+hash), []byte(v))
+		err := b.Put([]byte(id), []byte(hash))
 		if err != nil {
 			return err
 		}
-
+		b = tx.Bucket([]byte("invite_expire"))
+		err = b.Put([]byte(ts), []byte(id))
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	if err != nil {
@@ -86,7 +77,7 @@ func InviteCreate(id string, hash string, ttl int64) (item Invite, err error) {
 		return item, err
 	}
 
-	item = Invite{id, hash, ts}
+	item = Invite{id, hash}
 	return item, nil
 }
 
@@ -94,23 +85,48 @@ func InviteFind(id string) (item Invite, err error) {
 	item = Invite{}
 	db_invite_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("invite"))
-		c := b.Cursor()
-
-		prefix := []byte(id)
-		for k, ts := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			fields := strings.Split(string(k), "-")
-			item.Id = fields[0]
-			item.Hash = fields[1]
-			exp, _ := strconv.Atoi(string(ts))
-			item.Expiration = int64(exp)
+		v := b.Get([]byte(id))
+		if string(v) == "" {
 			return nil
+		}
+		item.Id = id
+		item.Hash = string(v)
+		return nil
+	})
+	return item, nil
+}
+
+type InviteExpires struct {
+	Ts     string `json:"ts"`
+	Invite Invite `json:"ts"`
+}
+
+func (o *InviteExpires) Delete() (err error) {
+	db_invite_update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("invite_expire"))
+		b.Delete([]byte(o.Ts))
+		return nil
+	})
+	return nil
+}
+
+func InviteFindExpired() (items []InviteExpires, err error) {
+	now := fmt.Sprintf("%d", time.Now().UnixNano())
+	db_invite_view(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("invite_expire"))
+		c := b.Cursor()
+		prefix := []byte("")
+		for ts, id := c.Seek(prefix); bytes.HasPrefix(ts, prefix); ts, id = c.Next() {
+			if len(ts) > 0 && string(ts) < now {
+				items = append(items, InviteExpires{
+					string(ts),
+					Invite{string(id), ""},
+				})
+			} else {
+				return nil
+			}
 		}
 		return nil
 	})
-	if err != nil {
-		fmt.Println(err)
-		return item, err
-	}
-
-	return item, nil
+	return items, nil
 }
