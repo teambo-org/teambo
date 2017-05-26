@@ -16,35 +16,37 @@ Teambo.model.invite = (function(t){
       return Promise.reject();
     }
     return new Promise(function (fulfill, reject) {
-      var xhrdata = {
-        team_id: t.team.current.id,
-        mkey:    t.team.current.mkey,
-        email:   data.member_email
-      };
-      if(data.include_team_name) {
-        xhrdata.team_name = t.team.current.opts.name;
-      }
-      if(data.include_sender_details) {
-        var member = t.acct.current.member();
-        xhrdata.sender_email = member.opts.email;
-        xhrdata.sender_name  = member.opts.name;
-      }
-      t.xhr.post('/invite', {
-        data: xhrdata
-      }).then(function (xhr) {
-        var d = JSON.parse(xhr.responseText);
-        if(xhr.status == 201) {
-          t.model.member.create({
-            email: data.member_email,
-            name:  data.name,
-            invite_key: d.ikey
-          }).then(function(m) {
-            fulfill(m);
-          }).catch(reject);
-        } else {
-          reject(xhr);
+      // 3 XHR requests to invite a member? One would be better
+      t.model.member.create({
+        email: data.member_email,
+        name:  data.name
+      }).then(function(m) {
+        var xhrdata = {
+          email:   data.member_email
+        };
+        if(data.include_team_name) {
+          xhrdata.team_name = t.team.current.opts.name;
         }
-      });
+        if(data.include_sender_details) {
+          var member = t.acct.current.member();
+          xhrdata.sender_email = member.opts.email;
+          xhrdata.sender_name  = member.opts.name;
+        }
+        t.xhr.post('/invite', {
+          data: xhrdata
+        }).then(function (xhr) {
+          var d = JSON.parse(xhr.responseText);
+          if(xhr.status == 201) {
+            m.update({
+              invite_key: d.ikey
+            }).then(function(m) {
+              fulfill(m);
+            });
+          } else {
+            reject(xhr);
+          }
+        });
+      }).catch(reject);
     });
   };
 

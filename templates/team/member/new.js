@@ -17,8 +17,17 @@ function(t){
       t.socket.inviteResponse.start();
       t.app.gotoUrl('/'+t.team.current.id+'/members');
     }).catch(function(xhr){
+      if(xhr.status === 403) {
+        var res = JSON.parse(xhr.responseText);
+        if(res.code && res.code === 'member_limit') {
+          form.error.msg("Member limit reached", "You must remove a member or upgrade your plan in order to invite another member");
+        } else {
+          form.error.msg("Are you an admin?", "Only a team admin may invite a new member");
+        }
+      } else {
+        form.error.msg("Member could not be saved", "Please try again");
+      }
       form.enable();
-      form.error.msg("Member could not be saved", "Please try again");
     });
   });
 

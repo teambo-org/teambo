@@ -38,7 +38,7 @@ func Member(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			if !strings.HasPrefix(obj.Ciphertext, iv) {
-				error_out(w, "Team version does not match", 409)
+				error_out(w, "Object version does not match", 409)
 				return
 			}
 			obj.Ciphertext = ct
@@ -175,6 +175,13 @@ func Members(w http.ResponseWriter, r *http.Request) {
 			match, err := regexp.MatchString(id_regex, id)
 			if !match {
 				http.Error(w, "Malformed Object ID", 400)
+				return
+			}
+			if members.Count() >= 5 {
+				error_data(w, 403, map[string]interface{}{
+					"error": "Team can only have a maximum of 5 members",
+					"code": "member_limit",
+				})
 				return
 			}
 

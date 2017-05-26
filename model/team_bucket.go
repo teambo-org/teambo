@@ -120,3 +120,16 @@ func (tb TeamBucket) RemoveByValue(val string) (err error) {
 	}
 	return nil
 }
+
+func (tb TeamBucket) Count() (total int) {
+	total = 0
+	db_team_view(tb.TeamId, func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(tb.Name))
+		b.ForEach(func(k, v []byte) error {
+			total++
+			return nil
+		})
+		return nil
+	})
+	return total
+}

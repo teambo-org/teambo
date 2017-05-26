@@ -70,9 +70,7 @@ Teambo.model._extend = (function(t){
             reject(xhr);
           }
         }).catch(function(e) {
-          if(e.status === 403) {
-            model.clearAll();
-          } else if(!id && e.status === 0) {
+          if(!id && e.status === 0) {
             var id = t.crypto.tempKey();
             var m = new model({id: id, opts: opts});
             var member_id = t.acct.current.member().id;

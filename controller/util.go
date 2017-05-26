@@ -8,10 +8,15 @@ import (
 )
 
 func error_out(w http.ResponseWriter, msg string, status int) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	res, _ := json.Marshal(map[string]string{
+	error_data(w, status, map[string]interface{}{
 		"error": msg,
 	})
+	return
+}
+
+func error_data(w http.ResponseWriter, status int, data map[string]interface{}) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	res, _ := json.Marshal(data)
 	http.Error(w, string(res), status)
 	return
 }
