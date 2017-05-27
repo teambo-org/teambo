@@ -19,6 +19,16 @@ func GlobalInit() error {
 	if err != nil {
 		return err
 	}
+	err = db_throttle_update(func(tx *bolt.Tx) error {
+		tx.CreateBucketIfNotExists([]byte("throttle"))
+		tx.CreateBucketIfNotExists([]byte("throttle_expires"))
+		tx.CreateBucketIfNotExists([]byte("throttle_reset"))
+		tx.CreateBucketIfNotExists([]byte("throttle_reset_expires"))
+		return nil
+	})
+	if err != nil {
+		return err
+	}
 	err = db_invite_update(func(tx *bolt.Tx) error {
 		tx.CreateBucketIfNotExists([]byte("invite"))
 		tx.CreateBucketIfNotExists([]byte("invite_response"))
@@ -44,6 +54,24 @@ func db_update(fn func(*bolt.Tx) error) error {
 
 func db_view(fn func(*bolt.Tx) error) error {
 	db, err := bolt.Open(util.Config("app.data")+"/global.db", 0644, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	return db.View(fn)
+}
+
+func db_throttle_update(fn func(*bolt.Tx) error) error {
+	db, err := bolt.Open(util.Config("app.data")+"/acct_throttle.db", 0644, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	return db.Update(fn)
+}
+
+func db_throttle_view(fn func(*bolt.Tx) error) error {
+	db, err := bolt.Open(util.Config("app.data")+"/acct_throttle.db", 0644, nil)
 	if err != nil {
 		return err
 	}

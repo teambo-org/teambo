@@ -100,8 +100,20 @@ function(t){
     }).catch(function(xhr){
       form.enable();
       if(xhr.status === 403) {
-        if(ikey == beta) {
-          var res = JSON.parse(xhr.responseText);
+        var res = JSON.parse(xhr.responseText);
+        if(res.code == "acct_locked") {
+          if(res.resets) {
+            form.error.msg('Account Locked', "Too many failed login attempts<br>To reset the account lock, you may<br/>" +
+              "<a href='#/account/unlock' class='bot-nav' id='acct-unlock'>Verify your email address</a>");
+            document.getElementById('acct-unlock').onclick = function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              t.app.gotoUrl('/account/unlock', {email: email});
+            };
+          } else {
+            form.error.msg('Account Locked', "Too many failed login attempts<br>Account locks reset after "+res.ttl+" hours");
+          }
+        } else if(ikey == beta) {
           if(res.error == "Invite Code already redeemed") {
             form.error.msg(res.error, 'You have already redeemed this invite code');
           } else {

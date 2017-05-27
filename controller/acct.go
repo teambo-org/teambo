@@ -27,10 +27,21 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !model.AcctThrottle.Check(id) {
+		error_data(w, 403, map[string]interface{}{
+			"error": "Account is locked",
+			"code": "acct_locked",
+		})
+		return
+	}
+
 	acct, _ := model.FindAcct(id, akey)
 	if acct.Ciphertext == "" {
-		// TODO: Treat as failed login attempt for throttling
-		error_out(w, "Account not found", 404)
+		model.AcctThrottle.Log(id)
+		error_data(w, 404, map[string]interface{}{
+			"error": "Account not found",
+			"retries": model.AcctThrottle.Remaining(id),
+		})
 		return
 	}
 
@@ -60,7 +71,7 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if !protection.Validate(pkey) {
-			// TODO: Treat as failed login attempt for throttling
+			model.AcctThrottle.Log(id)
 			error_out(w, "Account protection token does not match", 403)
 			return
 		}
@@ -110,7 +121,15 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: Check authentication failure limit and disallow authentication if necessary
+	if !model.AcctThrottle.Check(id) {
+		error_data(w, 403, map[string]interface{}{
+			"error": "Account is locked",
+			"code": "acct_locked",
+			"ttl": model.AcctThrottle.TTL,
+			"resets": model.AcctThrottle.RemainingResets(id),
+		})
+		return
+	}
 
 	acct, err := model.FindAcct(id, akey)
 	if err != nil {
@@ -118,7 +137,11 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if acct.Akey == "" || acct.Ciphertext == "new" {
-		error_out(w, "Account not found", 404)
+		model.AcctThrottle.Log(id)
+		error_data(w, 404, map[string]interface{}{
+			"error": "Account not found",
+			"retries": model.AcctThrottle.Remaining(id),
+		})
 		return
 	}
 
@@ -137,8 +160,17 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !model.AcctThrottle.Check(id) {
+		error_data(w, 403, map[string]interface{}{
+			"error": "Account is locked",
+			"code": "acct_locked",
+		})
+		return
+	}
+
 	acct, err := model.FindAcct(id, akey)
 	if err != nil {
+		model.AcctThrottle.Log(id)
 		error_out(w, "Account could not be retrieved", 500)
 		return
 	}

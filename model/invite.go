@@ -42,6 +42,19 @@ func (o *Invite) Redeem() bool {
 	return redeemed
 }
 
+func (o *Invite) Redeemable() bool {
+	redeemable := false
+	db_invite_view(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("invite_redeemed"))
+		v := b.Get([]byte(o.Id))
+		if string(v) == "0" {
+			redeemable = true
+		}
+		return nil
+	})
+	return redeemable
+}
+
 func (o *Invite) MakeRedeemable() bool {
 	err := db_invite_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("invite_redeemed"))
@@ -98,7 +111,7 @@ func InviteFind(id string) (item Invite, err error) {
 
 type InviteExpires struct {
 	Ts     string `json:"ts"`
-	Invite Invite `json:"ts"`
+	Invite Invite `json:"invite"`
 }
 
 func (o *InviteExpires) Delete() (err error) {

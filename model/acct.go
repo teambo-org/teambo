@@ -19,7 +19,7 @@ type Acct struct {
 }
 
 func (a *Acct) Delete() (err error) {
-	db_update(func(tx *bolt.Tx) error {
+	err = db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
 		err = b.Delete([]byte(a.Hkey))
 		if err != nil {
@@ -40,11 +40,6 @@ func (a *Acct) Move(akey string, pkey string, ct string) (err error) {
 			return err
 		}
 		err = b.Delete([]byte(a.Hkey))
-		if err != nil {
-			return err
-		}
-		// Temporary fallback
-		err = b.Delete([]byte(a.Akey))
 		if err != nil {
 			return err
 		}
@@ -74,11 +69,6 @@ func (a *Acct) Update(ct string) (err error) {
 		if err != nil {
 			return err
 		}
-		// Temporary fallback
-		err = b.Delete([]byte(a.Akey))
-		if err != nil {
-			return err
-		}
 		return nil
 	})
 	if err == nil {
@@ -90,7 +80,7 @@ func (a *Acct) Update(ct string) (err error) {
 func CreateAcct(id string, akey string, pkey string, ct string) (item Acct, err error) {
 	hkey := acct_hkey(id, akey)
 	phkey := acct_hkey(id, pkey)
-	db_update(func(tx *bolt.Tx) error {
+	err = db_update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
 		err := b.Put([]byte(hkey), []byte(ct))
 		if err != nil {
@@ -118,17 +108,8 @@ func FindAcct(id string, akey string) (item Acct, err error) {
 	db_view(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("acct"))
 		ct = string(b.Get([]byte(hkey)))
-		// Temporary fallback
-		if ct == "" {
-			ct = string(b.Get([]byte(akey)))
-		}
 		return nil
 	})
-	if err != nil {
-		fmt.Println(err)
-		return item, err
-	}
-
 	if ct != "" {
 		item = Acct{hkey, id, akey, ct}
 		return item, nil

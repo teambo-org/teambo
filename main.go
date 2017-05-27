@@ -53,6 +53,7 @@ func main() {
 	}
 
 	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
+	model.AcctThrottle.Init(config)
 	service.EmailQueue.Init()
 	service.InviteSweeper.Init()
 

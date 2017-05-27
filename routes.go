@@ -9,6 +9,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/":                    controller.Index,
 	"/acct":                controller.Acct,
 	"/acct/auth":           controller.AcctAuth,
+	"/acct/unlock":         controller.AcctUnlock,
 	"/acct/verification":   controller.AcctVerification,
 	"/acct/socket":         controller.AcctSocket,
 	"/invite":              controller.Invite,

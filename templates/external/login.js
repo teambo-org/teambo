@@ -23,15 +23,6 @@ function(t){
   };
 
   var form_submit_login = function(email, pass) {
-    var password_incorrect = function() {
-      form.enable();
-      form.error.msg('Incorrect email address or password', 'If you forgot your password, you may want to<br/><a href="" id="reset" class="bot-nav">Create a New Account<i class="icon-angle-right"></i></a>');
-      document.getElementById('reset').onclick = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        t.app.gotoUrl('/verification', {reset: true, email: email, pass: pass, ikey: ikey});
-      };
-    }
     t.acct.auth(email, pass).then(function(xhr){
       if(xhr === true || xhr.status === 200) {
         var remember_me = form.remember_me;
@@ -41,8 +32,32 @@ function(t){
         var after_auth = t.app.afterAuth ? t.app.afterAuth : '/account';
         t.app.afterAuth = null;
         t.app.gotoUrl(after_auth);
-      } else if(xhr.status === 404 || xhr.status === 403) {
-        password_incorrect();
+      } else if(xhr.status === 404) {
+        var d = JSON.parse(xhr.responseText);
+        form.enable();
+        form.error.msg('Incorrect email address or password',
+          d.retries + ' attempts remaining before your account is locked<br/>' +
+          'If you forgot your password, you may want to<br/>' +
+          '<a href="" id="reset" class="bot-nav"><i class="icon-blank"></i>Create a New Account<i class="icon-angle-right"></i></a>');
+        document.getElementById('reset').addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          t.app.gotoUrl('/verification', {reset: true, email: email, pass: pass, ikey: ikey});
+        });
+      } else if(xhr.status === 403) {
+        var d = JSON.parse(xhr.responseText);
+        if(d.resets) {
+          form.error.msg('Account Locked', "Too many failed login attempts<br>To reset the account lock, you may<br/>" +
+            "<a href='#/account/unlock' class='bot-nav' id='acct-unlock'>Verify your email address</i></a>");
+            document.getElementById('acct-unlock').onclick = function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              t.app.gotoUrl('/account/unlock', {email: email});
+            };
+        } else {
+          form.error.msg('Account Locked', "Too many failed login attempts<br>Your account will unlock in "+d.ttl+" hours");
+        }
+        form.enable();
       }
     }).catch(function() {
       if(t.app.online) {
@@ -73,10 +88,10 @@ function(t){
     form.style.display = 'block';
     form.addEventListener('submit', function(e){
       e.preventDefault();
+      form.disable();
       form.error.hide();
       email = form.email.value;
       pass  = form.pass.value;
-      form.disable();
       form_submit_fn(email, pass);
       form.pass.oninput = form.error.hide;
     });
