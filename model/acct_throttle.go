@@ -40,7 +40,7 @@ func (at *acctThrottle) PurgeExpired() (err error) {
 		c := b.Cursor()
 		prefix := []byte("")
 		for ts, id := c.Seek(prefix); bytes.HasPrefix(ts, prefix); ts, id = c.Next() {
-			if string(ts) < now {
+			if string(ts) != "" && string(ts) < now {
 				b.Delete(ts)
 				b2.Delete([]byte(string(id) + "-" + string(ts)))
 			} else {
@@ -60,7 +60,7 @@ func (at *acctThrottle) PurgeExpiredResets() (err error) {
 		c := b.Cursor()
 		prefix := []byte("")
 		for ts, id := c.Seek(prefix); bytes.HasPrefix(ts, prefix); ts, id = c.Next() {
-			if string(ts) < now {
+			if string(ts) != "" && string(ts) < now {
 				b.Delete(ts)
 				b2.Delete([]byte(string(id) + "-" + string(ts)))
 			} else {
