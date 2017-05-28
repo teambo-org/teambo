@@ -56,6 +56,7 @@ func main() {
 	model.AcctThrottle.Init(config)
 	service.EmailQueue.Init()
 	service.InviteSweeper.Init()
+	service.AcctVerificationSweeper.Init()
 
 	go socket.TeamHub.Run()
 	go socket.InviteResponseHub.Run()

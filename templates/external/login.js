@@ -55,7 +55,7 @@ function(t){
               t.app.gotoUrl('/account/unlock', {email: email});
             };
         } else {
-          form.error.msg('Account Locked', "Too many failed login attempts<br>Your account will unlock in "+d.ttl+" hours");
+          form.error.msg('Account Locked', "Too many failed login attempts<br>Account locks reset after "+d.ttl+" hours");
         }
         form.enable();
       }

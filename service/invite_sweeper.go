@@ -4,7 +4,7 @@ import (
 	"../model"
 	"../socket"
 	"time"
-	"log"
+	// "log"
 )
 
 type inviteSweeper struct {
@@ -55,7 +55,6 @@ func (is *inviteSweeper) Run() {
 		if is.stop {
 			return
 		}
-		log.Println("Sweeping Invite " + exp.Invite.Id)
 		exp.Invite.Delete()
 		msg := socket.JsonMessage(exp.Invite.Id, map[string]interface{}{
 			"expired": true,

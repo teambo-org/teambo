@@ -6,6 +6,7 @@ import (
 	"log"
 	"strconv"
 	"time"
+	"bytes"
 )
 
 type AcctVerification struct {
@@ -70,4 +71,24 @@ func FindAcctVerification(id string, akey string) (item AcctVerification, err er
 	}
 
 	return item, nil
+}
+
+func AcctVerificationPurgeExpired() (err error) {
+	now := strconv.Itoa(int(time.Now().UnixNano()))
+	err = db_update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("verification_expires"))
+		b2 := tx.Bucket([]byte("verification"))
+		c := b.Cursor()
+		prefix := []byte("")
+		for ts, id := c.Seek(prefix); bytes.HasPrefix(ts, prefix) && len(ts) > 0; ts, id = c.Next() {
+			if string(ts) < now {
+				b.Delete(ts)
+				b2.Delete(id)
+			} else {
+				return nil
+			}
+		}
+		return nil
+	})
+	return err
 }
