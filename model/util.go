@@ -3,8 +3,11 @@ package model
 import (
 	"../util"
 	"github.com/boltdb/bolt"
+	"github.com/syndtr/goleveldb/leveldb"
 	"os"
 )
+
+var db_invite *leveldb.DB
 
 func GlobalInit() error {
 	err := db_update(func(tx *bolt.Tx) error {
@@ -29,18 +32,16 @@ func GlobalInit() error {
 	if err != nil {
 		return err
 	}
-	err = db_invite_update(func(tx *bolt.Tx) error {
-		tx.CreateBucketIfNotExists([]byte("invite"))
-		tx.CreateBucketIfNotExists([]byte("invite_response"))
-		tx.CreateBucketIfNotExists([]byte("invite_acceptance"))
-		tx.CreateBucketIfNotExists([]byte("invite_redeemed"))
-		tx.CreateBucketIfNotExists([]byte("invite_expire"))
-		return nil
-	})
+	db_invite, err = leveldb.OpenFile(util.Config("app.data")+"/invite.ldb", nil)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func CloseAll() (err error) {
+	err = db_invite.Close()
+	return err
 }
 
 func db_update(fn func(*bolt.Tx) error) error {
@@ -72,24 +73,6 @@ func db_throttle_update(fn func(*bolt.Tx) error) error {
 
 func db_throttle_view(fn func(*bolt.Tx) error) error {
 	db, err := bolt.Open(util.Config("app.data")+"/acct_throttle.db", 0644, nil)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	return db.View(fn)
-}
-
-func db_invite_update(fn func(*bolt.Tx) error) error {
-	db, err := bolt.Open(util.Config("app.data")+"/invite.db", 0644, nil)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	return db.Update(fn)
-}
-
-func db_invite_view(fn func(*bolt.Tx) error) error {
-	db, err := bolt.Open(util.Config("app.data")+"/invite.db", 0644, nil)
 	if err != nil {
 		return err
 	}

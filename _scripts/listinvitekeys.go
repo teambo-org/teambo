@@ -1,61 +1,40 @@
 package main
 
 import (
-	// "flag"
-	"fmt"
-	"github.com/boltdb/bolt"
+	"flag"
+	"github.com/syndtr/goleveldb/leveldb"
+	"../util"
+	"log"
 )
 
-func list_buckets() (buckets []string, err error) {
-	db, err := bolt.Open("/var/lib/teambo/invite.db", 0644, nil)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
+var db_invite *leveldb.DB
 
-	fmt.Println("=== buckets ===")
-	err = db.View(func(tx *bolt.Tx) error {
-		return tx.ForEach(func(name []byte, _ *bolt.Bucket) error {
-			fmt.Println(string(name))
-			buckets = append(buckets, string(name))
-			return nil
-		})
-	})
-	return buckets, nil
-}
-
-func list_keys(bucket_name string) error {
-	db, err := bolt.Open("/var/lib/teambo/invite.db", 0644, nil)
-	if err != nil {
-		return err
+func list_keys() error {
+	iter := db_invite.NewIterator(nil, nil)
+	for iter.Next() {
+		log.Println(string(iter.Key()) + ": " + string(iter.Value()))
 	}
-	defer db.Close()
-	db.View(func(tx *bolt.Tx) error {
-		fmt.Println("--- " + bucket_name + " ---")
-		b := tx.Bucket([]byte(bucket_name))
-		if b == nil {
-			fmt.Println("[EMPTY]")
-			return nil
-		}
-		c := b.Cursor()
-		prefix := []byte("")
-		for k, v := c.Seek(prefix); len(k) > 0; k, v = c.Next() {
-			fmt.Println(string(k) + ": " + string(v))
-		}
-		return nil
-	})
-	return nil
+	iter.Release()
+	return iter.Error()
 }
 
 func main() {
-	fmt.Println("=== database ===")
-	fmt.Println("/var/lib/teambo/invite.db")
-	buckets, err := list_buckets()
+	var config_path *string = flag.String("conf", "../app.conf", "Location of config file")
+	flag.Parse()
+	util.ParseConfig(*config_path)
+
+	path := util.Config("app.data")+"/invite.ldb"
+	log.Println("=== " + path + " ===")
+	dbh, err := leveldb.OpenFile(path, nil)
+	db_invite = dbh
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
-	for _, bucket_name := range buckets {
-		list_keys(bucket_name)
+	err = list_keys()
+	if err != nil {
+		log.Println(err)
+		return
 	}
+	db_invite.Close()
 }

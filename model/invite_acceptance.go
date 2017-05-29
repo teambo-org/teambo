@@ -1,70 +1,29 @@
 package model
 
-import (
-	"bytes"
-	"fmt"
-	"github.com/boltdb/bolt"
-)
-
 type InviteAcceptance struct {
 	Id         string `json:"id"`
 	Ciphertext string `json:"ct"`
 }
 
 func (o *InviteAcceptance) Delete() (err error) {
-	db_invite_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("invite_acceptance"))
-		c := b.Cursor()
-
-		prefix := []byte(o.Id)
-		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			b.Delete(k)
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	return nil
+	k := []byte("invite_acceptance-" + o.Id)
+	return db_invite.Delete(k, nil)
 }
 
-func InviteAcceptanceCreate(id string, ct string) (item InviteAcceptance, err error) {
-	db_invite_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("invite_acceptance"))
-
-		err := b.Put([]byte(id), []byte(ct))
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-		return item, err
+func InviteAcceptanceCreate(id, ct string) (item InviteAcceptance, err error) {
+	k := []byte("invite_acceptance-" + id)
+	err = db_invite.Put(k, []byte(ct), nil)
+	if err == nil {
+		item = InviteAcceptance{id, ct}
 	}
-
-	item = InviteAcceptance{id, ct}
-	return item, nil
+	return item, err
 }
 
 func InviteAcceptanceFind(id string) (item InviteAcceptance, err error) {
-	item = InviteAcceptance{}
-	db_invite_view(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("invite_acceptance"))
-
-		v := b.Get([]byte(id))
-
-		item = InviteAcceptance{id, string(v)}
-
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-		return item, err
+	k := []byte("invite_acceptance-" + id)
+	ct, err := db_invite.Get(k, nil)
+	if err == nil {
+		item = InviteAcceptance{id, string(ct)}
 	}
-
-	return item, nil
+	return item, err
 }

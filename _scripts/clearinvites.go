@@ -1,75 +1,43 @@
 package main
 
 import (
-	"fmt"
+	"flag"
+	"github.com/syndtr/goleveldb/leveldb"
+	"../util"
+	"log"
 	"strconv"
-	"github.com/boltdb/bolt"
 )
 
+var db_invite *leveldb.DB
+
 func clear_invites() error {
-	db, err := bolt.Open("/var/lib/teambo/invite.db", 0644, nil)
-	if err != nil {
-		return err
+	total := 0
+	iter := db_invite.NewIterator(nil, nil)
+	for iter.Next() {
+		db_invite.Delete(iter.Key(), nil)
+		total++
 	}
-	defer db.Close()
-	n := 0
-	db.Update(func(tx *bolt.Tx) error {
-		c := tx.Bucket([]byte("invite")).Cursor()
-		prefix := []byte("")
-		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
-			c.Delete()
-			n = n + 1
-		}
-		return nil
-	})
-	fmt.Println("Deleted " + strconv.Itoa(n) + " invites")
-	n = 0
-	db.Update(func(tx *bolt.Tx) error {
-		c := tx.Bucket([]byte("invite_response")).Cursor()
-		prefix := []byte("")
-		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
-			c.Delete()
-			n = n + 1
-		}
-		return nil
-	})
-	fmt.Println("Deleted " + strconv.Itoa(n) + " invite responses")
-	n = 0
-	db.Update(func(tx *bolt.Tx) error {
-		c := tx.Bucket([]byte("invite_acceptance")).Cursor()
-		prefix := []byte("")
-		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
-			c.Delete()
-			n = n + 1
-		}
-		return nil
-	})
-	fmt.Println("Deleted " + strconv.Itoa(n) + " invite acceptances")
-	n = 0
-	db.Update(func(tx *bolt.Tx) error {
-		c := tx.Bucket([]byte("invite_redeemed")).Cursor()
-		prefix := []byte("")
-		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
-			c.Delete()
-			n = n + 1
-		}
-		return nil
-	})
-	fmt.Println("Deleted " + strconv.Itoa(n) + " from invite_redeemed")
-	n = 0
-	db.Update(func(tx *bolt.Tx) error {
-		c := tx.Bucket([]byte("invite_expire")).Cursor()
-		prefix := []byte("")
-		for k, _ := c.Seek(prefix); len(k) > 0; k, _ = c.Next() {
-			c.Delete()
-			n = n + 1
-		}
-		return nil
-	})
-	fmt.Println("Deleted " + strconv.Itoa(n) + " from invite_expire")
-	return nil
+	log.Println("Deleted " + strconv.Itoa(total) + " records")
+	iter.Release()
+	return iter.Error()
 }
 
 func main() {
-	clear_invites()
+	var config_path *string = flag.String("conf", "../app.conf", "Location of config file")
+	flag.Parse()
+	util.ParseConfig(*config_path)
+	path := util.Config("app.data")+"/invite.ldb"
+	log.Println("=== " + path + " ===")
+	dbh, err := leveldb.OpenFile(path, nil)
+	db_invite = dbh
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = clear_invites()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	db_invite.Close()
 }

@@ -91,6 +91,8 @@ func main() {
 	service.EmailQueue.Stop()
 	log.Println("Stopping Invite Sweeper ...")
 	service.InviteSweeper.Stop()
+	log.Println("Closing Database Connections ...")
+	model.CloseAll()
 }
 
 func redirectToHttps(config map[string]string) func(http.ResponseWriter, *http.Request) {
