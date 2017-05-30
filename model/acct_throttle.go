@@ -1,13 +1,10 @@
 package model
 
 import (
-	// "bytes"
-	"github.com/boltdb/bolt"
-	"log"
+	"../util"
 	"strconv"
 	"time"
-	"bytes"
-	"../util"
+	// "log"
 )
 
 type acctThrottle struct {
@@ -22,166 +19,94 @@ func (at *acctThrottle) Init(config map[string]string) {
 	at.Resets, _ = strconv.Atoi(config["acct.throttle.resets"])
 	at.Limit, _ = strconv.Atoi(config["acct.throttle.limit"])
 	at.TTL, _ = strconv.Atoi(config["acct.throttle.ttl"])
-	ticker := time.NewTicker(10 * time.Minute)
-	go func() {
-		for _ = range ticker.C {
-			at.PurgeExpired()
-			at.PurgeExpiredResets()
-		}
-	}()
-	return
 }
 
-func (at *acctThrottle) PurgeExpired() (err error) {
-	now := strconv.Itoa(int(time.Now().UnixNano()))
-	err = db_throttle_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle_expires"))
-		b2 := tx.Bucket([]byte("throttle"))
-		c := b.Cursor()
-		prefix := []byte("")
-		for ts, id := c.Seek(prefix); bytes.HasPrefix(ts, prefix); ts, id = c.Next() {
-			if string(ts) != "" && string(ts) < now {
-				b.Delete(ts)
-				b2.Delete([]byte(string(id) + "-" + string(ts)))
-			} else {
-				return nil
-			}
-		}
-		return nil
-	})
-	return err
+func (at *acctThrottle) PurgeExpired() ([]string, error) {
+	return PurgeExpired(db_throttle, "throttle")
 }
 
-func (at *acctThrottle) PurgeExpiredResets() (err error) {
-	now := strconv.Itoa(int(time.Now().UnixNano()))
-	err = db_throttle_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle_reset_expires"))
-		b2 := tx.Bucket([]byte("throttle_reset"))
-		c := b.Cursor()
-		prefix := []byte("")
-		for ts, id := c.Seek(prefix); bytes.HasPrefix(ts, prefix); ts, id = c.Next() {
-			if string(ts) != "" && string(ts) < now {
-				b.Delete(ts)
-				b2.Delete([]byte(string(id) + "-" + string(ts)))
-			} else {
-				return nil
-			}
-		}
-		return nil
-	})
-	return err
+func (at *acctThrottle) PurgeExpiredResets() ([]string, error) {
+	return PurgeExpired(db_throttle, "throttle_reset")
 }
 
 func (at *acctThrottle) Clear(id string) (err error) {
-	err = db_throttle_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle"))
-		c := b.Cursor()
-		prefix := []byte(id)
-		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			b.Delete(k)
-		}
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-		return err
+	batch := db_throttle.Batch()
+	iter := db_throttle.PrefixIterator([]byte("throttle-" + id))
+	for iter.Next() {
+		batch.Delete(iter.Key())
 	}
-
-	return nil
-}
-
-func (at *acctThrottle) Check(id string) bool {
-	return at.Remaining(id) > 0
+	iter.Release()
+	err = iter.Error()
+	if err == nil {
+		err = db_throttle.Write(batch)
+	}
+	return err
 }
 
 func (at *acctThrottle) Remaining(id string) int {
 	total := 0
-	db_throttle_view(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle"))
-		c := b.Cursor()
-		prefix := []byte(id)
-		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			total++
-		}
-		return nil
-	})
+	iter := db_throttle.PrefixIterator([]byte("throttle-" + id))
+	for iter.Next() {
+		total++
+	}
+	iter.Release()
 	return at.Limit - total
 }
 
-func (at *acctThrottle) Log(id string) (err error) {
+func (at *acctThrottle) Log(id string) error {
 	expires := strconv.Itoa(int(time.Now().Add(time.Duration(at.TTL) * time.Hour).UnixNano()))
-	err = db_throttle_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle_expires"))
-		b.Put([]byte(expires), []byte(id))
-		b2 := tx.Bucket([]byte("throttle"))
-		b2.Put([]byte(id + "-" + expires), []byte("1"))
-		return nil
-	})
-	return err
+	batch := db_throttle.Batch()
+	batch.Put([]byte("throttle_expires-" + expires), []byte(id))
+	batch.Put([]byte("throttle-" + id + "-" + expires), []byte("1"))
+	return db_throttle.Write(batch)
 }
 
 func (at *acctThrottle) RemainingResets(id string) int {
 	total := 0
-	db_throttle_view(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle_reset"))
-		c := b.Cursor()
-		prefix := []byte(id)
-		for k, _ := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, _ = c.Next() {
-			total++
-		}
-		return nil
-	})
+	iter := db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	for iter.Next() {
+		total++
+	}
+	iter.Release()
 	return at.Resets - total
 }
 
 func (at *acctThrottle) CreateReset(id string) string {
 	rkey := util.RandStr(16)
 	expires := strconv.Itoa(int(time.Now().Add(time.Duration(at.TTL) * time.Hour).UnixNano()))
-	db_throttle_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle_reset_expires"))
-		b.Put([]byte(expires), []byte(id))
-		b2 := tx.Bucket([]byte("throttle_reset"))
-		b2.Put([]byte(id + "-" + expires), []byte(rkey))
-		return nil
-	})
+	db_throttle.Put([]byte("throttle_reset_expires-" + expires), []byte(id))
+	db_throttle.Put([]byte("throttle_reset-" + id + "-" + expires), []byte(rkey))
 	return rkey
 }
 
 func (at *acctThrottle) HasReset(id string) bool {
 	found := false
-	db_throttle_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle_reset"))
-		c := b.Cursor()
-		prefix := []byte(id)
-		for k, v := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, v = c.Next() {
-			if string(v) != "0" {
-				found = true
-				return nil
-			}
+	iter := db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	for iter.Next() {
+		if string(iter.Value()) != "0" {
+			found = true
+			break
 		}
-		return nil
-	})
-	return found
-}
-
-func (at *acctThrottle) RedeemReset(id string, rkey string) bool {
-	found := false
-	db_throttle_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("throttle_reset"))
-		c := b.Cursor()
-		prefix := []byte(id)
-		for k, v := c.Seek(prefix); bytes.HasPrefix(k, prefix); k, v = c.Next() {
-			if rkey != "0" && string(v) == rkey {
-				b.Put([]byte(k), []byte("0"))
-				found = true
-				return nil
-			}
-		}
-		return nil
-	})
-	if found {
-		at.Clear(id)
 	}
+	iter.Release()
 	return found
 }
 
+func (at *acctThrottle) RedeemReset(id, rkey string) bool {
+	key := []byte("")
+	iter := db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	for iter.Next() {
+		v := string(iter.Value())
+		if v != "0" && v == rkey {
+			key = iter.Key()
+			break
+		}
+	}
+	iter.Release()
+	if len(key) > 0 {
+		db_throttle.Put(key, []byte("0"))
+		at.Clear(id)
+		return true
+	}
+	return false
+}

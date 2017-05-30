@@ -2,11 +2,10 @@ package model
 
 import (
 	"../util"
-	// "bytes"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"log"
 	"time"
+	"log"
 )
 
 type Team struct {

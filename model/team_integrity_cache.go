@@ -2,8 +2,8 @@ package model
 
 import (
 	"sort"
-	// "log"
 	"time"
+	// "log"
 )
 
 type teamIntegrityCache struct {

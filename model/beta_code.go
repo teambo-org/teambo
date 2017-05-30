@@ -1,10 +1,7 @@
 package model
 
 import (
-	// "bytes"
-	"github.com/boltdb/bolt"
-	"log"
-	// "time"
+	// "log"
 )
 
 type BetaCode struct {
@@ -12,31 +9,18 @@ type BetaCode struct {
 	Found string `json:"found"`
 }
 
-func (bc *BetaCode) Delete() (err error) {
-	db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("beta_code"))
-		b.Delete([]byte(bc.Code))
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	return nil
+func (bc *BetaCode) Delete() error {
+	return db_invite.Delete([]byte("beta_code-" + bc.Code))
 }
 
-func FindBetaCode(beta string) (item BetaCode, err error) {
-	item = BetaCode{}
-	db_view(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("beta_code"))
-		v := b.Get([]byte(beta))
-		item = BetaCode{beta, string(v)}
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-		return item, err
+func FindBetaCode(code string) (item BetaCode, err error) {
+	v, err := db_invite.Get([]byte("beta_code-" + code))
+	if err == nil {
+		item = BetaCode{code, string(v)}
 	}
+	return item, err
+}
 
-	return item, nil
+func BetaCodePurgeExpired() ([]string, error) {
+	return PurgeExpired(db_invite, "beta_code")
 }

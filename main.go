@@ -31,14 +31,12 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	} else {
 		controller.Static(w, r)
 	}
-	// log.Printf("%d %s", time.Since(start).Nanoseconds(), r.URL.Path)
+	// log.Printf("%d %s", time.Since(start).UnixNano(), r.URL.Path)
 }
 
 func main() {
 	var config_path *string = flag.String("conf", "app.conf", "Location of config file")
-
 	flag.Parse()
-
 	config := util.ParseConfig(*config_path)
 
 	procs, err := strconv.Atoi(config["app.procs"])
@@ -55,16 +53,12 @@ func main() {
 	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
 	model.AcctThrottle.Init(config)
 	service.EmailQueue.Init()
-	service.InviteSweeper.Init()
-	service.AcctVerificationSweeper.Init()
+	service.PurgeExpired.Init()
 
 	go socket.TeamHub.Run()
 	go socket.InviteResponseHub.Run()
 	go socket.InviteAcceptanceHub.Run()
 	go socket.AcctHub.Run()
-
-	stop := make(chan os.Signal)
-	signal.Notify(stop, os.Interrupt)
 
 	log.SetOutput(util.Logfilter{os.Stderr, [][]byte{
 		[]byte("http: TLS handshake error"),
@@ -80,17 +74,21 @@ func main() {
 		h = &http.Server{Addr: ":" + config["port.http"], Handler: StaticHandler{}}
 		go h.ListenAndServe()
 	}
+
+	stop := make(chan os.Signal)
+	signal.Notify(stop, os.Interrupt)
 	<-stop
+
 	log.Println("Shutting down HTTP server ...")
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	err = h.Shutdown(ctx)
 	if err != nil {
 		log.Println(err)
 	}
 	log.Println("Stopping Email Queue ...")
 	service.EmailQueue.Stop()
-	log.Println("Stopping Invite Sweeper ...")
-	service.InviteSweeper.Stop()
+	log.Println("Stopping Sweepers ...")
+	service.PurgeExpired.Stop()
 	log.Println("Closing Database Connections ...")
 	model.CloseAll()
 }

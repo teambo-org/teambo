@@ -27,7 +27,7 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !model.AcctThrottle.Check(id) {
+	if model.AcctThrottle.Remaining(id) < 1 {
 		error_data(w, 403, map[string]interface{}{
 			"error": "Account is locked",
 			"code": "acct_locked",
@@ -121,7 +121,7 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !model.AcctThrottle.Check(id) {
+	if model.AcctThrottle.Remaining(id) < 1 {
 		error_data(w, 403, map[string]interface{}{
 			"error": "Account is locked",
 			"code": "acct_locked",
@@ -160,7 +160,7 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !model.AcctThrottle.Check(id) {
+	if model.AcctThrottle.Remaining(id) < 1 {
 		error_data(w, 403, map[string]interface{}{
 			"error": "Account is locked",
 			"code": "acct_locked",

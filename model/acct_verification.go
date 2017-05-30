@@ -1,12 +1,9 @@
 package model
 
 import (
-	// "bytes"
-	"github.com/boltdb/bolt"
-	"log"
 	"strconv"
 	"time"
-	"bytes"
+	// "log"
 )
 
 type AcctVerification struct {
@@ -15,80 +12,32 @@ type AcctVerification struct {
 	Vkey string `json:"vkey"`
 }
 
-func (av *AcctVerification) Delete() (err error) {
-	db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("verification"))
-		b.Delete([]byte(av.Hkey))
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	return nil
+func (o *AcctVerification) Delete() (err error) {
+	return db_acct.Delete([]byte("verification-" + o.Hkey))
 }
 
-func CreateAcctVerification(id string, akey string, vkey string) (item AcctVerification, err error) {
+func CreateAcctVerification(id, akey, vkey string) (item AcctVerification, err error) {
 	hkey := acct_hkey(id, akey)
-
 	expires := strconv.Itoa(int(time.Now().Add(30 * time.Minute).UnixNano()))
-	db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("verification"))
-		err := b.Put([]byte(hkey), []byte(vkey))
-		if err != nil {
-			return err
-		}
-		b = tx.Bucket([]byte("verification_expires"))
-		err = b.Put([]byte(expires), []byte(hkey))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-		return item, err
+	batch := db_acct.Batch()
+	batch.Put([]byte("verification-" + hkey), []byte(vkey))
+	batch.Put([]byte("verification_expires-" + expires), []byte(hkey))
+	err = db_acct.Write(batch)
+	if err == nil {
+		item = AcctVerification{hkey, akey, vkey}
 	}
-
-	item = AcctVerification{hkey, akey, vkey}
-	return item, nil
+	return item, err
 }
 
-func FindAcctVerification(id string, akey string) (item AcctVerification, err error) {
+func FindAcctVerification(id, akey string) (item AcctVerification, err error) {
 	hkey := acct_hkey(id, akey)
-
-	item = AcctVerification{}
-	db_view(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("verification"))
-		v := b.Get([]byte(hkey))
-		item = AcctVerification{hkey, akey, string(v)}
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-		return item, err
+	vkey, err := db_acct.Get([]byte("verification-" + hkey))
+	if err == nil {
+		item = AcctVerification{hkey, akey, string(vkey)}
 	}
-
-	return item, nil
+	return item, err
 }
 
-func AcctVerificationPurgeExpired() (err error) {
-	now := strconv.Itoa(int(time.Now().UnixNano()))
-	err = db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("verification_expires"))
-		b2 := tx.Bucket([]byte("verification"))
-		c := b.Cursor()
-		prefix := []byte("")
-		for ts, id := c.Seek(prefix); bytes.HasPrefix(ts, prefix) && len(ts) > 0; ts, id = c.Next() {
-			if string(ts) < now {
-				b.Delete(ts)
-				b2.Delete(id)
-			} else {
-				return nil
-			}
-		}
-		return nil
-	})
-	return err
+func AcctVerificationPurgeExpired() (ids []string, err error) {
+	return PurgeExpired(db_acct, "verification")
 }

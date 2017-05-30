@@ -1,14 +1,10 @@
 package model
 
 import (
-	// "time"
-	// "bytes"
 	"../util"
-	"fmt"
-	"github.com/boltdb/bolt"
-	// "errors"
 	"crypto/sha256"
 	"encoding/base64"
+	// "log"
 )
 
 type Acct struct {
@@ -19,41 +15,18 @@ type Acct struct {
 }
 
 func (a *Acct) Delete() (err error) {
-	err = db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("acct"))
-		err = b.Delete([]byte(a.Hkey))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	return err
+	return db_acct.Delete([]byte("acct-"+a.Hkey))
 }
 
-func (a *Acct) Move(akey string, pkey string, ct string) (err error) {
+func (a *Acct) Move(akey, pkey, ct string) (err error) {
 	hkey := acct_hkey(a.Id, akey)
 	phkey := acct_hkey(a.Id, pkey)
-	err = db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("acct"))
-		err = b.Put([]byte(hkey), []byte(ct))
-		if err != nil {
-			return err
-		}
-		err = b.Delete([]byte(a.Hkey))
-		if err != nil {
-			return err
-		}
-		b = tx.Bucket([]byte("acct_protection"))
-		err = b.Put([]byte(hkey), []byte(phkey))
-		if err != nil {
-			return err
-		}
-		err = b.Delete([]byte(a.Hkey))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
+	batch := db_acct.Batch()
+	batch.Delete([]byte("acct-" + a.Hkey))
+	batch.Delete([]byte("acct_protection-" + a.Hkey))
+	batch.Put([]byte("acct-" + hkey), []byte(ct))
+	batch.Put([]byte("acct_protection-" + hkey), []byte(phkey))
+	err = db_acct.Write(batch)
 	if err == nil {
 		a.Hkey = hkey
 		a.Akey = akey
@@ -63,58 +36,33 @@ func (a *Acct) Move(akey string, pkey string, ct string) (err error) {
 }
 
 func (a *Acct) Update(ct string) (err error) {
-	err = db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("acct"))
-		err = b.Put([]byte(a.Hkey), []byte(ct))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
+	err = db_acct.Put([]byte("acct-" + a.Hkey), []byte(ct))
 	if err == nil {
 		a.Ciphertext = ct
 	}
 	return err
 }
 
-func CreateAcct(id string, akey string, pkey string, ct string) (item Acct, err error) {
+func CreateAcct(id, akey, pkey, ct string) (item Acct, err error) {
 	hkey := acct_hkey(id, akey)
 	phkey := acct_hkey(id, pkey)
-	err = db_update(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("acct"))
-		err := b.Put([]byte(hkey), []byte(ct))
-		if err != nil {
-			return err
-		}
-		b = tx.Bucket([]byte("acct_protection"))
-		err = b.Put([]byte(hkey), []byte(phkey))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-		return item, err
+	batch := db_acct.Batch()
+	batch.Put([]byte("acct-" + hkey), []byte(ct))
+	batch.Put([]byte("acct_protection-" + hkey), []byte(phkey))
+	err = db_acct.Write(batch)
+	if err == nil {
+		item = Acct{hkey, id, akey, ct}
 	}
-
-	item = Acct{hkey, id, akey, ct}
-	return item, nil
+	return item, err
 }
 
-func FindAcct(id string, akey string) (item Acct, err error) {
+func FindAcct(id, akey string) (item Acct, err error) {
 	hkey := acct_hkey(id, akey)
-	ct := ""
-	db_view(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("acct"))
-		ct = string(b.Get([]byte(hkey)))
-		return nil
-	})
-	if ct != "" {
-		item = Acct{hkey, id, akey, ct}
-		return item, nil
+	ct, err := db_acct.Get([]byte("acct-" + hkey))
+	if len(ct) > 0 {
+		item = Acct{hkey, id, akey, string(ct)}
 	}
-	return item, nil
+	return item, err
 }
 
 func acct_hkey(id string, akey string) string {
