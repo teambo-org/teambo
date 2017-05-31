@@ -105,6 +105,7 @@ var jsapp = []string{
 	"/js/socket/acct.js",
 }
 var jsasync = []string{
+	"/js/lib/fractal.js",
 	"/js/lib/zxcvbn.js",
 }
 var jsinit = []string{

@@ -112,9 +112,10 @@ Teambo.app = (function(t){
         }
         app.last_hash = hash;
         app.loaded = true;
+        window.fractal && window.fractal.unpause();
       }).catch(function(e){
         app.trace(e);
-        app.gotoUrl('/'+window.location.hash.split('/').slice(1, -2).join('/'));
+        // app.gotoUrl('/'+window.location.hash.split('/').slice(1, -2).join('/'));
       });
     };
     if(p.length) {

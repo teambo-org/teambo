@@ -4,7 +4,7 @@
         <a class="logout" href="#/logout"><i class="icon-power" title="Log Out"></i></a>
         <p><a href="#/account/settings">{{acct.current.email}}</a></p>
     </div>
-    <div class="main">
+    <div class="main no-bg">
         <div id="status"></div>
         <ul id="teams" class="teams">
         {{#acct.current.teams}}
@@ -18,7 +18,7 @@
             </li>
         {{/acct.current.teams}}
         </ul>
-        <a href="#/team/new" class="team-new" id="team-new">Create Team</a>
     </div>
+        <a href="#/team/new" class="team-new" id="team-new">Create Team</a>
 </div>
 <link id="account-themes" type='text/css' rel='stylesheet'/>

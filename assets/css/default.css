@@ -22,7 +22,7 @@ a:hover, a:active { text-decoration: underline; }
 .scrollable::-webkit-scrollbar-track { }
 .scrollable::-webkit-scrollbar-thumb {  }
 
-#bgcanvas { position: fixed; z-index: 1; top: 0; left: 0; }
+#bgcanvas { position: fixed; z-index: 0; top: 0; left: 0; }
 #page { z-index: 1; position: relative; }
 .bg { z-index: 0; }
 .container { z-index: 100; }
@@ -116,8 +116,10 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 .toggle-target { display: none; }
 .toggle-target.open { display: block; }
 
-.logo { background-image: url('/i/logo.svg'); background-repeat: no-repeat; background-size: 100%; }
+.logo { background-image: url('/i/logo.svg'); background-repeat: no-repeat; background-size: 100.5%; }
 #logo { opacity: 0.2; width: 11em; height: 11em; margin: 2em auto; -webkit-app-region: drag; }
+#logo { opacity: 1; background-image: url('/i/logo_grey.svg'); background-color: #fff; border-radius: 50%; box-shadow: 0 0 3em rgba(255,255,255,1); border: 0.2em solid #fff; box-sizing: border-box;  }
+/* #logo { opacity: 1; background-image: url('/i/icon/teambo192.png');  } */
 @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
 .spinner { animation: 2s linear infinite spin; }
 

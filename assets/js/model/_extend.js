@@ -297,7 +297,8 @@ Teambo.model._extend = (function(t){
               t.view.updateSideNav();
               fulfill();
             }).catch(function() {
-              t.app.trace(e);
+              m.uncache();
+              // t.app.trace(e);
               fulfill();
             });
           }).catch(function(e) {

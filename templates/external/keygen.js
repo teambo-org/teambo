@@ -1,6 +1,8 @@
 function(t){
   "use strict";
 
+  window.fractal.pause();
+
   var createKey = function(){
     var inner = document.getElementById('progressbar-inner');
     var progressCallback = function(p){

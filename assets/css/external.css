@@ -33,7 +33,8 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external p.ex { padding: 1em 1.5em 0; text-align: left; font-size: 0.8em; }
 .external p.exc { padding: 1em 1.5em 0; font-size: 0.8em; }
 .external form .error .ex { margin: 1em 0; }
-.external .main { max-width: 30em; margin: 0 auto; position: relative; padding: 0 1em; }
+.external .main { max-width: 30em; margin: 0 auto; position: relative; /* padding: 0 1em; */  background: rgba(255,255,255,1);  }
+.external .main.no-bg { background: none;  }
 .external ul { padding: 1.1em 1em 1px; margin: 0 0 1em; background: rgba(0,0,0,0.1); }
 .external ul.teams { position: relative; }
 .external ul.teams li { padding: 1em; list-style: none; margin-bottom: 1em; }
@@ -51,7 +52,7 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external ul.teams li.team a .pending { float: right; margin: 0 1em; opacity: 0.7; font-size: 0.8em; line-height: 2.5em; }
 .external ul.teams li.team a .failed { opacity: 1; }
 
-.external ul.teams li.welcome h3 { text-align: center; color: #fff; font-size: 1em; background: #040; margin: -2em -2em 2em; padding: 1.5em 0; }
+.external ul.teams li.welcome h3 { text-align: center; color: #fff; font-size: 1em; background: #040; margin: -2.1em -2em 2em; padding: 1.5em 0; }
 .external ul.teams li.welcome p { font-size: 0.9em; }
 .external a.bot-nav { color: #000; font-size: 1em; display: inline-block; padding: 0.5em; }
 .external a.bot-nav i { font-size: 0.8em; }
