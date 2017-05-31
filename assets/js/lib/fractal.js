@@ -5,7 +5,7 @@
   var n = 8;
   var zoom = 12.5;
   var rotation = 180;
-  var curl = 0;
+  var curl = -150;
   var twist = 0;
   var a_curl = .2;
   var a_twist = 0;
@@ -95,12 +95,12 @@
     }
     curl  = (curl < 360*depth_start ? curl : curl - 360*depth_start) + a_curl;
     twist = (twist < 360 ? twist : twist - 360) + a_twist;
+    window.cancelAnimationFrame(animationFrame);
     animationFrame = window.requestAnimationFrame(drawFractal);
   };
   window.addEventListener('resize', function(e){
     elem.width = w = window.innerWidth;
     elem.height = h = window.innerHeight;
-    window.cancelAnimationFrame(animationFrame);
     logo = document.getElementById('logo');
     if(logo) {
       rect = logo.getBoundingClientRect();
@@ -111,7 +111,6 @@
     }
   });
   window.addEventListener('scroll', function(e){
-    window.cancelAnimationFrame(animationFrame);
     logo = document.getElementById('logo');
     if(logo) {
       ctx.rect(0,0,elem.width,elem.height);
@@ -127,7 +126,6 @@
   window.fractal = {
     unpause: function() {
       elem.style.display = "block";
-      window.cancelAnimationFrame(animationFrame);
       logo = document.getElementById('logo');
       if(logo) {
         rect = logo.getBoundingClientRect();
@@ -137,13 +135,12 @@
       } else {
         rect = null;
       }
-      window.setTimeout(drawFractal, 0);
+      drawFractal();
     },
     pause: function() {
       window.cancelAnimationFrame(animationFrame);
     }
   };
-
   reset();
   drawFractal();
 })();

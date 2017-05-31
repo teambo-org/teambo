@@ -12,7 +12,7 @@ form.ext.std input.error:focus { outline: 4px solid rgba(255,0,0,0.5); }
 
 form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 
-.external .subtext { max-width: 30em; margin: 0 auto; padding: 0.5em 0; text-align: center; color: rgba(0,0,0,0.5); }
+.external .subtext { max-width: 30em; margin: 0 auto; padding: 0.5em 0; text-align: center; color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.75); }
 .external .subtext p { font-size: 0.9em; }
 .external.account .nav { max-width: 30em; margin: 0 auto; padding: 1em; text-align: center; }
 .external.account .nav p { margin: 0 2em; line-height: 2em; }
