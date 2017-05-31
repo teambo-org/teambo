@@ -22,7 +22,14 @@ type Response map[string]interface{}
 
 type StaticHandler struct{}
 
+var origin string
+
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// CSRF Origin filter
+	if r.Header.Get("Origin") != "" && r.Header.Get("Origin") != origin {
+		http.Error(w, "Origin not allowed", 403)
+		return
+	}
 	w.Header().Set("Cache-Control", "max-age=0, no-cache, must-revalidate")
 	// start := time.Now()
 	if handle, ok := routes[r.URL.Path]; ok {
@@ -70,9 +77,11 @@ func main() {
 		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(redirectToHttps(config)))
 		h = &http.Server{Addr: ":" + config["port.https"], Handler: StaticHandler{}}
 		go h.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"])
+		origin = "https://" + config["app.host"]
 	} else {
 		h = &http.Server{Addr: ":" + config["port.http"], Handler: StaticHandler{}}
 		go h.ListenAndServe()
+		origin = "http://" + config["app.host"]
 	}
 
 	stop := make(chan os.Signal)
