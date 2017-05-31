@@ -7,7 +7,7 @@
   var rotation = 180;
   var curl = -150;
   var twist = 0;
-  var a_curl = .2;
+  var a_curl = .15;
   var a_twist = 0;
   var rgb;
   var elem = document.getElementById('bgcanvas');

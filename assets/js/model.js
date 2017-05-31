@@ -39,6 +39,22 @@ Teambo.model = (function(t){
     return Promise.all(p);
   };
 
+  model._collection = function(models) {
+    var self = this;
+    this.models = models.slice();
+    t.object.extend(this, {
+      each: function() {
+        return self.models;
+      },
+      empty: function() {
+        return self.models.length < 1;
+      },
+      count: function() {
+        return self.models.length;
+      }
+    });
+  }
+
   model.searchAll = function(q) {
     var ret = {};
     var total = 0;

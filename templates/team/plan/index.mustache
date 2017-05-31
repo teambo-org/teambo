@@ -35,7 +35,8 @@
             <div class="progress hi-15" data-progress="{{progress}}"></div>
         </a>
         <ul class="items">
-        {{#item_list}}
+        {{#item_collection}}
+        {{#each}}
             <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
                 <a href="#{{url}}" class="{{#complete}}color-30{{/complete}}{{^complete}}dim{{/complete}}">
                     {{#status}}
@@ -52,7 +53,8 @@
                     <span class="name">{{opts.name}}</span>
                 </a>
             </li>
-        {{/item_list}}
+        {{/each}}
+        {{/item_collection}}
         </ul>
     </li>
     {{/model.plan.all}}

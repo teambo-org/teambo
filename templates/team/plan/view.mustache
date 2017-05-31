@@ -22,39 +22,49 @@
     {{/opts.desc}}
     <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
     <div>
+    {{#item_collection}}
+        {{#filter_incomplete}}
         <div class="up3c">
             <h4>Unassigned</h4>
             <ul class="items incomplete">
-            {{#item_list_incomplete_unassigned}}
+            {{#filter_unassigned}}
+            {{#each}}
                 {{>team/plan/_item-li}}
-            {{/item_list_incomplete_unassigned}}
-            {{^item_list_incomplete_unassigned}}
+            {{/each}}
+            {{#empty}}
                 <p class="empty color-30">None</p>
-            {{/item_list_incomplete_unassigned}}
+            {{/empty}}
+            {{/filter_unassigned}}
             </ul>
         </div>
         <div class="up3c">
             <h4>Assigned</h4>
             <ul class="items incomplete">
-            {{#item_list_incomplete_assigned}}
+            {{#filter_assigned}}
+            {{#each}}
                 {{>team/plan/_item-li}}
-            {{/item_list_incomplete_assigned}}
-            {{^item_list_incomplete_assigned}}
+            {{/each}}
+            {{#empty}}
                 <p class="empty color-30">None</p>
-            {{/item_list_incomplete_assigned}}
+            {{/empty}}
+            {{/filter_assigned}}
             </ul>
         </div>
+        {{/filter_incomplete}}
+        {{#filter_complete}}
         <div class="up3c">
             <h4>Complete</h4>
             <ul class="items complete">
-            {{#item_list_complete}}
+            {{#each}}
                 {{>team/plan/_item-li}}
-            {{/item_list_complete}}
-            {{^item_list_complete}}
+            {{/each}}
+            {{#empty}}
                 <p class="empty color-30">None</p>
-            {{/item_list_complete}}
+            {{/empty}}
             </ul>
         </div>
+        {{/filter_complete}}
+    {{/item_collection}}
     </div>
 {{/model.plan.current}}
 </div>

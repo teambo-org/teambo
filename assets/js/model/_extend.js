@@ -34,6 +34,10 @@ Teambo.model._extend = (function(t){
       return t.team.cache(model.type + '_ids', t.team.encrypt(model.ids()));
     };
 
+    model.collection = function() {
+      return new model._collection(model.all);
+    };
+
     model.create = function(opts, id) {
       return new Promise(function(fulfill, reject) {
         if('schema' in model) {

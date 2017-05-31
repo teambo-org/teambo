@@ -13,7 +13,9 @@
     {{/acct.current.member}}
 </div>
 <div class="workload scrollable">
-    {{#model.plan.all}}
+    {{#model.plan.collection}}
+    {{#filter_incomplete_items_mine}}
+    {{#each}}
     <div class="section">
         <i class="icon-minus nav"></i>
         <div class="totals">
@@ -24,16 +26,24 @@
             <div class="name">{{opts.name}}</div>
             <div class="progress hi-15" data-progress="{{progress}}"></div>
         </a>
-        {{#item_count_mine_incomplete}}
+        {{#item_collection}}
+        {{#filter_mine}}
+        {{#filter_incomplete}}
+        {{^empty}}
         <ul class="items subsection">
-        {{#item_list_mine_incomplete}}
+            {{#each}}
             <li class="item-{{opts.status}}">
                 <a href="#{{url}}" data-obj="item-{{id}}">{{#status}}<i class="icon-{{icon}}"></i>{{/status}}{{opts.name}}</a>
             </li>
-        {{/item_list_mine_incomplete}}
+            {{/each}}
         </ul>
-        {{/item_count_mine_incomplete}}
+        {{/empty}}
+        {{/filter_incomplete}}
+        {{/filter_mine}}
+        {{/item_collection}}
     </div>
-    {{/model.plan.all}}
+    {{/each}}
+    {{/filter_incomplete_items_mine}}
+    {{/model.plan.collection}}
 </div>
 <div class="call"></div>

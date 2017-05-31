@@ -26,7 +26,7 @@ Teambo.model.item = (function(t){
         return '/'+t.team.current.id + plan_url + item_url;
       },
       assigned: function() {
-        return self.member() ? true : false;
+        return !!self.member();
       },
       assignedTo: function(member_id) {
         return self.opts.member_id == member_id;
@@ -60,17 +60,6 @@ Teambo.model.item = (function(t){
     for(var i in model.all) {
       var o = model.all[i];
       if(o.opts.folder_id == folder_id) {
-        ret.push(o);
-      }
-    }
-    return ret;
-  };
-
-  model.getByPlan = function(plan_id) {
-    var ret = [];
-    for(var i in model.all) {
-      var o = model.all[i];
-      if(o.opts.plan_id === plan_id) {
         ret.push(o);
       }
     }
@@ -116,6 +105,7 @@ Teambo.model.item = (function(t){
     });
     return statuses
   };
+
   model.statuses = wrap_statuses([
     { key: 'ready',      label: 'Ready',       icon: 'check-empty' },
     { key: 'blocked',    label: 'Blocked',     icon: 'attention' },
@@ -123,6 +113,54 @@ Teambo.model.item = (function(t){
     { key: 'qa',         label: 'Under QA',    icon: 'sliders' },
     { key: 'complete',   label: 'Complete',    icon: 'check-1' }
   ]);
+
+
+  model._collection = function(models) {
+    t.model._collection.apply(this, [models]);
+    t.object.extend(this, {
+      filter_plan_id: function(plan_id) {
+        return new model._collection(this.models.filter(function(item) {
+          return item.opts.plan_id == plan_id;
+        }));
+      },
+      filter_complete: function() {
+        return new model._collection(this.models.filter(function(item) {
+          return item.complete();
+        }));
+      },
+      filter_incomplete: function() {
+        return new model._collection(this.models.filter(function(item) {
+          return !item.complete();
+        }));
+      },
+      filter_assigned: function() {
+        return new model._collection(this.models.filter(function(item) {
+          return item.assigned();
+        }));
+      },
+      filter_unassigned: function() {
+        return new model._collection(this.models.filter(function(item) {
+          return !item.assigned();
+        }));
+      },
+      filter_member_current: function() {
+        var member_id = t.model.member.current ? t.model.member.current.id : null;
+        if(!member_id) {
+          return new model._collection([]);
+        } else {
+          return new model._collection(this.models.filter(function(item) {
+            return item.assignedTo(member_id);
+          }));
+        }
+      },
+      filter_mine: function() {
+        var member_id = t.acct.current.member().id;
+        return new model._collection(this.models.filter(function(item) {
+          return item.assignedTo(member_id);
+        }));
+      }
+    });
+  };
 
   return model;
 

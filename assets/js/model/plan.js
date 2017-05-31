@@ -5,68 +5,24 @@ Teambo.model.plan = (function(t){
     var self = this;
     t.model.apply(this, [data, model]);
     t.object.extend(this, {
-      item_list: function() {
-        return t.model.item.getByPlan(self.id);
-      },
-      item_list_incomplete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status !== 'complete';
-        });
-      },
-      item_list_incomplete_assigned: function() {
-        return self.item_list_incomplete().filter(function(o) {
-          return o.assigned();
-        });
-      },
-      item_list_incomplete_unassigned: function() {
-        return self.item_list_incomplete().filter(function(o) {
-          return !o.assigned();
-        });
-      },
-      item_list_complete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status === 'complete';
-        });
-      },
-      item_list_mine_complete: function() {
-        return self.item_list_complete().filter(function(o) {
-          return o.assignedToMe();
-        });
-      },
-      item_list_mine_incomplete: function() {
-        return self.item_list_incomplete().filter(function(o) {
-          return o.assignedToMe();
-        });
-      },
-      member_has_items: function() {
-        return self.item_list().filter(function(o) {
-          return t.model.member.current && o.assignedTo(t.model.member.current.id);
-        }).length;
-      },
-      member_item_list_complete: function() {
-        return self.item_list_complete().filter(function(o) {
-          return t.model.member.current && o.assignedTo(t.model.member.current.id);
-        });
-      },
-      member_item_list_incomplete: function() {
-        return self.item_list_incomplete().filter(function(o) {
-          return t.model.member.current && o.assignedTo(t.model.member.current.id);
-        });
+      item_collection: function() {
+        return t.model.item.collection().filter_plan_id(this.id);
       },
       item_count: function() {
-        return self.item_list().length;
+        return this.item_collection().count();
+      },
+      item_count_complete: function() {
+        return this.item_collection().filter_complete().count();
       },
       item_count_incomplete: function() {
-        return self.item_list_incomplete().length;
-      },
-      item_count_mine_incomplete: function() {
-        return self.item_list_mine_incomplete().length;
+        return this.item_collection().filter_incomplete().count();
       },
       progress: function() {
-        return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
+        var total = this.item_count();
+        return total ? (this.item_count_complete() / total) * 100 : 100;
       },
       created: function() {
-        var h = self.hist[0];
+        var h = this.hist[0];
         return h ? h.ts : null;
       },
       url: function() {
@@ -97,9 +53,40 @@ Teambo.model.plan = (function(t){
     return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.plan_id : null);
   };
 
-  model.member_list = function() {
-    return model.all.filter(function(plan) {
-      return plan.member_has_items();
+  model._collection = function(models) {
+    t.model._collection.apply(this, [models]);
+    t.object.extend(this, {
+      filter_current_member: function() {
+        return new model._collection(this.models.filter(function(plan) {
+          return !plan.item_collection()
+            .filter_member_current()
+            .empty();
+        }));
+      },
+      filter_incomplete_member_items: function() {
+        return new model._collection(this.models.filter(function(plan) {
+          return !plan.item_collection()
+            .filter_member_current()
+            .filter_incomplete()
+            .empty();
+        }));
+      },
+      filter_complete_member_items: function() {
+        return new model._collection(this.models.filter(function(plan) {
+          return !plan.item_collection()
+            .filter_member_current()
+            .filter_complete()
+            .empty();
+        }));
+      },
+      filter_incomplete_items_mine: function() {
+        return new model._collection(this.models.filter(function(plan) {
+          return !plan.item_collection()
+            .filter_mine()
+            .filter_incomplete()
+            .empty();
+        }));
+      }
     });
   };
 

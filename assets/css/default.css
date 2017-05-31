@@ -135,6 +135,8 @@ form.filter { clear: both; }
 .up1c { width: 98%; margin: 0 1% 2%; clear: both; }
 .up2c { float: left; width: 48%; margin: 0 1% 2%; }
 
+.upshort { margin-bottom: 1%; }
+
 /* 4 col layout with wide right and left */
 .up4c { float: left; width: 23%; margin: 0 1% 2%; }
 .up4c3 { float: left; width: 73%; margin: 0 1% 2%; }
