@@ -15,6 +15,7 @@ import (
 var db_acct *ldb_wrapper
 var db_invite *ldb_wrapper
 var db_throttle *ldb_wrapper
+var db_newsletter *ldb_wrapper
 
 type ldb_wrapper struct {
 	db *leveldb.DB
@@ -71,6 +72,11 @@ func GlobalInit() error {
 		return err
 	}
 	db_throttle = &ldb_wrapper{dbh}
+	dbh, err = leveldb.OpenFile(util.Config("app.data")+"/newsletter.ldb", nil)
+	if err != nil {
+		return err
+	}
+	db_newsletter = &ldb_wrapper{dbh}
 	return nil
 }
 

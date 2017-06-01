@@ -11,7 +11,6 @@ import (
 	"errors"
 	"html/template"
 	"net/http"
-	// "fmt"
 	// "log"
 )
 
@@ -26,6 +25,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	ikey := r.FormValue("ikey")
 	ihash := r.FormValue("ihash")
 	pkey := r.FormValue("pkey")
+	news := r.FormValue("news")
 
 	if id == "" && email != "" {
 		h := sha256.New()
@@ -68,6 +68,10 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		v.Delete()
+		if news == "true" {
+			model.NewsletterInsert(email)
+		}
+		model.AcctThrottle.Clear(id)
 		msg, _ := json.Marshal(map[string]bool{
 			"success": true,
 		})
@@ -143,10 +147,14 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 		} else {
 			subject := "Teambo Account Verification"
 
+			link := scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey
+			if news == "true" {
+				link = link + "&news=true"
+			}
 			t, err := template.ParseFiles("templates/email/verification.html")
 			data := map[string]interface{}{
 				"email": email,
-				"link":  scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey,
+				"link":  link,
 			}
 			buf := new(bytes.Buffer)
 			if err = t.Execute(buf, data); err != nil {

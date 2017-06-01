@@ -5,6 +5,7 @@ function(t){
 
   var form = new t.form(document.auth);
   var vkey = form.getAttribute("data-vkey");
+  var news = form.getAttribute("data-news");
   var email;
   var pass;
   var ikey;
@@ -70,7 +71,7 @@ function(t){
   };
 
   var form_submit_verification = function(email, pass) {
-    t.acct.verification.confirm(vkey, email, pass).then(function(xhr) {
+    t.acct.verification.confirm(vkey, email, pass, {news: news}).then(function(xhr) {
       t.app.gotoUrl('/account');
     }).catch(function(e){
       form.enable();

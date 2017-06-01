@@ -12,11 +12,11 @@ function(t){
 
   if(!t.acct.isAuthed()) {
     if(data.ikey) {
-      sessionStorage.setItem('ikey-data', JSON.stringify(data));
+      window.sessionStorage.setItem('ikey-data', JSON.stringify(data));
     }
     t.app.gotoUrl('/login', {ikey: data.ikey});
   } else if(!data.ikey) {
-    var d = sessionStrorage.getItem('ikey-data');
+    var d = window.sessionStorage.getItem('ikey-data');
     var d = d ? JSON.parse(d) : {};
     if(d && d.ikey) {
       data = d;
@@ -28,13 +28,13 @@ function(t){
     decline.addEventListener('mousedown', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      sessionStorage.removeItem('ikey-data');
+      window.sessionStorage.removeItem('ikey-data');
       t.app.gotoUrl('/account');
     });
   }
 
   form.addEventListener('submit', function(e){
-    sessionStorage.removeItem('ikey-data');
+    window.sessionStorage.removeItem('ikey-data');
     form.disable();
     t.model.invite.respond(data).then(function(xhr) {
       if(xhr.status == 201) {

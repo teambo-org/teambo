@@ -14,7 +14,7 @@ function(t){
   }
 
   if(ikey) {
-    var d = sessionStorage.getItem('ikey-data');
+    var d = window.sessionStorage.getItem('ikey-data');
     var d = d ? JSON.parse(d) : {};
     if(d && d.chk) {
       ichk = d.chk;
@@ -52,6 +52,7 @@ function(t){
     var verify_pass  = form.verify_pass.value;
     var beta  = form.beta ? form.beta.value : '';
     var tos_accepted = form.tos.checked;
+    var newsletter = form.newsletter.checked;
     if(!pass_is_good) {
       form.error.msg('Password is not strong enough', pass_feedback ? pass_feedback : 'You must use a strong password');
       form.pass.focus();
@@ -77,7 +78,9 @@ function(t){
       return;
     }
     form.disable();
-    var data = {};
+    var data = {
+      news: newsletter
+    };
     if(ikey == form.beta.value) {
       data['ikey'] = ikey;
       data['ichk'] = ichk;
@@ -87,7 +90,7 @@ function(t){
     t.acct.verification.send(email, pass, data).then(function(xhr) {
       var data = JSON.parse(xhr.responseText);
       if('vkey' in data) {
-        t.acct.verification.confirm(data.vkey, email, pass).then(function(){
+        t.acct.verification.confirm(data.vkey, email, pass, {news: newsletter}).then(function(){
           t.acct.current.cacheAuth();
           t.app.gotoUrl('/account');
         }).catch(function(e) {
