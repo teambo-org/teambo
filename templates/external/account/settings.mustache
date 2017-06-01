@@ -1,11 +1,17 @@
 <div class="external account require-auth c">
     <div id="logo" class="logo"></div>
-    <div class="nav">
-        <a class="logout" href="#/logout"><i class="icon-power" title="Log Out"></i></a>
-        <p><a href="#/account">{{acct.current.email}}</a></p>
+    <div class="main half-bg">
+        <div class="nav">
+            <a class="settings nav-icon" href="#/account"><i class="icon-angle-left" title="Back"></i></a>
+            <a class="logout nav-icon" href="#/logout"><i class="icon-power" title="Log Out"></i></a>
+            <p><a href="#/account">{{acct.current.email}}</a></p>
+        </div>
     </div>
     <div class="main">
         <div id="status"></div>
+        <div class="tab-nav">
+            <a href="#/account/settings" class="active">Change Password</a>
+        </div>
         <div id="form-wrap">
             <form id="account-password" name="account_password" method="POST" class="std ext">
                 <div class="field">

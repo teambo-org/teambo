@@ -1,10 +1,11 @@
 <div class="external account require-auth c">
     <div id="logo" class="logo"></div>
-    <div class="nav">
-        <a class="logout" href="#/logout"><i class="icon-power" title="Log Out"></i></a>
-        <p><a href="#/account/settings">{{acct.current.email}}</a></p>
-    </div>
-    <div class="main no-bg">
+    <div class="main half-bg">
+        <div class="nav">
+            <a class="settings nav-icon" href="#/account/settings"><i class="icon-cog" title="Account Settings"></i></a>
+            <a class="logout nav-icon" href="#/logout"><i class="icon-power" title="Log Out"></i></a>
+            <p><a href="#/account/settings">{{acct.current.email}}</a></p>
+        </div>
         <div id="status"></div>
         <ul id="teams" class="teams">
         {{#acct.current.teams}}
@@ -18,7 +19,7 @@
             </li>
         {{/acct.current.teams}}
         </ul>
-    </div>
         <a href="#/team/new" class="team-new" id="team-new">Create Team</a>
+    </div>
 </div>
 <link id="account-themes" type='text/css' rel='stylesheet'/>

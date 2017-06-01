@@ -17,9 +17,11 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external.account .nav { max-width: 30em; margin: 0 auto; padding: 1em; text-align: center; }
 .external.account .nav p { margin: 0 2em; line-height: 2em; }
 .external.account .nav p span { font-size: 0.9em; }
-.external.account .nav a.logout { float: right; width: 2em; background: rgba(0,0,0,0.1); line-height: 2em; }
-.external.account .nav a.logout:hover,
-.external.account .nav a.logout:focus { background: rgba(0,0,0,0.2); }
+.external.account .nav a.nav-icon { width: 2em; line-height: 2em; background: rgba(0,0,0,0.1); }
+.external.account .nav a.nav-icon:hover,
+.external.account .nav a.nav-icon:focus { background: rgba(0,0,0,0.2); }
+.external.account .nav a.logout { float: right; }
+.external.account .nav a.settings { float: left; color: rgba(0,0,0,0.7); }
 .external.account a.team-new { display: none; }
 .external.account a.team-new:focus { text-decoration: underline; }
 .external .verification { padding-top: 1em; }
@@ -34,9 +36,10 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external p.exc { padding: 1em 1.5em 0; font-size: 0.8em; }
 .external form .error .ex { margin: 1em 0; }
 .external .main { max-width: 30em; margin: 0 auto; position: relative; /* padding: 0 1em; */  background: rgba(255,255,255,1);  }
-.external .main.no-bg { background: none;  }
+.external .main.no-bg { background: none; }
+.external .main.half-bg { background: rgba(255,255,255,0.75); padding: 0 0 0.1em; }
 .external ul { padding: 1.1em 1em 1px; margin: 0 0 1em; background: rgba(0,0,0,0.1); }
-.external ul.teams { position: relative; }
+.external ul.teams { position: relative; padding: 0 1em; background: none; }
 .external ul.teams li { padding: 1em; list-style: none; margin-bottom: 1em; }
 .external ul.teams li.team { padding: 0; }
 .external ul.teams li.placeholder { line-height: 2em; }
@@ -52,7 +55,7 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external ul.teams li.team a .pending { float: right; margin: 0 1em; opacity: 0.7; font-size: 0.8em; line-height: 2.5em; }
 .external ul.teams li.team a .failed { opacity: 1; }
 
-.external ul.teams li.welcome h3 { text-align: center; color: #fff; font-size: 1em; background: #040; margin: -2.1em -2em 2em; padding: 1.5em 0; }
+.external ul.teams li.welcome h3 { text-align: center; color: #fff; font-size: 1em; background: #040; margin: -1.1em -2em 2em; padding: 1.5em 0; }
 .external ul.teams li.welcome p { font-size: 0.9em; }
 .external a.bot-nav { color: #000; font-size: 1em; display: inline-block; padding: 0.5em; }
 .external a.bot-nav i { font-size: 0.8em; }
@@ -64,14 +67,17 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external form .field input:focus { outline: 4px solid rgba(0,0,0,0.15); }
 .external form.ext.std { position: relative; }
 .external #status.offline { position: absolute; left: 0; top: -1.725em; padding: 0.2em 0.6em 0; line-height: 1.6em;
-    background: rgba(0,0,0,0.1); text-transform: uppercase; font-size: 0.8em; }
+    background: rgba(255,255,255,0.75); text-transform: uppercase; font-size: 0.8em; }
 .external #status.online { display: none; }
-.external .main #status.offline { left: 1.25em; }
 
 .external form.std #pass-meter { width: 20em; margin: 0 auto; height: 0.5em; background: rgba(0,0,0,0.1); }
 .external form.std #pass-meter-bar { height: 0.5em; }
 
 .external .main .link { text-decoration: underline; }
+
+.external .main .tab-nav { position: absolute; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.1); z-index: 1000; }
+.external .main .tab-nav a { float: left; line-height: 2em; font-size: 0.9em; position: relative; cursor: pointer; padding: 0 0.6em; }
+.external .main .tab-nav a.active { background: rgba(255,255,255,0.3); }
 
 .keygen { padding: 2em 0 3em;  }
 .keygen h3 { text-align: center; border: none; margin: 0; }
