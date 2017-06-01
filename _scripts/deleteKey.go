@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"github.com/syndtr/goleveldb/leveldb"
-	// ldb_util "github.com/syndtr/goleveldb/leveldb/util"
 	"../util"
 	"log"
 )
@@ -11,16 +10,10 @@ import (
 var db *leveldb.DB
 
 var db_path *string = flag.String("d", "", "Database Path")
-var prefix *string = flag.String("p", "", "Prefix")
+var key *string = flag.String("k", "", "Key")
 
-func list_keys() error {
-	// r := ldb_util.BytesPrefix([]byte(*prefix))
-	iter := db.NewIterator(nil, nil)
-	for iter.Next() {
-		log.Println(string(iter.Key()) + ": " + string(iter.Value()))
-	}
-	iter.Release()
-	return iter.Error()
+func insert_beta_code() error {
+	return db.Delete([]byte(*key), nil)
 }
 
 func main() {
@@ -38,10 +31,8 @@ func main() {
 		log.Println(err)
 		return
 	}
-	log.Println("=== Listing from " + path + " ===")
-	if *prefix != "" {
-		log.Println("=== With Prefix " + *prefix + " ===")
-	}
-	list_keys()
+	log.Println("=== Deleting from " + path + " ===")
+	log.Println(*key)
+	insert_beta_code()
 	db.Close()
 }
