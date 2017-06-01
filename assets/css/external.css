@@ -15,13 +15,17 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external .subtext { max-width: 30em; margin: 0 auto; padding: 0.5em 0; text-align: center; color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.75); }
 .external .subtext p { font-size: 0.9em; }
 .external.account .nav { max-width: 30em; margin: 0 auto; padding: 1em; text-align: center; }
-.external.account .nav p { margin: 0 2em; line-height: 2em; }
+.external.account .nav p { margin: 0 4em; line-height: 2em; }
 .external.account .nav p span { font-size: 0.9em; }
-.external.account .nav a.nav-icon { width: 2em; line-height: 2em; background: rgba(0,0,0,0.1); }
+.external.account .nav a.nav-icon { width: 2em; line-height: 2em; background: rgba(0,0,0,0.1); text-decoration: none; }
 .external.account .nav a.nav-icon:hover,
 .external.account .nav a.nav-icon:focus { background: rgba(0,0,0,0.2); }
 .external.account .nav a.logout { float: right; }
 .external.account .nav a.settings { float: left; color: rgba(0,0,0,0.7); }
+.external.account .nav a.throttle { float: left; color: rgba(0,0,0,0.5); background: none; }
+.external.account .nav a.throttle span { font-size: 0.9em; }
+.external.account .nav a.throttle:focus,
+.external.account .nav a.throttle:hover { background: none; }
 .external.account a.team-new { display: none; }
 .external.account a.team-new:focus { text-decoration: underline; }
 .external .verification { padding-top: 1em; }

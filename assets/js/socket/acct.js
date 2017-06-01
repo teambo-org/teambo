@@ -25,6 +25,9 @@ Teambo.socket.acct = (function (t) {
           socket.stop();
           t.app.refresh({silent: true});
         } else {
+          if(e.throttle_total) {
+            t.view.render('throttle', 'external/account/_throttle', e);
+          }
           t.socket.inviteAcceptance.start();
         }
       });

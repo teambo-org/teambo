@@ -53,6 +53,21 @@ func (at *acctThrottle) Remaining(id string) int {
 	return at.Limit - total
 }
 
+func (at *acctThrottle) Recent(id string) int {
+	total := 0
+	iter := db_throttle.PrefixIterator([]byte("throttle-" + id))
+	for iter.Next() {
+		total++
+	}
+	iter.Release()
+	iter = db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	for iter.Next() {
+		total = total + at.Limit
+	}
+	iter.Release()
+	return total
+}
+
 func (at *acctThrottle) Log(id string) error {
 	expires := strconv.Itoa(int(time.Now().Add(time.Duration(at.TTL) * time.Hour).UnixNano()))
 	batch := db_throttle.Batch()

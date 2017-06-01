@@ -201,6 +201,8 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 	} else {
 		c.Write(websocket.TextMessage, socket.JsonMessagePure(acct.Hkey, map[string]interface{}{
 			"iv": acct_iv,
+			"throttle_total": model.AcctThrottle.Recent(id),
+			"throttle_ttl": model.AcctThrottle.TTL,
 		}))
 	}
 
