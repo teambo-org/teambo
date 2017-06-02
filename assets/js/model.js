@@ -39,7 +39,7 @@ Teambo.model = (function(t){
     return Promise.all(p);
   };
 
-  model._collection = function(models) {
+  model.collection = function(models) {
     var self = this;
     this.models = models.slice();
     t.object.extend(this, {

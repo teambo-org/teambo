@@ -6,7 +6,7 @@ Teambo.model.plan = (function(t){
     t.model.apply(this, [data, model]);
     t.object.extend(this, {
       item_collection: function() {
-        return t.model.item.collection().filter_plan_id(this.id);
+        return t.model.item.collect_all().filter_plan_id(this.id);
       },
       item_count: function() {
         return this.item_collection().count();
@@ -53,39 +53,42 @@ Teambo.model.plan = (function(t){
     return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.plan_id : null);
   };
 
-  model._collection = function(models) {
-    t.model._collection.apply(this, [models]);
+  model.collection = function(models) {
+    t.model.collection.apply(this, [models]);
     t.object.extend(this, {
       filter_current_member: function() {
-        return new model._collection(this.models.filter(function(plan) {
+        return this.filter(function(plan) {
           return !plan.item_collection()
             .filter_member_current()
             .empty();
-        }));
+        });
       },
       filter_incomplete_member_items: function() {
-        return new model._collection(this.models.filter(function(plan) {
+        return this.filter(function(plan) {
           return !plan.item_collection()
             .filter_member_current()
             .filter_incomplete()
             .empty();
-        }));
+        });
       },
       filter_complete_member_items: function() {
-        return new model._collection(this.models.filter(function(plan) {
+        return this.filter(function(plan) {
           return !plan.item_collection()
             .filter_member_current()
             .filter_complete()
             .empty();
-        }));
+        });
       },
       filter_incomplete_items_mine: function() {
-        return new model._collection(this.models.filter(function(plan) {
+        return this.filter(function(plan) {
           return !plan.item_collection()
             .filter_mine()
             .filter_incomplete()
             .empty();
-        }));
+        });
+      },
+      filter: function(fn) {
+        return new model.collection(this.models.filter(fn));
       }
     });
   };

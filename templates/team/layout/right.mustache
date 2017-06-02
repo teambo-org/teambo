@@ -13,7 +13,7 @@
     {{/acct.current.member}}
 </div>
 <div class="workload scrollable">
-    {{#model.plan.collection}}
+    {{#model.plan.collect_all}}
     {{#filter_incomplete_items_mine}}
     {{#each}}
     <div class="section">
@@ -44,6 +44,6 @@
     </div>
     {{/each}}
     {{/filter_incomplete_items_mine}}
-    {{/model.plan.collection}}
+    {{/model.plan.collect_all}}
 </div>
 <div class="call"></div>

@@ -16,7 +16,7 @@
     </div>
     {{/opts.description}}
     <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
-    {{#model.plan.collection}}
+    {{#model.plan.collect_all}}
     <div class="up1c upshort">
         <h4>Assigned</h4>
     </div>
@@ -99,6 +99,6 @@
         {{/empty}}
         {{/filter_complete_member_items}}
     </ul>
-    {{/model.plan.collection}}
+    {{/model.plan.collect_all}}
 {{/model.member.current}}
 </div>

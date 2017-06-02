@@ -115,49 +115,52 @@ Teambo.model.item = (function(t){
   ]);
 
 
-  model._collection = function(models) {
-    t.model._collection.apply(this, [models]);
+  model.collection = function(models) {
+    t.model.collection.apply(this, [models]);
     t.object.extend(this, {
       filter_plan_id: function(plan_id) {
-        return new model._collection(this.models.filter(function(item) {
+        return this.filter(function(item) {
           return item.opts.plan_id == plan_id;
-        }));
+        });
       },
       filter_complete: function() {
-        return new model._collection(this.models.filter(function(item) {
+        return this.filter(function(item) {
           return item.complete();
-        }));
+        });
       },
       filter_incomplete: function() {
-        return new model._collection(this.models.filter(function(item) {
+        return this.filter(function(item) {
           return !item.complete();
-        }));
+        });
       },
       filter_assigned: function() {
-        return new model._collection(this.models.filter(function(item) {
+        return this.filter(function(item) {
           return item.assigned();
-        }));
+        });
       },
       filter_unassigned: function() {
-        return new model._collection(this.models.filter(function(item) {
+        return this.filter(function(item) {
           return !item.assigned();
-        }));
+        });
       },
       filter_member_current: function() {
         var member_id = t.model.member.current ? t.model.member.current.id : null;
         if(!member_id) {
-          return new model._collection([]);
+          return new model.collection([]);
         } else {
-          return new model._collection(this.models.filter(function(item) {
+          return this.filter(function(item) {
             return item.assignedTo(member_id);
-          }));
+          });
         }
       },
       filter_mine: function() {
         var member_id = t.acct.current.member().id;
-        return new model._collection(this.models.filter(function(item) {
+        return this.filter(function(item) {
           return item.assignedTo(member_id);
-        }));
+        });
+      },
+      filter: function(fn) {
+        return new model.collection(this.models.filter(fn));
       }
     });
   };
