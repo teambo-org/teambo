@@ -1,9 +1,9 @@
-describe("Stress", function() {
+xdescribe("Stress", function() {
 
   // var factor = 100;
   var factor = 10;
 
-  it("Performs well with "+factor+" folders each having "+factor+" items", function(done) {
+  xit("Performs well with "+factor+" folders each having "+factor+" items", function(done) {
     var i = 0;
     var j = 0;
     var el = document.createElement('div');

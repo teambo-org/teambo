@@ -78,8 +78,11 @@ Teambo.team = (function(t){
           if(xhr.status == 200) {
             self.iv = iv;
             self.orig = t.object.clone(self.opts);
-            self.cache();
-            fulfill(xhr);
+            self.cache().then(function() {
+              fulfill(xhr);
+            }).catch(function(e){
+              reject(e);
+            });
           } else {
             reject(xhr);
           }
@@ -247,8 +250,7 @@ Teambo.team = (function(t){
   };
 
   var createFirstMember = function(team, member_id) {
-    return new Promise(function(fulfill, resolve) {
-      t.team.current = team;
+    return new Promise(function(fulfill, reject) {
       var member = new t.model.member({
         id: member_id,
         iv: "new",
@@ -258,11 +260,8 @@ Teambo.team = (function(t){
         }
       });
       member.save().then(function(m) {
-        t.model.member.uncacheAll().then(function() {
-          t.team.current = null;
-          fulfill(m);
-        });
-      });
+        fulfill(m);
+      }).catch(reject);
     });
   };
 
@@ -284,16 +283,20 @@ Teambo.team = (function(t){
           new_team.admin = true;
           new_team.orig = {};
           new_team.save().then(function(){
-            var team_data = {id: new_team.id, mkey: data.mkey, key: key, admin: true};
-            acct.addTeam(team_data).then(function(){
-              createFirstMember(new_team, data.member_id).then(function() {
+            t.team.current = new_team;
+            createFirstMember(new_team, data.member_id).then(function() {
+              var team_data = {id: new_team.id, mkey: data.mkey, key: key, admin: true};
+              acct.addTeam(team_data).then(function(){
                 fulfill(new_team);
-              }).catch(reject);
+              }).catch(function(e){
+                acct.removeTeam(team_data).then(function() {
+                  new_team.remove(new_team.opts.name);
+                  reject(e);
+                }).catch(reject);
+              });
             }).catch(function(e){
-              acct.removeTeam(team_data).then(function() {
-                new_team.remove(new_team.opts.name);
-                reject(e);
-              }).catch(reject);
+              t.app.trace(e);
+              reject(e);
             });
           }).catch(reject);
         } else {

@@ -44,7 +44,7 @@ Teambo.model._prototype = (function(t){
               self.orig = t.object.clone(self.opts);
               self.cache().then(function() {
                 fulfill(self);
-              });
+              }).catch(reject);
             } else {
               t.array.deleteByProperty(self.hist, 'iv', iv);
               reject(xhr);
@@ -114,7 +114,7 @@ Teambo.model._prototype = (function(t){
           }
           t.team.cache(model.type + '-' + self.id, self.encrypted()).then(function(){
             fulfill(self);
-          });
+          }).catch(reject);
         });
       },
       uncache: function() {

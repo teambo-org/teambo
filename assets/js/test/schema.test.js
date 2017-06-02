@@ -33,7 +33,7 @@ describe("Schema", function() {
     var errs = s.validate({name: "dave"});
     expect(errs.length).toBe(0);
     var errs = s.validate({name: null});
-    expect(errs.length).toBe(2);
+    expect(errs.length).toBe(1);
   });
   xit("constrains numbers by required", function() {
     var s = new Teambo.schema({
