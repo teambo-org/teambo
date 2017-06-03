@@ -38,6 +38,7 @@ function(t){
       t.app.gotoUrl(item.url());
     }).catch(function(e){
       unsetCurrent();
+      t.app.log(e);
       form.enable();
       form.error.msg("Item could not be created", "Please try again");
     });
