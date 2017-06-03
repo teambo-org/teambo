@@ -55,8 +55,13 @@ function(t){
         t.app.gotoUrl('/account')
       } else {
         form.enable();
-        var d = JSON.parse(xhr.responseText);
-        form.error.msg(d.error);
+        if(xhr.responseText) {
+          var d = JSON.parse(xhr.responseText);
+          form.error.msg(d.error);
+        } else {
+          t.app.trace(xhr);
+          form.error.msg("Unknown Error", "Please try again");
+        }
       }
     });
   });
