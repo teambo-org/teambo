@@ -12,6 +12,14 @@ function(t){
     }
     form.disable();
     var data = form.values(['member_email', 'name', 'include_team_name', 'include_sender_details']);
+    for(var i in t.model.member.all) {
+      var m = t.model.member.all[i];
+      if(m.opts.email == data.member_email) {
+        form.enable();
+        form.error.msg("Member has already been added", "A member with this email address already exists");
+        return;
+      }
+    }
     t.model.invite.create(data).then(function(member){
       t.view.updateSideNav();
       t.socket.inviteResponse.start();
