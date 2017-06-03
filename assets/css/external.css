@@ -60,7 +60,7 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external ul.teams li.team a .failed { opacity: 1; }
 
 .external.stripe-test { font-size: 2em; }
-.external.stripe-test #logo { visibility: hidden; }
+.external.stripe-test #logo { visibility: hidden; margin-top: 4em; }
 
 .external ul.teams li.welcome h3 { text-align: center; color: #fff; font-size: 1em; background: #040; margin: -1.1em -2em 2em; padding: 1.5em 0; }
 .external ul.teams li.welcome p { font-size: 0.9em; }
