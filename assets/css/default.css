@@ -72,7 +72,7 @@ form.std .field { padding: 0.5em 0.5em; }
 form.std .field.submit { padding-top: 1em; clear: both; }
 form.std .field.first { padding-top: 0; }
 form.std .field label { display: block; line-height: 1.2em; padding-bottom: 0.25em; }
-form.std .text { border: none; padding: 0.41em 0.5em; width: 20em; font-size: 1em; line-height: 1.2em; box-sizing: border-box; max-width: 100%; }
+form.std .text { border: none; padding: 0.42em 0.5em; width: 20em; font-size: 1em; line-height: 1.2em; box-sizing: border-box; max-width: 100%; }
 form.std .large { width: 24em; }
 form.std .small { width: 12em; }
 form.std select.demo-icon { width: 4em; }
