@@ -3,7 +3,6 @@ package model
 import (
 	"crypto/sha256"
 	"encoding/base64"
-	"github.com/boltdb/bolt"
 	"strings"
 	"sync"
 	"time"
@@ -26,27 +25,23 @@ func (ti *teamIntegrity) Init() (err error) {
 	ti.mutex.Lock()
 	defer ti.mutex.Unlock()
 	ti.bucket_names = map[string]bool{}
-	err = db_team_view(ti.TeamId, func(tx *bolt.Tx) error {
-		for _, bucket_name := range ti.Buckets {
-			ti.bucket_names[bucket_name] = true
-			b := tx.Bucket([]byte(bucket_name))
-			if b == nil {
-				continue
-			}
-			b.ForEach(func(k, ct []byte) error {
-				parts := strings.Split(string(ct), " ")
-				iv := parts[0]
-				if iv == "new" {
-					return nil
-				}
-				ti.Ivs = append(ti.Ivs, bucket_name+"-"+string(k)+"-"+iv)
-				return nil
-			})
-		}
-		return nil
-	})
+	team_db, err := TeamDBCache.Find(ti.TeamId)
 	if err != nil {
 		return err
+	}
+	for _, bucket_name := range ti.Buckets {
+		ti.bucket_names[bucket_name] = true
+		prefix := bucket_name + "-"
+		iter := team_db.PrefixIterator(prefix)
+		for iter.Next() {
+			parts := strings.Split(iter.Value(), " ")
+			iv := parts[0]
+			if iv == "new" {
+				continue
+			}
+			ti.Ivs = append(ti.Ivs, iter.Key() + "-" + iv)
+		}
+		iter.Release()
 	}
 	ti.ExpirationReset()
 	return nil

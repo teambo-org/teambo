@@ -2,7 +2,6 @@ package model
 
 import (
 	"fmt"
-	"github.com/boltdb/bolt"
 	"time"
 	// "log"
 )
@@ -15,68 +14,43 @@ type TeamObject struct {
 }
 
 func (o TeamObject) Save() (err error) {
-	db_team_update(o.TeamId, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte(o.Bucket))
-		err = b.Put([]byte(o.Id), []byte(o.Ciphertext))
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
+	team_db, err := TeamDBCache.Find(o.TeamId)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
-	if o.Ciphertext != "new" {
+	err = team_db.Put(o.Bucket + "-" + o.Id, o.Ciphertext)
+	if err == nil && o.Ciphertext != "new" {
 		integrity, err := TeamIntegrityCache.Find(o.TeamId)
 		if err == nil {
 			integrity.Insert(o.Bucket, o.Id, o.Ciphertext)
 		}
 	}
-	return nil
+	return err
 }
 
 func (o TeamObject) Remove() (err error) {
-	db_team_update(o.TeamId, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte(o.Bucket))
-
-		err = b.Delete([]byte(o.Id))
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
+	team_db, err := TeamDBCache.Find(o.TeamId)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
-	if o.Ciphertext != "new" {
+	err = team_db.Delete(o.Bucket + "-" + o.Id)
+	if err == nil && o.Ciphertext != "new" {
 		integrity, err := TeamIntegrityCache.Find(o.TeamId)
 		if err == nil {
 			integrity.Remove(o.Bucket, o.Id)
 		}
 	}
-	return nil
+	return err
 }
 
 func (o TeamObject) Log(iv string) (log string, err error) {
-	db_team_update(o.TeamId, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("log"))
-		ts := time.Now().UnixNano()
-		k := fmt.Sprintf("%d-%s-%s", ts, o.Bucket, o.Id)
-		err = b.Put([]byte(k), []byte(iv))
-		if err != nil {
-			return err
-		}
-		log = k + "-" + iv
-
-		return nil
-	})
+	team_db, err := TeamDBCache.Find(o.TeamId)
 	if err != nil {
-		fmt.Println(err)
 		return log, err
 	}
-	return log, nil
+	ts := time.Now().UnixNano()
+	k := fmt.Sprintf("log-%d-%s-%s", ts, o.Bucket, o.Id)
+	log = k + "-" + iv
+	err = team_db.Put(k, iv)
+	return log, err
 }

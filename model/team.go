@@ -3,7 +3,6 @@ package model
 import (
 	"../util"
 	"fmt"
-	"github.com/boltdb/bolt"
 	"time"
 	"log"
 )
@@ -14,22 +13,15 @@ type Team struct {
 }
 
 func (t Team) Save() (err error) {
-	db_team_update(t.Id, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("settings"))
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-		err = b.Put([]byte("team"), []byte(t.Ciphertext))
-		return err
-	})
-	if err != nil {
-		return err
+	team_db, err := TeamDBCache.Find(t.Id)
+	if err == nil {
+		err = team_db.Put("settings-team", t.Ciphertext)
 	}
-	return nil
+	return err
 }
 
 func (t Team) Remove() (err error) {
+	TeamDBCache.Expire(t.Id)
 	err = db_team_delete(t.Id)
 	if err != nil {
 		log.Println(err)
@@ -101,22 +93,15 @@ func (t Team) InviteResponseFind(ikey string) (inviteResponse TeamObject, err er
 }
 
 func (t Team) Log(iv string) (item string, err error) {
-	db_team_update(t.Id, func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte("log"))
-		ts := time.Now().UnixNano()
-		k := fmt.Sprintf("%d-%s-%s", ts, "team", t.Id)
-		err = b.Put([]byte(k), []byte(iv))
-		if err != nil {
-			return err
-		}
-		item = k + "-" + iv
-		return nil
-	})
+	team_db, err := TeamDBCache.Find(t.Id)
 	if err != nil {
-		log.Println(err)
 		return item, err
 	}
-	return item, nil
+	ts := time.Now().UnixNano()
+	k := fmt.Sprintf("log-%d-%s-%s", ts, "team", t.Id)
+	item = k + "-" + iv
+	err = team_db.Put(k, iv)
+	return item, err
 }
 
 func NewTeam() Team {
@@ -132,28 +117,15 @@ func NewTeam() Team {
 }
 
 func FindTeam(id string) (item Team, err error) {
-	ct := ""
-	db_team_view(id, func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("settings"))
-		if b == nil {
-			return nil
-		}
-		v := b.Get([]byte("team"))
-		if err != nil {
-			return err
-		}
-		ct = string(v)
-		return nil
-	})
+	team_db, err := TeamDBCache.Find(id)
 	if err != nil {
 		return item, err
 	}
-
+	ct, err := team_db.Get("settings-team")
 	if ct != "" {
 		item = Team{id, ct}
-		return item, nil
 	}
-	return item, nil
+	return item, err
 }
 
 func TeamExists(id string) bool {

@@ -54,7 +54,7 @@ func main() {
 	err = model.GlobalInit()
 	if err != nil {
 		log.Println(err.Error())
-		log.Fatal("Could not open Bolt DB for writing")
+		log.Fatal("Could not open DB for writing")
 	}
 
 	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
