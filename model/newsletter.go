@@ -8,18 +8,17 @@ import (
 
 func NewsletterInsert(email string) error {
 	ts := fmt.Sprintf("%d", time.Now().UnixNano())
-	k := []byte(email)
-	v, err := db_newsletter.Get(k)
+	v, err := db_newsletter.Get(email)
 	if err == nil && len(v) == 0 {
-		err = db_newsletter.Put(k, []byte(ts))
+		err = db_newsletter.Put(email, ts)
 	}
 	return err
 }
 
 func NewsletterRemove(email string) error {
-	return db_newsletter.Delete([]byte(email))
+	return db_newsletter.Delete(email)
 }
 
-func NewsletterFind(email string) ([]byte, error) {
-	return db_newsletter.Get([]byte(email))
+func NewsletterFind(email string) (string, error) {
+	return db_newsletter.Get(email)
 }

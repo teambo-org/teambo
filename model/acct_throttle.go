@@ -31,21 +31,21 @@ func (at *acctThrottle) PurgeExpiredResets() ([]string, error) {
 
 func (at *acctThrottle) Clear(id string) (err error) {
 	batch := db_throttle.Batch()
-	iter := db_throttle.PrefixIterator([]byte("throttle-" + id))
+	iter := db_throttle.PrefixIterator("throttle-" + id)
 	for iter.Next() {
 		batch.Delete(iter.Key())
 	}
 	iter.Release()
 	err = iter.Error()
 	if err == nil {
-		err = db_throttle.Write(batch)
+		err = batch.Write()
 	}
 	return err
 }
 
 func (at *acctThrottle) Remaining(id string) int {
 	total := 0
-	iter := db_throttle.PrefixIterator([]byte("throttle-" + id))
+	iter := db_throttle.PrefixIterator("throttle-" + id)
 	for iter.Next() {
 		total++
 	}
@@ -55,12 +55,12 @@ func (at *acctThrottle) Remaining(id string) int {
 
 func (at *acctThrottle) Recent(id string) int {
 	total := 0
-	iter := db_throttle.PrefixIterator([]byte("throttle-" + id))
+	iter := db_throttle.PrefixIterator("throttle-" + id)
 	for iter.Next() {
 		total++
 	}
 	iter.Release()
-	iter = db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	iter = db_throttle.PrefixIterator("throttle_reset-" + id)
 	for iter.Next() {
 		total = total + at.Limit
 	}
@@ -71,14 +71,14 @@ func (at *acctThrottle) Recent(id string) int {
 func (at *acctThrottle) Log(id string) error {
 	expires := strconv.Itoa(int(time.Now().Add(time.Duration(at.TTL) * time.Hour).UnixNano()))
 	batch := db_throttle.Batch()
-	batch.Put([]byte("throttle_expires-" + expires), []byte(id))
-	batch.Put([]byte("throttle-" + id + "-" + expires), []byte("1"))
-	return db_throttle.Write(batch)
+	batch.Put("throttle_expires-" + expires, id)
+	batch.Put("throttle-" + id + "-" + expires, "1")
+	return batch.Write()
 }
 
 func (at *acctThrottle) RemainingResets(id string) int {
 	total := 0
-	iter := db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	iter := db_throttle.PrefixIterator("throttle_reset-" + id)
 	for iter.Next() {
 		total++
 	}
@@ -89,14 +89,14 @@ func (at *acctThrottle) RemainingResets(id string) int {
 func (at *acctThrottle) CreateReset(id string) string {
 	rkey := util.RandStr(16)
 	expires := strconv.Itoa(int(time.Now().Add(time.Duration(at.TTL) * time.Hour).UnixNano()))
-	db_throttle.Put([]byte("throttle_reset_expires-" + expires), []byte(id))
-	db_throttle.Put([]byte("throttle_reset-" + id + "-" + expires), []byte(rkey))
+	db_throttle.Put("throttle_reset_expires-" + expires, id)
+	db_throttle.Put("throttle_reset-" + id + "-" + expires, rkey)
 	return rkey
 }
 
 func (at *acctThrottle) HasReset(id string) bool {
 	found := false
-	iter := db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	iter := db_throttle.PrefixIterator("throttle_reset-" + id)
 	for iter.Next() {
 		if string(iter.Value()) != "0" {
 			found = true
@@ -108,18 +108,18 @@ func (at *acctThrottle) HasReset(id string) bool {
 }
 
 func (at *acctThrottle) RedeemReset(id, rkey string) bool {
-	key := []byte("")
-	iter := db_throttle.PrefixIterator([]byte("throttle_reset-" + id))
+	key := ""
+	iter := db_throttle.PrefixIterator("throttle_reset-" + id)
 	for iter.Next() {
 		v := string(iter.Value())
 		if v != "0" && v == rkey {
-			key = iter.Key()
+			key = string(iter.Key())
 			break
 		}
 	}
 	iter.Release()
 	if len(key) > 0 {
-		db_throttle.Put(key, []byte("0"))
+		db_throttle.Put(key, "0")
 		at.Clear(id)
 		return true
 	}

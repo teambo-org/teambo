@@ -6,13 +6,13 @@ type InviteAcceptance struct {
 }
 
 func (o *InviteAcceptance) Delete() (err error) {
-	k := []byte("invite_acceptance-" + o.Id)
+	k := "invite_acceptance-" + o.Id
 	return db_invite.Delete(k)
 }
 
 func InviteAcceptanceCreate(id, ct string) (item InviteAcceptance, err error) {
-	k := []byte("invite_acceptance-" + id)
-	err = db_invite.Put(k, []byte(ct))
+	k := "invite_acceptance-" + id
+	err = db_invite.Put(k, ct)
 	if err == nil {
 		item = InviteAcceptance{id, ct}
 	}
@@ -20,10 +20,10 @@ func InviteAcceptanceCreate(id, ct string) (item InviteAcceptance, err error) {
 }
 
 func InviteAcceptanceFind(id string) (item InviteAcceptance, err error) {
-	k := []byte("invite_acceptance-" + id)
+	k := "invite_acceptance-" + id
 	ct, err := db_invite.Get(k)
 	if err == nil {
-		item = InviteAcceptance{id, string(ct)}
+		item = InviteAcceptance{id, ct}
 	}
 	return item, err
 }

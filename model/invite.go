@@ -12,18 +12,19 @@ type Invite struct {
 }
 
 func (o *Invite) Delete() (err error) {
-	db_invite.Delete([]byte("invite-"+o.Id))
-	db_invite.Delete([]byte("invite_response-"+o.Id))
-	db_invite.Delete([]byte("invite_acceptance-"+o.Id))
-	db_invite.Delete([]byte("invite_redeemed-"+o.Id))
-	return nil
+	batch := db_invite.Batch()
+	batch.Delete("invite-"+o.Id)
+	batch.Delete("invite_response-"+o.Id)
+	batch.Delete("invite_acceptance-"+o.Id)
+	batch.Delete("invite_redeemed-"+o.Id)
+	return batch.Write()
 }
 
 func (o *Invite) Redeem() bool {
-	k := []byte("invite_redeemed-" + o.Id)
-	ts := []byte(fmt.Sprintf("%d", time.Now().UnixNano()))
+	k := "invite_redeemed-" + o.Id
+	ts := fmt.Sprintf("%d", time.Now().UnixNano())
 	v, err := db_invite.Get(k)
-	if err == nil || string(v) != "0" {
+	if err == nil || v != "0" {
 		return false
 	}
 	err = db_invite.Put(k, ts)
@@ -31,26 +32,26 @@ func (o *Invite) Redeem() bool {
 }
 
 func (o *Invite) Redeemable() bool {
-	k := []byte("invite_redeemed-" + o.Id)
+	k := "invite_redeemed-" + o.Id
 	v, err := db_invite.Get(k)
-	return err == nil && string(v) == "0"
+	return err == nil && v == "0"
 }
 
 func (o *Invite) MakeRedeemable() bool {
-	k := []byte("invite_redeemed-" + o.Id)
-	err := db_invite.Put(k, []byte("0"))
+	k := "invite_redeemed-" + o.Id
+	err := db_invite.Put(k, "0")
 	return err == nil
 }
 
 func InviteCreate(id, hash string, ttl int64) (item Invite, err error) {
-	k := []byte("invite-" + id)
-	err = db_invite.Put(k, []byte(hash))
+	k := "invite-" + id
+	err = db_invite.Put(k, hash)
 	if err != nil {
 		return item, nil
 	}
 	ts := fmt.Sprintf("%d", time.Now().UnixNano() + ttl)
-	ek := []byte("invite_expire-" + ts)
-	err = db_invite.Put(ek, []byte(id))
+	ek := "invite_expire-" + ts
+	err = db_invite.Put(ek, id)
 	if err != nil {
 		return item, nil
 	}
@@ -58,11 +59,11 @@ func InviteCreate(id, hash string, ttl int64) (item Invite, err error) {
 }
 
 func InviteFind(id string) (item Invite, err error) {
-	k := []byte("invite-" + id)
+	k := "invite-" + id
 	v, err := db_invite.Get(k)
-	if err == nil && len(v) > 0 {
+	if err == nil && v != "" {
 		item.Id = id
-		item.Hash = string(v)
+		item.Hash = v
 	}
 	return item, nil
 }

@@ -33,7 +33,7 @@ func NewsletterUnsubscribe(w http.ResponseWriter, r *http.Request) {
 
 	h := sha256.New()
 	h.Write([]byte(email))
-	h.Write(ts)
+	h.Write([]byte(ts))
 	hash := base64.StdEncoding.EncodeToString(h.Sum(nil))
 
 	if hash != chk {

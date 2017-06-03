@@ -2,81 +2,35 @@ package model
 
 import (
 	"../util"
+	"./driver"
 	"github.com/boltdb/bolt"
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/syndtr/goleveldb/leveldb/iterator"
-	"github.com/syndtr/goleveldb/leveldb/errors"
-	ldb_util "github.com/syndtr/goleveldb/leveldb/util"
 	"strconv"
 	"time"
 	"os"
 )
 
-var db_acct *ldb_wrapper
-var db_invite *ldb_wrapper
-var db_throttle *ldb_wrapper
-var db_newsletter *ldb_wrapper
+var db_acct driver.DB
+var db_invite driver.DB
+var db_throttle driver.DB
+var db_newsletter driver.DB
 
-type ldb_wrapper struct {
-	db *leveldb.DB
-}
-
-func (w *ldb_wrapper) Get(key []byte) ([]byte, error) {
-	v, err := w.db.Get(key, nil)
-	if err == errors.ErrNotFound  {
-		return v, nil
-	}
-	return v, err
-}
-func (w *ldb_wrapper) Put(key, value []byte) error {
-	return w.db.Put(key, value, nil)
-}
-func (w *ldb_wrapper) Delete(key []byte) error {
-	return w.db.Delete(key, nil)
-}
-func (w *ldb_wrapper) Has(key []byte) (bool, error) {
-	return w.db.Has(key, nil)
-}
-func (w *ldb_wrapper) Close() error {
-	return w.db.Close()
-}
-func (w *ldb_wrapper) Write(batch *leveldb.Batch) error {
-	return w.db.Write(batch, nil)
-}
-func (w *ldb_wrapper) NewIterator(r *ldb_util.Range) (iterator.Iterator) {
-	return w.db.NewIterator(r, nil)
-}
-func (w *ldb_wrapper) Batch() *leveldb.Batch {
-	return new(leveldb.Batch)
-}
-func (w *ldb_wrapper) PrefixIterator(prefix []byte) (iterator.Iterator) {
-	return w.db.NewIterator(ldb_util.BytesPrefix(prefix), nil)
-}
-func (w *ldb_wrapper) RangeIterator(start, limit []byte) (iterator.Iterator) {
-	return w.db.NewIterator(&ldb_util.Range{Start: start, Limit: limit}, nil)
-}
-
-func GlobalInit() error {
-	dbh, err := leveldb.OpenFile(util.Config("app.data")+"/account.ldb", nil)
+func GlobalInit() (err error) {
+	db_acct, err = driver.OpenLevelDB(util.Config("app.data")+"/account.ldb")
 	if err != nil {
 		return err
 	}
-	db_acct = &ldb_wrapper{dbh}
-	dbh, err = leveldb.OpenFile(util.Config("app.data")+"/invite.ldb", nil)
+	db_invite, err = driver.OpenLevelDB(util.Config("app.data")+"/invite.ldb")
 	if err != nil {
 		return err
 	}
-	db_invite = &ldb_wrapper{dbh}
-	dbh, err = leveldb.OpenFile(util.Config("app.data")+"/throttle.ldb", nil)
+	db_throttle, err = driver.OpenLevelDB(util.Config("app.data")+"/throttle.ldb")
 	if err != nil {
 		return err
 	}
-	db_throttle = &ldb_wrapper{dbh}
-	dbh, err = leveldb.OpenFile(util.Config("app.data")+"/newsletter.ldb", nil)
+	db_newsletter, err = driver.OpenLevelDB(util.Config("app.data")+"/newsletter.ldb")
 	if err != nil {
 		return err
 	}
-	db_newsletter = &ldb_wrapper{dbh}
 	return nil
 }
 
@@ -87,20 +41,21 @@ func CloseAll() (err error) {
 	return err
 }
 
-func PurgeExpired(db *ldb_wrapper, prefix string) (ids []string, err error) {
+func PurgeExpired(db driver.DB, prefix string) (ids []string, err error) {
 	now := strconv.Itoa(int(time.Now().UnixNano()))
-	iter := db.RangeIterator([]byte(prefix + "_expires-"), []byte(prefix + "_expires-" + now))
-	batch := new(leveldb.Batch)
+	iter := db.RangeIterator(prefix + "_expires-", prefix + "_expires-" + now)
+	batch := db.Batch()
 	for iter.Next() {
 		id := string(iter.Value())
+		key := string(iter.Key())
 		ids = append(ids, id)
-		batch.Delete([]byte(prefix + "-" + id))
-		batch.Delete(iter.Key())
+		batch.Delete(prefix + "-" + id)
+		batch.Delete(key)
 	}
 	iter.Release()
 	err = iter.Error()
 	if err == nil {
-		err = db.Write(batch)
+		err = batch.Write()
 	}
 	return ids, err
 }

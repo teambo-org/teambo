@@ -10,13 +10,13 @@ type BetaCode struct {
 }
 
 func (bc *BetaCode) Delete() error {
-	return db_invite.Delete([]byte("beta_code-" + bc.Code))
+	return db_invite.Delete("beta_code-" + bc.Code)
 }
 
 func FindBetaCode(code string) (item BetaCode, err error) {
-	v, err := db_invite.Get([]byte("beta_code-" + code))
-	if err == nil {
-		item = BetaCode{code, string(v)}
+	v, err := db_invite.Get("beta_code-" + code)
+	if err == nil && v != "" {
+		item = BetaCode{code, v}
 	}
 	return item, err
 }
