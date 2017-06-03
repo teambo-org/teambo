@@ -66,6 +66,9 @@ func (b ldb_batch) Write() error {
 type ldb_iterator struct {
 	iter iterator.Iterator
 }
+func (i ldb_iterator) Seek(key string) bool {
+	return i.iter.Seek([]byte(key))
+}
 func (i ldb_iterator) Next() bool {
 	return i.iter.Next()
 }

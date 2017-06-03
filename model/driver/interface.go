@@ -18,6 +18,7 @@ type Batch interface {
 }
 
 type Iterator interface {
+	Seek(key string) bool
 	Next() bool
 	Key() string
 	Value() string
