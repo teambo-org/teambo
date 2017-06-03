@@ -15,7 +15,8 @@ Teambo.app = (function(t){
     debug: false,
     testing: false,
     remember_me: false,
-    next_data: {}
+    next_data: {},
+    max_teams: 3
   };
 
   app.init = function(opts) {

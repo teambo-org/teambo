@@ -17,7 +17,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
-	// "fmt"
+	"strconv"
 )
 
 type Page struct {
@@ -325,7 +325,7 @@ func append_js_init(w io.Writer) {
 	}
 	template_scripts := strings.Join(tpljs, ", ")
 	audio, _ := json.Marshal(find_audio())
-	app := map[string]bool{
+	app := map[string]interface{}{
 		"debug":       false,
 		"testing":     false,
 		"remember_me": false,
@@ -334,6 +334,9 @@ func append_js_init(w io.Writer) {
 		if util.Config("app."+k) == "true" {
 			app[k] = true
 		}
+	}
+	if util.Config("app.max_teams") != "" {
+		app["max_teams"], _ = strconv.Atoi(util.Config("app.max_teams"))
 	}
 	jsasync_json, _ := json.Marshal(hash_version(jsasync))
 	app_json, _ := json.Marshal(app)

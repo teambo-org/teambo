@@ -19,6 +19,15 @@ Teambo.array = (function (t) {
       });
       return ret;
     },
+    findAllByProperty: function(a, k, v) {
+      var ret = [];
+      a.forEach(function(o) {
+        if(typeof o === 'object' && o[k] === v) {
+          ret.push(o);
+        }
+      });
+      return ret;
+    },
     deleteByProperty: function(a, k, v) {
       a.forEach(function(o, i) {
         if(typeof o === 'object' && o[k] === v) {

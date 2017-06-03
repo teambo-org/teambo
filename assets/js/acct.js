@@ -196,6 +196,9 @@ Teambo.acct = (function (t) {
         if(t.array.findByProperty(self.teams, 'id', team.id)) {
           return Promise.resolve();
         }
+        if(team.admin && t.array.findAllByProperty(self.teams, 'admin', true).length >= t.app.max_teams) {
+          return Promise.reject("Accounts are currently limited to " + t.app.max_teams + " teams");
+        }
         return new Promise(function(fulfill, reject) {
           self.teams.push(team);
           self.save().then(function(){

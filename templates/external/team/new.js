@@ -11,9 +11,13 @@ function(t){
     t.team.create(name).then(function(team){
       t.app.gotoUrl('/'+team.id);
     }).catch(function(e){
-      t.app.log(e);
       form.enable();
-      form.error.msg("Team could not be created", "Please try again");
+      if(typeof e === "string") {
+        form.error.msg(e);
+      } else {
+        t.app.trace(e);
+        form.error.msg("Team could not be created", "Please try again");
+      }
     });
   });
 
