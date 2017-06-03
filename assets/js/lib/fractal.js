@@ -5,9 +5,9 @@
   var n = 8;
   var zoom = 12.5;
   var rotation = 180;
-  var curl = -150;
-  var twist = 0;
-  var a_curl = .15;
+  var curl = -45;
+  var twist = 180;
+  var a_curl = -.15;
   var a_twist = 0;
   var rgb;
   var elem = document.getElementById('bgcanvas');
@@ -27,11 +27,11 @@
     elem.width = w = window.innerWidth;
     elem.height = h = window.innerHeight;
     var start = Date.now();
-    for(var i = 0; i < 100; i++) {
+    for(var i = 0; i < 300; i++) {
       ctx.strokeStyle = "rgba(0,0,0,0)";
       ctx.beginPath();
-      ctx.moveTo(Math.random()*100, Math.random()*100);
-      ctx.lineTo(Math.random()*100, Math.random()*100);
+      ctx.moveTo(start_x, start_y);
+      ctx.lineTo(Math.random()*w, Math.random()*h);
       ctx.stroke();
     }
     var f = Date.now() - start;
@@ -51,9 +51,10 @@
   var start_length = logo.offsetHeight/zoom;
   var start_x = (rect.left + rect.right)/2;
   var start_y = rect.top + rect.height / 2;
+  var dangle = 360/n;
   ctx.lineWidth = 1;
   ctx.lineCap = "round";
-  // ctx.lineJoin = "round";
+  ctx.lineJoin = "round";
   var drawFractal = function() {
     if(!rect) {
       elem.style.display = "none";
@@ -64,28 +65,26 @@
     var next = [];
     next[depth_start] = [];
     for(var i = 0; i < n; i++) {
-      next[depth_start].push([start_x, start_y, i*(360/n) + (rotation/n), 360 / n, start_length]);
+      next[depth_start].push([start_x, start_y, i*(360/n) + (rotation/n)]);
     }
     for(var i = depth_start; i > 0; i--) {
       next[i-1] = [];
       ctx.beginPath();
-      // ctx.setLineDash([5, 15]);
+      // ctx.setLineDash([2, 2]);
       for(var j in next[i]) {
         var x1     = next[i][j][0],
             y1     = next[i][j][1],
-            angle  = next[i][j][2],
-            dangle = next[i][j][3],
-            length = next[i][j][4];
+            angle  = next[i][j][2];
         var dcurl = curl * (i / depth_start);
-        var x2 = x1 + (Math.cos(angle * deg_to_rad) * i * length);
-        var y2 = y1 + (Math.sin(angle * deg_to_rad) * i * length);
+        var x2 = x1 + (Math.cos(angle * deg_to_rad) * i * start_length);
+        var y2 = y1 + (Math.sin(angle * deg_to_rad) * i * start_length);
         if(i < depth_start-1) {
           ctx.moveTo(x1, y1);
           ctx.lineTo(x2, y2);
         }
         if(i>2) {
-          next[i - 1].push([x2, y2, angle - (dangle + dcurl) + twist, dangle, length]);
-          next[i - 1].push([x2, y2, angle + (dangle + dcurl) + twist, dangle, length]);
+          next[i - 1].push([x2, y2, angle - (dangle + dcurl) + twist]);
+          next[i - 1].push([x2, y2, angle + (dangle + dcurl) + twist]);
         }
       }
       if(i < depth_start-1) {
