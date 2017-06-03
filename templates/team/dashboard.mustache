@@ -7,4 +7,72 @@
     </nav>
     <h1><div class="img"><i class="icon-logo"></i></div>{{team.opts.name}}</h1>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
+    <ul class="folders">
+        <li class="folder hi-10 up3c result-item">
+            <a href="#{{team.url}}/folders" class="hi-05">
+                <i class="icon-users"></i>
+                <span class="name">Active Items</span>
+            </a>
+            <ul class="items">
+            {{#model.item.collect_all}}
+            {{#filter_incomplete}}
+            {{#filter_assigned}}
+            {{#filter_planned}}
+            {{#order_member}}
+            {{#each}}
+                {{>team/item/_li}}
+            {{/each}}
+            {{#empty}}
+                <p class="empty">No recently completed items</p>
+            {{/empty}}
+            {{/order_member}}
+            {{/filter_planned}}
+            {{/filter_assigned}}
+            {{/filter_incomplete}}
+            {{/model.item.collect_all}}
+            </ul>
+        </li>
+        <li class="folder hi-10 up3c result-item">
+            <a href="#{{team.url}}/folders" class="hi-05">
+                <i class="icon-check-1"></i>
+                <span class="name">Recently Completed Items</span>
+            </a>
+            <ul class="items">
+            {{#model.item.collect_all}}
+            {{#filter_complete}}
+            {{#order_completed_desc}}
+            {{#limit_10}}
+            {{#each}}
+                {{>team/item/_li}}
+            {{/each}}
+            {{#empty}}
+                <p class="empty">No recently completed items</p>
+            {{/empty}}
+            {{/limit_10}}
+            {{/order_completed_desc}}
+            {{/filter_complete}}
+            {{/model.item.collect_all}}
+            </ul>
+        </li>
+        <li class="folder hi-10 up3c result-item">
+            <a href="#{{team.url}}/folders" class="hi-05">
+                <i class="icon-archive"></i>
+                <span class="name">New Items</span>
+            </a>
+            <ul class="items">
+            {{#model.item.collect_all}}
+            {{#order_created_desc}}
+            {{#limit_10}}
+            {{#each}}
+                {{>team/item/_li}}
+            {{/each}}
+            {{#empty}}
+                <p class="empty">No new items</p>
+            {{/empty}}
+            {{/limit_10}}
+            {{/order_created_desc}}
+            {{/model.item.collect_all}}
+            </ul>
+        </li>
+    </ul>
 </div>

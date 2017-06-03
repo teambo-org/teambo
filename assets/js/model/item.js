@@ -25,6 +25,9 @@ Teambo.model.item = (function(t){
         var plan_url = t.model.plan.current ? '/plan/' + t.model.plan.current.id : '';
         return '/'+t.team.current.id + plan_url + item_url;
       },
+      planned: function() {
+        return !!self.plan();
+      },
       assigned: function() {
         return !!self.member();
       },
@@ -37,6 +40,14 @@ Teambo.model.item = (function(t){
       },
       complete: function() {
         return self.opts.status === 'complete';
+      },
+      date_completed: function() {
+        for(var i = this.hist.length-1; i >= 0; i--) {
+          if(this.hist[i].diff.status == "complete") {
+            return this.hist[i].ts;
+          }
+        }
+        return 0;
       }
     });
   };
@@ -133,6 +144,11 @@ Teambo.model.item = (function(t){
           return !item.complete();
         });
       },
+      filter_planned: function() {
+        return this.filter(function(item) {
+          return item.planned();
+        });
+      },
       filter_assigned: function() {
         return this.filter(function(item) {
           return item.assigned();
@@ -161,6 +177,31 @@ Teambo.model.item = (function(t){
       },
       filter: function(fn) {
         return new model.collection(this.models.filter(fn));
+      },
+      order_created_desc: function() {
+        return this.sort(function(a, b) {
+          if(!a.hist.length || !b.hist.length) return -1;
+          return a.hist[0].ts < b.hist[0].ts ? 1 : a.hist[0].ts > b.hist[0].ts ? -1 : 0;
+        });
+      },
+      order_completed_desc: function() {
+        return this.sort(function(a, b) {
+          var a_ts = a.date_completed();
+          var b_ts = b.date_completed();
+          return a_ts < b_ts ? 1 : a_ts > b_ts ? -1 : 0;
+        });
+      },
+      order_member: function() {
+        return this.sort(function(a, b) {
+          return a.opts.member_id < b.opts.member_id ? 1 : a.opts.member_id > b.opts.member_id ? -1 : 0;
+        });
+      },
+      sort: function(fn) {
+        this.models.sort(fn);
+        return this;
+      },
+      limit_10: function() {
+        return new model.collection(this.models.slice(0, 10));
       }
     });
   };
