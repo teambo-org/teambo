@@ -67,7 +67,7 @@ func db_team_open(team_id string) (driver.DB, error) {
 }
 
 func db_team_delete(team_id string) error {
-	err := os.Remove(util.Config("app.data") + "/teams/" + team_id + ".ldb")
+	err := os.RemoveAll(util.Config("app.data") + "/teams/" + team_id + ".ldb")
 	if err != nil {
 		return err
 	}
