@@ -34,6 +34,9 @@
       ctx.lineTo(Math.random()*w, Math.random()*h);
       ctx.stroke();
     }
+    if(stripes) {
+      ctx.setLineDash([2, 2]);
+    }
     var f = Date.now() - start;
     depth_start = f > 1 ? 6 : 7;
     var hue_shift = Math.random();
@@ -52,6 +55,7 @@
   var start_x = (rect.left + rect.right)/2;
   var start_y = rect.top + rect.height / 2;
   var dangle = 360/n;
+  var stripes = false;
   ctx.lineWidth = 1;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
@@ -70,7 +74,6 @@
     for(var i = depth_start; i > 0; i--) {
       next[i-1] = [];
       ctx.beginPath();
-      // ctx.setLineDash([2, 2]);
       for(var j in next[i]) {
         var x1     = next[i][j][0],
             y1     = next[i][j][1],
@@ -138,6 +141,10 @@
     },
     pause: function() {
       window.cancelAnimationFrame(animationFrame);
+    },
+    reset: reset,
+    stripes: function(onoff) {
+      stripes = !!onoff;
     }
   };
   reset();
