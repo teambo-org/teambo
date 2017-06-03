@@ -7,6 +7,14 @@
     </nav>
     <h1><div class="img"><i class="icon-logo"></i></div>{{team.opts.name}}</h1>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
+    <div class="up1c">
+        <form id="search" name="search" action="#/search" method="GET" class="std" data-q="{{q}}">
+            <div class="img hi-10"><i class="icon-flashlight"></i></div>
+            <div class="q hi-20">
+                <input id="q" type="text" class="hi-05 text full required min-len-2" name="q" value="{{q}}" autocomplete="off" placeholder="Search" />
+            </div>
+        </form>
+    </div>
     <ul class="folders">
         <li class="folder hi-10 up3c result-item">
             <a href="#{{team.url}}/folders" class="hi-05">
@@ -23,7 +31,7 @@
                 {{>team/item/_li}}
             {{/each}}
             {{#empty}}
-                <p class="empty">No recently completed items</p>
+                <p class="empty">No active items</p>
             {{/empty}}
             {{/order_member}}
             {{/filter_planned}}

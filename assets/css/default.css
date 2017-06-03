@@ -72,7 +72,7 @@ form.std .field { padding: 0.5em 0.5em; }
 form.std .field.submit { padding-top: 1em; clear: both; }
 form.std .field.first { padding-top: 0; }
 form.std .field label { display: block; line-height: 1.2em; padding-bottom: 0.25em; }
-form.std .text { border: none; padding: 0.4em 0.5em; width: 20em; font-size: 1em; line-height: 1.2em; box-sizing: border-box; max-width: 100%; }
+form.std .text { border: none; padding: 0.41em 0.5em; width: 20em; font-size: 1em; line-height: 1.2em; box-sizing: border-box; max-width: 100%; }
 form.std .large { width: 24em; }
 form.std .small { width: 12em; }
 form.std select.demo-icon { width: 4em; }
@@ -174,7 +174,8 @@ form.filter { clear: both; }
 
 /* < 1000 */
 @media (max-width: 1025px) {
-    .up3c:not(.frozen) { float: left; width: 100%; margin: 0; font-size: 1em; }
+    .up1c:not(.frozen) { width: 100%; margin: 0 0 2%; }
+    .up3c:not(.frozen) { float: left; width: 100%; margin: 0 0 2%; font-size: 1em; }
     .up4c3:not(.frozen) { width: 98%; }
     .up4c3b:not(.frozen) { width: 98%; }
     h1 { font-size: 1.4em }
@@ -192,6 +193,7 @@ form.filter { clear: both; }
 /* 1024 */
 @media (min-width: 1025px) and (max-width: 1259px) {
     #page { font-size: 1.2em; }
+    .up1c:not(.frozen) { width: 100%; margin: 0 0 2%; }
     .up3c:not(.frozen) { float: left; width: 100%; margin: 0; }
     .up4c3:not(.frozen) { width: 98%; }
     .up4c3b:not(.frozen) { width: 98%; }

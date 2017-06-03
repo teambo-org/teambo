@@ -9,6 +9,8 @@ function(t){
 
   form.q.focus();
   form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
     t.app.gotoUrl(t.team.current.url() + "/search?q=" + encodeURIComponent(form.q.value));
   });
 
