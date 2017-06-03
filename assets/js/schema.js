@@ -26,7 +26,7 @@ Teambo.schema = (function(t){
     if('required' in rules && rules.required && !val) {
       errs.push(key + " is required and is not present");
     }
-    if(('minLength' in rules || 'maxLength' in rules) && (val !== null || (rules.required && !rules.empty))) {
+    if(('minLength' in rules || 'maxLength' in rules) && (!!val || (rules.required && !rules.empty))) {
       if(type !== 'string' && type !== 'array') {
         errs.push("Schema error: "+ key +" - valerties of type " + type + " cannot be constrained by length");
       }
