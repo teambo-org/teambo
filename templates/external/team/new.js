@@ -8,6 +8,10 @@ function(t){
   form.addEventListener("submit", function(e) {
     form.disable();
     var name = form.team_name.value;
+    if(t.array.findAllByProperty(t.acct.current.teams, 'admin', true).length >= t.app.max_teams) {
+      form.error.msg("Accounts are currently limited to " + t.app.max_teams + " teams", "Please delete one of your existing teams to create a new one");
+      return;
+    }
     t.team.create(name).then(function(team){
       t.app.gotoUrl('/'+team.id);
     }).catch(function(e){
