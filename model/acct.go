@@ -21,12 +21,16 @@ func (a *Acct) Delete() (err error) {
 func (a *Acct) Move(akey, pkey, ct string) (err error) {
 	hkey := acct_hkey(a.Id, akey)
 	phkey := acct_hkey(a.Id, pkey)
-	batch := db_acct.Batch()
-	batch.Delete("acct-" + a.Hkey)
-	batch.Delete("acct_protection-" + a.Hkey)
-	batch.Put("acct-" + hkey, ct)
-	batch.Put("acct_protection-" + hkey, phkey)
-	err = batch.Write()
+
+	transaction, err := db_acct.OpenTransaction()
+	if err != nil {
+		return err
+	}
+	transaction.Delete("acct-" + a.Hkey)
+	transaction.Delete("acct_protection-" + a.Hkey)
+	transaction.Put("acct-" + hkey, ct)
+	transaction.Put("acct_protection-" + hkey, phkey)
+	err = transaction.Commit()
 	if err == nil {
 		a.Hkey = hkey
 		a.Akey = akey

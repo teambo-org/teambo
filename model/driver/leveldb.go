@@ -46,6 +46,13 @@ func (w *ldb_wrapper) PrefixIterator(prefix string) (Iterator) {
 func (w *ldb_wrapper) RangeIterator(start, limit string) (Iterator) {
 	return ldb_iterator{w.db.NewIterator(&util.Range{Start: []byte(start), Limit: []byte(limit)}, nil)}
 }
+func (w *ldb_wrapper) OpenTransaction() (Transaction, error) {
+	transaction, err := w.db.OpenTransaction()
+	if err != nil {
+		return ldb_transaction{}, err
+	}
+	return ldb_transaction{transaction}, nil
+}
 
 type ldb_batch struct {
 	db    *leveldb.DB
@@ -84,4 +91,23 @@ func (i ldb_iterator) Release() {
 }
 func (i ldb_iterator) Error() error {
 	return i.iter.Error()
+}
+
+type ldb_transaction struct {
+	transaction *leveldb.Transaction
+}
+func (t ldb_transaction) Put(key, value string) {
+	t.transaction.Put([]byte(key), []byte(value), nil)
+	return
+}
+func (t ldb_transaction) Delete(key string) {
+	t.transaction.Delete([]byte(key), nil)
+	return
+}
+func (t ldb_transaction) Commit() error {
+	return t.transaction.Commit()
+}
+func (t ldb_transaction) Discard() {
+	t.transaction.Discard()
+	return
 }

@@ -9,6 +9,7 @@ type DB interface {
 	Batch() Batch
 	PrefixIterator(prefix string) (Iterator)
 	RangeIterator(start, limit string) (Iterator)
+	OpenTransaction() (Transaction, error)
 }
 
 type Batch interface {
@@ -26,3 +27,9 @@ type Iterator interface {
 	Error() error
 }
 
+type Transaction interface {
+	Put(key, value string)
+	Delete(key string)
+	Commit() error
+	Discard()
+}
