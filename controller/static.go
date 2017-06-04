@@ -10,10 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"time"
-	// "encoding/json"
-	// "fmt"
 )
 
 func Static(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +57,6 @@ func Static(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
 	w.Header().Set("Content-Type", mimetype)
-	w.Header().Set("Content-Length", strconv.Itoa(int(stat.Size())))
 	file, _ := ioutil.ReadFile(path)
 	w.Write(file)
 }

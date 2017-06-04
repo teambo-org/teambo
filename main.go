@@ -16,15 +16,37 @@ import (
 	"runtime"
 	"strconv"
 	"time"
+	"compress/gzip"
+	"io"
+	"strings"
 )
 
 type Response map[string]interface{}
 
-type StaticHandler struct{}
-
 var origin string
 
+type gzipResponseWriter struct {
+	io.Writer
+	http.ResponseWriter
+}
+
+func (w gzipResponseWriter) Write(b []byte) (int, error) {
+	return w.Writer.Write(b)
+}
+
+type StaticHandler struct{}
+
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+		h.ServeSingle(w, r)
+	}
+	w.Header().Set("Content-Encoding", "gzip")
+	gz := gzip.NewWriter(w)
+	defer gz.Close()
+	gzw := gzipResponseWriter{Writer: gz, ResponseWriter: w}
+	h.ServeSingle(gzw, r)
+}
+func (h StaticHandler) ServeSingle(w http.ResponseWriter, r *http.Request) {
 	// CSRF Origin filter
 	if r.Header.Get("Origin") != "" && r.Header.Get("Origin") != origin {
 		http.Error(w, "Origin not allowed", 403)

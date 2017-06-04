@@ -3,8 +3,6 @@ package controller
 import (
 	"../util"
 	"bitbucket.org/maxhauser/jsmin"
-	"bytes"
-	"compress/gzip"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
@@ -18,6 +16,7 @@ import (
 	"sort"
 	"strings"
 	"strconv"
+	"bytes"
 )
 
 type Page struct {
@@ -206,12 +205,7 @@ func Initjs(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	w.Header().Set("Content-Encoding", "gzip")
-	var b bytes.Buffer
-	gw := gzip.NewWriter(&b)
-	append_js_init(gw)
-	gw.Close()
-	b.WriteTo(w)
+	append_js_init(w)
 }
 
 var manifest_cache = ""
