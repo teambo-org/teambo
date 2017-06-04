@@ -49,8 +49,8 @@ func (o TeamObject) Log(iv string) (log string, err error) {
 		return log, err
 	}
 	ts := time.Now().UnixNano()
-	k := fmt.Sprintf("log-%d-%s-%s", ts, o.Bucket, o.Id)
+	k := fmt.Sprintf("%d-%s-%s", ts, o.Bucket, o.Id)
 	log = k + "-" + iv
-	err = team_db.Put(k, iv)
+	err = team_db.Put("log-" + k, iv)
 	return log, err
 }

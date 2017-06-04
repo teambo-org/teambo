@@ -98,9 +98,9 @@ func (t Team) Log(iv string) (item string, err error) {
 		return item, err
 	}
 	ts := time.Now().UnixNano()
-	k := fmt.Sprintf("log-%d-%s-%s", ts, "team", t.Id)
+	k := fmt.Sprintf("%d-%s-%s", ts, "team", t.Id)
 	item = k + "-" + iv
-	err = team_db.Put(k, iv)
+	err = team_db.Put("log-" + k, iv)
 	return item, err
 }
 
