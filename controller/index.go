@@ -169,6 +169,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		ws_url = ws_url + port
 	}
 
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("X-Frame-Options", "DENY")
 	w.Header().Set("X-XSS-Protection", "1; mode=block")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
