@@ -19,6 +19,7 @@ import (
 	"compress/gzip"
 	"io"
 	"strings"
+	"path"
 )
 
 type Response map[string]interface{}
@@ -34,12 +35,23 @@ func (w gzipResponseWriter) Write(b []byte) (int, error) {
 	return w.Writer.Write(b)
 }
 
+var gzip_blacklist = map[string]bool{
+	".jpg": true,
+	".jpeg": true,
+	".gif": true,
+	".png": true,
+	".mp3": true,
+}
+
 type StaticHandler struct{}
 
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	_, ext_blacklisted := gzip_blacklist[path.Ext(r.URL.Path)]
 	if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") ||
-		strings.Contains(r.Header.Get("Upgrade"), "websocket") {
+		strings.Contains(r.Header.Get("Upgrade"), "websocket") ||
+		ext_blacklisted {
 		h.ServeSingle(w, r)
+		return
 	}
 	w.Header().Set("Content-Encoding", "gzip")
 	gz := gzip.NewWriter(w)

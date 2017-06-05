@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	// "log"
 )
 
 func Static(w http.ResponseWriter, r *http.Request) {
@@ -50,14 +51,18 @@ func Static(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Serve file
-	ext := filepath.Ext(path)
-	mimetype := mime.TypeByExtension(ext)
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 	}
-	w.Header().Set("Content-Type", mimetype)
+	ext := filepath.Ext(path)
+	mimetype := mime.TypeByExtension(ext)
 	file, _ := ioutil.ReadFile(path)
+	if mimetype != "" {
+		w.Header().Set("Content-Type", mimetype)
+	} else {
+		w.Header().Set("content-type", http.DetectContentType([]byte(file)))
+	}
 	w.Write(file)
 }
 
