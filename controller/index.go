@@ -17,6 +17,7 @@ import (
 	"strings"
 	"strconv"
 	"bytes"
+	"time"
 )
 
 type Page struct {
@@ -121,7 +122,13 @@ var css = []string{
 	"/font/teambo/css/teambo-embedded.css",
 }
 
+var mimetype_js = "text/javascript; charset=utf-8"
+var mimetype_css = "text/css; charset=utf-8"
+
 func Index(w http.ResponseWriter, r *http.Request) {
+	if HttpCache.Serve(w, r) {
+		return
+	}
 	min := r.FormValue("min")
 	t, err := template.ParseFiles("templates/layout.html")
 	if err != nil {
@@ -194,26 +201,40 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	// w.Header().Set("Cache-Control", "max-age=315360000")
 	// }
 
-	err = t.Execute(w, p)
+	b := &bytes.Buffer{}
+	err = t.Execute(b, p)
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
+
+	if util.Config("static.cache") == "true" {
+		modTime := time.Now().UTC()
+		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), "text/html; charset=utf-8", modTime})
+	}
+	w.Write(b.Bytes())
 }
 
 func Initjs(w http.ResponseWriter, r *http.Request) {
-	if util.Config("static.cache") == "true" {
+	if HttpCache.Serve(w, r) {
+		return
+	}
+	version := r.FormValue("v")
+	w.Header().Set("Content-Type", mimetype_js)
+	b := &bytes.Buffer{}
+	append_js_init(b)
+	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
+		modTime := time.Now().UTC()
+		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_js, modTime})
 	}
-	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	append_js_init(w)
+	w.Write(b.Bytes())
 }
 
-var manifest_cache = ""
-
 func Manifest(w http.ResponseWriter, r *http.Request) {
-	if manifest_cache != "" {
-		w.Write([]byte(manifest_cache))
+	if HttpCache.Serve(w, r) {
 		return
 	}
 	t, err := template.ParseFiles("templates/app.manifest")
@@ -233,7 +254,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 			CSSFONT: []string{"/font.css?v=" + css_min_version(cssfont)},
 			AUDIO:   find_audio(),
 			IMAGE:   find_images(),
-			FONT:    find_fonts(),
+			// FONT:    find_fonts(),
 		}
 	} else {
 		p = Page{
@@ -245,7 +266,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 			CSSFONT: hash_version(cssfont),
 			AUDIO:   find_audio(),
 			IMAGE:   find_images(),
-			FONT:    find_fonts(),
+			// FONT:    find_fonts(),
 		}
 	}
 	var b bytes.Buffer
@@ -253,8 +274,10 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
-	if util.Config("cache.manifest") == "true" {
-		manifest_cache = b.String()
+	if util.Config("static.cache") == "true" {
+		modTime := time.Now().UTC()
+		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), "text/cache-manifest", modTime})
 	}
 	w.Header().Set("Content-Type", "text/cache-manifest")
 	w.Write(b.Bytes())
@@ -263,8 +286,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 var webmanifest_cache = ""
 
 func WebManifest(w http.ResponseWriter, r *http.Request) {
-	if webmanifest_cache != "" {
-		w.Write([]byte(webmanifest_cache))
+	if HttpCache.Serve(w, r) {
 		return
 	}
 	t, err := template.ParseFiles("templates/app.manifestweb")
@@ -290,9 +312,12 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
-	if util.Config("cache.manifest") == "true" {
-		webmanifest_cache = b.String()
+	if util.Config("static.cache") == "true" {
+		modTime := time.Now().UTC()
+		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), "application/manifest+json", modTime})
 	}
+	w.Header().Set("Content-Type", "application/manifest+json")
 	w.Write(b.Bytes())
 }
 
@@ -425,8 +450,7 @@ func find_audio() []string {
 	audio := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() && strings.HasSuffix(path, ".mp3") {
-			name := strings.TrimSuffix(path, ".mp3")
-			audio = append(audio, strings.TrimPrefix(name, dir+string(os.PathSeparator)))
+			audio = append(audio, strings.TrimPrefix(path, dir+string(os.PathSeparator)))
 		}
 		return nil
 	}

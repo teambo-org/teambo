@@ -11,12 +11,12 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"bytes"
 	// "log"
 )
 
 func Static(w http.ResponseWriter, r *http.Request) {
-	version := r.FormValue("v")
-	if r.URL.Path == "/.perf" {
+	if HttpCache.Serve(w, r) {
 		return
 	}
 	if r.URL.Path == "/app.js" {
@@ -51,78 +51,90 @@ func Static(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Serve file
-	if util.Config("static.cache") == "true" && version != "" {
-		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
-		w.Header().Set("Cache-Control", "max-age=315360000")
-	}
 	ext := filepath.Ext(path)
 	mimetype := mime.TypeByExtension(ext)
 	file, _ := ioutil.ReadFile(path)
-	if mimetype != "" {
-		w.Header().Set("Content-Type", mimetype)
-	} else {
-		w.Header().Set("content-type", http.DetectContentType([]byte(file)))
+	if mimetype == "" {
+		mimetype = http.DetectContentType([]byte(file))
+	}
+	w.Header().Set("Content-Type", mimetype)
+	if util.Config("static.cache") == "true" {
+		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
+		w.Header().Set("Cache-Control", "max-age=315360000")
+		HttpCache.Set(r.URL.Path, cacheItem{file, mimetype, modTime})
 	}
 	w.Write(file)
 }
 
 func compile_lib_js(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
+	w.Header().Set("Content-Type", mimetype_js)
+	b := &bytes.Buffer{}
+	for _, v := range jslib {
+		src, _ := os.Open("assets" + v)
+		jsmin.Run(src, b)
+	}
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
 	}
-	w.Header().Set("Content-Type", mime.TypeByExtension(".js"))
-	for _, v := range jslib {
-		src, _ := os.Open("assets" + v)
-		jsmin.Run(src, w)
-	}
+	w.Write(b.Bytes())
 }
 
 func compile_js(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
+	w.Header().Set("Content-Type", mimetype_js)
+	b := &bytes.Buffer{}
+	b.Write([]byte("(function(){"))
+	for _, v := range jsapp {
+		src, _ := os.Open("assets" + v)
+		jsmin.Run(src, b)
+	}
+	append_js_init(b)
+	b.Write([]byte("})();"))
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
 	}
-	w.Header().Set("Content-Type", mime.TypeByExtension(".js"))
-	w.Write([]byte("(function(){"))
-	for _, v := range jsapp {
-		src, _ := os.Open("assets" + v)
-		jsmin.Run(src, w)
-	}
-	append_js_init(w)
-	w.Write([]byte("})();"))
+	w.Write(b.Bytes())
 }
 
 func compile_css(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
-	if util.Config("static.cache") == "true" && version != "" {
-		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
-		w.Header().Set("Cache-Control", "max-age=315360000")
-	}
-	w.Header().Set("Content-Type", mime.TypeByExtension(".css"))
+	w.Header().Set("Content-Type", mimetype_css)
 	m := minify.New()
 	m.AddFunc("text/css", cssminify.Minify)
+	b := &bytes.Buffer{}
 	for _, v := range css {
 		src, _ := ioutil.ReadFile("assets" + v)
 		min, _ := m.String("text/css", string(src))
-		w.Write([]byte(min))
+		b.Write([]byte(min))
 	}
+	if util.Config("static.cache") == "true" && version != "" {
+		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
+		w.Header().Set("Cache-Control", "max-age=315360000")
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
+	}
+	w.Write(b.Bytes())
 }
 
 func compile_font_css(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
-	if util.Config("static.cache") == "true" && version != "" {
-		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
-		w.Header().Set("Cache-Control", "max-age=315360000")
-	}
-	w.Header().Set("Content-Type", mime.TypeByExtension(".css"))
+	w.Header().Set("Content-Type", mimetype_css)
 	m := minify.New()
 	m.AddFunc("text/css", cssminify.Minify)
+	b := &bytes.Buffer{}
 	for _, v := range cssfont {
 		src, _ := ioutil.ReadFile("assets" + v)
 		min, _ := m.String("text/css", string(src))
-		w.Write([]byte(min))
+		b.Write([]byte(min))
 	}
+	if util.Config("static.cache") == "true" && version != "" {
+		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
+		w.Header().Set("Cache-Control", "max-age=315360000")
+		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
+	}
+	w.Write(b.Bytes())
 }

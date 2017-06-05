@@ -20,6 +20,7 @@ import (
 	"io"
 	"strings"
 	"path"
+	"syscall"
 )
 
 type Response map[string]interface{}
@@ -73,7 +74,7 @@ func (h StaticHandler) ServeSingle(w http.ResponseWriter, r *http.Request) {
 	} else {
 		controller.Static(w, r)
 	}
-	// log.Printf("%d %s", time.Since(start).UnixNano(), r.URL.Path)
+	// log.Printf("%d %s", time.Since(start).Nanoseconds() / 1e3, r.URL.Path)
 }
 
 func main() {
@@ -118,6 +119,16 @@ func main() {
 		go h.ListenAndServe()
 		origin = "http://" + config["app.host"]
 	}
+
+	clear := make(chan os.Signal)
+	signal.Notify(clear, syscall.SIGUSR1)
+	go func() {
+		for {
+			_ = <-clear
+			log.Println("Clearing Cache")
+			controller.HttpCache.Clear()
+		}
+	}()
 
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)

@@ -19,11 +19,11 @@ Teambo.audio = (function(t){
     loadAll: function(sources) {
       sources.forEach(function(v) {
         var audio = document.createElement('audio');
-        audio.src = "/audio/"+v+".mp3";
+        audio.src = "/audio/"+v;
         audio.autobuffer = true;
         audio.preload = 'none';
         audio.load();
-        sounds[v] = audio;
+        sounds[v.split('.')[0]] = audio;
       })
     }
   };

@@ -14,7 +14,7 @@ CACHE:
 {{end}}
 {{range .CSS}}{{.}}
 {{end}}
-{{range .AUDIO}}/audio/{{.}}.mp3
+{{range .AUDIO}}/audio/{{.}}
 {{end}}
 {{range .IMAGE}}/i/{{.}}
 {{end}}
