@@ -16,9 +16,6 @@ import (
 )
 
 func Static(w http.ResponseWriter, r *http.Request) {
-	if HttpCache.Serve(w, r) {
-		return
-	}
 	if r.URL.Path == "/app.js" {
 		compile_js(w, r)
 		return
@@ -61,7 +58,7 @@ func Static(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r.URL.Path, cacheItem{file, mimetype, modTime})
+		HttpCache.Set(r, cacheItem{file, mimetype, modTime})
 	}
 	w.Write(file)
 }
@@ -77,7 +74,7 @@ func compile_lib_js(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
+		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }
@@ -96,7 +93,7 @@ func compile_js(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
+		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }
@@ -115,7 +112,7 @@ func compile_css(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
+		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }
@@ -134,7 +131,7 @@ func compile_font_css(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r.URL.Path, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
+		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }

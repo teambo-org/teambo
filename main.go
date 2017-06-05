@@ -8,7 +8,6 @@ import (
 	"./service"
 	"context"
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -16,66 +15,8 @@ import (
 	"runtime"
 	"strconv"
 	"time"
-	"compress/gzip"
-	"io"
-	"strings"
-	"path"
 	"syscall"
 )
-
-type Response map[string]interface{}
-
-var origin string
-
-type gzipResponseWriter struct {
-	io.Writer
-	http.ResponseWriter
-}
-
-func (w gzipResponseWriter) Write(b []byte) (int, error) {
-	return w.Writer.Write(b)
-}
-
-var gzip_blacklist = map[string]bool{
-	".jpg": true,
-	".jpeg": true,
-	".gif": true,
-	".png": true,
-	".mp3": true,
-}
-
-type StaticHandler struct{}
-
-func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	_, ext_blacklisted := gzip_blacklist[path.Ext(r.URL.Path)]
-	if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") ||
-		strings.Contains(r.Header.Get("Upgrade"), "websocket") ||
-		ext_blacklisted {
-		h.ServeSingle(w, r)
-		return
-	}
-	w.Header().Set("Content-Encoding", "gzip")
-	gz := gzip.NewWriter(w)
-	defer gz.Close()
-	gzw := gzipResponseWriter{Writer: gz, ResponseWriter: w}
-	h.ServeSingle(gzw, r)
-}
-func (h StaticHandler) ServeSingle(w http.ResponseWriter, r *http.Request) {
-	// CSRF Origin filter
-	if r.Header.Get("Origin") != "" && r.Header.Get("Origin") != origin {
-		http.Error(w, "Origin not allowed", 403)
-		return
-	}
-	w.Header().Set("Cache-Control", "max-age=0, no-cache, must-revalidate")
-	// start := time.Now()
-	if handle, ok := routes[r.URL.Path]; ok {
-		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond)))
-		handle(w, r)
-	} else {
-		controller.Static(w, r)
-	}
-	// log.Printf("%d %s", time.Since(start).Nanoseconds() / 1e3, r.URL.Path)
-}
 
 func main() {
 	var config_path *string = flag.String("conf", "app.conf", "Location of config file")
@@ -146,11 +87,4 @@ func main() {
 	service.PurgeExpired.Stop()
 	log.Println("Closing Database Connections ...")
 	model.CloseAll()
-}
-
-func redirectToHttps(config map[string]string) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		// http.Redirect(w, r, "https://"+config["app.host"], http.StatusMovedPermanently) 301
-		http.Redirect(w, r, "https://"+config["app.host"], http.StatusFound)
-	}
 }
