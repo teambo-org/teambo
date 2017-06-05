@@ -37,7 +37,8 @@ func (w gzipResponseWriter) Write(b []byte) (int, error) {
 type StaticHandler struct{}
 
 func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+	if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") ||
+		strings.Contains(r.Header.Get("Upgrade"), "websocket") {
 		h.ServeSingle(w, r)
 	}
 	w.Header().Set("Content-Encoding", "gzip")
