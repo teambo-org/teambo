@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 	"os"
+	"strings"
 )
 
 var db_acct driver.DB
@@ -50,8 +51,9 @@ func PurgeExpired(db driver.DB, prefix string) (ids []string, err error) {
 	for iter.Next() {
 		id := string(iter.Value())
 		key := string(iter.Key())
+		ts := strings.Split(key, "-")[1]
 		ids = append(ids, id)
-		batch.Delete(prefix + "-" + id)
+		batch.Delete(prefix + "-" + id + "-" + ts)
 		batch.Delete(key)
 	}
 	iter.Release()
