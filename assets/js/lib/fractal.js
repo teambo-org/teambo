@@ -95,8 +95,8 @@
         ctx.stroke();
       }
     }
-    curl  = (curl < 360*depth_start ? curl : curl - 360*depth_start) + a_curl;
-    twist = (twist < 360 ? twist : twist - 360) + a_twist;
+    curl  = curl % (360*depth_start) + a_curl;
+    twist = twist % 360 + a_twist;
     window.cancelAnimationFrame(animationFrame);
     animationFrame = window.requestAnimationFrame(drawFractal);
   };

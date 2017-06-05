@@ -74,7 +74,7 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .external form .field input:focus { outline: 4px solid rgba(0,0,0,0.15); }
 .external form.ext.std { position: relative; }
 .external #status.offline { position: absolute; left: 0; top: -1.725em; padding: 0.2em 0.6em 0; line-height: 1.6em;
-    background: rgba(255,255,255,0.75); text-transform: uppercase; font-size: 0.8em; }
+    background: inherit; text-transform: uppercase; font-size: 0.8em; }
 .external #status.online { display: none; }
 
 .external form.std #pass-meter { width: 20em; margin: 0 auto; height: 0.5em; background: rgba(0,0,0,0.1); }

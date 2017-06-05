@@ -25,41 +25,41 @@
         <a class="clear" href="#{{team.url}}/plan?status=&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
     </form>
     <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
-    <ul class="plans folders" id="plans">
+    <ul class="model plans" id="plans">
     {{#model.plan.all}}
-    <li class="plan folder hi-10 up3c" id="plan-li-{{id}}">
-        <a href="#{{url}}" class="hi-05">
-            <i class="icon-{{icon}}"></i>
-            <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
-            <span class="name">{{opts.name}}</span>
-            <div class="progress hi-15" data-progress="{{progress}}"></div>
-        </a>
-        <ul class="items">
-        {{#item_collection}}
-        {{#each}}
-            <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
-                <a href="#{{url}}" class="{{#complete}}color-30{{/complete}}{{^complete}}dim{{/complete}}">
-                    {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
-                    {{/status}}
-                    {{#member}}
-                        {{#isMe}}
-                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                        {{^isMe}}
-                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                    {{/member}}
-                    <span class="name">{{opts.name}}</span>
-                </a>
-            </li>
-        {{/each}}
-        {{/item_collection}}
-        </ul>
-    </li>
+        <li class="plan folder hi-10 up3c" id="plan-li-{{id}}">
+            <a href="#{{url}}" class="hi-05">
+                <i class="icon-{{icon}}"></i>
+                <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
+                <span class="name">{{opts.name}}</span>
+                <div class="progress hi-15" data-progress="{{progress}}"></div>
+            </a>
+            <ul class="items">
+            {{#item_collection}}
+            {{#each}}
+                <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
+                    <a href="#{{url}}" class="{{#complete}}color-30{{/complete}}{{^complete}}dim{{/complete}}">
+                        {{#status}}
+                        <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
+                        {{/status}}
+                        {{#member}}
+                            {{#isMe}}
+                            <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
+                            {{/isMe}}
+                            {{^isMe}}
+                            <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
+                            {{/isMe}}
+                        {{/member}}
+                        <span class="name">{{opts.name}}</span>
+                    </a>
+                </li>
+            {{/each}}
+            {{/item_collection}}
+            </ul>
+        </li>
     {{/model.plan.all}}
     {{^model.plan.all}}
-    <p class="empty">Team has no plans</p>
+        <p class="empty">Team has no plans</p>
     {{/model.plan.all}}
     </ul>
 </div>
