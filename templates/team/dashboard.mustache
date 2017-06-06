@@ -6,7 +6,7 @@
         <a href="#{{team.url}}/item/new" data-keybind="c">Create Item</a>
     </nav>
     <h1><div class="img"><i class="icon-logo"></i></div>{{team.opts.name}}</h1>
-    <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
+    <a id="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <div class="up1c">
         <form id="search" name="search" action="#/search" method="GET" class="std" data-q="{{q}}">
             <div class="img hi-10"><i class="icon-flashlight"></i></div>
@@ -16,12 +16,12 @@
         </form>
     </div>
     <ul class="model">
-        <li class="hi-10 up3c result-item">
+        <li class="hi-10 up3c no-description">
             <a href="#{{team.url}}/folders" class="hi-05">
                 <i class="icon-users"></i>
                 <span class="name">Active Items</span>
             </a>
-            <ul class="items">
+            <ul class="items no-description">
             {{#model.item.collect_all}}
             {{#filter_incomplete}}
             {{#filter_assigned}}
@@ -40,12 +40,12 @@
             {{/model.item.collect_all}}
             </ul>
         </li>
-        <li class="hi-10 up3c result-item">
+        <li class="hi-10 up3c no-description">
             <a href="#{{team.url}}/folders" class="hi-05">
                 <i class="icon-check-1"></i>
                 <span class="name">Recently Completed Items</span>
             </a>
-            <ul class="items">
+            <ul class="items no-description">
             {{#model.item.collect_all}}
             {{#filter_complete}}
             {{#order_completed_desc}}
@@ -62,12 +62,12 @@
             {{/model.item.collect_all}}
             </ul>
         </li>
-        <li class="hi-10 up3c result-item">
+        <li class="hi-10 up3c">
             <a href="#{{team.url}}/folders" class="hi-05">
                 <i class="icon-archive"></i>
                 <span class="name">New Items</span>
             </a>
-            <ul class="items">
+            <ul class="items no-description">
             {{#model.item.collect_all}}
             {{#order_created_desc}}
             {{#limit_10}}

@@ -66,17 +66,6 @@ Teambo.model.item = (function(t){
 
   t.model._extend(model);
 
-  model.getByFolder = function(folder_id) {
-    var ret = [];
-    for(var i in model.all) {
-      var o = model.all[i];
-      if(o.opts.folder_id == folder_id) {
-        ret.push(o);
-      }
-    }
-    return ret;
-  };
-
   model.getByMember = function(member_id) {
     var ret = [];
     for(var i in model.all) {
@@ -97,17 +86,6 @@ Teambo.model.item = (function(t){
     }
   };
 
-  model.getOrphaned = function() {
-    var folder_ids = t.model.folder.ids();
-    var ret = [];
-    for(var i in model.all) {
-      if(folder_ids.indexOf(model.all[i].opts.folder_id) < 0) {
-        ret.push(model.all[i]);
-      }
-    }
-    return ret;
-  };
-
   var wrap_statuses = function(statuses) {
     statuses.forEach(function(el) {
       el.active = function() {
@@ -125,13 +103,22 @@ Teambo.model.item = (function(t){
     { key: 'complete',   label: 'Complete',    icon: 'check-1' }
   ]);
 
-
   model.collection = function(models) {
     t.model.collection.apply(this, [models]);
     t.object.extend(this, {
       filter_plan_id: function(plan_id) {
         return this.filter(function(item) {
           return item.opts.plan_id == plan_id;
+        });
+      },
+      filter_folder_id: function(folder_id) {
+        return this.filter(function(item) {
+          return item.opts.folder_id == folder_id;
+        });
+      },
+      filter_orphaned: function() {
+        return this.filter(function(item) {
+          return item.folder() === t.model.folder.orphaned;
         });
       },
       filter_complete: function() {
@@ -159,8 +146,8 @@ Teambo.model.item = (function(t){
           return !item.assigned();
         });
       },
-      filter_member_current: function() {
-        var member_id = t.model.member.current ? t.model.member.current.id : null;
+      filter_member: function(member) {
+        var member_id = member ? member.id : null;
         if(!member_id) {
           return new model.collection([]);
         } else {
@@ -168,6 +155,9 @@ Teambo.model.item = (function(t){
             return item.assignedTo(member_id);
           });
         }
+      },
+      filter_member_current: function() {
+        return this.filter_member(t.model.member.current);
       },
       filter_mine: function() {
         var member_id = t.acct.current.member().id;

@@ -6,7 +6,6 @@ function(t){
   var form = new t.form(document.member_edit),
     member_id = form.dataset.member_id,
     member = t.model.member.get(member_id);
-  form.name.focus();
   form.addEventListener("submit", function(e) {
     if(!member.editable()) {
       form.error.msg("Not allowed", "Members may only edit their own profiles");

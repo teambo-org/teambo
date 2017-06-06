@@ -7,24 +7,26 @@
         <a href="#{{team.url}}/plan/new" data-keybind="c">Create Plan</a>
     </nav>
     <h1><div class="img"><i class="icon-calendar-check-o"></i></div> Planning</h1>
-    <form class="std horizontal color-bg filter" name="filter">
-        <select name="status" class="text">
-            <option value="" selected="selected">All Statuses</option>
-            <option value="incomplete">Incomplete</option>
-            {{#model.item.statuses}}
-            <option value="{{key}}">{{label}}</option>
-            {{/model.item.statuses}}
-        </select>
-        <select name="member_id" class="text">
-            <option value="" selected="selected">All Members</option>
-            {{#model.member.all}}
-            <option value="{{id}}">{{opts.name}}</option>
-            {{/model.member.all}}
-            <option value="none">(unassigned)</option>
-        </select>
-        <a class="clear" href="#{{team.url}}/plan?status=&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
-    </form>
-    <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
+    <div class="up1c">
+        <form class="std horizontal color-bg filter" name="filter">
+            <select name="status" class="text">
+                <option value="" selected="selected">All Statuses</option>
+                <option value="incomplete">Incomplete</option>
+                {{#model.item.statuses}}
+                <option value="{{key}}">{{label}}</option>
+                {{/model.item.statuses}}
+            </select>
+            <select name="member_id" class="text">
+                <option value="" selected="selected">All Members</option>
+                {{#model.member.all}}
+                <option value="{{id}}">{{opts.name}}</option>
+                {{/model.member.all}}
+                <option value="none">(unassigned)</option>
+            </select>
+            <a class="clear" href="#{{team.url}}/plan?status=&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
+        </form>
+    </div>
+    <a id="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     <ul class="model plans" id="plans">
     {{#model.plan.all}}
         <li class="plan folder hi-10 up3c" id="plan-li-{{id}}">
@@ -37,23 +39,11 @@
             <ul class="items">
             {{#item_collection}}
             {{#each}}
-                <li class="item status-{{opts.status}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
-                    <a href="#{{url}}" class="{{#complete}}color-30{{/complete}}{{^complete}}dim{{/complete}}">
-                        {{#status}}
-                        <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
-                        {{/status}}
-                        {{#member}}
-                            {{#isMe}}
-                            <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
-                            {{/isMe}}
-                            {{^isMe}}
-                            <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                            {{/isMe}}
-                        {{/member}}
-                        <span class="name">{{opts.name}}</span>
-                    </a>
-                </li>
+                {{>team/item/_li}}
             {{/each}}
+            {{#empty}}
+                <p class="empty color-30">None</p>
+            {{/empty}}
             {{/item_collection}}
             </ul>
         </li>

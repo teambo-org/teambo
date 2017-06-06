@@ -5,23 +5,67 @@
     </nav>
     <nav>
     {{#team.isAdmin}}
-        <a href="#{{team.url}}/members/new" data-keybind="c">New Invite</a>
+        <a href="#{{team.url}}/members/new" data-keybind="c"><i class="icon-user-add"></i> New Member</a>
     {{/team.isAdmin}}
     </nav>
     <h1><i class="icon-flag-filled"></i> Members</h1>
+    <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
+    {{#model.member.collect_all}}
     <ul class="model member" id="members">
-    {{#model.member.all}}
-        {{#opts.pubKey}}
-            {{>team/member/_li}}
-        {{/opts.pubKey}}
-    {{/model.member.all}}
-    {{#model.member.all}}
-        {{^opts.pubKey}}
-            {{>team/member/_li}}
-        {{/opts.pubKey}}
-    {{/model.member.all}}
+        {{#filter_active}}
+        {{#each}}
+        <li class="member hi-10 up3c" id="member-li-{{id}}">
+            <a href="#{{url}}" class="hi-05">
+                <div class="img"><i class="{{icon}}"></i></div>
+                <span class="name">{{opts.name}}</span>
+            </a>
+            <ul class="items no-description">
+            {{#item_collection}}
+            {{#filter_incomplete}}
+            {{#filter_planned}}
+            {{#each}}
+                {{>team/item/_li}}
+            {{/each}}
+            {{#empty}}
+                <p class="empty color-30">No assigned items</p>
+            {{/empty}}
+            {{/filter_planned}}
+            {{/filter_incomplete}}
+            {{/item_collection}}
+            </ul>
+        </li>
+        {{/each}}
+        {{/filter_active}}
+        {{#filter_inactive}}
+        {{#each}}
+        <li class="member hi-05 up3c" id="member-li-{{id}}">
+            <a href="#{{url}}" class="hi-05">
+                {{#opts.invite_key}}
+                <span class="pending">Pending</span>
+                {{/opts.invite_key}}
+                {{^opts.invite_key}}
+                <span class="pending">Expired</span>
+                {{/opts.invite_key}}
+                <div class="img"><i class="{{icon}}"></i></div>
+                <span class="name">{{opts.name}}</span>
+            </a>
+            <ul class="items no-description">
+            {{#item_collection}}
+            {{#filter_incomplete}}
+            {{#filter_planned}}
+            {{#each}}
+                {{>team/item/_li}}
+            {{/each}}
+            {{#empty}}
+                <p class="empty color-30">No assigned items</p>
+            {{/empty}}
+            {{/filter_planned}}
+            {{/filter_incomplete}}
+            {{/item_collection}}
+            </ul>
+        </li>
+        {{/each}}
+        {{/filter_inactive}}
     </ul>
-    {{^model.member.all}}
-        <p class="empty">Team has no members</p>
-    {{/model.member.all}}
+    {{/model.member.collect_all}}
 </div>

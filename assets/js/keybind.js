@@ -72,11 +72,21 @@
       case 'left':
         if(dir === 'right') {
           focusPane('main');
+          var skipnav = document.getElementById('skipnav');
+          if(skipnav) {
+            skipnav.focus();
+            moveFocus({preventDefault: function(){}, target: skipnav}, 'down');
+          }
         }
         break;
       case 'right':
         if(dir === 'left') {
           focusPane('main');
+          var skipnav = document.getElementById('skipnav');
+          if(skipnav) {
+            skipnav.focus();
+            moveFocus({preventDefault: function(){}, target: skipnav}, 'down');
+          }
         }
         break;
     }

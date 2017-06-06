@@ -3,10 +3,6 @@ function(t){
 
   t.view.progress('#main .progress');
 
-  if(!t.dom.isChild('right', document.activeElement)) {
-    document.querySelector('a[name=skipnav]').focus();
-  }
-
   var form = new t.form(document.search);
   form.addEventListener("submit", function(e) {
     t.app.gotoUrl(t.team.current.url() + "/search?q=" + encodeURIComponent(form.q.value));

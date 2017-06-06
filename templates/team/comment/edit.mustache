@@ -2,10 +2,11 @@
 {{#model.comment.current}}
     <nav class="breadcrumbs">
         <a href="#{{team.url}}">Team</a>
-        <a href="#{{#parentModel}}{{url}}{{/parentModel}}">Comment</a>
+        <a href="#{{#parentModel}}{{url}}{{/parentModel}}" data-keybind="q escape `">Comment</a>
         <span>Edit</span>
     </nav>
     <h1>{{#parentModel}}{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}{{/parentModel}}</h1>
+    <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
     <form id="comment_edit" name="comment_edit" method="POST" class="std ext">
         <div class="section comments hi-05">
             {{#member}}

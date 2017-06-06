@@ -6,7 +6,7 @@ function(t){
   var form = new t.form(document.folder_edit),
     folder_id = form.dataset.folder_id,
     folder = t.model.folder.get(folder_id);
-  form.name.focus();
+  // form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'description']);

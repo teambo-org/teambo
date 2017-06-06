@@ -1,5 +1,5 @@
 <li class="item status-{{opts.status}} plan_id-{{opts.plan_id}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
-    <a href="#{{url}}" class="dim">
+    <a href="#{{url}}" class="{{#complete}}color-50{{/complete}}">
         {{#status}}
         <i class="icon-{{icon}}" role="img" title="{{label}}"></i>
         {{/status}}
@@ -15,5 +15,8 @@
             {{/isMe}}
         {{/member}}
         <span class="name">{{opts.name}}</span>
+        {{#opts.description}}
+        <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
+        {{/opts.description}}
     </a>
 </li>

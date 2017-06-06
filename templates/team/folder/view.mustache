@@ -16,63 +16,36 @@
         <section class="description color-bg">{{opts.description}}</section>
     </div>
     {{/opts.description}}
-    <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
-    <div class="up1c">
-        <ul class="items incomplete">
-        {{#item_list_incomplete}}
-            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#{{url}}" class="hi-05">
-                    {{#status}}
-                    <i class="icon-{{icon}}" role="img" alt="{{label}}" title="{{label}}"></i>
-                    {{/status}}
-                    {{#plan}}
-                    <span class="plan" title="{{opts.name}}">
-                        <i class="icon-{{icon}}"></i> {{opts.name}}<br/>
-                    </span>
-                    {{/plan}}
-                    {{#member}}
-                        {{#isMe}}
-                        <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                        {{^isMe}}
-                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                        {{/isMe}}
-                    {{/member}}
-                    <span class="name">{{opts.name}}</span>
-                    {{#opts.description}}
-                    <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>
-                    {{/opts.description}}
-                </a>
-            </li>
-        {{/item_list_incomplete}}
-        </ul>
-    </div>
-    <div class="up1c">
-    {{#item_count_complete}}
-        <ul class="items complete">
-        {{#item_list_complete}}
-            <li class="item status-{{opts.status}}" id="item-li-{{id}}">
-                <a href="#{{url}}">
-                    {{#status}}
-                    <i class="icon-{{icon}}"></i>
-                    {{/status}}
-                    {{#plan}}
-                    <span class="plan color-30" title="{{opts.name}}">
-                        <i class="icon-{{icon}}"></i> {{opts.name}}<br/>
-                    </span>
-                    {{/plan}}
-                    {{#member}}
-                        <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
-                    {{/member}}
-                    <span class="name">{{opts.name}}</span>
-                </a>
-            </li>
-        {{/item_list_complete}}
-        </ul>
-    {{/item_count_complete}}
-    </div>
-    {{^item_list}}
-    <p class="empty">This folder has no items.</p>
-    {{/item_list}}
+    <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
+    {{#item_collection}}
+    {{#filter_incomplete}}
+    {{^empty}}
+        <div class="up1c">
+            <ul class="items incomplete spaced">
+            {{#each}}
+                {{>team/item/_li}}
+            {{/each}}
+            </ul>
+        </div>
+    {{/empty}}
+    {{/filter_incomplete}}
+    {{#filter_complete}}
+    {{^empty}}
+        <div class="up1c upshort">
+            <h4>Complete</h4>
+        </div>
+        <div class="up1c">
+            <ul class="items complete">
+            {{#each}}
+                {{>team/item/_li}}
+            {{/each}}
+            </ul>
+        </div>
+    {{/empty}}
+    {{/filter_complete}}
+    {{#empty}}
+        <p class="empty hi-05 color-30">This folder has no items</p>
+    {{/empty}}
+    {{/item_collection}}
 {{/model.folder.current}}
 </div>

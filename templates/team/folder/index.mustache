@@ -4,35 +4,37 @@
         <span class="active">Items</span>
     </nav>
     <nav>
-        <a href="#{{team.url}}/new" data-keybind="n">New Folder</a>
-        <a href="#{{team.url}}/item/new" data-keybind="c">Create Item</a>
+        <a href="#{{team.url}}/new" data-keybind="c">Create Folder</a>
+        <a href="#{{team.url}}/item/new" data-keybind="n">New Item</a>
     </nav>
     <h1><div class="img"><i class="icon-archive"></i></div> Items</h1>
-    <form class="std horizontal color-bg filter" name="filter">
-        <select name="status" class="text">
-            <option value="">All Statuses</option>
-            <option value="incomplete" selected="selected">Incomplete</option>
-            {{#model.item.statuses}}
-            <option value="{{key}}">{{label}}</option>
-            {{/model.item.statuses}}
-        </select>
-        <select name="plan_id" class="text">
-            <option value="" selected="selected">All Plans</option>
-            {{#model.plan.all}}
-            <option value="{{id}}">{{opts.name}}</option>
-            {{/model.plan.all}}
-            <option value="none">(unplanned)</option>
-        </select>
-        <select name="member_id" class="text">
-            <option value="" selected="selected">All Members</option>
-            {{#model.member.all}}
-            <option value="{{id}}">{{opts.name}}</option>
-            {{/model.member.all}}
-            <option value="none">(unassigned)</option>
-        </select>
-        <a class="clear" href="#{{team.url}}/folders?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
-    </form>
-    <a name="skipnav" class="skip-nav" href="#{{team.url}}"></a>
+    <div class="up1c">
+        <form class="std horizontal color-bg filter" name="filter">
+            <select name="status" class="text">
+                <option value="">All Statuses</option>
+                <option value="incomplete" selected="selected">Incomplete</option>
+                {{#model.item.statuses}}
+                <option value="{{key}}">{{label}}</option>
+                {{/model.item.statuses}}
+            </select>
+            <select name="plan_id" class="text">
+                <option value="" selected="selected">All Plans</option>
+                {{#model.plan.all}}
+                <option value="{{id}}">{{opts.name}}</option>
+                {{/model.plan.all}}
+                <option value="none">(unplanned)</option>
+            </select>
+            <select name="member_id" class="text">
+                <option value="" selected="selected">All Members</option>
+                {{#model.member.all}}
+                <option value="{{id}}">{{opts.name}}</option>
+                {{/model.member.all}}
+                <option value="none">(unassigned)</option>
+            </select>
+            <a class="clear" href="#{{team.url}}/folders?status=incomplete&plan_id=&member_id="><i class="icon icon-cancel"></i></a>
+        </form>
+    </div>
+    <a id="skipnav" class="skip-nav" href="#{{team.url}}"></a>
     {{>team/folder/_list}}
     {{^model.folder.list}}
     <p class="empty">Team has no folders</p>

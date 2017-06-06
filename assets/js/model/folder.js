@@ -5,30 +5,24 @@ Teambo.model.folder = (function(t){
     var self = this;
     t.model.apply(this, [data, model]);
     t.object.extend(this, {
+      item_collection: function() {
+        return t.model.item.collect_all().filter_folder_id(this.id);
+      },
       item_list: function() {
-        return t.model.item.getByFolder(self.id);
-      },
-      item_list_incomplete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status !== 'complete';
-        });
-      },
-      item_list_complete: function() {
-        return self.item_list().filter(function(o) {
-          return o.opts.status === 'complete';
-        });
+        return this.item_collection().models;
       },
       item_count: function() {
-        return self.item_list().length;
+        return this.item_collection().count();
       },
       item_count_incomplete: function() {
-        return self.item_list_incomplete().length;
+        return this.item_collection().filter_incomplete().count();
       },
       item_count_complete: function() {
-        return self.item_list_complete().length;
+        return this.item_collection().filter_complete().count();
       },
       progress: function() {
-        return self.item_list().length ? (self.item_list_complete().length / self.item_list().length) * 100 : 100;
+        var total = this.item_count();
+        return total ? (this.item_count_complete() / total) * 100 : 100;
       },
       url: function() {
         return '/'+t.team.current.id+'/folder/'+self.id;
@@ -58,17 +52,17 @@ Teambo.model.folder = (function(t){
   };
 
   model.orphaned = new model({
-    id: "orphaned",
+    id: "(none)",
     opts: {
       name: "(none)",
-      description: "This is a list of items that don't belong to any existing folders."
+      description: "These items to not belong to an existing folder"
     }
   });
 
   model.orphaned.fake = true;
 
-  model.orphaned.item_list = function() {
-    return t.model.item.getOrphaned();
+  model.orphaned.item_collection = function() {
+    return t.model.item.collect_all().filter_orphaned();
   };
 
   model.list = function() {

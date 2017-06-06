@@ -3,8 +3,6 @@ function(t){
 
   t.app.editing = true;
 
-  document.querySelector('a[name=skipnav]').focus();
-
   var form = new t.form(document.item_edit),
     item_id = form.dataset.item_id,
     item = t.model.item.get(item_id);

@@ -90,7 +90,7 @@ form.std input.submit:hover { background: rgba(0,0,0,0.6); }
 form.std a.cancel { padding: 0 0.8em; cursor:pointer; line-height: 2.2em; font-size: 1em; }
 form.std a.cancel:hover { opacity: 1; }
 form.std p { margin: 0; font-size: 0.9em; }
-form.std.horizontal { padding: 0.6em; font-size: 0.9em; margin-bottom: 1em; }
+form.std.horizontal { padding: 0.6em; font-size: 0.9em; }
 form.std.horizontal .text { width: auto; padding: 0.2em 0.3em; }
 form.std label.chk { padding: 0.5em; font-size: 0.85em; }
 form.std label input.chk { float: left; margin-right: 0.8em; transform: scale(1.25); }
@@ -195,7 +195,7 @@ form.filter { clear: both; }
 @media (min-width: 1025px) and (max-width: 1259px) {
     #page { font-size: 1.2em; }
     .up1c:not(.frozen) { width: 100%; margin: 0 0 2%; }
-    .up3c:not(.frozen) { float: left; width: 100%; margin: 0; }
+    .up3c:not(.frozen) { float: left; width: 100%; margin: 0 0 2%; }
     .up4c3:not(.frozen) { width: 98%; }
     .up4c3b:not(.frozen) { width: 98%; }
 }
@@ -204,7 +204,7 @@ form.filter { clear: both; }
 @media (min-width: 1260px)  and (max-width: 1599px) {
     .up2l, .up2r { width: 100%; }
     #page { font-size: 1.3em; }
-    .up3c:not(.frozen) { float: left; width: 48%; margin: 0 1%; }
+    .up3c:not(.frozen) { float: left; width: 48%; margin: 0 1% 2%; }
     .up3c:not(.frozen):nth-child(3n+1) { clear: none; }
     .up3c:not(.frozen):nth-child(2n+1) { clear: left; }
     .up4c3:not(.frozen) { width: 64%; }

@@ -6,7 +6,7 @@ function(t){
   var form = new t.form(document.comment_edit),
     comment_id = form.comment_id.value,
     comment = t.model.comment.get(comment_id);
-  form.text.focus();
+  // form.text.focus();
   form.addEventListener("submit", function(e) {
     if(!comment.editable()) {
       form.error.msg("Not allowed", "Only the comment owner may edit this comment");

@@ -20,51 +20,61 @@
         <section class="description color-bg">{{opts.desc}}</section>
     </div>
     {{/opts.desc}}
-    <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
+    <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
     <div>
+    <ul class="model">
     {{#item_collection}}
         {{#filter_incomplete}}
-        <div class="up3c">
-            <h4>Unassigned</h4>
-            <ul class="items incomplete">
+        <li class="hi-10 up3c result-item">
+            <a href="#{{url}}" class="hi-05">
+                <i class="icon-archive"></i>
+                <span class="name">Unassigned</span>
+            </a>
+            <ul class="items no-description incomplete">
             {{#filter_unassigned}}
             {{#each}}
-                {{>team/plan/_item-li}}
+                {{>team/item/_li}}
             {{/each}}
             {{#empty}}
                 <p class="empty color-30">None</p>
             {{/empty}}
             {{/filter_unassigned}}
             </ul>
-        </div>
-        <div class="up3c">
-            <h4>Assigned</h4>
-            <ul class="items incomplete">
+        </li>
+        <li class="hi-10 up3c result-item">
+            <a href="#{{url}}" class="hi-05">
+                <i class="icon-user-1"></i>
+                <span class="name">Assigned</span>
+            </a>
+            <ul class="items no-description incomplete">
             {{#filter_assigned}}
             {{#each}}
-                {{>team/plan/_item-li}}
+                {{>team/item/_li}}
             {{/each}}
             {{#empty}}
                 <p class="empty color-30">None</p>
             {{/empty}}
             {{/filter_assigned}}
             </ul>
-        </div>
+        </li>
         {{/filter_incomplete}}
         {{#filter_complete}}
-        <div class="up3c">
-            <h4>Complete</h4>
-            <ul class="items complete">
+        <li class="hi-10 up3c result-item">
+            <a href="#{{url}}" class="hi-05">
+                <i class="icon-check-1"></i>
+                <span class="name">Complete</span>
+            </a>
+            <ul class="items no-description incomplete">
             {{#each}}
-                {{>team/plan/_item-li}}
+                {{>team/item/_li}}
             {{/each}}
             {{#empty}}
                 <p class="empty color-30">None</p>
             {{/empty}}
             </ul>
-        </div>
+        </li>
         {{/filter_complete}}
     {{/item_collection}}
-    </div>
+    </ul>
 {{/model.plan.current}}
 </div>

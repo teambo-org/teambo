@@ -251,6 +251,15 @@ Teambo.view = (function(t){
     view.off();
   });
 
+  t.event.on('nav', function() {
+    var el = document.getElementById('skipnav');
+    if(el) {
+      if(!t.dom.isChild('right', document.activeElement) && !t.dom.isChild('left', document.activeElement)) {
+        el.focus();
+      }
+    }
+  });
+
   return view;
 
 })(Teambo);

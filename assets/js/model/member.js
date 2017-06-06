@@ -5,6 +5,9 @@ Teambo.model.member = (function(t){
     var self = this;
     t.model.apply(this, [data, model]);
     t.object.extend(this, {
+      item_collection: function() {
+        return t.model.item.collect_all().filter_member(this);
+      },
       url: function() {
         return '/'+t.team.current.id+'/member/'+self.id;
       },
@@ -50,6 +53,25 @@ Teambo.model.member = (function(t){
 
   model.getActiveId = function() {
     return model.current ? model.current.id : (t.model.item.current ? t.model.item.current.opts.member_id : null);
+  };
+
+  model.collection = function(models) {
+    t.model.collection.apply(this, [models]);
+    t.object.extend(this, {
+      filter_active: function() {
+        return this.filter(function(member) {
+          return !!member.opts.pubKey;
+        });
+      },
+      filter_inactive: function() {
+        return this.filter(function(member) {
+          return !member.opts.pubKey;
+        });
+      },
+      filter: function(fn) {
+        return new model.collection(this.models.filter(fn));
+      }
+    });
   };
 
   return model;

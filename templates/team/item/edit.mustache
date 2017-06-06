@@ -15,7 +15,7 @@
         <a href="#{{url}}/remove" data-keybind="r">Remove</a>
     </nav>
     <h1><i class="icon-archive"></i> Edit Item</h1>
-    <a name="skipnav" class="skip-nav" href="#{{url}}"></a>
+    <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
     <form id="item-edit" name="item_edit" method="POST" class="std item-form" data-item_id="{{id}}">
         <div class="up1c">
             <input id="item_name"type="text" class="text large full required min-len-2" name="name" autocomplete="off" placeholder="Item Name" value="{{opts.name}}" />

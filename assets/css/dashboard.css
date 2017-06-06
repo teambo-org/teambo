@@ -18,15 +18,15 @@
 #dashboard.loading #loader { display: block; }
 
 #dashboard .section { clear: both; }
-#dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2em; text-align: center; font-weight: normal; }
+#dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2.1em; text-align: center; font-weight: normal; }
 #dashboard .section .folder { position: relative; }
-#dashboard .progress { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
-#dashboard .progress > div { height: 2px; }
-#dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2em; overflow: hidden; position: relative; }
+#dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2.1em; overflow: hidden; position: relative; }
 #dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; display: none; }
 #dashboard .section div.totals { float: right; opacity: 0.5; font-size: 0.7em; line-height: 2.9em; padding: 0 1em; text-align: center; }
 #dashboard .section div.totals .sep { opacity: 0.5; }
 #dashboard .section > a { display: block; }
+#dashboard .progress { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
+#dashboard .progress > div { height: 2px; }
 
 #dashboard .chat:before { content: ""; position: absolute; left: -2em; top: 0; right: 0; height: 200%; }
 #dashboard .chat .inner { position: relative; height: 100%; width: 100%; }
@@ -70,7 +70,6 @@
 #dashboard .right ul.items li { list-style: none; padding: 0; line-height: 1.1em; }
 #dashboard .right ul.items li i { position: absolute; top: 0.25em; left: 0.4em; }
 #dashboard .right ul.items li a { display: block; padding: 0.25em 0.6em 0.2em 2.0em; position: relative; }
-#dashboard .right ul.items li.item-complete { display: none; }
 
 #dashboard .right .account { height: 2em; }
 #dashboard .right .account a { display: block; }
@@ -134,7 +133,7 @@
 #dashboard .main .team a { display: block; }
 #dashboard .main .team a:hover .icon-down-open-1 { opacity: 0.8; background: none; }
 
-#dashboard .main p.empty { padding: 3em 0; text-align: center; }
+#dashboard .main p.empty { padding: 2em 0; text-align: center; margin: 0; }
 
 #dashboard .main ul.model { padding: 0; }
 #dashboard .main ul.model li { list-style: none; padding: 0; }
@@ -148,10 +147,15 @@
 #dashboard .main ul.items li i { float: left; }
 #dashboard .main ul.items li span.name { margin-left: 1.7em; display: block; }
 #dashboard .main ul.items li a { display: block; padding: 0.5em; text-decoration: none; }
+#dashboard .main ul.items.no-description li p.description { display: none; }
+#dashboard .main ul.items.spaced li { margin-bottom: 0.5em; }
+#dashboard .main ul.model.spaced > li { margin-bottom: 1em; }
 
 #dashboard .main ul.model ul.items { padding: 0.5em; font-size: 0.9em; }
 #dashboard .main ul.model ul.items li span.name { margin-left: 1.6em; font-weight: 400; }
 #dashboard .main ul.model ul.items li a { padding: 0.3em 0.2em; }
+#dashboard .main ul.items li p.description { margin: 0.3em 0.4em 0.2em 2.15em; font-size: 0.8em; max-height: 4.85em; overflow: hidden; clear: both; word-break: break-word; position: relative; }
+#dashboard .main ul.model ul.items li p.description { margin: 0.3em 0.4em 0.2em 1.75em; font-size: 0.9em; }
 #dashboard .main ul.items i.plan-icon { float: right; margin-left: 0.1em; opacity: 0.5; }
 #dashboard .main ul.items i.member-icon { float: right; margin-left: 0.1em; }
 #dashboard .main ul.items .date { float: right; font-size: 0.9em; opacity: 0.5; margin-right: 0.2em; }
@@ -159,13 +163,10 @@
 #dashboard .main .folder-view p.plan { padding: 0.8em 1em 0; margin-top: 0; font-size: 0.8em; }
 #dashboard .main .folder-view span.plan { float: right; font-size: 0.8em; line-height: 1.7em; padding-right: 0.4em; }
 #dashboard .main .folder-view span.plan i { margin-top: -0.1em; margin-right: 0.2em; }
-#dashboard .main .folder-view p.description { margin: 0.3em 0.4em 0.2em 2.15em; font-size: 0.8em; max-height: 4.85em; overflow: hidden; clear: both; word-break: break-word; position: relative; }
-#dashboard .main .folder-view ul.items li { margin-bottom: 0.5em; }
-#dashboard .main .folder-view ul.items.complete li { margin-bottom: 0; }
 
 #dashboard .main .search p.description { margin-left: 2.05em; }
 
-#dashboard .main .dash #search { padding: 0; position: relative; height: 2em; margin-bottom: 1em; }
+#dashboard .main .dash #search { padding: 0; position: relative; height: 2em; }
 #dashboard .main .dash #search .img { position: absolute; left: 0; line-height: 2em; width: 2em; text-align: center; }
 #dashboard .main .dash #search #q { padding-left: 2.5em; }
 
@@ -221,7 +222,7 @@
 #dashboard .side .member.active i { opacity: 1; }
 
 #dashboard .plan-view h4 { margin-bottom: 0.5em; }
-#dashboard .plan-view p.empty { padding: 0.5em 0; margin: 0 0 0.5em; }
+#dashboard .plan-view p.empty { }
 
 #dashboard .main ul.member li span.pending { float: right; font-size: 0.9em; padding: 0 0.5em; }
 

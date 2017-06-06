@@ -2,7 +2,7 @@
 {{#result.empty}}
 <p class="empty up1c">No Results</p>
 {{/result.empty}}
-<ul class="folders">
+<ul class="model folders">
 {{#result.has_item}}
 <li class="folder hi-10 up3c result-item">
     <a href="#{{team.url}}/folders" class="hi-05">
@@ -66,7 +66,7 @@
         <div class="info">{{result.count_member}} / {{result.total_member}}</div>
         <span class="name">Members</span>
     </a>
-    <ul class="items">
+    <ul class="items member">
     {{#result.member}}
         {{>team/member/_search-li}}
     {{/result.member}}
