@@ -1,4 +1,6 @@
 (function(){
+  var elem = document.getElementById('bgcanvas');
+  var logo = document.getElementById('logo');
   var animationFrame;
   var deg_to_rad = Math.PI / 180.0;
   var depth_start = 7;
@@ -9,12 +11,18 @@
   var twist = 180;
   var a_curl = -.15;
   var a_twist = 0;
-  var rgb;
-  var elem = document.getElementById('bgcanvas');
   var ctx = elem.getContext('2d');
-  var last = fps_tick = Date.now();
   var rgb = [];
   var running = false;
+  var rect = logo.getBoundingClientRect();
+  var start_length = logo.offsetHeight/zoom;
+  var start_x = (rect.left + rect.right)/2;
+  var start_y = rect.top + rect.height / 2;
+  var dangle = 360/n;
+  var stripes = false;
+  ctx.lineWidth = 1;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
   var reset = function() {
     depth_start = Math.min(15, depth_start);
     depth_start = Math.max(1, depth_start);
@@ -48,17 +56,7 @@
     rgb[3] = "rgba(255,255,255, 0.5)";
     elem.style.display = "block";
     window.cancelAnimationFrame(animationFrame);
-  }
-  var logo = document.getElementById('logo');
-  var rect = logo.getBoundingClientRect();
-  var start_length = logo.offsetHeight/zoom;
-  var start_x = (rect.left + rect.right)/2;
-  var start_y = rect.top + rect.height / 2;
-  var dangle = 360/n;
-  var stripes = false;
-  ctx.lineWidth = 1;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
+  };
   var drawFractal = function() {
     if(!rect) {
       elem.style.display = "none";
@@ -100,15 +98,18 @@
     window.cancelAnimationFrame(animationFrame);
     animationFrame = window.requestAnimationFrame(drawFractal);
   };
+  var recenter = function() {
+    rect = logo.getBoundingClientRect();
+    start_length = logo.offsetHeight/zoom;
+    start_x = (rect.left + rect.right)/2;
+    start_y = rect.top + rect.height / 2;
+  };
   window.addEventListener('resize', function(e){
     elem.width = w = window.innerWidth;
     elem.height = h = window.innerHeight;
     logo = document.getElementById('logo');
     if(logo) {
-      rect = logo.getBoundingClientRect();
-      start_length = logo.offsetHeight/zoom;
-      start_x = (rect.left + rect.right)/2;
-      start_y = rect.top + rect.height / 2;
+      recenter();
       drawFractal();
     }
   });
@@ -118,10 +119,7 @@
       ctx.rect(0,0,elem.width,elem.height);
       ctx.fillStyle="rgba(255,255,255,1)";
       ctx.fill();
-      rect = logo.getBoundingClientRect();
-      start_length = logo.offsetHeight/zoom;
-      start_x = (rect.left + rect.right)/2;
-      start_y = rect.top + rect.height / 2;
+      recenter();
       drawFractal();
     }
   });
@@ -130,10 +128,7 @@
       elem.style.display = "block";
       logo = document.getElementById('logo');
       if(logo) {
-        rect = logo.getBoundingClientRect();
-        start_length = logo.offsetHeight/zoom;
-        start_x = (rect.left + rect.right)/2;
-        start_y = rect.top + rect.height / 2;
+        recenter();
       } else {
         rect = null;
       }
