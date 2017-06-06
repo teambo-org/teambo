@@ -175,8 +175,8 @@ form.filter { clear: both; }
 
 /* < 1000 */
 @media (max-width: 1025px) {
-    .up1c:not(.frozen) { width: 100%; margin: 0 0 2%; }
-    .up3c:not(.frozen) { float: left; width: 100%; margin: 0 0 2%; font-size: 1em; }
+    .up1c:not(.frozen) { width: 98%; margin: 0 1% 2%; }
+    .up3c:not(.frozen) { float: left; width: 98%; margin: 0 1% 2%; font-size: 1em; }
     .up4c3:not(.frozen) { width: 98%; }
     .up4c3b:not(.frozen) { width: 98%; }
     h1 { font-size: 1.4em }
@@ -194,8 +194,8 @@ form.filter { clear: both; }
 /* 1024 */
 @media (min-width: 1025px) and (max-width: 1259px) {
     #page { font-size: 1.2em; }
-    .up1c:not(.frozen) { width: 100%; margin: 0 0 2%; }
-    .up3c:not(.frozen) { float: left; width: 100%; margin: 0 0 2%; }
+    .up1c:not(.frozen) { width: 98%; margin: 0 1% 2%; }
+    .up3c:not(.frozen) { float: left; width: 98%; margin: 0 1% 2%; }
     .up4c3:not(.frozen) { width: 98%; }
     .up4c3b:not(.frozen) { width: 98%; }
 }

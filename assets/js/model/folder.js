@@ -55,7 +55,7 @@ Teambo.model.folder = (function(t){
     id: "(none)",
     opts: {
       name: "(none)",
-      description: "These items to not belong to an existing folder"
+      description: "These items do not belong to an existing folder"
     }
   });
 

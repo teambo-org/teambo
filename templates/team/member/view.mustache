@@ -1,7 +1,6 @@
 <div class="member-view" require-model="member" id="member-view">
 {{#model.member.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}" class="active">Team</a>
         <a href="#{{team.url}}/members" class="active" data-keybind="q escape `">Members</a>
         <span class="active">Member</span>
     </nav>
@@ -21,69 +20,73 @@
     <div class="up1c upshort">
         <h4>Assigned</h4>
     </div>
-    <div class="up1c upshort">
-        <ul class="model plans">
-            {{#filter_incomplete_member_items}}
+    {{#filter_incomplete_member_items}}
+    {{^empty}}
+    <ul class="model plans">
+        {{#each}}
+        <li class="plan hi-10 up3c" id="plan-li-{{id}}">
+            <a href="#{{url}}" class="hi-05">
+                <i class="icon-{{icon}}"></i>
+                <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
+                <span class="name">{{opts.name}}</span>
+                <div class="progress hi-15" data-progress="{{progress}}"></div>
+            </a>
+            <ul class="items">
+            {{#item_collection}}
+            {{#filter_member_current}}
+            {{#filter_incomplete}}
             {{#each}}
-            <li class="plan hi-10 up3c" id="plan-li-{{id}}">
-                <a href="#{{url}}" class="hi-05">
-                    <i class="icon-{{icon}}"></i>
-                    <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
-                    <span class="name">{{opts.name}}</span>
-                    <div class="progress hi-15" data-progress="{{progress}}"></div>
-                </a>
-                <ul class="items">
-                {{#item_collection}}
-                {{#filter_member_current}}
-                {{#filter_incomplete}}
-                {{#each}}
-                    {{>team/item/_li}}
-                {{/each}}
-                {{/filter_incomplete}}
-                {{/filter_member_current}}
-                {{/item_collection}}
-                </ul>
-            </li>
+                {{>team/item/_li}}
             {{/each}}
-            {{#empty}}
-            <p class="empty hi-05">No assigned items</p>
-            {{/empty}}
-            {{/filter_incomplete_member_items}}
-        </ul>
+            {{/filter_incomplete}}
+            {{/filter_member_current}}
+            {{/item_collection}}
+            </ul>
+        </li>
+        {{/each}}
+    </ul>
+    {{/empty}}
+    {{#empty}}
+    <div class="up1c upshort">
+        <p class="empty hi-05">No assigned items</p>
     </div>
+    {{/empty}}
+    {{/filter_incomplete_member_items}}
     <div class="up1c upshort">
         <h4>Complete</h4>
     </div>
-    <div class="up1c upshort">
-        <ul class="model plans">
-            {{#filter_complete_member_items}}
+    {{#filter_complete_member_items}}
+    {{^empty}}
+    <ul class="model plans">
+        {{#each}}
+        <li class="plan hi-10 up3c" id="plan-li-{{id}}">
+            <a href="#{{url}}" class="hi-05">
+                <i class="icon-{{icon}}"></i>
+                <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
+                <span class="name">{{opts.name}}</span>
+                <div class="progress hi-15" data-progress="{{progress}}"></div>
+            </a>
+            <ul class="items">
+            {{#item_collection}}
+            {{#filter_member_current}}
+            {{#filter_complete}}
             {{#each}}
-            <li class="plan hi-10 up3c" id="plan-li-{{id}}">
-                <a href="#{{url}}" class="hi-05">
-                    <i class="icon-{{icon}}"></i>
-                    <div class="info">{{item_count_incomplete}} / {{item_count}}</div>
-                    <span class="name">{{opts.name}}</span>
-                    <div class="progress hi-15" data-progress="{{progress}}"></div>
-                </a>
-                <ul class="items">
-                {{#item_collection}}
-                {{#filter_member_current}}
-                {{#filter_complete}}
-                {{#each}}
-                    {{>team/item/_li}}
-                {{/each}}
-                {{/filter_complete}}
-                {{/filter_member_current}}
-                {{/item_collection}}
-                </ul>
-            </li>
+                {{>team/item/_li}}
             {{/each}}
-            {{#empty}}
-            <p class="empty hi-05">No completed items</p>
-            {{/empty}}
-            {{/filter_complete_member_items}}
-        </ul>
+            {{/filter_complete}}
+            {{/filter_member_current}}
+            {{/item_collection}}
+            </ul>
+        </li>
+        {{/each}}
+    </ul>
+    {{/empty}}
+    {{#empty}}
+    <div class="up1c upshort">
+        <p class="empty hi-05">No completed items</p>
     </div>
+    {{/empty}}
+    {{/filter_complete_member_items}}
     {{/model.plan.collect_all}}
 {{/model.member.current}}
 </div>
