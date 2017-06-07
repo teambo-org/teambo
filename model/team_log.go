@@ -6,7 +6,7 @@ import (
 )
 
 func TeamLogSince(team_id string, ts string) (ret []string, err error) {
-	team_db, err := TeamDBCache.Find(team_id)
+	team_db, err := TeamDBPool.Find(team_id)
 	if err != nil {
 		return ret, err
 	}
@@ -26,7 +26,7 @@ func TeamLogSince(team_id string, ts string) (ret []string, err error) {
 
 func TeamLogCount(team_id string, ts string) (total int64) {
 	total = 0
-	team_db, err := TeamDBCache.Find(team_id)
+	team_db, err := TeamDBPool.Find(team_id)
 	if err != nil {
 		return total
 	}

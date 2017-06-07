@@ -13,7 +13,7 @@ type Team struct {
 }
 
 func (t Team) Save() (err error) {
-	team_db, err := TeamDBCache.Find(t.Id)
+	team_db, err := TeamDBPool.Find(t.Id)
 	if err == nil {
 		err = team_db.Put("settings-team", t.Ciphertext)
 	}
@@ -21,7 +21,7 @@ func (t Team) Save() (err error) {
 }
 
 func (t Team) Remove() (err error) {
-	TeamDBCache.Expire(t.Id)
+	TeamDBPool.Expire(t.Id)
 	err = db_team_delete(t.Id)
 	if err != nil {
 		log.Println(err)
@@ -93,7 +93,7 @@ func (t Team) InviteResponseFind(ikey string) (inviteResponse TeamObject, err er
 }
 
 func (t Team) Log(iv string) (item string, err error) {
-	team_db, err := TeamDBCache.Find(t.Id)
+	team_db, err := TeamDBPool.Find(t.Id)
 	if err != nil {
 		return item, err
 	}
@@ -117,7 +117,7 @@ func NewTeam() Team {
 }
 
 func FindTeam(id string) (item Team, err error) {
-	team_db, err := TeamDBCache.Find(id)
+	team_db, err := TeamDBPool.Find(id)
 	if err != nil {
 		return item, err
 	}

@@ -14,7 +14,7 @@ type TeamObject struct {
 }
 
 func (o TeamObject) Save() (err error) {
-	team_db, err := TeamDBCache.Find(o.TeamId)
+	team_db, err := TeamDBPool.Find(o.TeamId)
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func (o TeamObject) Save() (err error) {
 }
 
 func (o TeamObject) Remove() (err error) {
-	team_db, err := TeamDBCache.Find(o.TeamId)
+	team_db, err := TeamDBPool.Find(o.TeamId)
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,7 @@ func (o TeamObject) Remove() (err error) {
 }
 
 func (o TeamObject) Log(iv string) (log string, err error) {
-	team_db, err := TeamDBCache.Find(o.TeamId)
+	team_db, err := TeamDBPool.Find(o.TeamId)
 	if err != nil {
 		return log, err
 	}

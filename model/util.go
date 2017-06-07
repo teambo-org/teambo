@@ -31,7 +31,7 @@ func GlobalInit() (err error) {
 	if err != nil {
 		return err
 	}
-	TeamDBCache.Init()
+	TeamDBPool.Init()
 	return nil
 }
 
@@ -40,7 +40,7 @@ func CloseAll() (err error) {
 	db_invite.Close()
 	db_throttle.Close()
 	db_newsletter.Close()
-	TeamDBCache.CloseAll()
+	TeamDBPool.CloseAll()
 	return err
 }
 
@@ -64,8 +64,15 @@ func PurgeExpired(db driver.DB, prefix string) (ids []string, err error) {
 	return ids, err
 }
 
-func db_team_open(team_id string) (driver.DB, error) {
-	return driver.OpenLevelDB(util.Config("app.data") + "/teams/" + team_id + ".ldb")
+func db_open_existing(path string) (db driver.DB, err error) {
+	if _, err := os.Stat(path); err == nil {
+		db, err = driver.OpenLevelDB(path)
+	}
+	return db, err
+}
+
+func db_team_open(team_id string) (db driver.DB, err error) {
+	return db_open_existing(util.Config("app.data") + "/teams/" + team_id + ".ldb")
 }
 
 func db_team_delete(team_id string) error {

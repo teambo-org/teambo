@@ -25,7 +25,7 @@ func (ti *teamIntegrity) Init() (err error) {
 	ti.mutex.Lock()
 	defer ti.mutex.Unlock()
 	ti.bucket_names = map[string]bool{}
-	team_db, err := TeamDBCache.Find(ti.TeamId)
+	team_db, err := TeamDBPool.Find(ti.TeamId)
 	if err != nil {
 		return err
 	}

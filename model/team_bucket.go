@@ -26,7 +26,7 @@ func (tb TeamBucket) NewObject(id string) TeamObject {
 }
 
 func (tb TeamBucket) Find(id string) (o TeamObject, err error) {
-	team_db, err := TeamDBCache.Find(tb.TeamId)
+	team_db, err := TeamDBPool.Find(tb.TeamId)
 	if err != nil {
 		return o, err
 	}
@@ -38,7 +38,7 @@ func (tb TeamBucket) Find(id string) (o TeamObject, err error) {
 }
 
 func (tb TeamBucket) All() (o []TeamObject, err error) {
-	team_db, err := TeamDBCache.Find(tb.TeamId)
+	team_db, err := TeamDBPool.Find(tb.TeamId)
 	if err != nil {
 		return o, err
 	}
@@ -56,7 +56,7 @@ func (tb TeamBucket) All() (o []TeamObject, err error) {
 }
 
 func (tb TeamBucket) Exists(id string) (exists bool, err error) {
-	team_db, err := TeamDBCache.Find(tb.TeamId)
+	team_db, err := TeamDBPool.Find(tb.TeamId)
 	if err != nil {
 		return exists, err
 	}
@@ -64,7 +64,7 @@ func (tb TeamBucket) Exists(id string) (exists bool, err error) {
 }
 
 func (tb TeamBucket) RemoveByValue(val string) (err error) {
-	team_db, err := TeamDBCache.Find(tb.TeamId)
+	team_db, err := TeamDBPool.Find(tb.TeamId)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (tb TeamBucket) RemoveByValue(val string) (err error) {
 
 func (tb TeamBucket) Count() (total int) {
 	total = 0
-	team_db, err := TeamDBCache.Find(tb.TeamId)
+	team_db, err := TeamDBPool.Find(tb.TeamId)
 	if err != nil {
 		return total
 	}
