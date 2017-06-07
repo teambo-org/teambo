@@ -76,7 +76,7 @@ Teambo.view.calendar = (function(t){
       calendar.style.left = (el.offsetLeft + el.offsetParent.offsetLeft + el.offsetWidth + 10) + 'px';
       calendar.style.top = (el.offsetTop + el.offsetParent.offsetTop - el.offsetParent.scrollTop) + 'px';
     };
-    interval = setInterval(position, 500);
+    interval = setInterval(position, 100);
     position();
   };
 
@@ -88,6 +88,9 @@ Teambo.view.calendar = (function(t){
   };
 
   calendar.addEventListener('mousedown', function(e) {
+    if(e.which !== 1) {
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     if(e.target.parentNode.classList.contains('nav')) {
@@ -97,10 +100,10 @@ Teambo.view.calendar = (function(t){
       var d = e.target.dataset.date;
       active_el.value = d;
       active = d;
-      update(new Date(d));
+      update(new Date(d + ' 00:00'));
     }
   });
-  
+
   calendar.init = function(id) {
     var el = document.getElementById(id);
     if(!el) return;
@@ -118,7 +121,7 @@ Teambo.view.calendar = (function(t){
   t.event.on('pre-nav', function() {
     calendar.hide();
   });
-  
+
   document.body.appendChild(calendar);
 
   return calendar;
