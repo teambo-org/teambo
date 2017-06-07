@@ -31,8 +31,17 @@ func (t Team) Remove() (err error) {
 }
 
 func (t Team) NewMemberKey() TeamObject {
-	member_keys := TeamBucket{t.Id, "member_key"}
-	return member_keys.NewObject("")
+	member_key := TeamBucket{t.Id, "member_key"}
+	id := util.RandStr(16)
+	for {
+		exists, _ := member_key.Exists(id)
+		if exists {
+			id = util.RandStr(16)
+		} else {
+			break
+		}
+	}
+	return TeamObject{t.Id, "member_key", id, "new"}
 }
 
 func (t Team) NewMember() TeamObject {
