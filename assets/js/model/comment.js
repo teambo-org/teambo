@@ -32,10 +32,10 @@ Teambo.model.comment = (function(t){
   model.type = 'comment';
 
   model.schema = new t.schema({
+    member_id: { type: 'string', required: true, minLength: 8, maxLength: 8 },
     pid:       { type: 'string', required: true, minLength: 8, maxLength: 8 },
     ptype:     { type: 'string', required: true },
-    text:      { type: 'string', required: true, searchable: true },
-    member_id: { type: 'string', required: true, minLength: 8, maxLength: 8 }
+    text:      { type: 'text', required: true, searchable: true }
   });
 
   t.model._extend(model);

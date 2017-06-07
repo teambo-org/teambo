@@ -22,6 +22,8 @@ a:hover, a:active { text-decoration: underline; }
 .scrollable::-webkit-scrollbar-track { }
 .scrollable::-webkit-scrollbar-thumb {  }
 
+.invisible { visibility: hidden; }
+
 #bgcanvas { position: fixed; z-index: 0; top: 0; left: 0; }
 #page { z-index: 1; position: relative; }
 .bg { z-index: 0; }

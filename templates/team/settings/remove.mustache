@@ -1,12 +1,12 @@
 <div class="team-remove">
 {{#team}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}">Team</a>
-        <span>Delete</span>
+        <a href="#{{team.url}}/settings" data-keybind="Q" data-keybind-alt="escape" title="Team Settings"><i class="icon-cog"></i></a>
+        <span title="Delete Team"><i class="icon-trash"></i></span>
     </nav>
     <h1><i class="icon-attention"></i> Delete Team</h1>
     <form id="team-remove" name="team_remove" method="POST" class="std ext remove">
-        <p>Are you sure you want to delete this team?</p>
+        <p class="email">Are you sure you want to delete this team?</p>
         <div class="field">
             <h4>{{team.opts.name}}</h4>
         </div>

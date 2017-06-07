@@ -1,14 +1,20 @@
 <div class="member-remove" require-model="member">
 {{#model.member.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}">Team</a>
-        <a href="#{{url}}">Member</a>
-        <span>Remove</span>
+        <a href="#{{team.url}}/members" title="Members"><i class="icon-users"></i></a>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape" title="Member"><i class="{{icon}}"></i></a>
+        <span title="Remove Member"><i class="icon-user-remove"></i></span>
     </nav>
-    <h1><i class="{{icon}}"></i> {{opts.name}}</h1>
-    <form id="remove" name="remove" method="POST" class="std ext remove">
+    <h1><i class="icon-user-remove"></i> Remove Member</h1>
+    <a id="skipnav" class="skip-nav" href="#{{url}}/remove"></a>
+    <form id="remove" name="remove" method="POST" class="std ext remove short">
         <input type="hidden" class="hidden" name="member_id" value="{{id}}"/>
-        <p>Are you sure you want to remove this member?</p>
+        <div class="field">
+            <p class="email hi-10"><i class="{{icon}}"></i> {{opts.name}}</p>
+        </div>
+        <div class="field">
+            <p>Are you sure you want to remove this member?</p>
+        </div>
         <div class="field submit">
             <input type="submit" class="submit" id="delete_submit" value="Remove Member" />
             <br/>

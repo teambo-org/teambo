@@ -1,15 +1,15 @@
 <div class="member-index">
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
-        <span class="active">Members</span>
+        <a href="#{{team.url}}" class="invisible" data-keybind="Q" data-keybind-alt="escape"></a>
+        <span title="Members"><i class="icon-users"></i></span>
     </nav>
     <nav>
     {{#team.isAdmin}}
-        <a href="#{{team.url}}/members/new" data-keybind="c"><i class="icon-user-add"></i> New Member</a>
+        <a href="#{{team.url}}/members/new" data-keybind="C" title="New Member"><i class="icon-user-add"></i></a>
     {{/team.isAdmin}}
     </nav>
-    <h1><i class="icon-flag-filled"></i> Members</h1>
-    <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
+    <h1><i class="icon-users"></i> Members</h1>
+    <a id="skipnav" class="skip-nav" href="#{{team.url}}/members"></a>
     {{#model.member.collect_all}}
     <ul class="model member" id="members">
         {{#filter_active}}

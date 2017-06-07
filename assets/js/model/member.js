@@ -29,7 +29,8 @@ Teambo.model.member = (function(t){
       },
       canRemove: function() {
         return !self.isMe() && t.team.current.isAdmin();
-      }
+      },
+      context_member: true
     });
     if(self.opts && !self.opts.name) {
       self.opts.name = self.opts.email;

@@ -1,33 +1,36 @@
 <div class="member-new">
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}/members" data-keybind="q escape `">Members</a>
-        <span>New</span>
+        <a href="#{{team.url}}/members" data-keybind="Q" data-keybind-alt="escape" title="Members"><i class="icon-users"></i></a>
+        <span title="New Member Invite"><i class="icon-user-add"></i></span>
     </nav>
     <h1><i class="icon-user-add"></i> New Member Invite</h1>
-    <form id="member-new" name="member_new" method="POST" class="std">
-        <div class="field">
-            <label for="member_email">Member Email Address</label>
-            <input id="member_email" type="email" class="text large required min-len-1" name="member_email" autocomplete="off" placeholder="Email Address" value="" />
-        </div>
-        <div class="field">
-            <label for="member_name">Member Name</label>
-            <input id="member_name" type="text" class="text large" name="name" autocomplete="off" placeholder="(optional)" value="" />
-        </div>
-        <div class="field chk">
-            <label>Context</label>
-            <label for="include_team_name" class="chk">
-                <input id="include_team_name" type="checkbox" class="chk" name="include_team_name" checked="checked" />
-                Include team name
-            </label>
-            <label for="include_sender_details" class="chk">
-                <input id="include_sender_details" type="checkbox" class="chk" name="include_sender_details" checked="checked" />
-                Include my name and email address
-            </label>
-        </div>
-        <div class="field submit">
-            <input type="submit" class="submit" value="Send Invite" />
-            <a class="cancel" href="#{{team.url}}/members">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+    <a id="skipnav" class="skip-nav" href="#{{team.url}}/members/new"></a>
+    <div class="up1c">
+        <form id="member-new" name="member_new" method="POST" class="std">
+            <div class="field">
+                <label for="member_email">Member Email Address</label>
+                <input id="member_email" type="email" class="text large required min-len-1" name="member_email" autocomplete="off" placeholder="Email Address" value="" />
+            </div>
+            <div class="field">
+                <label for="member_name">Member Name</label>
+                <input id="member_name" type="text" class="text large" name="name" autocomplete="off" placeholder="(optional)" value="" />
+            </div>
+            <div class="field chk">
+                <label>Context</label>
+                <label for="include_team_name" class="chk">
+                    <input id="include_team_name" type="checkbox" class="chk" name="include_team_name" checked="checked" />
+                    Include team name
+                </label>
+                <label for="include_sender_details" class="chk">
+                    <input id="include_sender_details" type="checkbox" class="chk" name="include_sender_details" checked="checked" />
+                    Include my name and email address
+                </label>
+            </div>
+            <div class="field submit">
+                <input type="submit" class="submit" value="Send Invite" />
+                <a class="cancel" href="#{{team.url}}/members">cancel</a>
+            </div>
+            <div class="error"></div>
+        </form>
+    </div>
 </div>

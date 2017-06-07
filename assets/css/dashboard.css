@@ -12,16 +12,18 @@
 #dashboard.chat-collapsed .main { bottom: 2em; }
 #dashboard.chat-collapsed .chat { height: 2em; }
 
-#dashboard #loader { position: fixed; top: 1em; right: 17em; display: none; height: 2.1em; line-height: 2em; }
-#dashboard #loader i { font-size: 2.09em; opacity: 0.3; padding-bottom: 10px; }
-#dashboard #loader i:before { margin: 0; }
-#dashboard.loading #loader { display: block; }
+#dashboard [data-keybind] { position: relative; }
+#dashboard [data-keybind]:before { position : absolute; content : attr(data-keybind); opacity : 0; font-weight: 500;
+    right: 0; top: 0; bottom: 0; line-height: 2em; padding: 0 0.5em; text-align: center; min-width: 1em; font-family: monospace; }
+#dashboard [data-keybind].show-keybind:before { opacity : 1; }
+#dashboard #left [data-keybind].show-keybind:before { left: auto; }
+#dashboard #main [data-keybind].show-keybind:before { left: 0; }
 
 #dashboard .section { clear: both; }
 #dashboard .section .img { height: 2em; width: 2em; float: left; line-height: 2.1em; text-align: center; font-weight: normal; }
 #dashboard .section .folder { position: relative; }
 #dashboard .section .name { height: 2em; margin-left: 2em; padding: 0 0.5em; line-height: 2.1em; overflow: hidden; position: relative; }
-#dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2em; width: 2em; text-align: center; display: none; }
+#dashboard .section i.nav { float: right; opacity: 0.5; line-height: 2.1em; width: 2em; height: 2em; text-align: center; display: none; position: relative; z-index: 1; overflow: hidden; }
 #dashboard .section div.totals { float: right; opacity: 0.5; font-size: 0.7em; line-height: 2.9em; padding: 0 1em; text-align: center; }
 #dashboard .section div.totals .sep { opacity: 0.5; }
 #dashboard .section > a { display: block; }
@@ -82,14 +84,15 @@
 #dashboard .main .area { height: 100%; position: relative; overflow-y: scroll; padding: 0 0 1em; }
 #dashboard .main .area .content { padding: 0 1%; }
 
-#dashboard .main nav { position: absolute; top: 0; right: 0; margin: 0; padding-right: 0.5em; font-size: 0.9em; z-index: 1000; }
-#dashboard .main nav a { float: left; padding: 0 0.75em; line-height: 2.23em; position: relative; }
-#dashboard .main nav .name { display: none; }
+#dashboard .main nav { position: absolute; top: 0; right: 0; margin: 0; padding: 0; font-size: 0.9em; z-index: 1000; }
+#dashboard .main nav a,
+#dashboard .main nav span { float: left; padding: 0.223em 0.75em 0; line-height: 2em; position: relative; }
+#dashboard .main nav a:before { line-height: 2.223em; }
 #dashboard .main nav.breadcrumbs { left: 0; right: auto; font-size: 1em; }
 #dashboard .main nav.breadcrumbs a,
-#dashboard .main nav.breadcrumbs span { float: none; display: inline-block; padding: 0 1em; line-height: 2em; font-size: 1.0em; float: left; }
+#dashboard .main nav.breadcrumbs span { line-height: 2em; font-size: 1.0em; padding: 0 1em; }
 
-#dashboard .main h1 { margin: 0 -1% 2%; position: relative; padding: 1.6em 0.5em 0.5em 2em; clear: both; overflow: hidden; }
+#dashboard .main h1 { margin: 0 -1% 2%; position: relative; padding: 1.6em 0.5em 0.5em 2.15em; clear: both; overflow: hidden; }
 #dashboard .main h1 i { position: absolute; left: 0.5em; }
 #dashboard .main h1::after { display: block; position: absolute; bottom: 0; left: -2em; right: -2em; height: 6em; content: " "; }
 
@@ -116,7 +119,7 @@
 #dashboard .main section.comments form .field { padding: 0.5em 0 0; }
 #dashboard .main section.comments form textarea.text { border: none; width: 100%; padding: 0.5em;
     -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
-#dashboard .comment-edit form .section { margin: -2em 0 1em; }
+#dashboard .comment-edit form textarea { font-size: 0.9em; }
 #dashboard .comment-edit form .section span.date { display: block; padding-right: 0.3em; font-size: 0.9em; opacity: 0.7; float: right; min-width: 10em; text-align: right; }
 
 #dashboard .main section.tags .child { font-size: 0.9em; }
@@ -197,6 +200,8 @@
 #dashboard .main form.filter select { margin-right: 0.5em; }
 #dashboard .main form.filter.default-options a.clear { display: none; }
 #dashboard .main form.item-form { padding-top: 1.5em; }
+#dashboard .main form.std p.email { padding: 1em 0; }
+#dashboard .main form.std.short { padding-top: 0; }
 
 #dashboard .left .section { font-size: 1em; }
 #dashboard .left a.nav-section { font-weight: 500; }

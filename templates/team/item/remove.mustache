@@ -1,14 +1,15 @@
 <div class="item-remove" require-model="item">
 {{#model.item.current}}
     <nav class="breadcrumbs">
+        <a href="#{{team.url}}/planning" class="hi-20" title="Planning"><i class="icon-calendar-check-o"></i></a>
         {{#model.plan.current}}
-        <a href="#{{url}}" data-keybind="q escape `">Plan</a>
+        <a href="#{{url}}" title="Plan"><i class="icon-{{icon}}"></i></a>
         {{/model.plan.current}}
         {{^model.plan.current}}
-        <a href="#{{#folder}}{{url}}{{/folder}}" data-keybind="q escape `">Folder</a>
+        {{#folder}}<a href="#{{url}}"><i class="icon-{{icon}}"></i></a>{{/folder}}
         {{/model.plan.current}}
-        <a href="#{{url}}" data-keybind="q escape `">Item</a>
-        <span>Remove</span>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape" title="Item"><i class="icon-{{icon}}"></i></a>
+        <span title="Remove Item"><i class="icon-trash"></i></span>
     </nav>
     <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
     <form id="item-remove" name="item_remove" method="POST" class="std ext remove">

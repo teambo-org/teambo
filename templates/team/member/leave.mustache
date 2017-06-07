@@ -1,19 +1,23 @@
 <div class="member-remove" require-model="member">
 {{#model.member.current}}
     <nav class="breadcrumbs">
-        <a href="#{{url}}">Member</a>
-        <span>Leave</span>
+        <a href="#{{team.url}}/members" title="Members"><i class="icon-users"></i></a>
+        <a href="#{{url}}/edit" data-keybind="Q" data-keybind-alt="escape" title="Member"><i class="{{icon}}"></i></a>
+        <span title="Leave Team"><i class="icon-user-remove"></i></span>
     </nav>
-    <h1><i class="{{icon}}"></i> {{opts.name}}</h1>
-    <form id="remove" name="remove" method="POST" class="std ext remove">
-        <input type="hidden" class="hidden" name="member_id" value="{{id}}"/>
-        <p>Are you sure you want to leave this team?</p>
-        <div class="field submit">
-            <input type="submit" class="submit" id="delete_submit" value="Leave Team" />
-            <br/>
-            <a class="cancel" href="#{{url}}">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+    <h1><i class="icon-user-remove"></i> Leave Team</h1>
+    <a id="skipnav" class="skip-nav" href="#{{url}}/leave"></a>
+    <div class="up1c">
+        <form id="remove" name="remove" method="POST" class="std ext remove">
+            <input type="hidden" class="hidden" name="member_id" value="{{id}}"/>
+            <p>Are you sure you want to leave this team?</p>
+            <div class="field submit">
+                <input type="submit" class="submit" id="delete_submit" value="Leave Team" />
+                <br/>
+                <a class="cancel" href="#{{url}}/edit">cancel</a>
+            </div>
+            <div class="error"></div>
+        </form>
+    </div>
 {{/model.member.current}}
 </div>

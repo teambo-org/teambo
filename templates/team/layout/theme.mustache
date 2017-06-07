@@ -32,7 +32,7 @@
 #dashboard .main a:hover,
 #dashboard .main .active a { color: rgba({{main.color}}, 0.9); }
 #dashboard .main h1 { color: rgba({{main.color}},0.9); }
-#dashboard .main h1::after { box-shadow: inset 0 0 1em rgba({{main.hi}}, 0.1); }
+#dashboard .main h1::after { box-shadow: inset -0.3em 0 1em rgba({{main.hi}}, 0.1); }
 #dashboard .main .bg-40 { background: rgba({{main.bg}}, 0.40); }
 #dashboard .main .bg { background: rgba({{main.bg}}, 1); }
 #dashboard .main .hi { box-shadow: 0 0 3em rgba({{main.hi}}, 0.1); outline: 1px solid rgba(0,255,255, 0.2); }
@@ -50,6 +50,9 @@
 #dashboard .main .color-70 { color: rgba({{main.color}}, 0.7); }
 #dashboard .main .color-50 { color: rgba({{main.color}}, 0.5); }
 #dashboard .main .color-30 { color: rgba({{main.color}}, 0.3); }
+
+#dashboard .main [data-keybind]:before { background: rgba({{main.bg}}, 1); box-shadow: inset 0 1em 0.5em rgba({{main.hi}}, 0.1); }
+#dashboard .right [data-keybind]:before { background: rgba({{right.bg}}, 1); box-shadow: inset 0 1em 0.5em rgba({{right.hi}}, 0.1); }
 
 #dashboard .main section { background: rgba({{main.hi}},0.05); }
 #dashboard .main form.ext.std,
@@ -97,8 +100,11 @@
 #dashboard .main .left a:focus { background: rgba({{main.hi}}, 0.05); }
 #dashboard .main .nav #status { box-shadow: 0 0 1em rgba({{main.bg}},1); }
 
-#dashboard .breadcrumbs a { background: rgba({{main.hi}}, 0.15); }
+#dashboard .breadcrumbs a { background: rgba({{main.hi}}, 0.10); }
+#dashboard .breadcrumbs a:nth-child(1) { background: rgba({{main.hi}}, 0.20); }
+#dashboard .breadcrumbs a:nth-child(2) { background: rgba({{main.hi}}, 0.15); }
 #dashboard .breadcrumbs span { background: rgba({{main.hi}}, 0.10); }
+#dashboard .breadcrumbs span:nth-child(4) { background: rgba({{main.hi}}, 0.05); }
 
 #dashboard .chat { color: rgba({{chat.color}}, 0.7); background: rgba({{chat.bg}},1); }
 #dashboard .chat:before { box-shadow: inset 1em 1em 2em rgba({{chat.hi}}, 0.05); }
@@ -140,8 +146,8 @@
 
 #date_selector { background: rgba({{main.bg}}, 1); color: rgba({{main.color}}, 0.7); }
 #date_selector a { color: rgba({{main.color}}, 0.8); }
+#date_selector a.today { color: rgba({{main.color}}, 0.9); background: rgba({{main.hi}}, 0.0); }
 #date_selector a.active { color: rgba({{main.color}}, 0.9); background: rgba({{main.hi}}, 0.15); }
-#date_selector a.today { color: rgba({{main.color}}, 0.9); background: rgba({{main.color}}, 0.1); }
 #date_selector a:hover { color: rgba({{main.color}}, 0.9); background: rgba({{main.hi}}, 0.15); text-decoration: none; }
 #date_selector .hi-05 { background: rgba({{main.hi}}, 0.05); }
 #date_selector .hi-10 { background: rgba({{main.hi}}, 0.10); }

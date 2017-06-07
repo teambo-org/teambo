@@ -4,7 +4,6 @@ function(t){
   t.app.editing = true;
 
   var form = new t.form(document.folder_new);
-  form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'description']);

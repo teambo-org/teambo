@@ -34,7 +34,8 @@ Teambo.model.plan = (function(t){
       active: function() {
         return ((model.current && model.current.id == self.id)
             || (t.model.item.current && t.model.item.current.opts.plan_id == self.id)) ? 'active' : '';
-      }
+      },
+      context_plan: true
     });
   };
 

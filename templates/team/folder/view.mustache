@@ -1,14 +1,14 @@
 <div class="folder-view" require-model="folder">
 {{#model.folder.current}}
-    <nav class="breadcrumbs">
-        <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
-        <span class="active">Folder</span>
+    <nav class="breadcrumbs icon-nav">
+        <a href="#{{team.url}}/folders" data-keybind="Q" data-keybind-alt="escape" title="Items"><i class="icon-archive"></i></a>
+        <span class="active"><i class="icon-{{icon}}"></i></span>
     </nav>
-    <nav>
+    <nav class="icon-nav">
     {{^fake}}
-        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
+        <a href="#{{url}}/edit" data-keybind="E" title="Edit Folder"><i class="icon-pencil"></i></a>
     {{/fake}}
-        <a href="#{{url}}/new" data-keybind="c">Create Item</a>
+        <a href="#{{url}}/new" data-keybind="N" title="New Item"><i class="icon-plus-1"></i></a>
     </nav>
     <h1><i class="icon-folder-open"></i> {{opts.name}}</h1>
     {{#opts.description}}

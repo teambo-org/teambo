@@ -1,11 +1,11 @@
 <div class="folder-index" id="folder-index">
-    <nav class="breadcrumbs">
-        <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
-        <span class="active">Items</span>
+    <nav class="breadcrumbs icon-nav">
+        <a href="#{{team.url}}" class="invisible" data-keybind="Q" data-keybind-alt="escape"></a>
+        <span class="active" title="Items"><i class="icon-archive"></i></span>
     </nav>
-    <nav>
-        <a href="#{{team.url}}/new" data-keybind="c">Create Folder</a>
-        <a href="#{{team.url}}/item/new" data-keybind="n">New Item</a>
+    <nav class="icon-nav">
+        <a href="#{{team.url}}/new" data-keybind="N" title="New Folder"><i class="icon-folder-add"></i></a>
+        <a href="#{{team.url}}/item/new" data-keybind="C" title="Create Item"><i class="icon-plus-1"></i></a>
     </nav>
     <h1><div class="img"><i class="icon-archive"></i></div> Items</h1>
     <div class="up1c">

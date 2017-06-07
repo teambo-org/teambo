@@ -1,31 +1,33 @@
 <div class="folder-edit" require-model="folder">
 {{#model.folder.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}">Team</a>
-        <a href="#{{url}}" data-keybind="q escape `">Folder</a>
-        <span>Edit</span>
+        <a href="#{{team.url}}/folders" title="Items"><i class="icon-archive"></i></a>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape"><i class="icon-folder"></i></a>
+        <span title="Edit Folder"><i class="icon-pencil"></i></span>
     </nav>
     <nav>
     {{^fake}}
-        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+        <a href="#{{url}}/remove" data-keybind="R" title="Remove Folder"><i class="icon-trash"></i></a>
     {{/fake}}
     </nav>
     <h1><i class="icon-folder-open"></i> {{opts.name}}</h1>
     <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
-    <form id="folder-edit" name="folder_edit" method="POST" class="std" data-folder_id="{{id}}">
-        <div class="field">
-            <label for="folder_name">Name</label>
-            <input id="folder_name" type="text" class="text required large min-len-2" name="name" autocomplete="off" placeholder="Folder Name" value="{{opts.name}}" />
-        </div>
-        <div class="field">
-            <label for="folder_description">Description</label>
-            <textarea id="folder_description" class="text large" name="description">{{opts.description}}</textarea>
-        </div>
-        <div class="field submit">
-            <input type="submit" class="submit" value="Save" />
-            <a class="cancel" href="#{{url}}">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+    <div class="up1c">
+        <form id="folder-edit" name="folder_edit" method="POST" class="std" data-folder_id="{{id}}">
+            <div class="field">
+                <label for="folder_name">Name</label>
+                <input id="folder_name" type="text" class="text required large min-len-2" name="name" autocomplete="off" placeholder="Folder Name" value="{{opts.name}}" />
+            </div>
+            <div class="field">
+                <label for="folder_description">Description</label>
+                <textarea id="folder_description" class="text large" name="description">{{opts.description}}</textarea>
+            </div>
+            <div class="field submit">
+                <input type="submit" class="submit" value="Save" />
+                <a class="cancel" href="#{{url}}">cancel</a>
+            </div>
+            <div class="error"></div>
+        </form>
+    </div>
 {{/model.folder.current}}
 </div>

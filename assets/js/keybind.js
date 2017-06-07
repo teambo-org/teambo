@@ -1,12 +1,25 @@
 (function(t){
   "use strict";
 
+  var isFormFocus = function(e) {
+    return (['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit')));
+  }
+
+  var showing_keybind = false;
+
   document.addEventListener("keydown", function(e) {
     var key = e.key === " " ? "spacebar" : e.key.toLowerCase();
     if((e.ctrlKey && key === 's') || (e.ctrlKey && key === 'enter')) {
       return submitParentForm(e);
     }
-    if((['SELECT', 'TEXTAREA'].indexOf(e.target.nodeName) >= 0 || (e.target.nodeName === "INPUT" && !e.target.classList.contains('submit'))) && key !== "escape") {
+    if(isFormFocus(e)) {
+      if(key != "escape") {
+        return;
+      }
+    }
+    if(e.shiftKey && !showing_keybind) {
+      showing_keybind = true;
+      [].forEach.call(document.querySelectorAll("[data-keybind]"), function(el) {el.classList.add('show-keybind')});
       return;
     }
     if(e.ctrlKey && key === 'q') {
@@ -45,9 +58,17 @@
       e.preventDefault();
       return document.activeElement.click();
     }
-    var keybind = document.querySelectorAll('a[data-keybind~="'+key+'"]');
+    var keybind = document.querySelectorAll('a[data-keybind~="'+key+'"], a[data-keybind-alt~="'+key+'"], a[data-keybind~="'+key.toUpperCase()+'"], a[data-keybind-alt~="'+key.toUpperCase()+'"]');
     if(keybind.length) {
       return keybind[0].click();
+    }
+  }, false);
+
+  document.addEventListener("keyup", function(e) {
+    if(showing_keybind) {
+      showing_keybind = false;
+      [].forEach.call(document.querySelectorAll("[data-keybind]"), function(el) {el.classList.remove('show-keybind')});
+      return;
     }
   }, false);
 

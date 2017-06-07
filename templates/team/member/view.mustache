@@ -1,12 +1,12 @@
 <div class="member-view" require-model="member" id="member-view">
 {{#model.member.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}/members" class="active" data-keybind="q escape `">Members</a>
-        <span class="active">Member</span>
+        <a href="#{{team.url}}/members" data-keybind="Q" data-keybind-alt="escape" title="Members"><i class="icon-users"></i></a>
+        <span title="Member"><i class="{{icon}}"></i></span>
     </nav>
     <nav>
     {{#editable}}
-        <a href="#{{url}}/edit" data-keybind="e">Edit Member</a>
+        <a href="#{{url}}/edit" data-keybind="E" title="Edit Member"><i class="icon-pencil"></i></a>
     {{/editable}}
     </nav>
     <h1><i class="{{icon}}"></i> {{opts.name}} <span class="sub">{{opts.email}}</span></h1>

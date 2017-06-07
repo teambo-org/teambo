@@ -1,13 +1,14 @@
 <div class="search">
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}" class="active" data-keybind="q escape `">Team</a>
-        <span class="active">Search</span>
+        <a href="#{{team.url}}" class="invisible" data-keybind="Q" data-keybind-alt="escape"></a>
+        <span title="Search"><i class="icon-flashlight"></i></span>
     </nav>
     <h1><i class="icon-flashlight"></i> Search</h1>
+    <a id="skipnav" class="skip-nav" href="#{{team.url}}/search"></a>
     <div class="up1c">
         <form id="search" name="search" method="GET" class="std" data-q="{{q}}">
             <div class="field">
-                <input id="q" type="text" class="text required min-len-2" name="q" value="{{q}}" autocomplete="off" placeholder="Query" />
+                <input id="q" type="text" class="text required min-len-2" name="q" value="{{q}}" placeholder="Query" />
             </div>
             <div class="field">
                 <input type="submit" class="submit" value="Search" />

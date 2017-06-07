@@ -1,8 +1,9 @@
 <div class="plan-remove" require-model="plan">
 {{#model.plan.current}}
     <nav class="breadcrumbs">
-        <a href="#{{url}}" data-keybind="q escape `">Plan</a>
-        <span>Remove</span>
+        <a href="#{{team.url}}/plan" title="Planning"><i class="icon-calendar-check-o"></i></a>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape" title="Plan"><i class="icon-flag-1"></i></a>
+        <span title="Remove Plan"><i class="icon-trash"></i></span>
     </nav>
     <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
     <form id="plan-remove" name="plan_remove" method="POST" class="std ext remove">

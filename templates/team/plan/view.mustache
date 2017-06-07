@@ -1,12 +1,12 @@
 <div class="plan-view folder-view" require-model="plan">
 {{#model.plan.current}}
-    <nav class="breadcrumbs">
-        <a href="#{{team.url}}/plan" data-keybind="q escape `">Plans</a>
-        <span class="active">Plan</span>
+    <nav class="breadcrumbs icon-nav">
+        <a href="#{{team.url}}/plan" data-keybind="Q" data-keybind-alt="escape" title="Planning"><i class="icon-calendar-check-o"></i></a>
+        <span class="active" title="Plan"><i class="icon-flag-1"></i></span>
     </nav>
     <nav>
-        <a href="#{{url}}/edit" data-keybind="e">Edit</a>
-        <a href="#{{url}}/new" data-keybind="c">Create Item</a>
+        <a href="#{{url}}/edit" data-keybind="E" title="Edit Plan"><i class="icon-pencil"></i></a>
+        <a href="#{{url}}/new" data-keybind="C" title="Create Item"><i class="icon-plus-1"></i></a>
     </nav>
     <h1><i class="icon-{{icon}}"></i> {{opts.name}} <span class="sub">{{item_count_incomplete}} / {{item_count}}</span></h1>
     {{#opts.start}}

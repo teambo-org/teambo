@@ -1,31 +1,34 @@
 <div class="comment-edit" require-model="comment">
 {{#model.comment.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}">Team</a>
-        <a href="#{{#parentModel}}{{url}}{{/parentModel}}" data-keybind="q escape `">Comment</a>
-        <span>Edit</span>
+        {{#parentModel}}
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape" title="Comment"><i class="icon-{{icon}}"></i></a>
+        {{/parentModel}}
+        <span title="Edit Comment"><i class="icon-comment"></i></span>
     </nav>
-    <h1>{{#parentModel}}{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}{{/parentModel}}</h1>
+    <nav>
+        <a href="#{{url}}/remove" data-keybind="R" title="Remove Comment"><i class="icon-trash"></i></a>
+    </nav>
+    <h1><i class="icon-pencil"></i> Edit Comment</h1>
     <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
-    <form id="comment_edit" name="comment_edit" method="POST" class="std ext">
-        <div class="section comments hi-05">
-            {{#member}}
-            <a>
-                <div class="img"><i class="{{icon}}"></i></div>
-                <div class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
-            </a>
-            {{/member}}
-        </div>
-        <input type="hidden" class="hidden" name="comment_id" value="{{id}}"/>
-        <div class="field">
-            <textarea id="comment_text" class="text large" name="text">{{opts.text}}</textarea>
-        </div>
-        <div class="field submit">
-            <input type="submit" class="submit" id="delete_submit" value="Save Comment" />
-            <br/>
-            <a class="cancel" href="#{{#parentModel}}{{url}}{{/parentModel}}">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+    <div class="up1c">
+        <form id="comment_edit" name="comment_edit" method="POST" class="std">
+            <div class="section comments hi-05">
+                {{#member}}
+                <a>
+                    <div class="img"><i class="{{icon}}"></i></div>
+                    <div class="name">{{opts.name}}<span class="date">{{#localTime}}{{created}}{{/localTime}}</span></div>
+                </a>
+                {{/member}}
+            </div>
+            <input type="hidden" class="hidden" name="comment_id" value="{{id}}"/>
+            <textarea id="comment_text" class="text med-tall full" name="text">{{opts.text}}</textarea>
+            <div class="field submit">
+                <input type="submit" class="submit" id="delete_submit" value="Save Comment" />
+                <a class="cancel" href="#{{#parentModel}}{{url}}{{/parentModel}}">cancel</a>
+            </div>
+            <div class="error"></div>
+        </form>
+    </div>
 {{/model.comment.current}}
 </div>

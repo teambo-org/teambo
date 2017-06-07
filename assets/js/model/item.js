@@ -23,7 +23,12 @@ Teambo.model.item = (function(t){
       url: function() {
         var item_url = '/item/' + self.id;
         var plan_url = t.model.plan.current ? '/plan/' + t.model.plan.current.id : '';
-        return '/'+t.team.current.id + plan_url + item_url;
+        return t.team.current.url() + plan_url + item_url;
+      },
+      plan_url: function() {
+        var item_url = '/item/' + self.id;
+        var plan_url = this.plan() ? '/plan/' + this.plan().id : '';
+        return t.team.current.url() + plan_url + item_url;
       },
       planned: function() {
         return !!self.plan();
@@ -48,6 +53,9 @@ Teambo.model.item = (function(t){
           }
         }
         return 0;
+      },
+      icon: function() {
+        return this.status().icon;
       }
     });
   };

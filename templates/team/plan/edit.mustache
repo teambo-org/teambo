@@ -1,39 +1,43 @@
 <div class="plan-edit" require-model="plan">
 {{#model.plan.current}}
     <nav class="breadcrumbs">
-        <a href="#{{url}}" data-keybind="q escape `">Plan</a>
-        <span>Edit</span>
+        <a href="#{{team.url}}/plan" title="Planning"><i class="icon-calendar-check-o"></i></a>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape" title="Plan"><i class="icon-flag-1"></i></a>
+        <span title="Edit Plan"><i class="icon-pencil"></i></span>
     </nav>
     <nav>
-        <a href="#{{url}}/remove" data-keybind="r">Remove</a>
+        <a href="#{{url}}/remove" data-keybind="R" title="Remove Plan"><i class="icon-trash"></i></a>
     </nav>
     <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
-    <form id="plan-edit" name="plan_edit" method="POST" class="std" data-plan_id="{{id}}">
-        <div class="up2c">
-            <div class="field">
-                <label for="plan_name">Name</label>
-                <input id="plan_name" type="text" class="text required full min-len-2" name="name" autocomplete="off" placeholder="Plan Name" value="{{opts.name}}" />
+    <a id="skipnav" class="skip-nav" href="#{{url}}/edit"></a>
+    <div class="up1c">
+        <form id="plan-edit" name="plan_edit" method="POST" class="std" data-plan_id="{{id}}">
+            <div class="up2c">
+                <div class="field">
+                    <label for="plan_name">Name</label>
+                    <input id="plan_name" type="text" class="text required full min-len-2" name="name" autocomplete="off" placeholder="Plan Name" value="{{opts.name}}" />
+                </div>
+                <div class="field">
+                    <label for="plan_desc">Description</label>
+                    <textarea id="plan_desc" class="text large full" name="desc">{{opts.desc}}</textarea>
+                </div>
             </div>
-            <div class="field">
-                <label for="plan_desc">Description</label>
-                <textarea id="plan_desc" class="text large full" name="desc">{{opts.desc}}</textarea>
+            <div class="up2c">
+                <div class="field">
+                    <label for="plan_start">Start Date</label>
+                    <input id="plan_start"type="text" class="text small min-len-10 max-len-10 date" name="start" autocomplete="off" value="{{opts.start}}" />
+                </div>
+                <div class="field">
+                    <label for="plan_end">End Date</label>
+                    <input id="plan_end" type="text" class="text small min-len-10 max-len-10 date" name="end" autocomplete="off" value="{{opts.end}}" />
+                </div>
             </div>
-        </div>
-        <div class="up2c">
-            <div class="field">
-                <label for="plan_start">Start Date</label>
-                <input id="plan_start"type="text" class="text small min-len-10 max-len-10 date" name="start" autocomplete="off" value="{{opts.start}}" />
+            <div class="field submit">
+                <input type="submit" class="submit" value="Save" />
+                <a class="cancel" href="#{{url}}">cancel</a>
             </div>
-            <div class="field">
-                <label for="plan_end">End Date</label>
-                <input id="plan_end" type="text" class="text small min-len-10 max-len-10 date" name="end" autocomplete="off" value="{{opts.end}}" />
-            </div>
-        </div>
-        <div class="field submit">
-            <input type="submit" class="submit" value="Save" />
-            <a class="cancel" href="#{{url}}">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+            <div class="error"></div>
+        </form>
+    </div>
 {{/model.plan.current}}
 </div>

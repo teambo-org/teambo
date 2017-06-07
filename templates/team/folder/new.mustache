@@ -1,23 +1,24 @@
 <div class="folder-new">
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}" class="active">Team</a>
-        <a href="#{{team.url}}/folders" data-keybind="q escape `">Items</a>
-        <span class="active">New Folder</span>
+        <a href="#{{team.url}}/folders" data-keybind="Q" data-keybind-alt="escape" title="Items"><i class="icon-archive"></i></a>
+        <span class="active" title="New Folder"><i class="icon-folder-add"></i></span>
     </nav>
-    <h1><i class="icon-folder"></i> New Folder</h1>
-    <form id="folder-new" name="folder_new" method="POST" class="std">
-        <div class="field">
-            <label for="folder_name">Name</label>
-            <input id="folder_name" type="text" class="text required large min-len-2" name="name" autocomplete="off" placeholder="Folder Name" />
-        </div>
-        <div class="field">
-            <label for="folder_description">Description</label>
-            <textarea id="folder_description" class="text large" name="description"></textarea>
-        </div>
-        <div class="field submit">
-            <input type="submit" class="submit" value="Create Folder" />
-            <a class="cancel" href="#{{team.url}}/folders">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+    <h1><i class="icon-folder-add"></i> New Folder</h1>
+    <div class="up1c">
+        <form id="folder-new" name="folder_new" method="POST" class="std">
+            <div class="field">
+                <label for="folder_name">Name</label>
+                <input id="folder_name" type="text" class="text required large min-len-2" name="name" autocomplete="off" placeholder="Folder Name" />
+            </div>
+            <div class="field">
+                <label for="folder_description">Description</label>
+                <textarea id="folder_description" class="text large" name="description"></textarea>
+            </div>
+            <div class="field submit">
+                <input type="submit" class="submit" value="Create Folder" />
+                <a class="cancel" href="#{{team.url}}/folders">cancel</a>
+            </div>
+            <div class="error"></div>
+        </form>
+    </div>
 </div>

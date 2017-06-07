@@ -1,20 +1,26 @@
 <div class="comment-remove" require-model="comment">
 {{#model.comment.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}">Team</a>
-        <a href="#{{#parentModel}}{{url}}{{/parentModel}}">Comment</a>
-        <span>Remove</span>
+        {{#parentModel}}
+        <a href="#{{url}}" title="Model"><i class="icon-{{icon}}"></i></a>
+        {{/parentModel}}
+        <a href="#{{url}}/edit" data-keybind="Q" data-keybind-alt="escape" title="Comment"><i class="icon-comment"></i></a>
+        <span title="Remove Comment"><i class="icon-trash"></i></span>
     </nav>
-    <h1>{{#status}}<i class="icon-{{icon}}"></i>{{/status}} {{opts.name}}</h1>
-    <form id="comment_remove" name="comment_remove" method="POST" class="std ext remove">
-        <input type="hidden" class="hidden" name="comment_id" value="{{id}}"/>
-        <p>Are you sure you want to remove this comment?</p>
-        <div class="field submit">
-            <input type="submit" class="submit" id="delete_submit" value="Remove Comment" />
-            <br/>
-            <a class="cancel" href="#{{#parentModel}}{{url}}{{/parentModel}}">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+    <h1><i class="icon-trash"></i> Remove Comment</h1>
+    <div class="up1c">
+        <form id="comment_remove" name="comment_remove" method="POST" class="std ext">
+            <input type="hidden" class="hidden" name="comment_id" value="{{id}}"/>
+            <div class="field">
+                <p>Are you sure you want to remove this comment?</p>
+            </div>
+            <div class="field submit">
+                <input type="submit" class="submit" id="delete_submit" value="Remove Comment" />
+                <br/>
+                <a class="cancel" href="#{{url}}/edit">cancel</a>
+            </div>
+            <div class="error"></div>
+        </form>
+    </div>
 {{/model.comment.current}}
 </div>

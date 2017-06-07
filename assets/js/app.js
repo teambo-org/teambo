@@ -141,7 +141,7 @@ Teambo.app = (function(t){
   };
 
   app.reload = function() {
-    t.view.render('page', 'external/blank');
+    // t.view.render('page', 'external/blank');
     // window.onbeforeunload = null;
     window.location.reload();
   };

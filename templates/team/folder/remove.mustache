@@ -1,9 +1,9 @@
 <div class="folder-remove" require-model="folder">
 {{#model.folder.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}">Team</a>
-        <a href="#{{url}}" data-keybind="q escape `">Folder</a>
-        <span>Remove</span>
+        <a href="#{{team.url}}/folders" title="Items"><i class="icon-archive"></i></a>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape"><i class="icon-folder"></i></a>
+        <span title="Remove Folder"><i class="icon-trash"></i></span>
     </nav>
     <h1><i class="icon-folder-open"></i> {{opts.name}}</h1>
     <form id="folder-remove" name="folder_remove" method="POST" class="std ext remove">

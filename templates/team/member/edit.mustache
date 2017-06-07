@@ -1,74 +1,78 @@
 <div class="member-edit" require-model="member">
 {{#model.member.current}}
     <nav class="breadcrumbs">
-        <a href="#{{url}}" data-keybind="q escape `">Member</a>
-        <span>Edit</span>
+        <a href="#{{team.url}}/members" title="Members"><i class="icon-users"></i></a>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape" title="Member"><i class="{{icon}}"></i></a>
+        <span title="Edit Member"><i class="icon-pencil"></i></span>
     </nav>
     <nav>
     {{#canLeave}}
-        <a href="#{{url}}/leave" data-keybind="r">Leave Team</a>
+        <a href="#{{url}}/leave" data-keybind="R" title="Leave Team"><i class="icon-user-remove"></i></a>
     {{/canLeave}}
     {{#canRemove}}
-        <a href="#{{url}}/remove" data-keybind="r">Remove Member</a>
+        <a href="#{{url}}/remove" data-keybind="R" title="Remove Member"><i class="icon-user-remove"></i></a>
     {{/canRemove}}
     </nav>
     <h1><i class="{{icon}}"></i>{{opts.name}}</h1>
-    <form id="member-edit" name="member_edit" method="POST" class="std" data-member_id="{{id}}">
-        <div class="field">
-            <label for="member_email">Email</label>
-            <p>{{opts.email}}</p>
-        </div>
-        <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
-        <div class="field">
-            <label for="member_icon">Icon</label>
-            <select id="member_icon" name="icon" class="text demo-icon" data-value="{{opts.icon}}">
-                <option value=""></option>
-                <option value="icon-apple"></option>
-                <option value="icon-windows"></option>
-                <option value="icon-android"></option>
-                <option value="icon-asl"></option>
-                <option value="icon-github-circled"></option>
-                <option value="icon-reddit-alien"></option>
-                <option value="icon-child-1"></option>
-                <option value="icon-heart"></option>
-                <option value="icon-chrome-1"></option>
-                <option value="icon-firefox-1"></option>
-                <option value="icon-theatre"></option>
-                <option value="icon-html5"></option>
-                <option value="icon-snapchat-ghost"></option>
-                <option value="icon-user-circle-o"></option>
-                <option value="icon-basketball"></option>
-                <option value="icon-steam"></option>
-                <option value="icon-moon-inv"></option>
-                <option value="icon-suit"></option>
-                <option value="icon-paw"></option>
-                <option value="icon-rebel"></option>
-                <option value="icon-flight"></option>
-                <option value="icon-floppy"></option>
-                <option value="icon-cube"></option>
-                <option value="icon-garden"></option>
-                <option value="icon-giraffe"></option>
-                <option value="icon-rocket"></option>
-                <option value="icon-heartbeat"></option>
-                <option value="icon-fast-food"></option>
-                <option value="icon-user-secret"></option>
-                <option value="icon-coffee"></option>
-                <option value="icon-graduation-cap"></option>
-            </select>
-        </div>
-        <div class="field">
-            <label for="member_name">Name</label>
-            <input id="member_name"type="text" class="text large required min-len-1" name="name" autocomplete="off" placeholder="Member Name" value="{{opts.name}}" />
-        </div>
-        <div class="field">
-            <label for="member_description">Bio</label>
-            <textarea id="member_description" class="text large max-len-2048" placeholder="Member Bio" name="description">{{opts.description}}</textarea>
-        </div>
-        <div class="field submit">
-            <input type="submit" class="submit" value="Save Changes" />
-            <a class="cancel" href="#{{url}}">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+    <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
+    <div class="up1c">
+        <form id="member-edit" name="member_edit" method="POST" class="std" data-member_id="{{id}}">
+            <div class="field">
+                <label for="member_email">Email</label>
+                <p>{{opts.email}}</p>
+            </div>
+            <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
+            <div class="field">
+                <label for="member_icon">Icon</label>
+                <select id="member_icon" name="icon" class="text demo-icon" data-value="{{opts.icon}}">
+                    <option value=""></option>
+                    <option value="icon-apple"></option>
+                    <option value="icon-windows"></option>
+                    <option value="icon-android"></option>
+                    <option value="icon-asl"></option>
+                    <option value="icon-github-circled"></option>
+                    <option value="icon-reddit-alien"></option>
+                    <option value="icon-child-1"></option>
+                    <option value="icon-heart"></option>
+                    <option value="icon-chrome-1"></option>
+                    <option value="icon-firefox-1"></option>
+                    <option value="icon-theatre"></option>
+                    <option value="icon-html5"></option>
+                    <option value="icon-snapchat-ghost"></option>
+                    <option value="icon-user-circle-o"></option>
+                    <option value="icon-basketball"></option>
+                    <option value="icon-steam"></option>
+                    <option value="icon-moon-inv"></option>
+                    <option value="icon-suit"></option>
+                    <option value="icon-paw"></option>
+                    <option value="icon-rebel"></option>
+                    <option value="icon-flight"></option>
+                    <option value="icon-floppy"></option>
+                    <option value="icon-cube"></option>
+                    <option value="icon-garden"></option>
+                    <option value="icon-giraffe"></option>
+                    <option value="icon-rocket"></option>
+                    <option value="icon-heartbeat"></option>
+                    <option value="icon-fast-food"></option>
+                    <option value="icon-user-secret"></option>
+                    <option value="icon-coffee"></option>
+                    <option value="icon-graduation-cap"></option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="member_name">Name</label>
+                <input id="member_name"type="text" class="text large required min-len-1" name="name" autocomplete="off" placeholder="Member Name" value="{{opts.name}}" />
+            </div>
+            <div class="field">
+                <label for="member_description">Bio</label>
+                <textarea id="member_description" class="text large max-len-2048" placeholder="Member Bio" name="description">{{opts.description}}</textarea>
+            </div>
+            <div class="field submit">
+                <input type="submit" class="submit" value="Save Changes" />
+                <a class="cancel" href="#{{url}}">cancel</a>
+            </div>
+            <div class="error"></div>
+        </form>
+    </div>
 {{/model.member.current}}
 </div>

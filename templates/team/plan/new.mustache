@@ -1,34 +1,36 @@
 <div class="plan-new">
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}/plan" data-keybind="q escape `">Plans</a>
-        <span class="active">Create Plan</span>
+        <a href="#{{team.url}}/plan" data-keybind="Q" data-keybind-alt="escape" title="Planning"><i class="icon-calendar-check-o"></i></a>
+        <span class="active" title="Create Plan"><i class="icon-flag-add"></i></span>
     </nav>
-    <h1><i class="icon-flag-1"></i> New Plan</h1>
-    <form id="plan-new" name="plan_new" method="POST" class="std">
-        <div class="up2c">
-            <div class="field">
-                <label for="plan_name">Name</label>
-                <input id="plan_name" type="text" class="text large full required min-len-2" name="name" autocomplete="off" placeholder="Plan Name" />
+    <h1><i class="icon-flag-add"></i> New Plan</h1>
+    <div class="up1c">
+        <form id="plan-new" name="plan_new" method="POST" class="std">
+            <div class="up2c">
+                <div class="field">
+                    <label for="plan_name">Name</label>
+                    <input id="plan_name" type="text" class="text large full required min-len-2" name="name" autocomplete="off" placeholder="Plan Name" />
+                </div>
+                <div class="field">
+                    <label for="plan_description">Description</label>
+                    <textarea id="plan_description" class="text large full" name="description"></textarea>
+                </div>
             </div>
-            <div class="field">
-                <label for="plan_description">Description</label>
-                <textarea id="plan_description" class="text large full" name="description"></textarea>
+            <div class="up2c">
+                <div class="field">
+                    <label for="plan_start">Start Date</label>
+                    <input id="plan_start"type="text" class="text small date" name="start" autocomplete="off" value="{{opts.start}}" />
+                </div>
+                <div class="field">
+                    <label for="plan_end">End Date</label>
+                    <input id="plan_end" type="text" class="text small date" name="end" autocomplete="off" value="{{opts.end}}" />
+                </div>
             </div>
-        </div>
-        <div class="up2c">
-            <div class="field">
-                <label for="plan_start">Start Date</label>
-                <input id="plan_start"type="text" class="text small date" name="start" autocomplete="off" value="{{opts.start}}" />
+            <div class="field submit">
+                <input type="submit" class="submit" value="Create Plan" />
+                <a class="cancel" href="#{{team.url}}/plan">cancel</a>
             </div>
-            <div class="field">
-                <label for="plan_end">End Date</label>
-                <input id="plan_end" type="text" class="text small date" name="end" autocomplete="off" value="{{opts.end}}" />
-            </div>
-        </div>
-        <div class="field submit">
-            <input type="submit" class="submit" value="Create Plan" />
-            <a class="cancel" href="#{{team.url}}/plan">cancel</a>
-        </div>
-        <div class="error"></div>
-    </form>
+            <div class="error"></div>
+        </form>
+    </div>
 </div>

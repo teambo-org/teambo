@@ -1,9 +1,9 @@
 <div class="wiki-remove" require-model="wiki">
 {{#model.wiki.current}}
     <nav class="breadcrumbs">
-        <a href="#{{team.url}}">Team</a>
-        <a href="#{{team.url}}/wiki" data-keybind="q escape `">Wiki</a>
-        <span>Remove Page</span>
+        <a href="#{{team.url}}/wiki" title="Wiki"><i class="icon-book"></i></a>
+        <a href="#{{url}}" data-keybind="Q" data-keybind-alt="escape" title="Page"><i class="icon-angle-right"></i></a>
+        <span title="Remove Page"><i class="icon-trash"></i></span>
     </nav>
     <h1><i class="icon-{{icon}}"></i> {{opts.name}}</h1>
     <form id="wiki-remove" name="wiki_remove" method="POST" class="std ext remove">

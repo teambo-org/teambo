@@ -1,11 +1,19 @@
 <li class="item status-{{opts.status}} plan_id-{{opts.plan_id}} member_id-{{opts.member_id}}" id="item-li-{{id}}">
+    {{#context_plan}}
+    <a href="#{{plan_url}}" class="{{#complete}}color-50{{/complete}}">
+    {{/context_plan}}
+    {{^context_plan}}
     <a href="#{{url}}" class="{{#complete}}color-50{{/complete}}">
+    {{/context_plan}}
         {{#status}}
         <i class="icon-{{icon}}" role="img" title="{{label}}"></i>
         {{/status}}
+        {{^context_plan}}
         {{#plan}}
         <i class="icon-{{icon}} plan-icon" title="{{opts.name}}"></i>
         {{/plan}}
+        {{/context_plan}}
+        {{^context_member}}
         {{#member}}
             {{#isMe}}
             <i class="{{icon}} member-icon" title="{{opts.name}}"></i>
@@ -14,6 +22,7 @@
             <i class="{{icon}} member-icon color-30" title="{{opts.name}}"></i>
             {{/isMe}}
         {{/member}}
+        {{/context_member}}
         <span class="name">{{opts.name}}</span>
         {{#opts.description}}
         <p class="description color-50">{{#nl2br}}{{.}}{{/nl2br}}</p>

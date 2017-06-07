@@ -5,7 +5,6 @@ function(t){
 
   var form = new t.form(document.team_edit);
   var team_id = form.dataset.team_id;
-  form.name.focus();
   form.addEventListener("submit", function(e) {
     form.disable();
     var data = form.values(['name', 'theme']);
