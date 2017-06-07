@@ -7,6 +7,7 @@ import (
 	"time"
 	"os"
 	"strings"
+	// "log"
 )
 
 var db_acct driver.DB
@@ -64,6 +65,10 @@ func PurgeExpired(db driver.DB, prefix string) (ids []string, err error) {
 	return ids, err
 }
 
+func db_open(path string) (db driver.DB, err error) {
+	return driver.OpenLevelDB(path)
+}
+
 func db_open_existing(path string) (db driver.DB, err error) {
 	if _, err := os.Stat(path); err == nil {
 		db, err = driver.OpenLevelDB(path)
@@ -72,7 +77,7 @@ func db_open_existing(path string) (db driver.DB, err error) {
 }
 
 func db_team_open(team_id string) (db driver.DB, err error) {
-	return db_open_existing(util.Config("app.data") + "/teams/" + team_id + ".ldb")
+	return db_open(util.Config("app.data") + "/teams/" + team_id + ".ldb")
 }
 
 func db_team_delete(team_id string) error {
