@@ -1,7 +1,7 @@
 function(t){
   "use strict";
 
-  var form = new t.form(document.remove_invite);
+  var form = new t.form(document.invite_responded);
   var ikey = form.dataset.ikey;
 
   form.addEventListener("submit", function(e) {

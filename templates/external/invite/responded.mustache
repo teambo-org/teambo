@@ -1,18 +1,23 @@
 <div class="external require-auth c">
     <div id="logo" class="logo"></div>
     <div class="main">
-    <form name="invite_responded" class="std ext">
-        <div class="field first">
-            <p>Your invite response has been received.<br/></p>
-            <p class="ex">
-                You can expect to receive another email to finalize the invite process as soon as
-                an admin from the team to which you have been invited accepts your response.
-                This extra step is necessary in order to ensure that your team remains highly secure.
-            </p>
+        <form name="invite_responded" class="std ext" data-ikey="{{ikey}}">
+            <div class="field first">
+                <p>Your invite response has been received.<br/></p>
+                <p class="ex">
+                    You can expect to receive another email to finalize the invite process as soon as
+                    an admin from the team to which you have been invited accepts your response.
+                    This extra step is necessary in order to ensure that your team remains highly secure.
+                </p>
+            </div>
+            <div class="field submit">
+                {{#ikey}}
+                <input type="submit" class="submit" value="Cancel Invite" />
+                {{/ikey}}
+            </div>
+        </form>
+        <div class="subtext" id="onboarding">
+            <p><a href="#/account" data-keybind="escape q"><i class="icon-angle-left"></i>Back to account<i class="icon-blank"></i></a></p>
         </div>
-        <div class="field submit">
-            <a href="#/account" data-keybind="escape q"><i class="icon-angle-left"></i>Back to account</a>
-        </div>
-    </form>
     </div>
 </div>
