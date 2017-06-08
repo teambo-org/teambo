@@ -79,37 +79,38 @@ Teambo.model.invite = (function(t){
     }
     return new Promise(function (fulfill, reject) {
       var email = member.opts.email;
-      var xhrdata = {
-        team_id:   t.team.current.id,
-        mkey:      t.team.current.mkey,
-        member_id: member.id,
-        ikey:      member.opts.invite_key,
-        ct:        t.team.current.rsaTPO(pubKey)
-      };
-      t.xhr.post('/invite/acceptance', {
-        data: xhrdata
-      }).then(function (xhr) {
-        if(xhr.status == 201) {
-          member.opts.pubKey = pubKey;
-          delete(member.opts['invite_key']);
-          member.save().then(function(member){
-            fulfill(member);
-          });
-        } else {
-          reject(xhr);
-        }
-      });
+      member.grantAccess(t.team.current, 'key').then(function(mkey) {
+        var xhrdata = {
+          ikey:      member.opts.invite_key,
+          ct:        t.team.current.rsaTPO(pubKey, [member.id, mkey])
+        };
+        t.xhr.post('/invite/acceptance', {
+          data: xhrdata,
+          team: t.team.current
+        }).then(function (xhr) {
+          if(xhr.status == 201) {
+            member.opts.pubKey = pubKey;
+            delete(member.opts['invite_key']);
+            member.save().then(function(member){
+              fulfill(member);
+            });
+          } else {
+            reject(xhr);
+          }
+        });
+      }).catch(reject);
     });
   };
 
-  model.activate = function(ikey, ct, mkey) {
+  model.activate = function(ikey, ct) {
     var data = t.acct.current.rsa.decrypt(t.crypto.b64tohex(ct));
     if(data) {
       var parts = data.split('-');
       var team_data = {
         id: parts[0],
-        mkey: mkey,
-        key: parts[1]
+        key: parts[1],
+        member_id: parts[2],
+        mkey: parts[3],
       };
       t.array.deleteByProperty(t.acct.current.teams, 'id', team_data.id);
       t.array.deleteByProperty(t.acct.current.invites, 'ikey', ikey);

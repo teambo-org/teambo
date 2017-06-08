@@ -10,6 +10,8 @@ import (
 	"context"
 	"time"
 	"fmt"
+	"io/ioutil"
+	"bytes"
 	// "log"
 )
 
@@ -42,6 +44,13 @@ func (h StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Origin not allowed", 403)
 		return
 	}
+
+	// Atvaark: You could try wrapping the r.Body reader with your own one that also calculates the hash when reading.
+	body, _ := ioutil.ReadAll(r.Body)
+	r.Body = ioutil.NopCloser(bytes.NewReader(body))
+	r.ParseForm()
+	r.Body = ioutil.NopCloser(bytes.NewReader(body))
+
 	// start := time.Now()
 	h.ServeGzip(w, r)
 	// log.Printf("%d %s", time.Since(start).Nanoseconds() / 1e3, r.URL.Path)

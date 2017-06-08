@@ -11,19 +11,19 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"crypto/sha256"
+	"encoding/base64"
 )
 
 func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	team_id := r.FormValue("team_id")
-	mkey := r.FormValue("mkey")
+	member_id := r.FormValue("member_id")
+	salt := r.FormValue("salt")
+	sig := r.FormValue("sig")
 	ts := r.FormValue("ts")
 
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", 405)
-		return
-	}
-	if r.Header.Get("Origin") != "http://"+r.Host && r.Header.Get("Origin") != "https://"+r.Host {
-		http.Error(w, "Origin not allowed", 403)
 		return
 	}
 	ws, err := websocket.Upgrade(w, r, nil, 1024, 1024)
@@ -32,6 +32,17 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if err != nil {
 		log.Println(err)
+		return
+	}
+
+	if team_id == "" || member_id == "" || salt == "" || sig == "" {
+		msg, _ := json.Marshal(map[string]interface{}{
+			"channel_id": team_id,
+			"code":       400,
+			"type":       "error",
+			"msg":        "Team Id, Member Id, Salt and Signature required",
+		})
+		ws.WriteMessage(websocket.TextMessage, msg)
 		return
 	}
 
@@ -47,11 +58,12 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	member_id := team.GetMemberId(mkey)
+	member_keys := model.TeamBucket{team.Id, "member_key"}
+	member_key, _ := member_keys.Find(member_id)
 
-	if member_id == "" {
+	if member_key.Ciphertext == "" {
 		msg, _ := json.Marshal(map[string]interface{}{
-			"channel_id": team_id,
+			"channel_id": team.Id,
 			"code":       403,
 			"type":       "error",
 			"msg":        "You do not have access to this team",
@@ -60,28 +72,44 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := socket.CreateConnection([]string{team_id}, ws)
+	h := sha256.New()
+	h.Write([]byte(salt))
+	h.Write([]byte(member_key.Ciphertext))
+	computed_sig := base64.StdEncoding.EncodeToString(h.Sum(nil))
+
+	if computed_sig != sig {
+		msg, _ := json.Marshal(map[string]interface{}{
+			"channel_id": team.Id,
+			"code":       403,
+			"type":       "error",
+			"msg":        "Invalid request signature",
+		})
+		ws.WriteMessage(websocket.TextMessage, msg)
+		return
+	}
+
+	c := socket.CreateConnection([]string{team.Id}, ws)
 	if ts != "0" && ts != "" {
-		logs, err := model.TeamLogSince(team_id, ts)
+		logs, err := model.TeamLogSince(team.Id, ts)
 		if err == nil {
 			log_objs := model.TeamLogParse(logs)
 			for _, log := range log_objs {
-				c.Write(websocket.TextMessage, socket.JsonMessage(team_id, log))
+				c.Write(websocket.TextMessage, socket.JsonMessage(team.Id, log))
 			}
 		}
 	}
 
-	integrity, err := model.TeamIntegrityCache.Find(team_id)
+	integrity, err := model.TeamIntegrityCache.Find(team.Id)
 	if err == nil {
 		hash := integrity.Hash()
-		c.Write(websocket.TextMessage, socket.JsonMessage(team_id, map[string]interface{}{
+		c.Write(websocket.TextMessage, socket.JsonMessage(team.Id, map[string]interface{}{
 			"type": "integrity",
 			"hash": hash,
 			"ts":   fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
 		}))
 	}
 
-	c.Write(websocket.TextMessage, socket.JsonMessage(team_id, map[string]interface{}{
+	c.Write(websocket.TextMessage, socket.JsonMessage(team.Id, map[string]interface{}{
 		"type": "timesync",
 		"ts":   fmt.Sprintf("%d", time.Now().UTC().UnixNano()),
 	}))
@@ -96,10 +124,9 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func TeamIntegrity(w http.ResponseWriter, r *http.Request) {
-	team_id := r.FormValue("team_id")
 	ivs := r.FormValue("ivs")
 
-	_, err := auth_team(w, r)
+	team, _, err := auth_team(w, r)
 	if err != nil {
 		return
 	}
@@ -111,7 +138,7 @@ func TeamIntegrity(w http.ResponseWriter, r *http.Request) {
 
 	iv_list := strings.Split(ivs, ",")
 
-	integrity, err := model.TeamIntegrityCache.Find(team_id)
+	integrity, err := model.TeamIntegrityCache.Find(team.Id)
 	if err != nil {
 		http.Error(w, "Integrity cache not found", 404)
 		return

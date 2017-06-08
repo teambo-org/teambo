@@ -30,6 +30,20 @@ Teambo.model.member = (function(t){
       canRemove: function() {
         return !self.isMe() && t.team.current.isAdmin();
       },
+      grantAccess: function(team, type) {
+        return new Promise(function(fulfill, reject){
+          t.xhr.post('/team/member/access', {
+            data: {
+              id: self.id,
+              type: type
+            },
+            team: team
+          }).then(function(xhr) {
+            var data = JSON.parse(xhr.responseText);
+            fulfill(data.mkey);
+          }).catch(reject);
+        });
+      },
       context_member: true
     });
     if(self.opts && !self.opts.name) {

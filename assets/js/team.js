@@ -1,7 +1,7 @@
 Teambo.team = (function(t){
   "use strict";
 
-  var team = function(data, mkey, key) {
+  var team = function(data, member_id, mkey, key) {
     var self = this;
     if(typeof data == 'string') {
       var iv = data.split(' ')[0];
@@ -11,7 +11,6 @@ Teambo.team = (function(t){
     t.object.extend(this, {
       id: data.id,
       iv: data.iv,
-      mkey: mkey,
       orig: data.opts ? t.object.clone(data.opts) : {},
       opts: data.opts ? data.opts : {},
       hist: data.hist ? data.hist : [],
@@ -42,21 +41,35 @@ Teambo.team = (function(t){
         return team.summaries[this.id];
       },
       queue: new t.offline.queue(this),
-      rsaTPO: function(pubKey) {
+      rsaTPO: function(pubKey, opts) {
         if(!pubKey) return;
+        opts = Array.isArray(opts) ? opts : [];
         var rsa = new RSAKey();
         var e = 65537;
         rsa.setPublic(t.crypto.b64tohex(pubKey), e.toString(16));
-        return t.crypto.hextob64(rsa.encrypt(this.id+'-'+key));
+        var data = [this.id, key].concat(opts);
+        return t.crypto.hextob64(rsa.encrypt(data.join('-')));
+      },
+      signRequest: function(url, opts) {
+        opts.headers = opts.headers ? opts.headers : {};
+        opts.headers['teambo-team-id'] = this.id;
+        opts.headers['teambo-member-id'] = member_id;
+        opts.headers['teambo-member-sig'] = t.crypto.sha(url + (opts.data ? opts.data : "") + mkey);
+        return opts;
+      },
+      signSocketUrl: function(url) {
+        var salt = t.crypto.tempKey();
+        url += "&team_id=" + this.id;
+        url += "&member_id=" + member_id;
+        url += "&salt=" + salt;
+        url += "&sig=" + encodeURIComponent(t.crypto.sha(salt + mkey));
+        return url;
       }
     });
   };
 
   team.prototype = {
     save: function() {
-      if(!this.mkey) {
-        return Promise.reject('No mkey');
-      }
       var self = this;
       return new Promise(function(fulfill, reject) {
         var errs = team.schema.validate(self.opts, self.orig);
@@ -69,11 +82,10 @@ Teambo.team = (function(t){
         t.socket.team.ignore(['team', self.id, iv].join('-'));
         t.xhr.post('/team', {
           data: {
-            team_id: self.id,
-            mkey: self.mkey,
             ct: new_ct,
             iv: self.iv
-          }
+          },
+          team: self
         }).then(function(xhr){
           if(xhr.status == 200) {
             self.iv = iv;
@@ -118,12 +130,8 @@ Teambo.team = (function(t){
       }
       var self = this;
       return new Promise(function(fulfill, reject) {
-        var data = {
-          team_id: self.id,
-          mkey:    self.mkey
-        };
         t.xhr.post('/team/remove', {
-          data: data
+          team: self
         }).then(function(xhr){
           if(xhr.status == 204) {
             var p = [];
@@ -142,7 +150,10 @@ Teambo.team = (function(t){
       });
     },
     cache: function() {
-      return localforage.setItem(this.sha(), this.encrypted({last_seen: this.last_seen, admin: this.admin}));
+      return localforage.setItem(this.sha(), this.encrypted({
+        last_seen: this.last_seen,
+        admin: this.admin
+      }));
     },
     uncache: function() {
       return localforage.removeItem(this.sha());
@@ -173,10 +184,9 @@ Teambo.team = (function(t){
       return new Promise(function(fulfill, reject) {
         t.xhr.get('/team/summary', {
           data: {
-            team_id: self.id,
-            mkey: self.mkey,
             ts: self.last_seen
-          }
+          },
+          team: self
         }).then(function(xhr) {
           if(xhr.status == 200) {
             team.summaries[self.id] = JSON.parse(xhr.responseText);
@@ -267,7 +277,7 @@ Teambo.team = (function(t){
 
   team.create = function(name) {
     return new Promise(function(fulfill, reject) {
-      t.xhr.post('/team').then(function(xhr){
+      t.xhr.post('/teams').then(function(xhr){
         if(xhr.status == 200) {
           var data = JSON.parse(xhr.responseText);
           var key  = t.crypto.randomKey();
@@ -279,13 +289,13 @@ Teambo.team = (function(t){
               name: name,
               theme: 'Default'
             }
-          }, data.mkey, key);
+          }, data.member_id, data.mkey, key);
           new_team.admin = true;
           new_team.orig = {};
           new_team.save().then(function(){
             t.team.current = new_team;
             createFirstMember(new_team, data.member_id).then(function() {
-              var team_data = {id: new_team.id, mkey: data.mkey, key: key, admin: true};
+              var team_data = {id: new_team.id, member_id: data.member_id, mkey: data.mkey, key: key, admin: true};
               acct.addTeam(team_data).then(function(){
                 fulfill(new_team);
               }).catch(function(e){
@@ -317,12 +327,11 @@ Teambo.team = (function(t){
       var cacheKey = t.crypto.sha(args);
       localforage.getItem(cacheKey).then(function (ct) {
         if (ct) {
-          fulfill(new team(ct, d.mkey, d.key));
+          fulfill(new team(ct, d.member_id, d.mkey, d.key));
         } else {
-          team.fetch(id, d.mkey).then(function(data) {
+          team.fetch(id, d.member_id, d.mkey).then(function(data) {
             if(data.team) {
-              // TODO: Add 'admin' parameter to API endpoint and collect it here
-              var fetched_team = new team(data.team.ct, d.mkey, d.key);
+              var fetched_team = new team(data.team.ct, d.member_id, d.mkey, d.key);
               fetched_team.admin = data.admin;
               fetched_team.cache().then(function() {
                 fulfill(fetched_team);
@@ -373,13 +382,10 @@ Teambo.team = (function(t){
     };
   };
 
-  team.fetch = function(id, mkey) {
+  team.fetch = function(id, member_id, mkey) {
     return new Promise(function(fulfill, reject) {
       t.xhr.get('/team', {
-        data: {
-          team_id: id,
-          mkey: mkey
-        }
+        team: new team({id: id}, member_id, mkey)
       }).then(function(xhr) {
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
@@ -400,8 +406,8 @@ Teambo.team = (function(t){
         reject();
         return;
       }
-      team.fetch(id, d.mkey).then(function(data) {
-        var new_team = new team(data.team.ct, d.mkey, d.key);
+      team.fetch(id, d.member_id, d.mkey).then(function(data) {
+        var new_team = new team(data.team.ct, d.member_id, d.mkey, d.key);
         new_team.cache().then(function(){
           fulfill(new_team);
         });

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 	"log"
+	"errors"
 )
 
 type Team struct {
@@ -30,18 +31,17 @@ func (t Team) Remove() (err error) {
 	return nil
 }
 
-func (t Team) NewMemberKey() TeamObject {
+func (t Team) NewMemberKey(id string) (TeamObject, error) {
 	member_key := TeamBucket{t.Id, "member_key"}
-	id := util.RandStr(16)
-	for {
-		exists, _ := member_key.Exists(id)
-		if exists {
-			id = util.RandStr(16)
-		} else {
-			break
-		}
+	exists, err := member_key.Exists(id)
+	if err != nil {
+		return TeamObject{}, errors.New("Could not read member key")
 	}
-	return TeamObject{t.Id, "member_key", id, "new"}
+	if exists {
+		return TeamObject{}, errors.New("Member already has a key")
+	}
+	mkey := util.RandStr(16)
+	return TeamObject{t.Id, "member_key", id, mkey}, nil
 }
 
 func (t Team) NewMember() TeamObject {
@@ -49,29 +49,20 @@ func (t Team) NewMember() TeamObject {
 	return members.NewObject("")
 }
 
-func (t Team) NewAdmin(mkey string) TeamObject {
+func (t Team) NewAdmin(member_id string) TeamObject {
 	admins := TeamBucket{t.Id, "member_admin"}
 	admin := admins.NewObject("")
-	admin.Id = mkey
+	admin.Id = member_id
 	return admin
 }
 
-func (t Team) IsAdmin(mkey string) bool {
+func (t Team) IsAdmin(member_id string) bool {
 	member_admin := TeamBucket{t.Id, "member_admin"}
-	exists, err := member_admin.Exists(mkey)
+	exists, err := member_admin.Exists(member_id)
 	if err == nil && exists {
 		return true
 	}
 	return false
-}
-
-func (t Team) GetMemberId(mkey string) string {
-	member_keys := TeamBucket{t.Id, "member_key"}
-	member_key, err := member_keys.Find(mkey)
-	if err == nil && member_key.Ciphertext != "" {
-		return member_key.Ciphertext
-	}
-	return ""
 }
 
 func (t Team) InviteCreate(ikey string) (invite TeamObject) {

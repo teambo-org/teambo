@@ -1,10 +1,10 @@
 package main
 
 import (
+	"../util"
+	"os"
 	"flag"
 	"github.com/syndtr/goleveldb/leveldb"
-	// ldb_util "github.com/syndtr/goleveldb/leveldb/util"
-	"../util"
 	"log"
 )
 
@@ -32,6 +32,10 @@ func main() {
 	}
 	util.ParseConfig(*config_path)
 	path := util.Config("app.data") + "/" + *db_path + ".ldb"
+	if _, err := os.Stat(path); err != nil {
+		log.Println("Database not found: " + path)
+		return
+	}
 	dbh, err := leveldb.OpenFile(path, nil)
 	db = dbh
 	if err != nil {

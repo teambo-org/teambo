@@ -38,7 +38,7 @@ Teambo.socket.inviteAcceptance = (function (t) {
       var invite = t.array.findByProperty(t.acct.current.invites, 'ikey', e.ikey);
       if(invite && !invite.failed) {
         t.socket.acct.stop();
-        t.model.invite.activate(e.ikey, e.ct, e.mkey).then(function() {
+        t.model.invite.activate(e.ikey, e.ct).then(function() {
           t.app.refresh();
         }).catch(function() {
           t.app.refresh();

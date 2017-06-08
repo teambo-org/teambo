@@ -10,6 +10,9 @@ Teambo.xhr = (function(t){
       }
       x.open(method, url, 1);
       x.timeout = 'timeout' in opts ? opts.timeout : 5000;
+      if(opts.team) {
+        opts = opts.team.signRequest(url, opts);
+      }
       for(var i in opts.headers) {
         x.setRequestHeader(i, opts.headers[i]);
       }

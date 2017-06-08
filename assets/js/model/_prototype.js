@@ -32,12 +32,11 @@ Teambo.model._prototype = (function(t){
           }
           t.xhr.post(url, {
             data: {
-              team_id: t.team.current.id,
-              mkey: t.team.current.mkey,
               id: self.id,
               ct: new_ct,
               iv: self.iv ? self.iv : ""
-            }
+            },
+            team: t.team.current
           }).then(function(xhr){
             if(xhr.status == 200) {
               self.iv = iv;
@@ -88,8 +87,7 @@ Teambo.model._prototype = (function(t){
       refresh: function() {
         var self = this;
         return new Promise(function (fulfill, reject) {
-          var d = t.team.current;
-          model.fetch(self.id, d.id, d.mkey).then(function(ct) {
+          model.fetch(self.id, t.team.current).then(function(ct) {
             var m = new model(ct);
             m.cache().then(function(m){
               fulfill(m);
@@ -125,8 +123,6 @@ Teambo.model._prototype = (function(t){
         var self = this;
         return new Promise(function(fulfill, reject) {
           var data = {
-            team_id: t.team.current.id,
-            mkey:    t.team.current.mkey,
             id:      self.id
           };
           if(self.comments) {
@@ -135,7 +131,8 @@ Teambo.model._prototype = (function(t){
             }, []);
           };
           t.xhr.post('/team/'+model.type+'/remove', {
-            data: data
+            data: data,
+            team: t.team.current
           }).then(function(xhr){
             if(xhr.status == 204 || xhr.status == 404) {
               self.uncache().then(function(){

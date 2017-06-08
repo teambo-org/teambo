@@ -166,8 +166,6 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 	ikey := r.FormValue("ikey")
 	ct := r.FormValue("ct")
-	member_id := r.FormValue("member_id")
-	mkey := r.FormValue("mkey")
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -178,11 +176,11 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 
-		team, err := auth_team(w, r)
+		team, member_id, err := auth_team(w, r)
 		if err != nil {
 			return
 		}
-		if !team.IsAdmin(mkey) {
+		if !team.IsAdmin(member_id) {
 			error_out(w, "Only a team admin can accept invites", 403)
 			return
 		}
@@ -197,16 +195,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		memberKey := team.NewMemberKey()
-		memberKey.Ciphertext = member_id
-		err = memberKey.Save()
-		if err != nil {
-			team.Remove()
-			error_out(w, "Team member could not be saved", 500)
-			return
-		}
-
-		_, err = model.InviteAcceptanceCreate(ikey, ct+"-"+memberKey.Id)
+		_, err = model.InviteAcceptanceCreate(ikey, ct)
 		if err != nil {
 			error_out(w, "Invite could not be accepted", 500)
 			return
@@ -215,8 +204,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 		inviteResponse.Delete()
 
 		socket.InviteAcceptanceHub.Broadcast <- socket.JsonMessage(ikey, map[string]interface{}{
-			"ct":   ct,
-			"mkey": memberKey.Id,
+			"ct": ct,
 		})
 
 		msg, _ := json.Marshal(map[string]bool{
@@ -244,7 +232,6 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 				parts := strings.Split(inviteAcceptance.Ciphertext, "-")
 				c.Write(websocket.TextMessage, socket.JsonMessage(k, map[string]interface{}{
 					"ct":   parts[0],
-					"mkey": parts[1],
 				}))
 			} else {
 				inviteResponse, _ := model.InviteResponseFind(k)

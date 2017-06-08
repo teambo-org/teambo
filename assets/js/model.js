@@ -99,10 +99,9 @@ Teambo.model = (function(t){
     return new Promise(function(fulfill, reject) {
       t.xhr.post('/team/integrity', {
         data: {
-          team_id: t.team.current.id,
-          mkey: t.team.current.mkey,
           ivs: ivs
-        }
+        },
+        team: t.team.current
       }).then(function(xhr) {
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);

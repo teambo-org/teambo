@@ -47,17 +47,11 @@ Teambo.model._extend = (function(t){
             return;
           }
         }
-        var data = {
-          team_id: t.team.current.id,
-          mkey:    t.team.current.mkey
-        };
-        if(id) {
-          data.id = id;
-        } else {
-          data.id = t.crypto.tempKey();
+        if(!id) {
+          id = t.crypto.tempKey();
         }
         var m = new model({
-          id:   data.id,
+          id:   id,
           opts: opts
         });
         m.orig = {};
@@ -92,14 +86,13 @@ Teambo.model._extend = (function(t){
       });
     };
 
-    model.fetch = function(id, team_id, mkey) {
+    model.fetch = function(id, team) {
       return new Promise(function(fulfill, reject) {
         t.xhr.get('/team/'+model.type, {
           data: {
-            team_id: team_id,
-            mkey: mkey,
             id: id
-          }
+          },
+          team: team
         }).then(function(xhr) {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText);
@@ -141,7 +134,7 @@ Teambo.model._extend = (function(t){
               });
             }
           } else {
-            model.fetch(id, team.id, team.mkey).then(function(ct) {
+            model.fetch(id, team).then(function(ct) {
               var new_m = new model(ct);
               if(new_m.id) {
                 fulfill(new_m);
@@ -196,7 +189,7 @@ Teambo.model._extend = (function(t){
             if(!team) {
               reject('team not found');
             }
-            model.fetchAll(team.id, team.mkey).then(function(data){
+            model.fetchAll(team).then(function(data){
               var p = [];
               data.forEach(function(o) {
                 var m = new model(o.ct);
@@ -217,13 +210,10 @@ Teambo.model._extend = (function(t){
       });
     };
 
-    model.fetchAll = function(team_id, mkey) {
+    model.fetchAll = function(team) {
       return new Promise(function(fulfill, reject) {
         t.xhr.get('/team/'+model.type+'s', {
-          data: {
-            team_id: team_id,
-            mkey: mkey
-          },
+          team: team,
           timeout: 30*1000
         }).then(function(xhr) {
           if (xhr.status === 200) {

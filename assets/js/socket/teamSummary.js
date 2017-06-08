@@ -8,7 +8,7 @@ Teambo.socket.teamSummary = (function (t) {
         if(!team) {
           return
         }
-        return "/team/socket?team_id="+team.id+"&mkey="+team.mkey+"&ts="+team.lastSeen()
+        return team.signSocketUrl("/team/socket?ts="+team.lastSeen());
       }
     });
   };
