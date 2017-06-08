@@ -11,7 +11,10 @@
             <h4>{{team.opts.name}}</h4>
         </div>
         <div class="field">
-            <input id="team_name" type="text" class="text" name="name" autocomplete="off" placeholder="Team Name" />
+            <input id="team_name" type="text" class="text required" name="name" autocomplete="off" placeholder="Team Name" />
+        </div>
+        <div class="field">
+            <input type="password" class="text required min-len-8" name="cur_pass" placeholder="Current Password" />
         </div>
         <div class="field submit">
             <input type="submit" class="submit" id="delete_submit" value="Delete Team" />

@@ -124,13 +124,18 @@ Teambo.team = (function(t){
         });
       });
     },
-    remove: function(name) {
-      if(name != this.opts.name || !t.app.online) {
+    remove: function(name, cur_pass) {
+      if(name != this.opts.name || !cur_pass || !t.app.online) {
         return Promise.reject();
       }
       var self = this;
       return new Promise(function(fulfill, reject) {
         t.xhr.post('/team/remove', {
+          data: {
+            id: t.acct.current.id,
+            akey: t.acct.current.getAkey(),
+            pkey: t.acct.current.getPkey(cur_pass)
+          },
           team: self
         }).then(function(xhr){
           if(xhr.status == 204) {

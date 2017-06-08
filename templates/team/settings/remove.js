@@ -4,6 +4,7 @@ function(t){
   var form = new t.form(document.team_remove);
   var team = t.team.current;
   form.addEventListener("submit", function(e) {
+    var cur_pass = form.cur_pass.value;
     if(!t.app.online) {
       form.error.msg("You are not online", "Teams can only be removed while online");
       return;
@@ -15,13 +16,18 @@ function(t){
     }
     form.disable();
     if(confirm("Are you sure you wish to delete this team? This cannot be undone.")) {
-      team.remove(data.name).then(function(){
+      team.remove(data.name, cur_pass).then(function(){
         t.acct.current.removeTeam(team).then(function() {
           t.app.gotoUrl('/account');
         });
       }).catch(function(e){
         form.enable();
-        form.error.msg("Team could not be deleted.", "Please try again");
+        if(e.status && e.status === 403) {
+          var d = JSON.parse(e.responseText);
+          form.error.msg(d.error);
+        } else {
+          form.error.msg("Team could not be deleted.", "Please try again");
+        }
       });
     } else {
       form.enable();

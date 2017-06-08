@@ -112,9 +112,12 @@ func Team(w http.ResponseWriter, r *http.Request) {
 func TeamRemove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
+	id := r.FormValue("id")
+	akey := r.FormValue("akey")
+	pkey := r.FormValue("pkey")
+
 	team, member_id, err := auth_team(w, r)
 	if err != nil {
-		error_out(w, "Team could not be found", 500)
 		return
 	}
 
@@ -123,7 +126,26 @@ func TeamRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if model.AcctThrottle.Remaining(id) < 1 {
+		error_data(w, 403, map[string]interface{}{
+			"error": "Account is locked",
+			"code": "acct_locked",
+		})
+		return
+	}
+
 	if r.Method == "POST" {
+		protection, err := model.FindAcctProtection(id, akey)
+		if err != nil {
+			error_out(w, "Account protection could not be verified", 500)
+			return
+		}
+		if !protection.Validate(pkey) {
+			model.AcctThrottle.Log(id)
+			error_out(w, "Account protection key does not match", 403)
+			return
+		}
+
 		err = team.Remove()
 		if err != nil {
 			error_out(w, "Team could not be removed", 500)

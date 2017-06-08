@@ -81,6 +81,12 @@ Teambo.acct = (function (t) {
           });
         });
       },
+      getPkey: function(cur_pass) {
+        return t.crypto.pbk(cur_pass, self.id + key + self.id);
+      },
+      getAkey: function() {
+        return akey;
+      },
       cache: function () {
         var hash = t.crypto.sha(self.email + t.salt);
         return localforage.setItem(hash, self.encrypted({iv: self.iv}));
