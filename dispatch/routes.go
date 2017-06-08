@@ -1,7 +1,7 @@
-package main
+package dispatch
 
 import (
-	"./controller"
+	"../controller"
 	"net/http"
 )
 

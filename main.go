@@ -5,6 +5,7 @@ import (
 	"./model"
 	"./socket"
 	"./util"
+	"./dispatch"
 	"./service"
 	"context"
 	"flag"
@@ -50,15 +51,18 @@ func main() {
 	}})
 
 	h := &http.Server{}
+
+	dh := dispatch.NewHandler()
+	// app.NewRegistry(dh)
+	dh.Finalize()
+
 	if config["ssl.active"] == "true" {
-		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(redirectToHttps(config)))
-		h = &http.Server{Addr: ":" + config["port.https"], Handler: StaticHandler{}}
+		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(dispatch.RedirectToHttps(config)))
+		h = &http.Server{Addr: ":" + config["port.https"], Handler: dh}
 		go h.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"])
-		origin = "https://" + config["app.host"]
 	} else {
-		h = &http.Server{Addr: ":" + config["port.http"], Handler: StaticHandler{}}
+		h = &http.Server{Addr: ":" + config["port.http"], Handler: dh}
 		go h.ListenAndServe()
-		origin = "http://" + config["app.host"]
 	}
 
 	clear := make(chan os.Signal)
