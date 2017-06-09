@@ -18,7 +18,7 @@
     <div class="up4c3 {{^opts.description}}c-empty{{/opts.description}}">
     {{#opts.description}}
         <section class="description color-bg" role="main">
-            {{#nl2br}}{{#linkify}}{{opts.description}}{{/linkify}}{{/nl2br}}
+            {{#codeblock}}{{#nl2br}}{{#linkify}}{{opts.description}}{{/linkify}}{{/nl2br}}{{/codeblock}}
         </section>
     {{/opts.description}}
     </div>

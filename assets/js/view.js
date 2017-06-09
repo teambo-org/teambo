@@ -19,6 +19,11 @@ Teambo.view = (function(t){
         return render(text).split("\r").join("[r]").split("\n").join("<br/>");
       };
     },
+    codeblock: function() {
+      return function(text, render) {
+        return render(text).replace(/&#x60;&#x60;&#x60;/g, "```").replace(new RegExp("```([^`]*)```", "ig"), "<pre>$1</pre>");
+      };
+    },
     inf : function() {
       return function(text, render) {
         return parseInt(render(text)) === 1 ? '' : 's';

@@ -12,7 +12,7 @@
     <h1><i class="{{icon}}"></i> {{opts.name}} <span class="sub">{{opts.email}}</span></h1>
     {{#opts.description}}
     <div class="up1c">
-        <section class="description color-bg">{{#nl2br}}{{opts.description}}{{/nl2br}}</section>
+        <section class="description color-bg">{{#codeblock}}{{#nl2br}}{{opts.description}}{{/nl2br}}{{/codeblock}}</section>
     </div>
     {{/opts.description}}
     <a id="skipnav" class="skip-nav" href="#{{url}}"></a>

@@ -1,7 +1,7 @@
 xdescribe("Stress", function() {
 
   // var factor = 100;
-  var factor = 10;
+  var factor = 50;
 
   xit("Performs well with "+factor+" folders each having "+factor+" items", function(done) {
     var i = 0;
