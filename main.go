@@ -1,7 +1,6 @@
 package main
 
 import (
-	"./controller"
 	"./model"
 	"./socket"
 	"./util"
@@ -16,7 +15,6 @@ import (
 	"runtime"
 	"strconv"
 	"time"
-	"syscall"
 )
 
 func main() {
@@ -64,16 +62,6 @@ func main() {
 		h = &http.Server{Addr: ":" + config["port.http"], Handler: dh}
 		go h.ListenAndServe()
 	}
-
-	clear := make(chan os.Signal)
-	signal.Notify(clear, syscall.SIGUSR1)
-	go func() {
-		for {
-			_ = <-clear
-			log.Println("Clearing Cache")
-			controller.HttpCache.Clear()
-		}
-	}()
 
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)
