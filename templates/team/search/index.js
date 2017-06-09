@@ -7,6 +7,10 @@ function(t){
   var q = form.dataset.q;
   var results_el = document.getElementById('search-results')
 
+  t.event.once('nav', function() {
+    form.q.focus();
+  });
+
   form.addEventListener("submit", function(e) {
     e.preventDefault();
     e.stopPropagation();

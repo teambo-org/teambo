@@ -23,6 +23,7 @@
     <div>
     <ul class="model">
     {{#item_collection}}
+        {{#clone}}
         {{#filter_incomplete}}
         <li class="hi-10 up3c result-item">
             <a href="#{{url}}" class="hi-05">
@@ -30,6 +31,7 @@
                 <span class="name">Unassigned</span>
             </a>
             <ul class="items no-description incomplete">
+            {{#clone}}
             {{#filter_unassigned}}
             {{#each}}
                 {{>team/item/_li}}
@@ -38,6 +40,7 @@
                 <p class="empty color-30">None</p>
             {{/empty}}
             {{/filter_unassigned}}
+            {{/clone}}
             </ul>
         </li>
         <li class="hi-10 up3c result-item">
@@ -46,6 +49,7 @@
                 <span class="name">Assigned</span>
             </a>
             <ul class="items no-description incomplete">
+            {{#clone}}
             {{#filter_assigned}}
             {{#each}}
                 {{>team/item/_li}}
@@ -54,9 +58,12 @@
                 <p class="empty color-30">None</p>
             {{/empty}}
             {{/filter_assigned}}
+            {{/clone}}
             </ul>
         </li>
         {{/filter_incomplete}}
+        {{/clone}}
+        {{#clone}}
         {{#filter_complete}}
         <li class="hi-10 up3c result-item">
             <a href="#{{url}}" class="hi-05">
@@ -73,6 +80,7 @@
             </ul>
         </li>
         {{/filter_complete}}
+        {{/clone}}
     {{/item_collection}}
     </ul>
 {{/model.plan.current}}

@@ -18,6 +18,7 @@
     {{/opts.description}}
     <a id="skipnav" class="skip-nav" href="#{{url}}"></a>
     {{#item_collection}}
+    {{#clone}}
     {{#filter_incomplete}}
     {{^empty}}
         <div class="up1c">
@@ -29,6 +30,8 @@
         </div>
     {{/empty}}
     {{/filter_incomplete}}
+    {{/clone}}
+    {{#clone}}
     {{#filter_complete}}
     {{^empty}}
         <div class="up1c upshort">
@@ -43,6 +46,7 @@
         </div>
     {{/empty}}
     {{/filter_complete}}
+    {{/clone}}
     {{#empty}}
         <div class="up1c">
             <p class="empty hi-05 color-30">This folder has no items</p>

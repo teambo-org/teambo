@@ -89,7 +89,11 @@ Teambo.model.plan = (function(t){
         });
       },
       filter: function(fn) {
-        return new model.collection(this.models.filter(fn));
+        this.models = this.models.filter(fn)
+        return this;
+      },
+      clone: function() {
+        return new model.collection(this.models);
       }
     });
   };

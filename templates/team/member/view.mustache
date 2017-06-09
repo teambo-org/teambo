@@ -20,6 +20,7 @@
     <div class="up1c upshort">
         <h4>Assigned</h4>
     </div>
+    {{#clone}}
     {{#filter_incomplete_member_items}}
     {{^empty}}
     <ul class="model plans">
@@ -52,9 +53,11 @@
     </div>
     {{/empty}}
     {{/filter_incomplete_member_items}}
+    {{/clone}}
     <div class="up1c upshort">
         <h4>Complete</h4>
     </div>
+    {{#clone}}
     {{#filter_complete_member_items}}
     {{^empty}}
     <ul class="model plans">
@@ -87,6 +90,7 @@
     </div>
     {{/empty}}
     {{/filter_complete_member_items}}
+    {{/clone}}
     {{/model.plan.collect_all}}
 {{/model.member.current}}
 </div>

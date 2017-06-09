@@ -12,6 +12,7 @@
     <a id="skipnav" class="skip-nav" href="#{{team.url}}/members"></a>
     {{#model.member.collect_all}}
     <ul class="model member" id="members">
+        {{#clone}}
         {{#filter_active}}
         {{#each}}
         <li class="member hi-10 up3c" id="member-li-{{id}}">
@@ -36,6 +37,8 @@
         </li>
         {{/each}}
         {{/filter_active}}
+        {{/clone}}
+        {{#clone}}
         {{#filter_inactive}}
         {{#each}}
         <li class="member hi-05 up3c" id="member-li-{{id}}">
@@ -66,6 +69,7 @@
         </li>
         {{/each}}
         {{/filter_inactive}}
+        {{/clone}}
     </ul>
     {{/model.member.collect_all}}
 </div>

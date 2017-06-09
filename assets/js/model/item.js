@@ -157,7 +157,8 @@ Teambo.model.item = (function(t){
       filter_member: function(member) {
         var member_id = member ? member.id : null;
         if(!member_id) {
-          return new model.collection([]);
+          this.models = [];
+          return this;
         } else {
           return this.filter(function(item) {
             return item.assignedTo(member_id);
@@ -174,7 +175,8 @@ Teambo.model.item = (function(t){
         });
       },
       filter: function(fn) {
-        return new model.collection(this.models.filter(fn));
+        this.models = this.models.filter(fn)
+        return this;
       },
       order_created_desc: function() {
         return this.sort(function(a, b) {
@@ -199,7 +201,11 @@ Teambo.model.item = (function(t){
         return this;
       },
       limit_10: function() {
-        return new model.collection(this.models.slice(0, 10));
+        this.models.slice(0, 10)
+        return this;
+      },
+      clone: function() {
+        return new model.collection(this.models);
       }
     });
   };
