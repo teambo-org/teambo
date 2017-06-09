@@ -6,6 +6,7 @@ form.ext.std .field.submit { text-align: center; }
 form.ext.std .field label.chk { width: 25em; box-sizing: border-box; max-width: 100%; text-align: left; margin: 0 auto; padding: 0; font-size: 0.8em; }
 form.ext.std .field label.chk input.chk { transform: scale(1.5); }
 form.ext.std .field label.chk input.chk:active { transform: scale(1.5); background: rgba(0,0,0,0.15); }
+form.ext.std .field label.chk a { text-decoration: underline; }
 form.ext.std .field span.alert { color: #a00; font-weight: bold; }
 form.ext.std input.error,
 form.ext.std input.error:focus { outline: 4px solid rgba(255,0,0,0.5); }
@@ -109,15 +110,16 @@ form.ext.std.stealth { padding: 0 0 0.5em; box-shadow: none; display: none; }
 .about section #dashboard { position: relative; height: 16em; font-size: 0.9em; margin: 0 -1em 1em; }
 .about section #dashboard .up4c3b.frozen { width: 32% }
 .about section #dashboard .up4c3.frozen { width: 64%; }
-.about section #dashboard.item { overflow: visible; height: 16em; }
-.about section #dashboard.plan { font-size: 0.8em; height: 30em; }
+.about section #dashboard.item { overflow: visible; height: 14em; }
+.about section #dashboard.plan { font-size: 0.8em; height: 29em; }
 .about section #dashboard p { line-height: 1.2em; }
 .about section #dashboard ul li { padding: 0; }
-.about section #dashboard .main { position: absolute; left: 0; right: 0; margin: 0; padding: 0 1em; bottom: 0; max-width: 100%; }
+.about section #dashboard .main { position: absolute; left: 0; right: 0; margin: 0; padding: 0 0.5em; bottom: 0; max-width: 100%; }
 .about section #dashboard .main section { color: rgba(255,255,255,0.7); }
 .about section #dashboard .main nav { margin-top: 0; }
 .about section #dashboard .main h1 { font-size: 1.4em; }
 .about section #dashboard .main span.name { line-height: 1.18em; }
 
-.about .github-banner { position: fixed; top: 0; right: 0; border: 0; display: block; z-index: 1200; }
+.about h1 { color: #000; margin: 0.5em 0; }
+.about section.privacy { max-width: 40em; font-size: 0.8em; }
 
