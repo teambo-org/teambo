@@ -88,11 +88,11 @@
 #dashboard .main nav a,
 #dashboard .main nav span { float: left; padding: 0.223em 0.75em 0; line-height: 2em; position: relative; }
 #dashboard .main nav a:before { line-height: 2.223em; }
-#dashboard .main nav.breadcrumbs { left: 0; right: auto; font-size: 1em; }
+#dashboard .main nav.breadcrumbs { left: 0; right: auto; font-size: 1em; display: none; }
 #dashboard .main nav.breadcrumbs a,
 #dashboard .main nav.breadcrumbs span { line-height: 2em; font-size: 1.0em; padding: 0 1em; }
 
-#dashboard .main h1 { margin: 0 -1% 2%; position: relative; padding: 1.6em 0.5em 0.5em 2.15em; clear: both; overflow: hidden; }
+#dashboard .main h1 { margin: 0 -1% 2%; position: relative; padding: 0.5em 0.5em 0.5em 2.15em; clear: both; overflow: hidden; }
 #dashboard .main h1 i { position: absolute; left: 0.5em; }
 #dashboard .main h1::after { display: block; position: absolute; bottom: 0; left: -2em; right: -2em; height: 6em; content: " "; }
 
@@ -241,7 +241,7 @@ ul.items i.icon-check-empty { opacity: 0.5; }
 form.std.remove p { text-align: center; }
 
 @media (max-width: 1599px) {
-    #dashboard .main h1 { padding-top: 1.8em; }
+    #dashboard .main h1 { padding-top: 0.5em; }
 }
 
 @media (max-width: 639px) {
