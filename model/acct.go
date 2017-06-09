@@ -8,6 +8,7 @@ import (
 )
 
 type Acct struct {
+	AcctId     string `json:"-"`
 	Hkey       string `json:"-"`
 	Id         string `json:"id"`
 	Akey       string `json:"akey"`
@@ -15,56 +16,84 @@ type Acct struct {
 }
 
 func (a *Acct) Delete() (err error) {
-	return db_acct.Delete("acct-"+a.Hkey)
+	db_auth.Delete("auth-"+a.Hkey)
+	db_auth.Delete("protection-"+a.Hkey)
+	return db_acct.Delete("acct-"+a.AcctId)
 }
 
-func (a *Acct) Move(akey, pkey, ct string) (err error) {
-	hkey := acct_hkey(a.Id, akey)
-	phkey := acct_hkey(a.Id, pkey)
+func (a *Acct) Move(new_akey, new_pkey, ct string) (err error) {
+	hkey := acct_hkey(a.Id, new_akey)
+	phkey := acct_hkey(a.Id, new_pkey)
 
-	transaction, err := db_acct.OpenTransaction()
+	transaction, err := db_auth.OpenTransaction()
 	if err != nil {
 		return err
 	}
-	transaction.Delete("acct-" + a.Hkey)
-	transaction.Delete("acct_protection-" + a.Hkey)
-	transaction.Put("acct-" + hkey, ct)
-	transaction.Put("acct_protection-" + hkey, phkey)
+	transaction.Put("auth-" + hkey, a.AcctId)
+	transaction.Put("protection-" + hkey, phkey)
+	transaction.Delete("auth-" + a.Hkey)
+	transaction.Delete("protection-" + a.Hkey)
 	err = transaction.Commit()
+	if err != nil {
+		return err
+	}
+	err = db_acct.Put("acct-" + a.AcctId, ct)
 	if err == nil {
 		a.Hkey = hkey
-		a.Akey = akey
+		a.Akey = new_akey
 		a.Ciphertext = ct
 	}
 	return err
 }
 
 func (a *Acct) Update(ct string) (err error) {
-	err = db_acct.Put("acct-" + a.Hkey, ct)
+	err = db_acct.Put("acct-" + a.AcctId, ct)
 	if err == nil {
 		a.Ciphertext = ct
 	}
 	return err
 }
 
+func NewAcctId() string {
+	id := util.RandStr(16)
+	for {
+		exists, _ := db_acct.Has("acct-" + id)
+		if exists {
+			id = util.RandStr(16)
+		} else {
+			break
+		}
+	}
+	return id
+}
+
 func CreateAcct(id, akey, pkey, ct string) (item Acct, err error) {
 	hkey := acct_hkey(id, akey)
 	phkey := acct_hkey(id, pkey)
-	batch := db_acct.Batch()
-	batch.Put("acct-" + hkey, ct)
-	batch.Put("acct_protection-" + hkey, phkey)
+	acctId := NewAcctId()
+	batch := db_auth.Batch()
+	batch.Put("auth-" + hkey, acctId)
+	batch.Put("protection-" + hkey, phkey)
 	err = batch.Write()
+	if err != nil {
+		return item, err
+	}
+	err = db_acct.Put("acct-" + acctId, ct)
 	if err == nil {
-		item = Acct{hkey, id, akey, ct}
+		item = Acct{acctId, hkey, id, akey, ct}
 	}
 	return item, err
 }
 
 func FindAcct(id, akey string) (item Acct, err error) {
 	hkey := acct_hkey(id, akey)
-	ct, err := db_acct.Get("acct-" + hkey)
-	if len(ct) > 0 {
-		item = Acct{hkey, id, akey, ct}
+	acctId, err := db_auth.Get("auth-" + hkey)
+	if acctId == "" {
+		return item, err
+	}
+	ct, err := db_acct.Get("acct-" + acctId)
+	if ct != "" {
+		item = Acct{acctId, hkey, id, akey, ct}
 	}
 	return item, err
 }

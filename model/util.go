@@ -10,12 +10,17 @@ import (
 	// "log"
 )
 
+var db_auth driver.DB
 var db_acct driver.DB
 var db_invite driver.DB
 var db_throttle driver.DB
 var db_newsletter driver.DB
 
 func GlobalInit() (err error) {
+	db_auth, err = driver.OpenLevelDB(util.Config("app.data")+"/auth.ldb")
+	if err != nil {
+		return err
+	}
 	db_acct, err = driver.OpenLevelDB(util.Config("app.data")+"/account.ldb")
 	if err != nil {
 		return err
