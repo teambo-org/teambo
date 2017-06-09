@@ -1,6 +1,6 @@
 Teambo is an open source platform for team collaboration
 
-* It's highly secure and extremely fast
+* It's extremely fast
 * You can make changes when you're offline
 * Everything is End-to-end Encrypted
 
