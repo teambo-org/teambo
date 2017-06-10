@@ -20,7 +20,6 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
 	vkey := r.FormValue("vkey")
 	ct := r.FormValue("ct")
-	bypass := r.FormValue("bypass")
 	beta_code := r.FormValue("beta")
 	ikey := r.FormValue("ikey")
 	ihash := r.FormValue("ihash")
@@ -34,8 +33,8 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	verification_required := true
-	if bypass != "" {
-		verification_required = !(bypass == "true" && util.Config("app.testing") == "true")
+	if util.Config("acct.verification_required") == "false" {
+		verification_required = false
 	}
 
 	beta := model.BetaCode{}

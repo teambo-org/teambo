@@ -11,7 +11,7 @@ describe("acct.js", function() {
   Teambo.acct.deAuth();
 
   it("Can be created", function(done) {
-    Teambo.acct.verification.send(email, pass, {bypass: true}).then(function(){
+    Teambo.acct.verification.send(email, pass).then(function(){
       expect(Teambo.acct.current).not.toBe(null);
       done();
     }).catch(function(e){

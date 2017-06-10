@@ -25,15 +25,12 @@ Teambo.acct.verification = (function (t) {
           xhr_data.ikey = opts.ikey;
           xhr_data.ihash = t.crypto.sha(opts.ikey+opts.ichk+email);
         }
-        if(opts.bypass) {
-          xhr_data.bypass = 'true';
-        }
         t.xhr.post('/acct/verification', {
           data: xhr_data
         }).then(function (xhr){
           var data = JSON.parse(xhr.responseText);
           if(xhr.status == 201) {
-            if(opts.bypass && 'vkey' in data) {
+            if('vkey' in data) {
               verification.confirm(data.vkey, email, pass, {news: opts.news}).then(function(){
                 fulfill(xhr);
               });

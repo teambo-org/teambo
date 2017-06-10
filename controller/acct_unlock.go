@@ -14,7 +14,6 @@ import (
 
 func AcctUnlock(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
-	bypass := r.FormValue("bypass")
 	rkey := r.FormValue("rkey")
 	id := r.FormValue("id")
 
@@ -29,8 +28,8 @@ func AcctUnlock(w http.ResponseWriter, r *http.Request) {
 	}
 
 	verification_required := true
-	if bypass != "" {
-		verification_required = !(bypass == "true" && util.Config("app.testing") == "true")
+	if util.Config("acct.verification_required") == "false" {
+		verification_required = false
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")

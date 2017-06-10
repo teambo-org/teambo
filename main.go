@@ -22,15 +22,7 @@ func main() {
 	flag.Parse()
 	config := util.ParseConfig(*config_path)
 
-	if config["secret"] == "" || config["secret"] == "EMPTY" {
-		log.Println("Secret is required in configuration")
-		log.Println("Here's a random secret you can use:\n\nsecret " + util.RandStr(80) + "\n")
-		return
-	}
-	if config["smtp.user"] == "" || config["smtp.user"] == "__USER__" ||
-		config["smtp.pass"] == "" || config["smtp.pass"] == "__PASS__" {
-		log.Println("You must configure an SMTP service provider for verification emails")
-		log.Println("If this is a dev environment, try mailtrap.io")
+	if !check_config(config) {
 		return
 	}
 
@@ -91,4 +83,20 @@ func main() {
 	service.PurgeExpired.Stop()
 	log.Println("Closing Database Connections ...")
 	model.CloseAll()
+}
+
+func check_config(config map[string]string) bool {
+	if config["secret"] == "" || config["secret"] == "EMPTY" {
+		log.Println("You must provide a secret in your configuration file")
+		log.Println("Here's a random secret you can use:\n\nsecret " + util.RandStr(80) + "\n")
+		return false
+	}
+	if config["acct.verification_required"] != "false" &&
+		config["smtp.user"] == "" || config["smtp.user"] == "__USER__" ||
+		config["smtp.pass"] == "" || config["smtp.pass"] == "__PASS__" {
+		log.Println("You must configure an Email Service Provider under smtp.* (__USER__ / __PASS__)")
+		log.Println("Try a free account from mailtrap.io for dev or sendgrid.com for prod")
+		return false
+	}
+	return true
 }
