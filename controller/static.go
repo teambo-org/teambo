@@ -15,24 +15,8 @@ import (
 	// "log"
 )
 
-func Static(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/app.js" {
-		compile_js(w, r)
-		return
-	}
-	if r.URL.Path == "/lib.js" {
-		compile_lib_js(w, r)
-		return
-	}
-	if r.URL.Path == "/min.css" {
-		compile_css(w, r)
-		return
-	}
-	if r.URL.Path == "/font.css" {
-		compile_font_css(w, r)
-		return
-	}
-	path := "assets" + r.URL.Path
+func ServeStatic(prefix string, w http.ResponseWriter, r *http.Request) {
+	path := prefix + r.URL.Path
 	stat, err := os.Stat(path)
 	if err != nil {
 		http.Error(w, "Not Found : "+r.URL.Path, 404)
@@ -58,12 +42,18 @@ func Static(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r, cacheItem{file, mimetype, modTime})
+		HttpCache.Set(r, CacheItem{file, mimetype, modTime})
 	}
 	w.Write(file)
 }
 
-func compile_lib_js(w http.ResponseWriter, r *http.Request) {
+func StaticHandler(prefix string) func(w http.ResponseWriter, r *http.Request) {
+	return func (w http.ResponseWriter, r *http.Request) {
+		ServeStatic(prefix, w, r)
+	}
+}
+
+func Libjs(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
 	w.Header().Set("Content-Type", mimetype_js)
 	b := &bytes.Buffer{}
@@ -74,12 +64,12 @@ func compile_lib_js(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
+		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }
 
-func compile_js(w http.ResponseWriter, r *http.Request) {
+func Appjs(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
 	w.Header().Set("Content-Type", mimetype_js)
 	b := &bytes.Buffer{}
@@ -93,12 +83,12 @@ func compile_js(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
+		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }
 
-func compile_css(w http.ResponseWriter, r *http.Request) {
+func Mincss(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
 	w.Header().Set("Content-Type", mimetype_css)
 	m := minify.New()
@@ -112,12 +102,12 @@ func compile_css(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
+		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }
 
-func compile_font_css(w http.ResponseWriter, r *http.Request) {
+func Fontcss(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("v")
 	w.Header().Set("Content-Type", mimetype_css)
 	m := minify.New()
@@ -131,7 +121,7 @@ func compile_font_css(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
-		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
+		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
 	}
 	w.Write(b.Bytes())
 }

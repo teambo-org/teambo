@@ -17,6 +17,7 @@ func NewHandler() Handler {
 	dh.Attach(middleware.GzipAware)
 	dh.Attach(middleware.HttpCache)
 	dh.Attach(middleware.Gzip)
+	dh.Attach(middleware.DontCache)
 	return dh
 }
 
@@ -43,12 +44,11 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func ServeSingle(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Cache-Control", "max-age=0, no-cache, must-revalidate")
 	if handle, ok := routes[r.URL.Path]; ok {
 		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond)))
 		handle(w, r)
 	} else {
-		controller.Static(w, r)
+		controller.ServeStatic("assets", w, r)
 	}
 }
 

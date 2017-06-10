@@ -6,6 +6,7 @@ import (
 	"./service"
 	"./socket"
 	"./util"
+	"./apps"
 	"context"
 	"flag"
 	"log"
@@ -55,7 +56,10 @@ func main() {
 	h := &http.Server{}
 
 	dh := dispatch.NewHandler()
-	// app.NewRegistry(dh)
+	registry := apps.Registry {
+		DispatchHandler: &dh,
+	}
+	registry.Init()
 	dh.Finalize()
 
 	if config["ssl.active"] == "true" {

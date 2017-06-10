@@ -207,7 +207,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" {
 		modTime := time.Now().UTC()
 		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
-		HttpCache.Set(r, cacheItem{b.Bytes(), "text/html; charset=utf-8", modTime})
+		HttpCache.Set(r, CacheItem{b.Bytes(), "text/html; charset=utf-8", modTime})
 	}
 	w.Write(b.Bytes())
 }
@@ -222,7 +222,7 @@ func Initjs(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=315360000")
 		modTime := time.Now().UTC()
 		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
-		HttpCache.Set(r, cacheItem{b.Bytes(), mimetype_js, modTime})
+		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_js, modTime})
 	}
 	w.Write(b.Bytes())
 }
@@ -268,7 +268,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" {
 		modTime := time.Now().UTC()
 		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
-		HttpCache.Set(r, cacheItem{b.Bytes(), "text/cache-manifest", modTime})
+		HttpCache.Set(r, CacheItem{b.Bytes(), "text/cache-manifest", modTime})
 	}
 	w.Header().Set("Content-Type", "text/cache-manifest")
 	w.Write(b.Bytes())
@@ -303,7 +303,7 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 	if util.Config("static.cache") == "true" {
 		modTime := time.Now().UTC()
 		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
-		HttpCache.Set(r, cacheItem{b.Bytes(), "application/manifest+json", modTime})
+		HttpCache.Set(r, CacheItem{b.Bytes(), "application/manifest+json", modTime})
 	}
 	w.Header().Set("Content-Type", "application/manifest+json")
 	w.Write(b.Bytes())

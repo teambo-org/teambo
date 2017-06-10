@@ -9,33 +9,33 @@ import (
 	"time"
 )
 
-type cacheItem struct {
+type CacheItem struct {
 	Body     []byte
 	Mimetype string
 	Modified time.Time
 }
 
 type httpCache struct {
-	cache   map[string]*cacheItem
-	gzcache map[string]*cacheItem
+	cache   map[string]*CacheItem
+	gzcache map[string]*CacheItem
 	mutex   *sync.RWMutex
 }
 
 var HttpCache = httpCache{
-	cache:   map[string]*cacheItem{},
-	gzcache: map[string]*cacheItem{},
+	cache:   map[string]*CacheItem{},
+	gzcache: map[string]*CacheItem{},
 	mutex:   &sync.RWMutex{},
 }
 
 func (hc *httpCache) Clear() {
-	hc.cache = map[string]*cacheItem{}
-	hc.gzcache = map[string]*cacheItem{}
+	hc.cache = map[string]*CacheItem{}
+	hc.gzcache = map[string]*CacheItem{}
 }
 
 func (hc *httpCache) Serve(w http.ResponseWriter, r *http.Request) bool {
 	hc.mutex.RLock()
 	defer hc.mutex.RUnlock()
-	item, ok := &cacheItem{}, false
+	item, ok := &CacheItem{}, false
 	if r.Context().Value("gzip").(bool) {
 		item, ok = hc.gzcache[r.URL.Path]
 	} else {
@@ -52,11 +52,12 @@ func (hc *httpCache) Serve(w http.ResponseWriter, r *http.Request) bool {
 	}
 	w.Header().Set("Last-Modified", item.Modified.Format(time.RFC1123))
 	w.Header().Set("Content-Type", item.Mimetype)
+	w.Header().Set("Teambo-From-Cache", "1")
 	w.Write(item.Body)
 	return true
 }
 
-func (hc *httpCache) Set(r *http.Request, item cacheItem) {
+func (hc *httpCache) Set(r *http.Request, item CacheItem) {
 	hc.mutex.Lock()
 	defer hc.mutex.Unlock()
 	if r.Context().Value("gzip").(bool) {
