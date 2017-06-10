@@ -6,7 +6,8 @@ import (
 	"./service"
 	"./socket"
 	"./util"
-	"./apps"
+	"./app"
+	"./asset"
 	"context"
 	"flag"
 	"log"
@@ -57,9 +58,14 @@ func main() {
 
 	h := &http.Server{}
 
+	asset.Registry.Init()
+	asset.TestRegistry.Init()
+
 	dh := dispatch.NewHandler()
-	registry := apps.Registry {
+	registry := app.Registry {
 		Config: &util.Config,
+		AssetRegistry: &asset.Registry,
+		AssetTestRegistry: &asset.TestRegistry,
 		DispatchHandler: &dh,
 	}
 	registry.Init()

@@ -42,7 +42,7 @@ var routes = map[string]func(http.ResponseWriter, *http.Request){
 	"/init.js":             controller.Initjs,
 	"/app.js":              controller.Appjs,
 	"/lib.js":              controller.Libjs,
-	"/min.css":             controller.Mincss,
-	"/font.css":            controller.Fontcss,
+	"/app.css":             controller.Appcss,
+	"/lib.css":             controller.Libcss,
 	"/test":                controller.Test,
 }

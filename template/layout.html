@@ -18,8 +18,8 @@
         <div id="logo" class="logo" alt="Teambo"></div>
     </div>
 </div>
-{{range .CSS}}<link href="{{.}}" type="text/css" rel="stylesheet" media="all" />
-{{end}}{{range .CSSFONT}}<link href="{{.}}" type="text/css" rel="stylesheet" media="all" />
+{{range .CSSAPP}}<link href="{{.}}" type="text/css" rel="stylesheet" media="all" />
+{{end}}{{range .CSSLIB}}<link href="{{.}}" type="text/css" rel="stylesheet" media="all" />
 {{end}}{{range .JSLIB}}<script src="{{.}}" type="text/javascript"></script>
 {{end}}{{range .JSAPP}}<script src="{{.}}" type="text/javascript"></script>
 {{end}}{{range .JSINIT}}<script src="{{.}}" type="text/javascript"></script>

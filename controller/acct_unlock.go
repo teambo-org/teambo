@@ -68,7 +68,7 @@ func AcctUnlock(w http.ResponseWriter, r *http.Request) {
 			if util.Config.Get("ssl.active") == "true" {
 				scheme = scheme + "s"
 			}
-			t, err := template.ParseFiles("templates/email/unlock.html")
+			t, err := template.ParseFiles("template/email/unlock.html")
 			data := map[string]interface{}{
 				"email": email,
 				"link":  scheme + "://" + util.Config.Get("app.host") + "/#/account/unlock?id=" + id + "&rkey=" + rkey,

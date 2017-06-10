@@ -60,7 +60,7 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 		link = link + "&name=" + url.QueryEscape(team_name)
 	}
 
-	t, err := template.ParseFiles("templates/email/invite.html")
+	t, err := template.ParseFiles("template/email/invite.html")
 	data := map[string]interface{}{
 		"team_name":    team_name,
 		"link":         link,

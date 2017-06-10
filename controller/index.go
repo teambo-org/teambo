@@ -2,6 +2,8 @@ package controller
 
 import (
 	"../util"
+	"../asset"
+	"../app/apptools"
 	"bitbucket.org/maxhauser/jsmin"
 	"bytes"
 	"crypto/md5"
@@ -25,142 +27,26 @@ type Page struct {
 	JSAPP    []string
 	JSASYNC  []string
 	JSINIT   []string
-	CSS      []string
-	CSSFONT  []string
+	CSSAPP   []string
+	CSSLIB   []string
 	AUDIO    []string
 	MANIFEST []string
 	IMAGE    []string
 	FONT     []string
 }
 
-var jslib = []string{
-	"/js/lib/RSA/jsbn.js",
-	"/js/lib/RSA/jsbn2.js",
-	"/js/lib/RSA/prng4.js",
-	"/js/lib/RSA/rng.js",
-	"/js/lib/RSA/rsa.js",
-	"/js/lib/RSA/rsa2.js",
-	"/js/lib/RSA/base64.js",
-	"/js/lib/RSA/rsasync.js",
-	"/js/lib/sjcl.js",
-	"/js/lib/jsuri-1.1.1.js",
-	"/js/lib/fastclick.js",
-	"/js/lib/mustache.2.2.1.js",
-	"/js/lib/localforage.min.js",
-	"/js/lib/promise-7.0.4.min.js",
-	"/js/lib/classList.js",
-	"/js/lib/polyfills.js",
-	"/js/lib/color.js",
-	"/js/lib/diff_match_patch.js",
-}
-var jsapp = []string{
-	"/js/app.js",
-	"/js/array.js",
-	"/js/object.js",
-	"/js/async.js",
-	"/js/promise.js",
-	"/js/crypto.js",
-	"/js/event.js",
-	"/js/time.js",
-	"/js/socket.js",
-	"/js/form.js",
-	"/js/xhr.js",
-	"/js/dom.js",
-	"/js/device.js",
-	"/js/router.js",
-	"/js/view.js",
-	"/js/acct.js",
-	"/js/audio.js",
-	"/js/themes.js",
-	"/js/chat.js",
-	"/js/schema.js",
-	"/js/offline.js",
-	"/js/team.js",
-	"/js/model.js",
-	"/js/keybind.js",
-	"/js/manifest.js",
-	"/js/acct/verification.js",
-	"/js/view/calendar.js",
-	"/js/view/autoselect.js",
-	"/js/view/autofilter.js",
-	"/js/view/progress.js",
-	"/js/view/toggle.js",
-	"/js/view/history.js",
-	"/js/view/comment.js",
-	"/js/view/passmeter.js",
-	"/js/model/_prototype.js",
-	"/js/model/_extend.js",
-	"/js/model/comment.js",
-	"/js/model/folder.js",
-	"/js/model/item.js",
-	"/js/model/plan.js",
-	"/js/model/wiki.js",
-	"/js/model/member.js",
-	"/js/model/history.js",
-	"/js/model/invite.js",
-	"/js/socket/team.js",
-	"/js/socket/teamSummary.js",
-	"/js/socket/inviteResponse.js",
-	"/js/socket/inviteAcceptance.js",
-	"/js/socket/acct.js",
-}
-var jsasync = []string{
-	"/js/lib/fractal.js",
-	"/js/lib/zxcvbn.js",
-}
-var jsinit = []string{
-	"/init.js",
-}
-var cssfont = []string{
-	"/css/font.css",
-	"/css/font-semibold.css",
-}
-var css = []string{
-	"/css/default.css",
-	"/css/external.css",
-	"/css/dashboard.css",
-	"/font/teambo/css/teambo-embedded.css",
-}
-
 var mimetype_js = "text/javascript; charset=utf-8"
 var mimetype_css = "text/css; charset=utf-8"
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	min := r.FormValue("min")
-	t, err := template.ParseFiles("templates/layout.html")
+	t, err := template.ParseFiles("template/layout.html")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
 		http.Error(w, string(res), 500)
 		return
 	}
-	manifest := []string{}
-	if util.Config.Get("app.manifest") == "true" {
-		manifest = []string{
-			"/app.manifest",
-		}
-	}
-	p := Page{}
-	if util.Config.Get("static.min") == "true" && min != "0" {
-		p = Page{
-			JSLIB:    []string{"/lib.js?v=" + js_min_lib_version(jslib)},
-			JSASYNC:  hash_version(jsasync),
-			JSAPP:    []string{"/app.js?v=" + js_min_version(jsapp)},
-			JSINIT:   []string{},
-			CSS:      []string{"/min.css?v=" + css_min_version(css)},
-			CSSFONT:  []string{"/font.css?v=" + css_min_version(cssfont)},
-			MANIFEST: manifest,
-		}
-	} else {
-		p = Page{
-			JSLIB:    hash_version(jslib),
-			JSAPP:    hash_version(jsapp),
-			JSASYNC:  hash_version(jsasync),
-			JSINIT:   []string{"/init.js?v=" + jsinit_version()},
-			CSS:      hash_version(css),
-			CSSFONT:  hash_version(cssfont),
-			MANIFEST: manifest,
-		}
-	}
+
+	p := getPage()
 
 	ws_scheme := "ws"
 	port := ":" + util.Config.Get("port.http")
@@ -228,38 +114,15 @@ func Initjs(w http.ResponseWriter, r *http.Request) {
 }
 
 func Manifest(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("templates/app.manifest")
+	t, err := template.ParseFiles("template/app.manifest")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
 		http.Error(w, string(res), 500)
 		return
 	}
-	p := Page{}
-	if util.Config.Get("static.min") == "true" {
-		p = Page{
-			JSLIB:   []string{"/lib.js?v=" + js_min_lib_version(jslib)},
-			JSASYNC: hash_version(jsasync),
-			JSAPP:   []string{"/app.js?v=" + js_min_version(jsapp)},
-			JSINIT:  []string{},
-			CSS:     []string{"/min.css?v=" + css_min_version(css)},
-			CSSFONT: []string{"/font.css?v=" + css_min_version(cssfont)},
-			AUDIO:   find_audio(),
-			IMAGE:   find_images(),
-			// FONT:    find_fonts(),
-		}
-	} else {
-		p = Page{
-			JSLIB:   hash_version(jslib),
-			JSAPP:   hash_version(jsapp),
-			JSASYNC: hash_version(jsasync),
-			JSINIT:  []string{"/init.js?v=" + jsinit_version()},
-			CSS:     hash_version(css),
-			CSSFONT: hash_version(cssfont),
-			AUDIO:   find_audio(),
-			IMAGE:   find_images(),
-			// FONT:    find_fonts(),
-		}
-	}
+
+	p := getPage()
+
 	var b bytes.Buffer
 	err = t.Execute(&b, p)
 	if err != nil {
@@ -277,7 +140,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 var webmanifest_cache = ""
 
 func WebManifest(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("templates/app.manifestweb")
+	t, err := template.ParseFiles("template/app.manifestweb")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
 		http.Error(w, string(res), 500)
@@ -307,6 +170,39 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/manifest+json")
 	w.Write(b.Bytes())
+}
+
+func getPage() Page {
+	manifest := []string{}
+	if util.Config.Get("app.manifest") == "true" {
+		manifest = []string{
+			"/app.manifest",
+		}
+	}
+	if util.Config.Get("static.min") == "true" {
+		return Page{
+			JSLIB:    []string{"/lib.js?v=" + js_min_lib_version()},
+			JSASYNC:  hash_version(asset.Registry.Get("jsasync")),
+			JSAPP:    []string{"/app.js?v=" + js_min_app_version()},
+			JSINIT:   []string{},
+			CSSAPP:   []string{"/app.css?v=" + css_min_app_version()},
+			CSSLIB:   []string{"/lib.css?v=" + css_min_lib_version()},
+			AUDIO:    find_audio(),
+			IMAGE:    find_images(),
+			MANIFEST: manifest,
+		}
+	}
+	return Page{
+		JSLIB:    hash_version(asset.Registry.Get("jslib")),
+		JSAPP:    hash_version(asset.Registry.Get("jsapp")),
+		JSASYNC:  hash_version(asset.Registry.Get("jsasync")),
+		JSINIT:   []string{"/init.js?v=" + jsinit_version()},
+		CSSAPP:   hash_version(asset.Registry.Get("cssapp")),
+		CSSLIB:   hash_version(asset.Registry.Get("csslib")),
+		AUDIO:    find_audio(),
+		IMAGE:    find_images(),
+		MANIFEST: manifest,
+	}
 }
 
 // json marshal with SetEscapeHTML to prevent ugly escaping
@@ -346,7 +242,7 @@ func append_js_init(w io.Writer) {
 	if util.Config.Get("app.max_teams") != "" {
 		app["max_teams"], _ = strconv.Atoi(util.Config.Get("app.max_teams"))
 	}
-	jsasync_json, _ := json.Marshal(hash_version(jsasync))
+	jsasync_json, _ := json.Marshal(hash_version(asset.Registry.Get("jsasync")))
 	app_json, _ := json.Marshal(app)
 	js_data := "'templates': " + string(templates) + ", " +
 		"'template_js': { " + template_scripts + " }, " +
@@ -361,45 +257,38 @@ func append_js_init(w io.Writer) {
 	}
 }
 
-func hash_version(sources []string) []string {
+func hash_version(sources []apptools.Asset) []string {
 	ret := []string{}
-	for _, path := range sources {
-		content, _ := ioutil.ReadFile("assets" + path)
+	for _, a := range sources {
+		content, _ := ioutil.ReadAll(a.GetReader())
 		hasher := md5.New()
 		hasher.Write(content)
-		ret = append(ret, path+"?v="+hex.EncodeToString(hasher.Sum(nil)))
+		ret = append(ret, a.Url+"?v="+hex.EncodeToString(hasher.Sum(nil)))
 	}
 	return ret
 }
 
-func css_min_version(files []string) string {
+func css_min_lib_version() string {
 	hasher := md5.New()
-	for _, v := range files {
-		src, _ := os.Open("assets" + v)
-		jsmin.Run(src, hasher)
-	}
+	append_min_css_lib(hasher)
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func js_min_lib_version(js []string) string {
+func css_min_app_version() string {
 	hasher := md5.New()
-	for _, v := range js {
-		src, _ := os.Open("assets" + v)
-		jsmin.Run(src, hasher)
-	}
-	append_js_init(hasher)
+	append_min_css_app(hasher)
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func js_min_version(js []string) string {
+func js_min_lib_version() string {
 	hasher := md5.New()
-	hasher.Write([]byte("(function(){"))
-	for _, v := range js {
-		src, _ := os.Open("assets" + v)
-		jsmin.Run(src, hasher)
-	}
-	append_js_init(hasher)
-	hasher.Write([]byte("})();"))
+	append_min_js_lib(hasher)
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func js_min_app_version() string {
+	hasher := md5.New()
+	append_min_js_app(hasher)
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
@@ -413,7 +302,7 @@ func compile_templates() (map[string]string, map[string]string) {
 	templates := map[string]string{}
 	template_js := map[string]string{}
 	scan := func(path string, f os.FileInfo, err error) error {
-		filename, _ := filepath.Rel("templates", path)
+		filename, _ := filepath.Rel("template", path)
 		if !f.IsDir() && strings.Contains(filename, string(os.PathSeparator)) {
 			tpl, _ := ioutil.ReadFile(path)
 			if strings.HasSuffix(filename, ".mustache") {
@@ -428,13 +317,13 @@ func compile_templates() (map[string]string, map[string]string) {
 		}
 		return nil
 	}
-	filepath.Walk("templates", scan)
+	filepath.Walk("template", scan)
 
 	return templates, template_js
 }
 
 func find_audio() []string {
-	dir := "assets" + string(os.PathSeparator) + "audio"
+	dir := "public" + string(os.PathSeparator) + "audio"
 	audio := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() && strings.HasSuffix(path, ".mp3") {
@@ -447,7 +336,7 @@ func find_audio() []string {
 }
 
 func find_images() []string {
-	dir := "assets" + string(os.PathSeparator) + "i"
+	dir := "public" + string(os.PathSeparator) + "i"
 	images := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {
@@ -460,7 +349,7 @@ func find_images() []string {
 }
 
 func find_fonts() []string {
-	dir := "assets" + string(os.PathSeparator) + "font"
+	dir := "public" + string(os.PathSeparator) + "font"
 	files := []string{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {

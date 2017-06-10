@@ -2,33 +2,13 @@ package controller
 
 import (
 	"../util"
+	"../asset"
 	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
 	"strings"
-	// "fmt"
 )
-
-var tjs = append(jslib, []string{
-	"/js/lib/jasmine.2.5.js",
-	"/js/lib/jasmine-html.2.5.js",
-}...)
-var tcss = append(css, []string{
-	"/css/lib/jasmine.2.5.css",
-}...)
-var tests = []string{
-	"/js/test/boot.js",
-	"/js/test/array.test.js",
-	"/js/test/object.test.js",
-	"/js/test/schema.test.js",
-	"/js/test/acct.test.js",
-	"/js/test/team.test.js",
-	"/js/test/folder.test.js",
-	"/js/test/item.test.js",
-	"/js/test/plan.test.js",
-	"/js/test/stress.test.js",
-}
 
 func Test(w http.ResponseWriter, r *http.Request) {
 	if util.Config.Get("app.testing") != "true" {
@@ -36,33 +16,14 @@ func Test(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, string(res), 403)
 		return
 	}
-	min := r.FormValue("min")
-	t, err := template.ParseFiles("templates/layout.html")
+	t, err := template.ParseFiles("template/layout.html")
 	if err != nil {
 		res, _ := json.Marshal(map[string]string{"error": err.Error()})
 		http.Error(w, string(res), 500)
 		return
 	}
-	p := Page{}
-	if util.Config.Get("static.min") == "true" && min != "0" {
-		p = Page{
-			JSLIB:   hash_version(tjs),
-			JSASYNC: hash_version(jsasync),
-			JSAPP:   []string{"/min.js?v=" + js_min_version(jsapp)},
-			JSINIT:  []string{},
-			CSS:     []string{"/min.css?v=" + css_min_version(tcss)},
-			CSSFONT: []string{"/font.css?v=" + css_min_version(cssfont)},
-		}
-	} else {
-		p = Page{
-			JSLIB:   hash_version(tjs),
-			JSASYNC: hash_version(jsasync),
-			JSAPP:   hash_version(jsapp),
-			JSINIT:  append([]string{"/init.js?v=" + jsinit_version()}, hash_version(tests)...),
-			CSS:     hash_version(tcss),
-			CSSFONT: hash_version(cssfont),
-		}
-	}
+
+	p := getTestPage()
 
 	ws_scheme := "ws"
 	port := ":" + util.Config.Get("port.http")
@@ -95,5 +56,25 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	err = t.Execute(w, p)
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
+	}
+}
+
+func getTestPage() Page {
+	manifest := []string{}
+	if util.Config.Get("app.manifest") == "true" {
+		manifest = []string{
+			"/app.manifest",
+		}
+	}
+	return Page{
+		JSLIB:    hash_version(asset.TestRegistry.Get("jslib")),
+		JSAPP:    hash_version(asset.TestRegistry.Get("jsapp")),
+		JSASYNC:  hash_version(asset.TestRegistry.Get("jsasync")),
+		JSINIT:   []string{"/init.js?v=" + jsinit_version()},
+		CSSAPP:   hash_version(asset.TestRegistry.Get("cssapp")),
+		CSSLIB:   hash_version(asset.TestRegistry.Get("csslib")),
+		AUDIO:    find_audio(),
+		IMAGE:    find_images(),
+		MANIFEST: manifest,
 	}
 }

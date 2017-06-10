@@ -3,6 +3,7 @@ Teambo.acct.verification = (function (t) {
 
   var verification = {
     send : function (email, pass, opts) {
+      opts = opts ? opts : {};
       if(!email || !pass) {
         return Promise.reject();
       }

@@ -15,6 +15,7 @@ describe("acct.js", function() {
       expect(Teambo.acct.current).not.toBe(null);
       done();
     }).catch(function(e){
+      console.trace(e);
       fail("Account not created");
     });
   });
@@ -33,7 +34,7 @@ describe("acct.js", function() {
 
   it("Generates an RSA key", function(done) {
     var progress = function(a){
-      // console.log(a);
+      console.log("RSA Progress: " + a);
     };
     Teambo.acct.current.genrsa(progress).then(function() {
       expect(Teambo.acct.current.rsa).not.toBe(null);

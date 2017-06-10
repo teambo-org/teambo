@@ -150,7 +150,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			if news == "true" {
 				link = link + "&news=true"
 			}
-			t, err := template.ParseFiles("templates/email/verification.html")
+			t, err := template.ParseFiles("template/email/verification.html")
 			data := map[string]interface{}{
 				"email": email,
 				"link":  link,

@@ -2,6 +2,8 @@ package apptools
 
 import (
 	"net/http"
+	"io"
+	"time"
 )
 
 type App interface {
@@ -11,13 +13,23 @@ type App interface {
 type Registry interface {
 	Init()
 	GetDispatchHandler() DispatchHandler
+	GetAssetRegistry() AssetRegistry
+	GetAssetTestRegistry() AssetRegistry
 }
 
 type DispatchHandler interface {
 	Attach(func(func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request))
-	HandleTeamObject(string, bool) func(w http.ResponseWriter, r *http.Request)
-	HandleTeamObjects(string, bool) func(w http.ResponseWriter, r *http.Request)
-	HandleTeamObjectRemove(string, bool) func(w http.ResponseWriter, r *http.Request)
+	AddTeamObject(string, bool)
+}
+
+type AssetRegistry interface {
+	Add(string, Asset)
+}
+
+type Asset struct {
+	Url string
+	GetModTime func()time.Time
+	GetReader func()io.Reader
 }
 
 type Config interface {

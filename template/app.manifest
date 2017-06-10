@@ -10,9 +10,9 @@ CACHE:
 {{end}}{{range .JSINIT}}
 {{.}}
 {{end}}
-{{range .CSSFONT}}{{.}}
+{{range .CSSLIB}}{{.}}
 {{end}}
-{{range .CSS}}{{.}}
+{{range .CSSAPP}}{{.}}
 {{end}}
 {{range .AUDIO}}/audio/{{.}}
 {{end}}
