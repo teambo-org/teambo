@@ -43,6 +43,22 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// log.Printf("%d %s", time.Since(start).Nanoseconds() / 1e3, r.URL.Path)
 }
 
+func (h *Handler) HandleTeamObject(bucket_name string, log_changes bool) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		controller.TeamObject(bucket_name, log_changes, w, r)
+	}
+}
+func (h *Handler) HandleTeamObjects(bucket_name string, log_changes bool) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		controller.TeamObjects(bucket_name, log_changes, w, r)
+	}
+}
+func (h *Handler) HandleTeamObjectRemove(bucket_name string, log_changes bool) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		controller.TeamObjectRemove(bucket_name, log_changes, w, r)
+	}
+}
+
 func ServeSingle(w http.ResponseWriter, r *http.Request) {
 	if handle, ok := routes[r.URL.Path]; ok {
 		w.Header().Set("Server-Time", fmt.Sprintf("%d", time.Now().UTC().UnixNano()/int64(time.Millisecond)))

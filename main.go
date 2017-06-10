@@ -59,6 +59,7 @@ func main() {
 
 	dh := dispatch.NewHandler()
 	registry := apps.Registry {
+		Config: &util.Config,
 		DispatchHandler: &dh,
 	}
 	registry.Init()
