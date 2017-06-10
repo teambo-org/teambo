@@ -12,7 +12,7 @@ import (
 
 func NewHandler() Handler {
 	dh := Handler{}
-	dh.Attach(middleware.CSRF(util.Config("ssl.active") == "true", util.Config("app.host")))
+	dh.Attach(middleware.CSRF(util.Config.Get("ssl.active") == "true", util.Config.Get("app.host")))
 	dh.Attach(middleware.BodyBuffer)
 	dh.Attach(middleware.GzipAware)
 	dh.Attach(middleware.HttpCache)

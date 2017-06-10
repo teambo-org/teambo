@@ -17,23 +17,23 @@ var db_throttle driver.DB
 var db_newsletter driver.DB
 
 func GlobalInit() (err error) {
-	db_auth, err = driver.OpenLevelDB(util.Config("app.data") + "/auth.ldb")
+	db_auth, err = driver.OpenLevelDB(util.Config.Get("app.data") + "/auth.ldb")
 	if err != nil {
 		return err
 	}
-	db_acct, err = driver.OpenLevelDB(util.Config("app.data") + "/account.ldb")
+	db_acct, err = driver.OpenLevelDB(util.Config.Get("app.data") + "/account.ldb")
 	if err != nil {
 		return err
 	}
-	db_invite, err = driver.OpenLevelDB(util.Config("app.data") + "/invite.ldb")
+	db_invite, err = driver.OpenLevelDB(util.Config.Get("app.data") + "/invite.ldb")
 	if err != nil {
 		return err
 	}
-	db_throttle, err = driver.OpenLevelDB(util.Config("app.data") + "/throttle.ldb")
+	db_throttle, err = driver.OpenLevelDB(util.Config.Get("app.data") + "/throttle.ldb")
 	if err != nil {
 		return err
 	}
-	db_newsletter, err = driver.OpenLevelDB(util.Config("app.data") + "/newsletter.ldb")
+	db_newsletter, err = driver.OpenLevelDB(util.Config.Get("app.data") + "/newsletter.ldb")
 	if err != nil {
 		return err
 	}
@@ -82,11 +82,11 @@ func db_open_existing(path string) (db driver.DB, err error) {
 }
 
 func db_team_open(team_id string) (db driver.DB, err error) {
-	return db_open(util.Config("app.data") + "/teams/" + team_id + ".ldb")
+	return db_open(util.Config.Get("app.data") + "/teams/" + team_id + ".ldb")
 }
 
 func db_team_delete(team_id string) error {
-	err := os.RemoveAll(util.Config("app.data") + "/teams/" + team_id + ".ldb")
+	err := os.RemoveAll(util.Config.Get("app.data") + "/teams/" + team_id + ".ldb")
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func db_team_delete(team_id string) error {
 }
 
 func db_team_exists(team_id string) bool {
-	if _, err := os.Stat(util.Config("app.data") + "/teams/" + team_id + ".ldb"); err == nil {
+	if _, err := os.Stat(util.Config.Get("app.data") + "/teams/" + team_id + ".ldb"); err == nil {
 		return true
 	}
 	return false

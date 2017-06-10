@@ -23,8 +23,8 @@ func main() {
 		log.Println("Database Path Required")
 		return
 	}
-	util.ParseConfig(*config_path)
-	path := util.Config("app.data") + "/" + *db_path + ".ldb"
+	util.Config.Parse(*config_path)
+	path := util.Config.Get("app.data")+"/" + *db_path + ".ldb"
 	if _, err := os.Stat(path); err != nil {
 		log.Println("Database not found: " + path)
 		return

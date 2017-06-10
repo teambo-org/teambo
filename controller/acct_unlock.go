@@ -28,7 +28,7 @@ func AcctUnlock(w http.ResponseWriter, r *http.Request) {
 	}
 
 	verification_required := true
-	if util.Config("acct.verification_required") == "false" {
+	if util.Config.Get("acct.verification_required") == "false" {
 		verification_required = false
 	}
 
@@ -65,13 +65,13 @@ func AcctUnlock(w http.ResponseWriter, r *http.Request) {
 			subject := "Teambo Account Unlock"
 
 			scheme := "http"
-			if util.Config("ssl.active") == "true" {
+			if util.Config.Get("ssl.active") == "true" {
 				scheme = scheme + "s"
 			}
 			t, err := template.ParseFiles("templates/email/unlock.html")
 			data := map[string]interface{}{
 				"email": email,
-				"link":  scheme + "://" + util.Config("app.host") + "/#/account/unlock?id=" + id + "&rkey=" + rkey,
+				"link":  scheme + "://" + util.Config.Get("app.host") + "/#/account/unlock?id=" + id + "&rkey=" + rkey,
 			}
 			buf := new(bytes.Buffer)
 			if err = t.Execute(buf, data); err != nil {

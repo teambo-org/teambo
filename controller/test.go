@@ -31,7 +31,7 @@ var tests = []string{
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
-	if util.Config("app.testing") != "true" {
+	if util.Config.Get("app.testing") != "true" {
 		res, _ := json.Marshal(map[string]string{"error": "Tests not enabled"})
 		http.Error(w, string(res), 403)
 		return
@@ -44,7 +44,7 @@ func Test(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	p := Page{}
-	if util.Config("static.min") == "true" && min != "0" {
+	if util.Config.Get("static.min") == "true" && min != "0" {
 		p = Page{
 			JSLIB:   hash_version(tjs),
 			JSASYNC: hash_version(jsasync),
@@ -65,12 +65,12 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ws_scheme := "ws"
-	port := ":" + util.Config("port.http")
-	if util.Config("ssl.active") == "true" {
+	port := ":" + util.Config.Get("port.http")
+	if util.Config.Get("ssl.active") == "true" {
 		ws_scheme = "wss"
-		port = ":" + util.Config("port.https")
+		port = ":" + util.Config.Get("port.https")
 	}
-	ws_url := ws_scheme + "://" + util.Config("app.host")
+	ws_url := ws_scheme + "://" + util.Config.Get("app.host")
 	if port != ":" && port != ":80" && port != ":443" {
 		ws_url = ws_url + port
 	}
@@ -81,12 +81,12 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("X-Permitted-Cross-Domain-Policies", "none")
 	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' data:; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob: "+ws_url)
-	if util.Config("ssl.active") == "true" {
+	if util.Config.Get("ssl.active") == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 	}
-	if util.Config("ssl.hpkp") != "" {
+	if util.Config.Get("ssl.hpkp") != "" {
 		var keys = ""
-		for _, k := range strings.Split(util.Config("ssl.hpkp"), " ") {
+		for _, k := range strings.Split(util.Config.Get("ssl.hpkp"), " ") {
 			keys = keys + "pin-sha256=\"" + k + "\"; "
 		}
 		w.Header().Set("Public-Key-Pins", keys+"max-age=30")

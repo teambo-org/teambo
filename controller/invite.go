@@ -52,10 +52,10 @@ func Invite(w http.ResponseWriter, r *http.Request) {
 
 	subject := "Teambo Invite"
 	scheme := "http"
-	if util.Config("ssl.active") == "true" {
+	if util.Config.Get("ssl.active") == "true" {
 		scheme = scheme + "s"
 	}
-	link := scheme + "://" + util.Config("app.host") + "/#/invite?ikey=" + ikey + "&chk=" + chk
+	link := scheme + "://" + util.Config.Get("app.host") + "/#/invite?ikey=" + ikey + "&chk=" + chk
 	if team_name != "" {
 		link = link + "&name=" + url.QueryEscape(team_name)
 	}
@@ -90,7 +90,7 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	scheme := "http"
-	if util.Config("ssl.active") == "true" {
+	if util.Config.Get("ssl.active") == "true" {
 		scheme = scheme + "s"
 	}
 
@@ -125,7 +125,7 @@ func InviteResponse(w http.ResponseWriter, r *http.Request) {
 		})
 		http.Error(w, string(msg), 201)
 	} else if r.Method == "GET" {
-		if r.Header.Get("Origin") != scheme+"://"+util.Config("app.host") {
+		if r.Header.Get("Origin") != scheme+"://"+util.Config.Get("app.host") {
 			http.Error(w, "Origin not allowed", 403)
 			return
 		}
@@ -170,7 +170,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	scheme := "http"
-	if util.Config("ssl.active") == "true" {
+	if util.Config.Get("ssl.active") == "true" {
 		scheme = scheme + "s"
 	}
 
@@ -212,7 +212,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 		})
 		http.Error(w, string(msg), 201)
 	} else if r.Method == "GET" {
-		if r.Header.Get("Origin") != scheme+"://"+util.Config("app.host") {
+		if r.Header.Get("Origin") != scheme+"://"+util.Config.Get("app.host") {
 			http.Error(w, "Origin not allowed", 403)
 			return
 		}

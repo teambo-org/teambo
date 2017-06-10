@@ -25,8 +25,8 @@ func clear_invites() error {
 func main() {
 	var config_path *string = flag.String("conf", "../app.conf", "Location of config file")
 	flag.Parse()
-	util.ParseConfig(*config_path)
-	path := util.Config("app.data")+"/invite.ldb"
+	util.Config.Parse(*config_path)
+	path := util.Config.Get("app.data")+"/invite.ldb"
 	log.Println("=== " + path + " ===")
 	dbh, err := leveldb.OpenFile(path, nil)
 	db_invite = dbh

@@ -100,7 +100,7 @@ func FindAcct(id, akey string) (item Acct, err error) {
 
 func acct_hkey(id string, akey string) string {
 	h := sha256.New()
-	h.Write([]byte(id + akey + util.Config("secret")))
+	h.Write([]byte(id + akey + util.Config.Get("secret")))
 	hkey := base64.StdEncoding.EncodeToString(h.Sum(nil))
 	return hkey
 }

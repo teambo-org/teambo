@@ -33,7 +33,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	verification_required := true
-	if util.Config("acct.verification_required") == "false" {
+	if util.Config.Get("acct.verification_required") == "false" {
 		verification_required = false
 	}
 
@@ -134,7 +134,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		scheme := "http"
-		if util.Config("ssl.active") == "true" {
+		if util.Config.Get("ssl.active") == "true" {
 			scheme = scheme + "s"
 		}
 		msg := []byte("")
@@ -146,7 +146,7 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 		} else {
 			subject := "Teambo Account Verification"
 
-			link := scheme + "://" + util.Config("app.host") + "/#/login?vkey=" + vkey
+			link := scheme + "://" + util.Config.Get("app.host") + "/#/login?vkey=" + vkey
 			if news == "true" {
 				link = link + "&news=true"
 			}

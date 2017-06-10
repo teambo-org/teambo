@@ -134,13 +134,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	manifest := []string{}
-	if util.Config("app.manifest") == "true" {
+	if util.Config.Get("app.manifest") == "true" {
 		manifest = []string{
 			"/app.manifest",
 		}
 	}
 	p := Page{}
-	if util.Config("static.min") == "true" && min != "0" {
+	if util.Config.Get("static.min") == "true" && min != "0" {
 		p = Page{
 			JSLIB:    []string{"/lib.js?v=" + js_min_lib_version(jslib)},
 			JSASYNC:  hash_version(jsasync),
@@ -163,12 +163,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ws_scheme := "ws"
-	port := ":" + util.Config("port.http")
-	if util.Config("ssl.active") == "true" {
+	port := ":" + util.Config.Get("port.http")
+	if util.Config.Get("ssl.active") == "true" {
 		ws_scheme = "wss"
-		port = ":" + util.Config("port.https")
+		port = ":" + util.Config.Get("port.https")
 	}
-	ws_url := ws_scheme + "://" + util.Config("app.host")
+	ws_url := ws_scheme + "://" + util.Config.Get("app.host")
 	if port != ":" && port != ":80" && port != ":443" {
 		ws_url = ws_url + port
 	}
@@ -179,12 +179,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("X-Permitted-Cross-Domain-Policies", "none")
 	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' data:; img-src 'self' data:; font-src 'self' data:; connect-src 'self' blob: "+ws_url)
-	if util.Config("ssl.active") == "true" {
+	if util.Config.Get("ssl.active") == "true" {
 		w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 	}
-	if util.Config("ssl.hpkp") != "" {
+	if util.Config.Get("ssl.hpkp") != "" {
 		var keys = ""
-		for _, k := range strings.Split(util.Config("ssl.hpkp"), " ") {
+		for _, k := range strings.Split(util.Config.Get("ssl.hpkp"), " ") {
 			keys = keys + "pin-sha256=\"" + k + "\"; "
 		}
 		w.Header().Set("Public-Key-Pins", keys+"max-age=30")
@@ -192,7 +192,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	// Index page can be cached by reverse proxy if cache is cleared after every deploy
 	// X-Cache-Edge works like s-maxage in that rpc caches resposne but tells clients not to
-	// if util.Config("static.cache") == "true" {
+	// if util.Config.Get("static.cache") == "true" {
 	// w.Header().Set("X-Cache-Edge", "0")
 	// w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 	// w.Header().Set("Cache-Control", "max-age=315360000")
@@ -204,7 +204,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
 
-	if util.Config("static.cache") == "true" {
+	if util.Config.Get("static.cache") == "true" {
 		modTime := time.Now().UTC()
 		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
 		HttpCache.Set(r, CacheItem{b.Bytes(), "text/html; charset=utf-8", modTime})
@@ -217,7 +217,7 @@ func Initjs(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", mimetype_js)
 	b := &bytes.Buffer{}
 	append_js_init(b)
-	if util.Config("static.cache") == "true" && version != "" {
+	if util.Config.Get("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 		modTime := time.Now().UTC()
@@ -235,7 +235,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	p := Page{}
-	if util.Config("static.min") == "true" {
+	if util.Config.Get("static.min") == "true" {
 		p = Page{
 			JSLIB:   []string{"/lib.js?v=" + js_min_lib_version(jslib)},
 			JSASYNC: hash_version(jsasync),
@@ -265,7 +265,7 @@ func Manifest(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
-	if util.Config("static.cache") == "true" {
+	if util.Config.Get("static.cache") == "true" {
 		modTime := time.Now().UTC()
 		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
 		HttpCache.Set(r, CacheItem{b.Bytes(), "text/cache-manifest", modTime})
@@ -284,10 +284,10 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	scheme := "http"
-	if util.Config("ssl.active") == "true" {
+	if util.Config.Get("ssl.active") == "true" {
 		scheme = scheme + "s"
 	}
-	url := scheme + "://" + util.Config("app.host")
+	url := scheme + "://" + util.Config.Get("app.host")
 	p := map[string]string{
 		"url":         url,
 		"name":        "Teambo",
@@ -300,7 +300,7 @@ func WebManifest(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("TEMPLATE ERROR - " + err.Error())
 	}
-	if util.Config("static.cache") == "true" {
+	if util.Config.Get("static.cache") == "true" {
 		modTime := time.Now().UTC()
 		w.Header().Set("Last-Modified", modTime.Format(time.RFC1123))
 		HttpCache.Set(r, CacheItem{b.Bytes(), "application/manifest+json", modTime})
@@ -339,12 +339,12 @@ func append_js_init(w io.Writer) {
 		"remember_me": false,
 	}
 	for k, _ := range app {
-		if util.Config("app."+k) == "true" {
+		if util.Config.Get("app."+k) == "true" {
 			app[k] = true
 		}
 	}
-	if util.Config("app.max_teams") != "" {
-		app["max_teams"], _ = strconv.Atoi(util.Config("app.max_teams"))
+	if util.Config.Get("app.max_teams") != "" {
+		app["max_teams"], _ = strconv.Atoi(util.Config.Get("app.max_teams"))
 	}
 	jsasync_json, _ := json.Marshal(hash_version(jsasync))
 	app_json, _ := json.Marshal(app)
@@ -354,7 +354,7 @@ func append_js_init(w io.Writer) {
 		"'jsasync': " + string(jsasync_json) + ", " +
 		"'app': " + string(app_json)
 	js := "Teambo.app.init({" + js_data + "});"
-	if util.Config("static.min") == "true" {
+	if util.Config.Get("static.min") == "true" {
 		jsmin.Run(strings.NewReader(js), w)
 	} else {
 		w.Write([]byte(js))

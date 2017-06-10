@@ -39,7 +39,7 @@ func ServeStatic(prefix string, w http.ResponseWriter, r *http.Request) {
 		mimetype = http.DetectContentType([]byte(file))
 	}
 	w.Header().Set("Content-Type", mimetype)
-	if util.Config("static.cache") == "true" {
+	if util.Config.Get("static.cache") == "true" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 		HttpCache.Set(r, CacheItem{file, mimetype, modTime})
@@ -61,7 +61,7 @@ func Libjs(w http.ResponseWriter, r *http.Request) {
 		src, _ := os.Open("assets" + v)
 		jsmin.Run(src, b)
 	}
-	if util.Config("static.cache") == "true" && version != "" {
+	if util.Config.Get("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
@@ -80,7 +80,7 @@ func Appjs(w http.ResponseWriter, r *http.Request) {
 	}
 	append_js_init(b)
 	b.Write([]byte("})();"))
-	if util.Config("static.cache") == "true" && version != "" {
+	if util.Config.Get("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_js, time.Now().UTC()})
@@ -99,7 +99,7 @@ func Mincss(w http.ResponseWriter, r *http.Request) {
 		min, _ := m.String("text/css", string(src))
 		b.Write([]byte(min))
 	}
-	if util.Config("static.cache") == "true" && version != "" {
+	if util.Config.Get("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})
@@ -118,7 +118,7 @@ func Fontcss(w http.ResponseWriter, r *http.Request) {
 		min, _ := m.String("text/css", string(src))
 		b.Write([]byte(min))
 	}
-	if util.Config("static.cache") == "true" && version != "" {
+	if util.Config.Get("static.cache") == "true" && version != "" {
 		w.Header().Set("Expires", "Mon, 28 Jan 2038 23:30:00 GMT")
 		w.Header().Set("Cache-Control", "max-age=315360000")
 		HttpCache.Set(r, CacheItem{b.Bytes(), mimetype_css, time.Now().UTC()})

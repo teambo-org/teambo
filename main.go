@@ -16,12 +16,14 @@ import (
 	"runtime"
 	"strconv"
 	"time"
+	// "github.com/teambo-org/apptools"
 )
 
 func main() {
 	var config_path *string = flag.String("conf", "app.conf", "Location of config file")
 	flag.Parse()
-	config := util.ParseConfig(*config_path)
+	util.Config.Parse(*config_path)
+	config := util.Config.All()
 
 	if !check_config(config) {
 		return
