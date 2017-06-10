@@ -22,6 +22,18 @@ func main() {
 	flag.Parse()
 	config := util.ParseConfig(*config_path)
 
+	if config["secret"] == "" || config["secret"] == "EMPTY" {
+		log.Println("Secret is required in configuration")
+		log.Println("Here's a random secret you can use:\n\nsecret " + util.RandStr(80) + "\n")
+		return
+	}
+	if config["smtp.user"] == "" || config["smtp.user"] == "__USER__" ||
+		config["smtp.pass"] == "" || config["smtp.pass"] == "__PASS__" {
+		log.Println("You must configure an SMTP service provider for verification emails")
+		log.Println("If this is a dev environment, try mailtrap.io")
+		return
+	}
+
 	procs, err := strconv.Atoi(config["app.procs"])
 	if err != nil {
 		runtime.GOMAXPROCS(procs)
