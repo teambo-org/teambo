@@ -2,10 +2,10 @@ package model
 
 import (
 	"../util"
-	"fmt"
-	"time"
-	"log"
 	"errors"
+	"fmt"
+	"log"
+	"time"
 )
 
 type Team struct {
@@ -100,7 +100,7 @@ func (t Team) Log(iv string) (item string, err error) {
 	ts := time.Now().UnixNano()
 	k := fmt.Sprintf("%d-%s-%s", ts, "team", t.Id)
 	item = k + "-" + iv
-	err = team_db.Put("log-" + k, iv)
+	err = team_db.Put("log-"+k, iv)
 	return item, err
 }
 

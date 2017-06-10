@@ -15,8 +15,8 @@ func TeamLogSince(team_id string, ts string) (ret []string, err error) {
 	iter := team_db.PrefixIterator(prefix)
 	iter.Seek(prefix + ts)
 	for iter.Next() {
-		if !first || !strings.HasPrefix(iter.Key(), prefix + ts) {
-			ret = append(ret, iter.Key()[len(prefix):] + "-" + iter.Value())
+		if !first || !strings.HasPrefix(iter.Key(), prefix+ts) {
+			ret = append(ret, iter.Key()[len(prefix):]+"-"+iter.Value())
 		}
 		first = false
 	}
@@ -35,7 +35,7 @@ func TeamLogCount(team_id string, ts string) (total int64) {
 	iter := team_db.PrefixIterator(prefix)
 	iter.Seek(prefix + ts)
 	for iter.Next() {
-		if !first || !strings.HasPrefix(iter.Key(), prefix + ts) {
+		if !first || !strings.HasPrefix(iter.Key(), prefix+ts) {
 			total++
 		}
 		first = false

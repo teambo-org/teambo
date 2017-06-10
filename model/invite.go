@@ -13,10 +13,10 @@ type Invite struct {
 
 func (o *Invite) Delete() (err error) {
 	batch := db_invite.Batch()
-	batch.Delete("invite-"+o.Id)
-	batch.Delete("invite_response-"+o.Id)
-	batch.Delete("invite_acceptance-"+o.Id)
-	batch.Delete("invite_redeemed-"+o.Id)
+	batch.Delete("invite-" + o.Id)
+	batch.Delete("invite_response-" + o.Id)
+	batch.Delete("invite_acceptance-" + o.Id)
+	batch.Delete("invite_redeemed-" + o.Id)
 	return batch.Write()
 }
 
@@ -49,7 +49,7 @@ func InviteCreate(id, hash string, ttl int64) (item Invite, err error) {
 	if err != nil {
 		return item, nil
 	}
-	ts := fmt.Sprintf("%d", time.Now().UnixNano() + ttl)
+	ts := fmt.Sprintf("%d", time.Now().UnixNano()+ttl)
 	ek := "invite_expire-" + ts
 	err = db_invite.Put(ek, id)
 	if err != nil {

@@ -18,7 +18,7 @@ func (o TeamObject) Save() (err error) {
 	if err != nil {
 		return err
 	}
-	err = team_db.Put(o.Bucket + "-" + o.Id, o.Ciphertext)
+	err = team_db.Put(o.Bucket+"-"+o.Id, o.Ciphertext)
 	if err == nil && o.Ciphertext != "new" {
 		integrity, err := TeamIntegrityCache.Find(o.TeamId)
 		if err == nil {
@@ -51,6 +51,6 @@ func (o TeamObject) Log(iv string) (log string, err error) {
 	ts := time.Now().UnixNano()
 	k := fmt.Sprintf("%d-%s-%s", ts, o.Bucket, o.Id)
 	log = k + "-" + iv
-	err = team_db.Put("log-" + k, iv)
+	err = team_db.Put("log-"+k, iv)
 	return log, err
 }

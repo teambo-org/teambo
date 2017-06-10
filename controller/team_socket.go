@@ -4,6 +4,8 @@ import (
 	"../model"
 	"../socket"
 	// "../util"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -11,8 +13,6 @@ import (
 	"net/http"
 	"strings"
 	"time"
-	"crypto/sha256"
-	"encoding/base64"
 )
 
 func TeamSocket(w http.ResponseWriter, r *http.Request) {

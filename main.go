@@ -1,11 +1,11 @@
 package main
 
 import (
+	"./dispatch"
 	"./model"
+	"./service"
 	"./socket"
 	"./util"
-	"./dispatch"
-	"./service"
 	"context"
 	"flag"
 	"log"

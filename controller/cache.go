@@ -1,30 +1,30 @@
 package controller
 
 import (
-	"net/http"
-	"time"
-	"sync"
-	"log"
 	"bytes"
 	"compress/gzip"
+	"log"
+	"net/http"
+	"sync"
+	"time"
 )
 
 type cacheItem struct {
-	Body []byte
+	Body     []byte
 	Mimetype string
 	Modified time.Time
 }
 
 type httpCache struct {
-	cache map[string]*cacheItem
+	cache   map[string]*cacheItem
 	gzcache map[string]*cacheItem
-	mutex *sync.RWMutex
+	mutex   *sync.RWMutex
 }
 
-var HttpCache = httpCache {
-	cache: map[string]*cacheItem{},
+var HttpCache = httpCache{
+	cache:   map[string]*cacheItem{},
 	gzcache: map[string]*cacheItem{},
-	mutex: &sync.RWMutex{},
+	mutex:   &sync.RWMutex{},
 }
 
 func (hc *httpCache) Clear() {

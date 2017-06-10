@@ -3,6 +3,7 @@ package controller
 import (
 	"../util"
 	"bitbucket.org/maxhauser/jsmin"
+	"bytes"
 	"github.com/tdewolff/minify"
 	cssminify "github.com/tdewolff/minify/css"
 	"io/ioutil"
@@ -11,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-	"bytes"
 	// "log"
 )
 

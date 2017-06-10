@@ -1,7 +1,7 @@
 package model
 
 import (
-	// "log"
+// "log"
 )
 
 type BetaCode struct {

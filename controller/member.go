@@ -182,7 +182,7 @@ func Members(w http.ResponseWriter, r *http.Request) {
 		if members.Count() >= 5 {
 			error_data(w, 403, map[string]interface{}{
 				"error": "Team can only have a maximum of 5 members",
-				"code": "member_limit",
+				"code":  "member_limit",
 			})
 			return
 		}

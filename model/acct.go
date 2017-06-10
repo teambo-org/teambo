@@ -16,9 +16,9 @@ type Acct struct {
 }
 
 func (a *Acct) Delete() (err error) {
-	db_auth.Delete("auth-"+a.Hkey)
-	db_auth.Delete("protection-"+a.Hkey)
-	return db_acct.Delete("acct-"+a.AcctId)
+	db_auth.Delete("auth-" + a.Hkey)
+	db_auth.Delete("protection-" + a.Hkey)
+	return db_acct.Delete("acct-" + a.AcctId)
 }
 
 func (a *Acct) Move(new_akey, new_pkey, ct string) (err error) {
@@ -29,15 +29,15 @@ func (a *Acct) Move(new_akey, new_pkey, ct string) (err error) {
 	if err != nil {
 		return err
 	}
-	transaction.Put("auth-" + hkey, a.AcctId)
-	transaction.Put("protection-" + hkey, phkey)
+	transaction.Put("auth-"+hkey, a.AcctId)
+	transaction.Put("protection-"+hkey, phkey)
 	transaction.Delete("auth-" + a.Hkey)
 	transaction.Delete("protection-" + a.Hkey)
 	err = transaction.Commit()
 	if err != nil {
 		return err
 	}
-	err = db_acct.Put("acct-" + a.AcctId, ct)
+	err = db_acct.Put("acct-"+a.AcctId, ct)
 	if err == nil {
 		a.Hkey = hkey
 		a.Akey = new_akey
@@ -47,7 +47,7 @@ func (a *Acct) Move(new_akey, new_pkey, ct string) (err error) {
 }
 
 func (a *Acct) Update(ct string) (err error) {
-	err = db_acct.Put("acct-" + a.AcctId, ct)
+	err = db_acct.Put("acct-"+a.AcctId, ct)
 	if err == nil {
 		a.Ciphertext = ct
 	}
@@ -72,13 +72,13 @@ func CreateAcct(id, akey, pkey, ct string) (item Acct, err error) {
 	phkey := acct_hkey(id, pkey)
 	acctId := NewAcctId()
 	batch := db_auth.Batch()
-	batch.Put("auth-" + hkey, acctId)
-	batch.Put("protection-" + hkey, phkey)
+	batch.Put("auth-"+hkey, acctId)
+	batch.Put("protection-"+hkey, phkey)
 	err = batch.Write()
 	if err != nil {
 		return item, err
 	}
-	err = db_acct.Put("acct-" + acctId, ct)
+	err = db_acct.Put("acct-"+acctId, ct)
 	if err == nil {
 		item = Acct{acctId, hkey, id, akey, ct}
 	}

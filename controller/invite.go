@@ -231,7 +231,7 @@ func InviteAcceptance(w http.ResponseWriter, r *http.Request) {
 			if inviteAcceptance.Ciphertext != "" {
 				parts := strings.Split(inviteAcceptance.Ciphertext, "-")
 				c.Write(websocket.TextMessage, socket.JsonMessage(k, map[string]interface{}{
-					"ct":   parts[0],
+					"ct": parts[0],
 				}))
 			} else {
 				inviteResponse, _ := model.InviteResponseFind(k)

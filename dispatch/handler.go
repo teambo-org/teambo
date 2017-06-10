@@ -1,12 +1,12 @@
 package dispatch
 
 import (
-	"../util"
 	"../controller"
+	"../util"
 	"./middleware"
+	"fmt"
 	"net/http"
 	"time"
-	"fmt"
 	// "log"
 )
 
@@ -20,7 +20,7 @@ func NewHandler() Handler {
 	return dh
 }
 
-type Handler struct{
+type Handler struct {
 	stack []func(next func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request)
 	final func(w http.ResponseWriter, r *http.Request)
 }

@@ -2,12 +2,12 @@ package controller
 
 import (
 	"../model"
-	"encoding/json"
-	"errors"
-	"net/http"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"io/ioutil"
+	"net/http"
 	// "log"
 )
 

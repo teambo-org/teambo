@@ -2,16 +2,16 @@ package model
 
 import (
 	"./driver"
-	"time"
-	"sync"
 	"log"
+	"sync"
+	"time"
 )
 
 type teamDBPool struct {
-	Pool     map[string]driver.DB
-	Expires  map[string]int64
-	TTL      time.Duration
-	mutex    *sync.RWMutex
+	Pool    map[string]driver.DB
+	Expires map[string]int64
+	TTL     time.Duration
+	mutex   *sync.RWMutex
 }
 
 var TeamDBPool = teamDBPool{

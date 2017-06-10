@@ -8,9 +8,9 @@ import (
 )
 
 type acctThrottle struct {
-	Resets  int
-	Limit   int
-	TTL     int
+	Resets int
+	Limit  int
+	TTL    int
 }
 
 var AcctThrottle = acctThrottle{}
@@ -71,8 +71,8 @@ func (at *acctThrottle) Recent(id string) int {
 func (at *acctThrottle) Log(id string) error {
 	expires := strconv.Itoa(int(time.Now().Add(time.Duration(at.TTL) * time.Hour).UnixNano()))
 	batch := db_throttle.Batch()
-	batch.Put("throttle_expires-" + expires, id)
-	batch.Put("throttle-" + id + "-" + expires, "1")
+	batch.Put("throttle_expires-"+expires, id)
+	batch.Put("throttle-"+id+"-"+expires, "1")
 	return batch.Write()
 }
 
@@ -89,8 +89,8 @@ func (at *acctThrottle) RemainingResets(id string) int {
 func (at *acctThrottle) CreateReset(id string) string {
 	rkey := util.RandStr(16)
 	expires := strconv.Itoa(int(time.Now().Add(time.Duration(at.TTL) * time.Hour).UnixNano()))
-	db_throttle.Put("throttle_reset_expires-" + expires, id)
-	db_throttle.Put("throttle_reset-" + id + "-" + expires, rkey)
+	db_throttle.Put("throttle_reset_expires-"+expires, id)
+	db_throttle.Put("throttle_reset-"+id+"-"+expires, rkey)
 	return rkey
 }
 

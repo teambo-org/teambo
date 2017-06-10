@@ -39,7 +39,7 @@ func (ti *teamIntegrity) Init() (err error) {
 			if iv == "new" {
 				continue
 			}
-			ti.Ivs = append(ti.Ivs, iter.Key() + "-" + iv)
+			ti.Ivs = append(ti.Ivs, iter.Key()+"-"+iv)
 		}
 		iter.Release()
 	}

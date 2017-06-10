@@ -3,6 +3,7 @@ package controller
 import (
 	"../util"
 	"bitbucket.org/maxhauser/jsmin"
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
@@ -14,9 +15,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"strconv"
-	"bytes"
+	"strings"
 	"time"
 )
 

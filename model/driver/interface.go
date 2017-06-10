@@ -7,8 +7,8 @@ type DB interface {
 	Delete(key string) error
 	Close() error
 	Batch() Batch
-	PrefixIterator(prefix string) (Iterator)
-	RangeIterator(start, limit string) (Iterator)
+	PrefixIterator(prefix string) Iterator
+	RangeIterator(start, limit string) Iterator
 	OpenTransaction() (Transaction, error)
 }
 

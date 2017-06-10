@@ -8,8 +8,8 @@ import (
 )
 
 type purgeExpired struct {
-	ticker   *time.Ticker
-	running  bool
+	ticker  *time.Ticker
+	running bool
 }
 
 var PurgeExpired = purgeExpired{

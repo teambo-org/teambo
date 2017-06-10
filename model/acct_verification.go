@@ -20,8 +20,8 @@ func CreateAcctVerification(id, akey, vkey string) (item AcctVerification, err e
 	hkey := acct_hkey(id, akey)
 	expires := strconv.Itoa(int(time.Now().Add(30 * time.Minute).UnixNano()))
 	batch := db_auth.Batch()
-	batch.Put("verification-" + hkey, vkey)
-	batch.Put("verification_expires-" + expires, hkey)
+	batch.Put("verification-"+hkey, vkey)
+	batch.Put("verification_expires-"+expires, hkey)
 	err = batch.Write()
 	if err == nil {
 		item = AcctVerification{hkey, akey, vkey}

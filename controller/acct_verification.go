@@ -112,9 +112,9 @@ func AcctVerification(w http.ResponseWriter, r *http.Request) {
 
 		if model.AcctThrottle.Remaining(id) < 1 {
 			error_data(w, 403, map[string]interface{}{
-				"error": "Account is locked",
-				"code": "acct_locked",
-				"ttl": model.AcctThrottle.TTL,
+				"error":  "Account is locked",
+				"code":   "acct_locked",
+				"ttl":    model.AcctThrottle.TTL,
 				"resets": model.AcctThrottle.RemainingResets(id),
 			})
 			return

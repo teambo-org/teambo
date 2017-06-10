@@ -102,7 +102,7 @@ func TeamObjectRemove(bucket_name string, log_changes bool, w http.ResponseWrite
 		return
 	}
 
-	bucket   := model.TeamBucket{team.Id, bucket_name}
+	bucket := model.TeamBucket{team.Id, bucket_name}
 	comments := model.TeamBucket{team.Id, "comment"}
 
 	if r.Method == "POST" {

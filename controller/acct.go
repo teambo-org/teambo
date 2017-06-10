@@ -30,7 +30,7 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 	if model.AcctThrottle.Remaining(id) < 1 {
 		error_data(w, 403, map[string]interface{}{
 			"error": "Account is locked",
-			"code": "acct_locked",
+			"code":  "acct_locked",
 		})
 		return
 	}
@@ -39,7 +39,7 @@ func Acct(w http.ResponseWriter, r *http.Request) {
 	if acct.Ciphertext == "" {
 		model.AcctThrottle.Log(id)
 		error_data(w, 404, map[string]interface{}{
-			"error": "Account not found",
+			"error":   "Account not found",
 			"retries": model.AcctThrottle.Remaining(id),
 		})
 		return
@@ -123,9 +123,9 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 
 	if model.AcctThrottle.Remaining(id) < 1 {
 		error_data(w, 403, map[string]interface{}{
-			"error": "Account is locked",
-			"code": "acct_locked",
-			"ttl": model.AcctThrottle.TTL,
+			"error":  "Account is locked",
+			"code":   "acct_locked",
+			"ttl":    model.AcctThrottle.TTL,
 			"resets": model.AcctThrottle.RemainingResets(id),
 		})
 		return
@@ -139,7 +139,7 @@ func AcctAuth(w http.ResponseWriter, r *http.Request) {
 	if acct.Akey == "" || acct.Ciphertext == "new" {
 		model.AcctThrottle.Log(id)
 		error_data(w, 404, map[string]interface{}{
-			"error": "Account not found",
+			"error":   "Account not found",
 			"retries": model.AcctThrottle.Remaining(id),
 		})
 		return
@@ -163,7 +163,7 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 	if model.AcctThrottle.Remaining(id) < 1 {
 		error_data(w, 403, map[string]interface{}{
 			"error": "Account is locked",
-			"code": "acct_locked",
+			"code":  "acct_locked",
 		})
 		return
 	}
@@ -200,9 +200,9 @@ func AcctSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		c.Write(websocket.TextMessage, socket.JsonMessagePure(acct.Hkey, map[string]interface{}{
-			"iv": acct_iv,
+			"iv":             acct_iv,
 			"throttle_total": model.AcctThrottle.Recent(id),
-			"throttle_ttl": model.AcctThrottle.TTL,
+			"throttle_ttl":   model.AcctThrottle.TTL,
 		}))
 	}
 

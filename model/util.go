@@ -3,10 +3,10 @@ package model
 import (
 	"../util"
 	"./driver"
-	"strconv"
-	"time"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 	// "log"
 )
 
@@ -17,23 +17,23 @@ var db_throttle driver.DB
 var db_newsletter driver.DB
 
 func GlobalInit() (err error) {
-	db_auth, err = driver.OpenLevelDB(util.Config("app.data")+"/auth.ldb")
+	db_auth, err = driver.OpenLevelDB(util.Config("app.data") + "/auth.ldb")
 	if err != nil {
 		return err
 	}
-	db_acct, err = driver.OpenLevelDB(util.Config("app.data")+"/account.ldb")
+	db_acct, err = driver.OpenLevelDB(util.Config("app.data") + "/account.ldb")
 	if err != nil {
 		return err
 	}
-	db_invite, err = driver.OpenLevelDB(util.Config("app.data")+"/invite.ldb")
+	db_invite, err = driver.OpenLevelDB(util.Config("app.data") + "/invite.ldb")
 	if err != nil {
 		return err
 	}
-	db_throttle, err = driver.OpenLevelDB(util.Config("app.data")+"/throttle.ldb")
+	db_throttle, err = driver.OpenLevelDB(util.Config("app.data") + "/throttle.ldb")
 	if err != nil {
 		return err
 	}
-	db_newsletter, err = driver.OpenLevelDB(util.Config("app.data")+"/newsletter.ldb")
+	db_newsletter, err = driver.OpenLevelDB(util.Config("app.data") + "/newsletter.ldb")
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func CloseAll() (err error) {
 
 func PurgeExpired(db driver.DB, prefix string) (ids []string, err error) {
 	now := strconv.Itoa(int(time.Now().UnixNano()))
-	iter := db.RangeIterator(prefix + "_expires-", prefix + "_expires-" + now)
+	iter := db.RangeIterator(prefix+"_expires-", prefix+"_expires-"+now)
 	batch := db.Batch()
 	for iter.Next() {
 		id := string(iter.Value())
