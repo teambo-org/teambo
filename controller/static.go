@@ -46,7 +46,6 @@ func ServeStatic(prefix string, w http.ResponseWriter, r *http.Request) {
 	mimetype := mime.TypeByExtension(ext)
 	if a.Url == r.URL.Path {
 		file, _ = ioutil.ReadAll(a.GetReader())
-		log.Printf("%s %d", r.URL.Path, len(file))
 	} else {
 		file, _ = ioutil.ReadFile(path)
 	}
