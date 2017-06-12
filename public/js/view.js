@@ -99,6 +99,7 @@ Teambo.view = (function(t){
     template_js = opts.template_js;
 
     obj.app = t.app;
+    obj.apps = t.apps;
     obj.acct = t.acct;
     obj.model = t.model;
     obj.chat = t.chat;

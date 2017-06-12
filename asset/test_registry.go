@@ -21,4 +21,6 @@ var TestRegistry = registry {
 		"cssapp":  []apptools.Asset{},
 		"csslib":  []apptools.Asset{},
 	},
+	Templates:  map[string]string{},
+	Templatejs: map[string]string{},
 }

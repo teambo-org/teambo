@@ -15,7 +15,7 @@ import (
 	"path/filepath"
 	"time"
 	"io"
-	"log"
+	// "log"
 )
 
 func ServeStatic(prefix string, w http.ResponseWriter, r *http.Request) {

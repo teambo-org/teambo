@@ -41,7 +41,7 @@ func main() {
 		log.Fatal("Could not open DB for writing")
 	}
 
-	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan", "wiki"})
+	model.TeamIntegrityCache.Init([]string{"comment", "folder", "item", "member", "plan"})
 	model.AcctThrottle.Init(config)
 	service.EmailQueue.Init()
 	service.PurgeExpired.Init()

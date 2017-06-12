@@ -21,8 +21,6 @@ var TeamIntegrityCache = teamIntegrityCache{
 func (tic *teamIntegrityCache) Init(buckets []string) {
 	sort.Strings(buckets)
 	tic.Buckets = buckets
-	// Sweep cache for expired teams
-	// ticker := time.NewTicker(time.Minute)
 	ticker := time.NewTicker(10 * time.Minute)
 	go func() {
 		for _ = range ticker.C {
@@ -30,6 +28,11 @@ func (tic *teamIntegrityCache) Init(buckets []string) {
 		}
 	}()
 	return
+}
+
+func (tic *teamIntegrityCache) AddBucket(bucket string) {
+	tic.Buckets = append(tic.Buckets, bucket)
+	sort.Strings(tic.Buckets)
 }
 
 func (tic *teamIntegrityCache) PurgeExpired() {

@@ -1,4 +1,5 @@
 var Teambo = {};
+Teambo.apps = [];
 Teambo.app = (function(t){
   "use strict";
 
@@ -25,20 +26,22 @@ Teambo.app = (function(t){
     }
     t.object.extend(app, opts.app);
     t.object.watchable(app);
-    t.view.init(opts);
     t.manifest.init();
     t.router.init(opts.templates);
     t.device.init().then(function() {
-      t.acct.init().then(function(){
-        window.onhashchange = app.refresh;
-        app.refresh();
-        t.audio.loadAll(opts.audio);
-        t.async.loadJs(opts.jsasync);
-      }).catch(function(e) {
-        app.trace(e);
-        t.acct.deAuth();
-        // TODO: Fix infinite reload on serious app error
-        // window.location.reload();
+      t.event.all('app-init').then(function() {
+        t.view.init(opts);
+        t.acct.init().then(function(){
+          window.onhashchange = app.refresh;
+          app.refresh();
+          t.audio.loadAll(opts.audio);
+          t.async.loadJs(opts.jsasync);
+        }).catch(function(e) {
+          app.trace(e);
+          t.acct.deAuth();
+          // TODO: Fix infinite reload on serious app error
+          // window.location.reload();
+        });
       });
     });
   };

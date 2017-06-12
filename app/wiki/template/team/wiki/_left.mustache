@@ -1,0 +1,23 @@
+<div class="collapsible {{#ui.left_toggle.wiki}}open{{/ui.left_toggle.wiki}}" data-toggle-target="wiki">
+    <div class="section hi-10">
+        <div class="totals">
+        {{#model.wiki.all.length}}
+            {{model.wiki.all.length}}
+        {{/model.wiki.all.length}}
+        </div>
+        <i class="icon-minus-1 nav color-hi-30 toggle-close" data-toggle="wiki"></i>
+        <i class="icon-down-open-1 nav color-hi-30 toggle-open" data-toggle="wiki"></i>
+        <a href="#{{team.url}}/wiki" class="nav-section" data-keybind="K">
+            <div class="img"><i class="icon-book"></i></div>
+            <div class="name">Wiki</div>
+        </a>
+    </div>
+    <div class="section wiki subsection">
+    {{#model.wiki.top}}
+        <a href="#{{url}}" class="folder {{active}}" data-obj="wiki-{{id}}">
+            <div class="img"><i class="icon-{{icon}}"></i></div>
+            <div class="name">{{opts.name}}</div>
+        </a>
+    {{/model.wiki.top}}
+    </div>
+</div>

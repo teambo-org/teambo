@@ -2,11 +2,6 @@ package asset
 
 import (
 	"../app/apptools"
-	"io"
-	"os"
-	"bytes"
-	"time"
-	// "log"
 )
 
 var Registry = registry {
@@ -26,15 +21,41 @@ var Registry = registry {
 		"cssapp":  []apptools.Asset{},
 		"csslib":  []apptools.Asset{},
 	},
+	Templates:  map[string]string{},
+	Templatejs: map[string]string{},
 }
 
 type registry struct {
-	defaults map[string][]string
-	Assets   map[string][]apptools.Asset
+	defaults   map[string][]string
+	Assets     map[string][]apptools.Asset
+	Templates  map[string]string
+	Templatejs map[string]string
+}
+
+func (r *registry) Init() {
+	r.AddAssets(apptools.CollectAssets("public", r.defaults))
+	r.AddTemplates(apptools.CollectTemplates("template"))
 }
 
 func (r *registry) Add(asset_type string, a apptools.Asset) {
 	r.Assets[asset_type] = append(r.Assets[asset_type], a)
+}
+
+func (r *registry) AddAssets(assetMap map[string][]apptools.Asset) {
+	for asset_type, assets := range assetMap {
+		for _, asset := range assets {
+			r.Add(asset_type, asset)
+		}
+	}
+}
+
+func (r *registry) AddTemplates(templates, templatejs map[string]string) {
+	for k, v := range templates {
+		r.Templates[k] = v
+	}
+	for k, v := range templatejs {
+		r.Templatejs[k] = v
+	}
 }
 
 func (r *registry) Get(asset_type string) []apptools.Asset {
@@ -42,14 +63,6 @@ func (r *registry) Get(asset_type string) []apptools.Asset {
 		return assets
 	}
 	return []apptools.Asset{}
-}
-
-func (r *registry) Init() {
-	for asset_type, paths := range r.defaults {
-		for _, path := range paths {
-			r.Add(asset_type, makeAsset(path))
-		}
-	}
 }
 
 func (r *registry) Find(path string) apptools.Asset {
@@ -61,24 +74,4 @@ func (r *registry) Find(path string) apptools.Asset {
 		}
 	}
 	return apptools.Asset{}
-}
-
-func makeAsset(path string) apptools.Asset {
-	return apptools.Asset {
-		Url: path,
-		GetModTime: func() time.Time {
-			stat, err := os.Stat("public" + path)
-			if err != nil {
-				return time.Now()
-			}
-			return stat.ModTime()
-		},
-		GetReader: func() io.Reader {
-			r, err := os.Open("public" + path)
-			if err == nil {
-				return r
-			}
-			return bytes.NewReader(nil)
-		},
-	}
 }

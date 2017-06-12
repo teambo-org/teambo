@@ -8,6 +8,14 @@ Teambo.model.wiki = (function(t){
       url: function() {
         return '/'+t.team.current.id+'/wiki/'+self.id;
       },
+      parentUrl: function() {
+        var par = model.get(self.opts.parent_id);
+        if(par) {
+          return par.url();
+        } else {
+          return '/'+t.team.current.id+'/wiki';
+        }
+      },
       icon: function() {
         return self.opts.parent_id ? 'angle-right' : 'book';
       },

@@ -30,7 +30,6 @@ func (r Registry) GetAssetTestRegistry() apptools.AssetRegistry {
 	return r.AssetTestRegistry
 }
 
-
 func (r Registry) Init() {
 	apps := []apptools.App{
 		wiki.App{},

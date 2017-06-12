@@ -215,7 +215,8 @@ func safe_json_marshal(content map[string]string) string {
 }
 
 func append_js_init(w io.Writer) {
-	content, scripts := compile_templates()
+	content := asset.Registry.Templates
+	scripts := asset.Registry.Templatejs
 	templates := safe_json_marshal(content)
 	keys := []string{}
 	tpljs := []string{}
@@ -298,30 +299,6 @@ func jsinit_version() string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func compile_templates() (map[string]string, map[string]string) {
-	templates := map[string]string{}
-	template_js := map[string]string{}
-	scan := func(path string, f os.FileInfo, err error) error {
-		filename, _ := filepath.Rel("template", path)
-		if !f.IsDir() && strings.Contains(filename, string(os.PathSeparator)) {
-			tpl, _ := ioutil.ReadFile(path)
-			if strings.HasSuffix(filename, ".mustache") {
-				tplname := strings.TrimSuffix(filename, ".mustache")
-				tplname = strings.Replace(tplname, string(os.PathSeparator), "/", -1)
-				templates[tplname] = string(tpl)
-			}
-			if strings.HasSuffix(filename, ".js") {
-				tplname := strings.TrimSuffix(filename, ".js")
-				template_js[tplname] = string(tpl)
-			}
-		}
-		return nil
-	}
-	filepath.Walk("template", scan)
-
-	return templates, template_js
-}
-
 func find_audio() []string {
 	dir := "public" + string(os.PathSeparator) + "audio"
 	audio := []string{}
@@ -346,17 +323,4 @@ func find_images() []string {
 	}
 	filepath.Walk(dir, scan)
 	return images
-}
-
-func find_fonts() []string {
-	dir := "public" + string(os.PathSeparator) + "font"
-	files := []string{}
-	scan := func(path string, f os.FileInfo, err error) error {
-		if !f.IsDir() {
-			files = append(files, strings.TrimPrefix(path, dir+string(os.PathSeparator)))
-		}
-		return nil
-	}
-	filepath.Walk(dir, scan)
-	return files
 }

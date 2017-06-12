@@ -13,12 +13,6 @@ Teambo.router = (function(t){
     '/:team_id/edit'                       : 'team/settings/edit',
     '/:team_id/remove'                     : 'team/settings/remove',
     '/:team_id/new'                        : 'team/folder/new',
-    '/:team_id/wiki'                       : 'team/wiki/index',
-    '/:team_id/wiki/new'                   : 'team/wiki/new',
-    '/:team_id/wiki/:wiki_id/new'          : 'team/wiki/new',
-    '/:team_id/wiki/:wiki_id'              : 'team/wiki/view',
-    '/:team_id/wiki/:wiki_id/remove'       : 'team/wiki/remove',
-    '/:team_id/wiki/:wiki_id/edit'         : 'team/wiki/edit',
     '/:team_id/plan'                       : 'team/plan/index',
     '/:team_id/plan/new'                   : 'team/plan/new',
     '/:team_id/plan/:plan_id'              : 'team/plan/view',
@@ -53,7 +47,7 @@ Teambo.router = (function(t){
 
   var router = {
     init: function(templates) {
-      for(i in templates) {
+      for(var i in templates) {
         if(i.indexOf('index/') === 0) {
           routes.push({
             route: new RegExp('^'+i.substr(5)+'$'),
@@ -68,18 +62,7 @@ Teambo.router = (function(t){
           });
         }
       }
-      for(var i in plain_routes) {
-        var m = i.match(/\:([a-z_]+)/g);
-        m = m ? m : []
-        m.forEach(function(v, j) {
-          m[j] = m[j].substr(1);
-        });
-        routes.push({
-          route: new RegExp('^'+i.replace(/\:([a-z_]+)/g, '([^/]+)')+'$'),
-          tpl: plain_routes[i],
-          vars: m
-        });
-      }
+      this.addRoutes(plain_routes);
     },
     find: function(url) {
       for (var i in routes) {
@@ -102,7 +85,22 @@ Teambo.router = (function(t){
         route = router.find(url);
       }
       return route;
-    }
+    },
+    addRoutes: function(routeArr) {
+      for(var url in routeArr) {
+        var m = url.match(/\:([a-z_]+)/g);
+        m = m ? m : []
+        m.forEach(function(v, j) {
+          m[j] = m[j].substr(1);
+        });
+        routes.push({
+          route: new RegExp('^'+url.replace(/\:([a-z_]+)/g, '([^/]+)')+'$'),
+          tpl: routeArr[url],
+          vars: m
+        });
+      }
+    },
+    routes: routes
   };
 
   return router;

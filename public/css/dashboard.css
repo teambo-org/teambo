@@ -183,9 +183,6 @@
 #dashboard .main .dash #search .img { position: absolute; left: 0; line-height: 2em; width: 2em; text-align: center; }
 #dashboard .main .dash #search #q { padding-left: 2.5em; }
 
-#dashboard .main .wiki-toc ul.children > li a { padding: 0 0 0 1em; }
-#dashboard .main .wiki section.description { font-size: 0.9em; }
-
 #dashboard .main section.history { background: none; }
 #dashboard .main section.history h2 { margin-bottom: 0.4em; }
 #dashboard .main ul.history { padding: 0; }

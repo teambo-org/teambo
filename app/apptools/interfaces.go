@@ -12,6 +12,7 @@ type App interface {
 
 type Registry interface {
 	Init()
+	GetConfig() Config
 	GetDispatchHandler() DispatchHandler
 	GetAssetRegistry() AssetRegistry
 	GetAssetTestRegistry() AssetRegistry
@@ -24,6 +25,8 @@ type DispatchHandler interface {
 
 type AssetRegistry interface {
 	Add(string, Asset)
+	AddAssets(map[string][]Asset)
+	AddTemplates(map[string]string, map[string]string)
 }
 
 type Asset struct {
