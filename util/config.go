@@ -36,3 +36,19 @@ func (c *config) Get(key string) string {
 func (c *config) All() map[string]string {
 	return c.values
 }
+
+func (c *config) Validate() bool {
+	if c.values["secret"] == "" || c.values["secret"] == "EMPTY" {
+		log.Println("You must provide a secret in your configuration file")
+		log.Println("Here's a random secret you can use:\n\nsecret " + RandStr(80) + "\n")
+		return false
+	}
+	if c.values["acct.verification_required"] != "false" &&
+		c.values["smtp.user"] == "" || c.values["smtp.user"] == "__USER__" ||
+		c.values["smtp.pass"] == "" || c.values["smtp.pass"] == "__PASS__" {
+		log.Println("You must configure an Email Service Provider under smtp.* (__USER__ / __PASS__)")
+		log.Println("Try a free account from mailtrap.io for dev or sendgrid.com for prod")
+		return false
+	}
+	return true
+}

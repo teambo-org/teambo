@@ -20,7 +20,6 @@ var asset_paths = map[string][]string{
 var test_asset_paths = map[string][]string{}
 
 func (app App) Init(r apptools.Registry) {
-	dh := r.GetDispatchHandler()
-	dh.AddTeamObject("wiki", true)
+	r.GetDispatchHandler().AddTeamObject("wiki", true)
 	apptools.RegisterAssets(r, "app/wiki", asset_paths, test_asset_paths)
 }

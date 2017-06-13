@@ -155,9 +155,10 @@ Teambo.team = (function(t){
       });
     },
     cache: function() {
+      var self = this;
       return localforage.setItem(this.sha(), this.encrypted({
-        last_seen: this.last_seen,
-        admin: this.admin
+        last_seen: self.last_seen,
+        admin: self.admin
       }));
     },
     uncache: function() {
