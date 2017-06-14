@@ -39,7 +39,7 @@ Teambo.view = (function(t){
       };
     },
     ui: {
-      left_toggle: {plan: true, item: true, wiki: true, member: true, settings: true}
+      left_toggle: {plan: true, item: true, member: true, settings: true}
     }
   };
 

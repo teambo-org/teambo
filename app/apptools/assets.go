@@ -8,29 +8,30 @@ import (
 	"io/ioutil"
 	"time"
 	"bytes"
+	// "log"
 )
 
 func RegisterAssets(r Registry, path string, assetPaths, testAssetPaths map[string][]string) {
-	template_dir := "template"
-	public_dir := "public"
-	if path != "" {
-		template_dir = path + string(os.PathSeparator) + template_dir
-		public_dir = path + string(os.PathSeparator) + public_dir
-	}
-
-	templates, templatejs := CollectTemplates(template_dir)
-	assets := CollectAssets(public_dir, assetPaths)
-
+	assets := CollectAssets(path, assetPaths)
 	assetRegistry := r.GetAssetRegistry()
 	assetRegistry.AddAssets(assets)
-	assetRegistry.AddTemplates(templates, templatejs)
-
 	if r.GetConfig().Get("app.testing") == "true" {
-		testAssets := CollectAssets(public_dir, testAssetPaths)
+		testAssets := CollectAssets(path, testAssetPaths)
 		testAssetRegistry := r.GetAssetTestRegistry()
 		testAssetRegistry.AddAssets(assets)
 		testAssetRegistry.AddAssets(testAssets)
-		testAssetRegistry.AddTemplates(templates, templatejs)
+	}
+}
+
+func RegisterTemplates(r Registry, path string, prefix string) {
+	templates, templatejs := CollectTemplates(path)
+	if len(prefix) > 0 {
+		templates = PrefixTemplates(prefix, templates)
+		templatejs = PrefixTemplates(prefix, templatejs)
+	}
+	r.GetAssetRegistry().AddTemplates(templates, templatejs)
+	if r.GetConfig().Get("app.testing") == "true" {
+		r.GetAssetTestRegistry().AddTemplates(templates, templatejs)
 	}
 }
 
@@ -58,6 +59,14 @@ func CollectTemplates(basepath string) (templates map[string]string, templatejs 
 	}
 	filepath.Walk(basepath, scan)
 	return templates, templatejs
+}
+
+func PrefixTemplates(prefix string, templates map[string]string) map[string]string {
+	ret := map[string]string{}
+	for k, template := range templates {
+		ret[prefix + k] = template
+	}
+	return ret
 }
 
 func CollectAssets(prefix string, assetPaths map[string][]string) (assetMap map[string][]Asset) {

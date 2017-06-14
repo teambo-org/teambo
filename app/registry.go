@@ -4,7 +4,6 @@ import (
 	"./wiki"
 	// "github.com/teambo-org/wiki"
 	"./apptools"
-	// "io"
 )
 
 type Registry struct {

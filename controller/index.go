@@ -226,7 +226,7 @@ func append_js_init(w io.Writer) {
 	sort.Strings(keys)
 	for _, k := range keys {
 		tplname := strings.Replace(k, string(os.PathSeparator), "/", -1)
-		tpljs = append(tpljs, "'"+tplname+"': "+scripts[k])
+		tpljs = append(tpljs, "\""+tplname+"\": "+scripts[k])
 	}
 	template_scripts := strings.Join(tpljs, ", ")
 	audio, _ := json.Marshal(find_audio())
@@ -245,11 +245,11 @@ func append_js_init(w io.Writer) {
 	}
 	jsasync_json, _ := json.Marshal(hash_version(asset.Registry.Get("jsasync")))
 	app_json, _ := json.Marshal(app)
-	js_data := "'templates': " + string(templates) + ", " +
-		"'template_js': { " + template_scripts + " }, " +
-		"'audio': " + string(audio) + ", " +
-		"'jsasync': " + string(jsasync_json) + ", " +
-		"'app': " + string(app_json)
+	js_data := "\"templates\": " + string(templates) + ", " +
+		"\"template_js\": { " + template_scripts + " }, " +
+		"\"audio\": " + string(audio) + ", " +
+		"\"jsasync\": " + string(jsasync_json) + ", " +
+		"\"app\": " + string(app_json)
 	js := "Teambo.app.init({" + js_data + "});"
 	if util.Config.Get("static.min") == "true" {
 		jsmin.Run(strings.NewReader(js), w)

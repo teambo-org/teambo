@@ -2,7 +2,7 @@
 {{#result.empty}}
 <p class="empty up1c">No Results</p>
 {{/result.empty}}
-<ul class="model folders">
+<ul class="model">
 {{#result.has_item}}
 <li class="folder hi-10 up3c result-item">
     <a href="#{{team.url}}/folders" class="hi-05">
@@ -45,23 +45,12 @@
     </ul>
 </li>
 {{/result.has_plan}}
-{{#result.has_wiki}}
-<li class="folder hi-10 up3c result-folder">
-    <a href="#{{team.url}}/wiki" class="hi-05">
-        <i class="icon-book"></i>
-        <div class="info">{{result.count_wiki}} / {{result.total_wiki}}</div>
-        <span class="name">Wiki</span>
-    </a>
-    <ul class="items">
-    {{#result.wiki}}
-        {{>team/wiki/_search-li}}
-    {{/result.wiki}}
-    </ul>
-</li>
-{{/result.has_wiki}}
+{{#apps}}
+    {{#searchResult}}{{/searchResult}}
+{{/apps}}
 {{#result.has_member}}
 <li class="folder hi-10 up3c result-folder">
-    <a href="#{{team.url}}/wiki" class="hi-05">
+    <a href="#{{team.url}}/members" class="hi-05">
         <i class="icon-users"></i>
         <div class="info">{{result.count_member}} / {{result.total_member}}</div>
         <span class="name">Members</span>
@@ -75,7 +64,7 @@
 {{/result.has_member}}
 {{#result.has_comment}}
 <li class="folder hi-10 up3c result-folder">
-    <a href="#{{team.url}}/wiki" class="hi-05">
+    <a href="#{{team.url}}/comments" class="hi-05">
         <i class="icon-book"></i>
         <div class="info">{{result.count_comment}} / {{result.total_comment}}</div>
         <span class="name">Comments</span>

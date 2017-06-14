@@ -1,0 +1,14 @@
+{{#result.has_wiki}}
+<li class="folder hi-10 up3c result-folder">
+    <a href="#{{team.url}}/wiki" class="hi-05">
+        <i class="icon-book"></i>
+        <div class="info">{{result.count_wiki}} / {{result.total_wiki}}</div>
+        <span class="name">Wiki</span>
+    </a>
+    <ul class="items">
+    {{#result.wiki}}
+        {{>app/wiki/_search-li}}
+    {{/result.wiki}}
+    </ul>
+</li>
+{{/result.has_wiki}}
