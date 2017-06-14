@@ -4,7 +4,7 @@ import (
 	"../app/apptools"
 )
 
-var TestRegistry = registry {
+var TestRegistry = registry{
 	defaults: map[string][]string{
 		"jsapp":   jsapp_test,
 		"jslib":   jslib_test,

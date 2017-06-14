@@ -34,4 +34,3 @@ func Init() {
 	go InviteAcceptanceHub.Run()
 	go AcctHub.Run()
 }
-

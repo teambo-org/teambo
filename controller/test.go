@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"../util"
 	"../asset"
+	"../util"
 	"encoding/json"
 	"html/template"
 	"log"

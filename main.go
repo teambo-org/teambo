@@ -1,13 +1,13 @@
 package main
 
 import (
+	"./app"
+	"./asset"
 	"./dispatch"
 	"./model"
 	"./service"
 	"./socket"
 	"./util"
-	"./app"
-	"./asset"
 	"context"
 	"flag"
 	"log"
@@ -55,11 +55,11 @@ func main() {
 	asset.TestRegistry.Init()
 
 	dh := dispatch.NewHandler()
-	registry := app.Registry {
-		Config: &util.Config,
-		AssetRegistry: &asset.Registry,
+	registry := app.Registry{
+		Config:            &util.Config,
+		AssetRegistry:     &asset.Registry,
 		AssetTestRegistry: &asset.TestRegistry,
-		DispatchHandler: &dh,
+		DispatchHandler:   &dh,
 	}
 	registry.Init()
 	dh.Finalize()

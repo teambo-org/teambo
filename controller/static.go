@@ -1,20 +1,20 @@
 package controller
 
 import (
-	"../util"
 	"../asset"
+	"../util"
 	// "../app/apptools"
 	"bitbucket.org/maxhauser/jsmin"
 	"bytes"
 	"github.com/tdewolff/minify"
 	cssminify "github.com/tdewolff/minify/css"
+	"io"
 	"io/ioutil"
 	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
-	"io"
 	// "log"
 )
 
@@ -62,7 +62,7 @@ func ServeStatic(prefix string, w http.ResponseWriter, r *http.Request) {
 }
 
 func StaticHandler(prefix string) func(w http.ResponseWriter, r *http.Request) {
-	return func (w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 		ServeStatic(prefix, w, r)
 	}
 }

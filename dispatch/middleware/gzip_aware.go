@@ -1,18 +1,18 @@
 package middleware
 
 import (
-	"net/http"
-	"strings"
 	"context"
+	"net/http"
 	"path"
+	"strings"
 )
 
 var gzip_blacklist = map[string]bool{
-	".jpg": true,
+	".jpg":  true,
 	".jpeg": true,
-	".gif": true,
-	".png": true,
-	".mp3": true,
+	".gif":  true,
+	".png":  true,
+	".mp3":  true,
 }
 
 func GzipAware(next func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {

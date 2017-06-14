@@ -1,8 +1,8 @@
 package apptools
 
 import (
-	"net/http"
 	"io"
+	"net/http"
 	"time"
 )
 
@@ -30,9 +30,9 @@ type AssetRegistry interface {
 }
 
 type Asset struct {
-	Url string
-	GetModTime func()time.Time
-	GetReader func()io.Reader
+	Url        string
+	GetModTime func() time.Time
+	GetReader  func() io.Reader
 }
 
 type Config interface {

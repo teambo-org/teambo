@@ -1,8 +1,8 @@
 package dispatch
 
 import (
-	"../model"
 	"../controller"
+	"../model"
 	"../util"
 	"./middleware"
 	"fmt"
@@ -45,9 +45,9 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) AddTeamObject(name string, log_changes bool) {
-	routes["/team/" + name] = controller.HandleTeamObject(name, true)
-	routes["/team/" + name + "s"] = controller.HandleTeamObjects(name, true)
-	routes["/team/" + name + "/remove"] = controller.HandleTeamObjectRemove(name, true)
+	routes["/team/"+name] = controller.HandleTeamObject(name, true)
+	routes["/team/"+name+"s"] = controller.HandleTeamObjects(name, true)
+	routes["/team/"+name+"/remove"] = controller.HandleTeamObjectRemove(name, true)
 	if log_changes {
 		model.TeamIntegrityCache.AddBucket(name)
 	}

@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"net/http"
 	"bytes"
 	"io/ioutil"
+	"net/http"
 )
 
 func BodyBuffer(next func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {

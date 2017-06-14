@@ -1,13 +1,13 @@
 package apptools
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
-	"io"
 	// "io/ioutil"
-	"time"
 	"bytes"
+	"time"
 	// "log"
 )
 
@@ -63,7 +63,7 @@ func CollectTemplates(basepath string) (templates map[string]Asset, templatejs m
 func PrefixTemplates(prefix string, templates map[string]Asset) map[string]Asset {
 	ret := map[string]Asset{}
 	for k, template := range templates {
-		ret[prefix + k] = template
+		ret[prefix+k] = template
 	}
 	return ret
 }
@@ -80,7 +80,7 @@ func CollectAssets(prefix string, assetPaths map[string][]string) (assetMap map[
 }
 
 func makeAsset(prefix, path string) Asset {
-	return Asset {
+	return Asset{
 		Url: path,
 		GetModTime: func() time.Time {
 			stat, err := os.Stat(prefix + path)

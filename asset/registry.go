@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 )
 
-var Registry = registry {
+var Registry = registry{
 	defaults: map[string][]string{
 		"jsapp":   jsapp,
 		"jslib":   jslib,

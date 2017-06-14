@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"../util"
-	"../asset"
 	"../app/apptools"
+	"../asset"
+	"../util"
 	"bitbucket.org/maxhauser/jsmin"
 	"bytes"
 	"crypto/md5"
