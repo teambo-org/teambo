@@ -2,7 +2,7 @@ package app
 
 import (
 	"./wiki"
-	// "github.com/teambo-org/wiki"
+	// "github.com/teambo-org/app-wiki"
 	"./apptools"
 )
 
