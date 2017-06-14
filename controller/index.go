@@ -215,8 +215,8 @@ func safe_json_marshal(content map[string]string) string {
 }
 
 func append_js_init(w io.Writer) {
-	content := asset.Registry.Templates
-	scripts := asset.Registry.Templatejs
+	content := asset.Registry.ResolveTemplates()
+	scripts := asset.Registry.ResolveTemplatejs()
 	templates := safe_json_marshal(content)
 	keys := []string{}
 	tpljs := []string{}

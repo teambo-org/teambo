@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 	"io"
-	"io/ioutil"
+	// "io/ioutil"
 	"time"
 	"bytes"
 	// "log"
@@ -35,24 +35,23 @@ func RegisterTemplates(r Registry, path string, prefix string) {
 	}
 }
 
-func CollectTemplates(basepath string) (templates map[string]string, templatejs map[string]string) {
-	templates = map[string]string{}
-	templatejs = map[string]string{}
+func CollectTemplates(basepath string) (templates map[string]Asset, templatejs map[string]Asset) {
+	templates = map[string]Asset{}
+	templatejs = map[string]Asset{}
 	scan := func(path string, f os.FileInfo, err error) error {
 		if err != nil {
 			return nil
 		}
 		filename, _ := filepath.Rel(basepath, path)
 		if !f.IsDir() && strings.Contains(filename, string(os.PathSeparator)) {
-			tpl, _ := ioutil.ReadFile(path)
 			if strings.HasSuffix(filename, ".mustache") {
 				tplname := strings.TrimSuffix(filename, ".mustache")
 				tplname = strings.Replace(tplname, string(os.PathSeparator), "/", -1)
-				templates[tplname] = string(tpl)
+				templates[tplname] = makeAsset("", path)
 			}
 			if strings.HasSuffix(filename, ".js") {
 				tplname := strings.TrimSuffix(filename, ".js")
-				templatejs[tplname] = string(tpl)
+				templatejs[tplname] = makeAsset("", path)
 			}
 		}
 		return nil
@@ -61,8 +60,8 @@ func CollectTemplates(basepath string) (templates map[string]string, templatejs 
 	return templates, templatejs
 }
 
-func PrefixTemplates(prefix string, templates map[string]string) map[string]string {
-	ret := map[string]string{}
+func PrefixTemplates(prefix string, templates map[string]Asset) map[string]Asset {
+	ret := map[string]Asset{}
 	for k, template := range templates {
 		ret[prefix + k] = template
 	}

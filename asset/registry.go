@@ -2,6 +2,7 @@ package asset
 
 import (
 	"../app/apptools"
+	"io/ioutil"
 )
 
 var Registry = registry {
@@ -21,15 +22,15 @@ var Registry = registry {
 		"cssapp":  []apptools.Asset{},
 		"csslib":  []apptools.Asset{},
 	},
-	Templates:  map[string]string{},
-	Templatejs: map[string]string{},
+	Templates:  make(map[string]apptools.Asset),
+	Templatejs: make(map[string]apptools.Asset),
 }
 
 type registry struct {
 	defaults   map[string][]string
 	Assets     map[string][]apptools.Asset
-	Templates  map[string]string
-	Templatejs map[string]string
+	Templates  map[string]apptools.Asset
+	Templatejs map[string]apptools.Asset
 }
 
 func (r *registry) Init() {
@@ -49,7 +50,7 @@ func (r *registry) AddAssets(assetMap map[string][]apptools.Asset) {
 	}
 }
 
-func (r *registry) AddTemplates(templates, templatejs map[string]string) {
+func (r *registry) AddTemplates(templates, templatejs map[string]apptools.Asset) {
 	for k, v := range templates {
 		r.Templates[k] = v
 	}
@@ -74,4 +75,26 @@ func (r *registry) Find(path string) apptools.Asset {
 		}
 	}
 	return apptools.Asset{}
+}
+
+func (r *registry) ResolveTemplates() map[string]string {
+	templates := map[string]string{}
+	for k, asset := range r.Templates {
+		template, err := ioutil.ReadAll(asset.GetReader())
+		if err == nil {
+			templates[k] = string(template)
+		}
+	}
+	return templates
+}
+
+func (r *registry) ResolveTemplatejs() map[string]string {
+	templates := map[string]string{}
+	for k, asset := range r.Templatejs {
+		template, err := ioutil.ReadAll(asset.GetReader())
+		if err == nil {
+			templates[k] = string(template)
+		}
+	}
+	return templates
 }
