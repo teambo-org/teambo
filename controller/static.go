@@ -4,10 +4,10 @@ import (
 	"../asset"
 	"../util"
 	// "../app/apptools"
-	"bitbucket.org/maxhauser/jsmin"
 	"bytes"
 	"github.com/tdewolff/minify"
-	cssminify "github.com/tdewolff/minify/css"
+	cssmin "github.com/tdewolff/minify/css"
+	jsmin "github.com/tdewolff/minify/js"
 	"io"
 	"io/ioutil"
 	"mime"
@@ -114,36 +114,48 @@ func serve_min_css(b *bytes.Buffer, w http.ResponseWriter, r *http.Request) {
 }
 
 func append_min_js_lib(w io.Writer) {
+	mediatype := "text/javascript"
+	m := minify.New()
+	m.AddFunc(mediatype, jsmin.Minify)
 	for _, a := range asset.Registry.Get("jslib") {
-		jsmin.Run(a.GetReader(), w)
+		src, _ := ioutil.ReadAll(a.GetReader())
+		min, _ := m.Bytes(mediatype, src)
+		w.Write(min)
 	}
 }
 
 func append_min_js_app(w io.Writer) {
+	mediatype := "text/javascript"
+	m := minify.New()
+	m.AddFunc(mediatype, jsmin.Minify)
 	w.Write([]byte("(function(){"))
 	for _, a := range asset.Registry.Get("jsapp") {
-		jsmin.Run(a.GetReader(), w)
+		src, _ := ioutil.ReadAll(a.GetReader())
+		min, _ := m.Bytes(mediatype, src)
+		w.Write(min)
 	}
 	append_js_init(w)
 	w.Write([]byte("})();"))
 }
 
 func append_min_css_lib(b io.Writer) {
+	mediatype := "text/css"
 	m := minify.New()
-	m.AddFunc("text/css", cssminify.Minify)
+	m.AddFunc(mediatype, cssmin.Minify)
 	for _, a := range asset.Registry.Get("csslib") {
 		src, _ := ioutil.ReadAll(a.GetReader())
-		min, _ := m.String("text/css", string(src))
-		b.Write([]byte(min))
+		min, _ := m.Bytes(mediatype, src)
+		b.Write(min)
 	}
 }
 
 func append_min_css_app(b io.Writer) {
+	mediatype := "text/css"
 	m := minify.New()
-	m.AddFunc("text/css", cssminify.Minify)
+	m.AddFunc(mediatype, cssmin.Minify)
 	for _, a := range asset.Registry.Get("cssapp") {
 		src, _ := ioutil.ReadAll(a.GetReader())
-		min, _ := m.String("text/css", string(src))
-		b.Write([]byte(min))
+		min, _ := m.Bytes(mediatype, src)
+		b.Write(min)
 	}
 }

@@ -4,11 +4,12 @@ import (
 	"../app/apptools"
 	"../asset"
 	"../util"
-	"bitbucket.org/maxhauser/jsmin"
 	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"github.com/tdewolff/minify"
+	jsmin "github.com/tdewolff/minify/js"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -252,7 +253,11 @@ func append_js_init(w io.Writer) {
 		"\"app\": " + string(app_json)
 	js := "Teambo.app.init({" + js_data + "});"
 	if util.Config.Get("static.min") == "true" {
-		jsmin.Run(strings.NewReader(js), w)
+		mediatype := "text/javascript"
+		m := minify.New()
+		m.AddFunc(mediatype, jsmin.Minify)
+		min, _ := m.Bytes(mediatype, []byte(js))
+		w.Write(min)
 	} else {
 		w.Write([]byte(js))
 	}
