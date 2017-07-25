@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"flag"
+	"io/ioutil"
 	"log"
 	"os"
-	"strings"
-	"bytes"
-	"io/ioutil"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
@@ -54,7 +54,7 @@ func main() {
 			}
 		}
 	}
-	t := template.Must(template.New("assets").Parse(_assets_template))
+	t := template.Must(template.New("compiled").Parse(_template))
 	b := &bytes.Buffer{}
 	err := t.Execute(b, p)
 	if err != nil {
@@ -72,7 +72,7 @@ func CollectFiles(basepath string) (files map[string]string) {
 		}
 		if !f.IsDir() {
 			file, _ := ioutil.ReadFile(path)
-			files[path] = strings.Replace(string(file), "`", "` + \"`\" + `", -1)
+			files[path] = "`" + strings.Replace(string(file), "`", "` + \"`\" + `", -1) + "`"
 		}
 		return nil
 	}
@@ -80,20 +80,20 @@ func CollectFiles(basepath string) (files map[string]string) {
 	return files
 }
 
-var _assets_template = `package {{.Package}}
+var _template = `package {{.Package}}
 
 var _compiled_assets = map[string]string {
-    {{range .Assets}}"{{.Path}}": ` + "`" + `{{.Value}}` + "`" + `,
-    {{end}}
+	{{range .Assets}}"{{.Path}}": {{.Value}},
+	{{end}}
 }
 
 var _compiled_templates = map[string]string {
-    {{range .Templates}}"{{.Path}}": ` + "`" + `{{.Value}}` + "`" + `,
-    {{end}}
+	{{range .Templates}}"{{.Path}}": {{.Value}},
+	{{end}}
 }
 
 var _compiled_templatejs = map[string]string {
-    {{range .Templatejs}}"{{.Path}}": ` + "`" + `{{.Value}}` + "`" + `,
-    {{end}}
+	{{range .Templatejs}}"{{.Path}}": {{.Value}},
+	{{end}}
 }
 `

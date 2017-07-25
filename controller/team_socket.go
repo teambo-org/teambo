@@ -118,7 +118,7 @@ func TeamSocket(w http.ResponseWriter, r *http.Request) {
 	go c.Writer()
 	c.Reader(socket.TeamHub)
 	// Reader could be used to:
-	// - switch or add channels
+	// - add or remove channels
 	// - send chat messages
 	// - update following integrity mismatch
 }

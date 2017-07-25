@@ -2,7 +2,7 @@ package wiki
 
 import (
 	"../apptools"
-	"strings"
+	// "strings"
 	// "log"
 )
 
@@ -26,20 +26,13 @@ var test_asset_paths = map[string][]string{}
 func (app App) Init(r apptools.Registry) {
 	r.GetDispatchHandler().AddTeamObject("wiki", true)
 
-	// apptools.RegisterAssets(r, "app/wiki", asset_paths, test_asset_paths)
-	// apptools.RegisterTemplates(r, "app/wiki/template", "app/")
+	// Read assets directly from filesystem (dev mode)
+	apptools.RegisterAssets(r, "app/wiki", asset_paths, test_asset_paths)
+	apptools.RegisterTemplates(r, "app/wiki/template", "app/")
 
-	apptools.RegisterCompiledAssets(r, asset_paths, test_asset_paths, _compiled_assets)
-	apptools.RegisterCompiledTemplates(r,
-		cleanPrefix("template", "app", _compiled_templates),
-		cleanPrefix("template", "app", _compiled_templatejs))
-}
-
-func cleanPrefix(oldPfx, newPfx string, target map[string]string) map[string]string {
-	cleaned := map[string]string{}
-	for k, v := range target {
-		k = strings.TrimPrefix(k, oldPfx)
-		cleaned[newPfx+k] = v
-	}
-	return cleaned
+	// Read compiled assets after go generate
+	// apptools.RegisterCompiledAssets(r, asset_paths, test_asset_paths, _compiled_assets)
+	// apptools.RegisterCompiledTemplates(r,
+	// apptools.SwapStringMapKeyPrefix("template", "app", _compiled_templates),
+	// apptools.SwapStringMapKeyPrefix("template", "app", _compiled_templatejs))
 }

@@ -1,12 +1,11 @@
 package apptools
 
 import (
+	"bytes"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
-	// "io/ioutil"
-	"bytes"
 	"time"
 	// "log"
 )
@@ -26,8 +25,8 @@ func RegisterAssets(r Registry, path string, assetPaths, testAssetPaths map[stri
 func RegisterTemplates(r Registry, path string, prefix string) {
 	templates, templatejs := CollectTemplates(path)
 	if len(prefix) > 0 {
-		templates = PrefixTemplates(prefix, templates)
-		templatejs = PrefixTemplates(prefix, templatejs)
+		templates = PrefixAssetMapKey(prefix, templates)
+		templatejs = PrefixAssetMapKey(prefix, templatejs)
 	}
 	r.GetAssetRegistry().AddTemplates(templates, templatejs)
 	if r.GetConfig().Get("app.testing") == "true" {
@@ -60,12 +59,23 @@ func CollectTemplates(basepath string) (templates map[string]Asset, templatejs m
 	return templates, templatejs
 }
 
-func PrefixTemplates(prefix string, templates map[string]Asset) map[string]Asset {
+func PrefixAssetMapKey(prefix string, assetMap map[string]Asset) map[string]Asset {
 	ret := map[string]Asset{}
-	for k, template := range templates {
-		ret[prefix+k] = template
+	for k, asset := range assetMap {
+		ret[prefix+k] = asset
 	}
 	return ret
+}
+
+func SwapStringMapKeyPrefix(oldPfx, newPfx string, target map[string]string) map[string]string {
+	swapped := map[string]string{}
+	for k, v := range target {
+		if strings.HasPrefix(k, oldPfx) {
+			k = strings.TrimPrefix(k, oldPfx)
+			swapped[newPfx+k] = v
+		}
+	}
+	return swapped
 }
 
 func CollectAssets(prefix string, assetPaths map[string][]string) (assetMap map[string][]Asset) {
