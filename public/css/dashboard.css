@@ -10,6 +10,8 @@
 #page.fullscreen-mode #dashboard .right,
 #page.fullscreen-mode #dashboard .chat { display: none; }
 #page.fullscreen-mode #dashboard .main { right: 0; bottom: 0; font-size: 2em; }
+#page.fullscreen-side #dashboard .up4c3 { width: 98%; }
+#page.fullscreen-side #dashboard .up4c3b { width: 98%; }
 
 #dashboard #main { -webkit-app-region: drag; }
 #dashboard #main > div { -webkit-app-region: no-drag; }

@@ -38,6 +38,9 @@
     if(e.ctrlKey && e.shiftKey && key === "k") {
       return toggleFullscreen(e);
     }
+    if(e.ctrlKey && e.shiftKey && key === "l") {
+      return toggleFullscreenSide(e);
+    }
     if(e.ctrlKey || e.altKey) {
       return;
     }
@@ -85,7 +88,36 @@
   };
 
   var toggleFullscreen = function(e) {
-    document.getElementById('page').classList.toggle('fullscreen-mode')
+    if (document.fullscreenEnabled ||
+      document.webkitFullscreenEnabled ||
+      document.mozFullScreenEnabled ||
+      document.msFullscreenEnabled) {
+      if (document.getElementById('page').classList.contains('fullscreen-mode')) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } else {
+        if (document.body.requestFullscreen) {
+          document.body.requestFullscreen();
+        } else if (document.body.webkitRequestFullscreen) {
+          document.body.webkitRequestFullscreen();
+        } else if (document.body.mozRequestFullScreen) {
+          document.body.mozRequestFullScreen();
+        } else if (document.body.msRequestFullscreen) {
+          document.body.msRequestFullscreen();
+        }
+      }
+    }
+    document.getElementById('page').classList.toggle('fullscreen-mode');
+  };
+  var toggleFullscreenSide = function(e) {
+    document.getElementById('page').classList.toggle('fullscreen-side')
   };
 
   var switchPane = function(e, dir) {
