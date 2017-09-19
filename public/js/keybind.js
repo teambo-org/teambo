@@ -35,6 +35,9 @@
     if(key === "f5" || e.ctrlKey && key === 'r') {
       return pageReload(e);
     }
+    if(e.ctrlKey && e.shiftKey && key === "k") {
+      return toggleFullscreen(e);
+    }
     if(e.ctrlKey || e.altKey) {
       return;
     }
@@ -79,6 +82,10 @@
       parent_form._submit();
       return;
     }
+  };
+
+  var toggleFullscreen = function(e) {
+    document.getElementById('page').classList.toggle('fullscreen-mode')
   };
 
   var switchPane = function(e, dir) {
