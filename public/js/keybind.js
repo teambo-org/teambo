@@ -102,6 +102,7 @@
         } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
+        document.getElementById('page').classList.remove('fullscreen-side')
       } else {
         if (document.body.requestFullscreen) {
           document.body.requestFullscreen();
@@ -112,6 +113,7 @@
         } else if (document.body.msRequestFullscreen) {
           document.body.msRequestFullscreen();
         }
+        document.getElementById('page').classList.add('fullscreen-side')
       }
     }
     document.getElementById('page').classList.toggle('fullscreen-mode');
