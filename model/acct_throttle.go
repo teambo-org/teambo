@@ -1,10 +1,11 @@
 package model
 
 import (
-	"../util"
 	"strconv"
 	"time"
 	// "log"
+
+	"github.com/teambo-org/teambo/util"
 )
 
 type acctThrottle struct {

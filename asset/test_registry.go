@@ -1,7 +1,7 @@
 package asset
 
 import (
-	"../app/apptools"
+	"github.com/teambo-org/teambo/app/apptools"
 )
 
 var TestRegistry = registry{

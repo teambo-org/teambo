@@ -1,12 +1,13 @@
 package controller
 
 import (
-	"../model"
-	"../socket"
 	"encoding/json"
 	"net/http"
 	"strings"
 	// "fmt"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/socket"
 )
 
 func Teams(w http.ResponseWriter, r *http.Request) {

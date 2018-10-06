@@ -110,7 +110,7 @@ form.std .error .ex { opacity: 0.7; font-size: 0.9em; text-align: center; }
 #date_selector a.next { float: right; }
 
 .autoselect { position: relative; }
-.autoselect .options { position: absolute; top: 2em; left: 0; display: none; width: 100%; z-index: 1000; background: black; }
+.autoselect .options { position: absolute; top: 2em; left: 0; display: none; width: 100%; z-index: 1000; background: black; margin-bottom: 3em; }
 .autoselect.open .trigger { display: none; }
 .autoselect.open .options { display: block; }
 .autoselect.open .options a { display: block; }

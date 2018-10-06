@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"../model"
-	"../socket"
 	"encoding/json"
 	"net/http"
 	"regexp"
@@ -10,6 +8,9 @@ import (
 	// "io/ioutil"
 	// "bytes"
 	// "log"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/socket"
 )
 
 var only_admins_can_create = map[string]bool{

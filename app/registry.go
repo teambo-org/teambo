@@ -1,9 +1,8 @@
 package app
 
 import (
-	"./wiki"
-	// "github.com/teambo-org/app-wiki"
-	"./apptools"
+	"github.com/teambo-org/teambo/app/wiki"
+	"github.com/teambo-org/teambo/app/apptools"
 )
 
 type Registry struct {

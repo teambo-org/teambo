@@ -1,8 +1,9 @@
 package asset
 
 import (
-	"../app/apptools"
 	"io/ioutil"
+
+	"github.com/teambo-org/teambo/app/apptools"
 )
 
 var Registry = registry{

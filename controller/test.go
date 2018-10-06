@@ -1,13 +1,14 @@
 package controller
 
 import (
-	"../asset"
-	"../util"
 	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/teambo-org/teambo/asset"
+	"github.com/teambo-org/teambo/util"
 )
 
 func Test(w http.ResponseWriter, r *http.Request) {

@@ -1,11 +1,12 @@
 package model
 
 import (
-	"../util"
 	"errors"
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/teambo-org/teambo/util"
 )
 
 type Team struct {

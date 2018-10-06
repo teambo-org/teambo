@@ -1,10 +1,11 @@
 package service
 
 import (
-	"../model"
-	"../socket"
 	"time"
 	// "log"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/socket"
 )
 
 type purgeExpired struct {

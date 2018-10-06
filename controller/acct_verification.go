@@ -1,9 +1,6 @@
 package controller
 
 import (
-	"../model"
-	"../service"
-	"../util"
 	"bytes"
 	"crypto/sha256"
 	"encoding/base64"
@@ -12,6 +9,10 @@ import (
 	"html/template"
 	"net/http"
 	// "log"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/service"
+	"github.com/teambo-org/teambo/util"
 )
 
 func AcctVerification(w http.ResponseWriter, r *http.Request) {

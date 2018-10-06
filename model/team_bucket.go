@@ -1,8 +1,9 @@
 package model
 
 import (
-	"../util"
 	// "log"
+
+	"github.com/teambo-org/teambo/util"
 )
 
 type TeamBucket struct {

@@ -1,9 +1,6 @@
 package controller
 
 import (
-	"../asset"
-	"../util"
-	// "../app/apptools"
 	"bytes"
 	"github.com/tdewolff/minify"
 	cssmin "github.com/tdewolff/minify/css"
@@ -16,6 +13,9 @@ import (
 	"path/filepath"
 	"time"
 	// "log"
+
+	"github.com/teambo-org/teambo/asset"
+	"github.com/teambo-org/teambo/util"
 )
 
 func ServeStatic(prefix string, w http.ResponseWriter, r *http.Request) {

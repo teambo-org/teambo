@@ -1,15 +1,16 @@
 package controller
 
 import (
-	"../model"
-	"../service"
-	"../util"
 	"bytes"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"html/template"
 	"net/http"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/service"
+	"github.com/teambo-org/teambo/util"
 )
 
 func AcctUnlock(w http.ResponseWriter, r *http.Request) {

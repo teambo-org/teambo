@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"../model"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
@@ -9,6 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	// "log"
+
+	"github.com/teambo-org/teambo/model"
 )
 
 func error_out(w http.ResponseWriter, msg string, status int) {

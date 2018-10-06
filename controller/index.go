@@ -1,9 +1,6 @@
 package controller
 
 import (
-	"../app/apptools"
-	"../asset"
-	"../util"
 	"bytes"
 	"crypto/md5"
 	"encoding/hex"
@@ -21,6 +18,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/teambo-org/teambo/app/apptools"
+	"github.com/teambo-org/teambo/asset"
+	"github.com/teambo-org/teambo/util"
 )
 
 type Page struct {

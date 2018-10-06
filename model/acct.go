@@ -1,10 +1,11 @@
 package model
 
 import (
-	"../util"
 	"crypto/sha256"
 	"encoding/base64"
 	// "log"
+
+	"github.com/teambo-org/teambo/util"
 )
 
 type Acct struct {

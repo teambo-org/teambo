@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"../model"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"net/http"
+
+	"github.com/teambo-org/teambo/model"
 )
 
 func NewsletterUnsubscribe(w http.ResponseWriter, r *http.Request) {

@@ -1,13 +1,14 @@
 package model
 
 import (
-	"../util"
-	"./driver"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 	// "log"
+
+	"github.com/teambo-org/teambo/util"
+	"github.com/teambo-org/teambo/model/driver"
 )
 
 var db_auth driver.DB

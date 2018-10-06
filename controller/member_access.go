@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"../model"
 	"encoding/json"
 	"net/http"
 	// "log"
+
+	"github.com/teambo-org/teambo/model"
 )
 
 func MemberAccess(w http.ResponseWriter, r *http.Request) {

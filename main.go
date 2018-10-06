@@ -1,13 +1,6 @@
 package main
 
 import (
-	"./app"
-	"./asset"
-	"./dispatch"
-	"./model"
-	"./service"
-	"./socket"
-	"./util"
 	"context"
 	"flag"
 	"log"
@@ -17,6 +10,14 @@ import (
 	"runtime"
 	"strconv"
 	"time"
+
+	"github.com/teambo-org/teambo/app"
+	"github.com/teambo-org/teambo/asset"
+	"github.com/teambo-org/teambo/dispatch"
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/service"
+	"github.com/teambo-org/teambo/socket"
+	"github.com/teambo-org/teambo/util"
 )
 
 func main() {

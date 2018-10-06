@@ -1,10 +1,11 @@
 package model
 
 import (
-	"./driver"
 	"log"
 	"sync"
 	"time"
+
+	"github.com/teambo-org/teambo/model/driver"
 )
 
 type teamDBPool struct {

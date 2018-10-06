@@ -1,14 +1,15 @@
 package controller
 
 import (
-	"../model"
-	"../socket"
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"strings"
 	// "fmt"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/socket"
 )
 
 func Acct(w http.ResponseWriter, r *http.Request) {

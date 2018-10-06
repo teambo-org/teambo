@@ -1,8 +1,9 @@
 package dispatch
 
 import (
-	"../controller"
 	"net/http"
+
+	"github.com/teambo-org/teambo/controller"
 )
 
 var routes = map[string]func(http.ResponseWriter, *http.Request){

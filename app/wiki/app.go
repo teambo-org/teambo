@@ -1,9 +1,10 @@
 package wiki
 
 import (
-	"../apptools"
 	// "strings"
 	// "log"
+
+	"github.com/teambo-org/teambo/app/apptools"
 )
 
 //go:generate go run ../apptools/apptools-compile/main.go -pkg wiki -templates template -assets js,css

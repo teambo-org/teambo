@@ -1,10 +1,6 @@
 package controller
 
 import (
-	"../model"
-	"../service"
-	"../socket"
-	"../util"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
@@ -18,6 +14,11 @@ import (
 	"strings"
 	"time"
 	// "fmt"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/service"
+	"github.com/teambo-org/teambo/socket"
+	"github.com/teambo-org/teambo/util"
 )
 
 func Invite(w http.ResponseWriter, r *http.Request) {

@@ -1,9 +1,6 @@
 package controller
 
 import (
-	"../model"
-	"../socket"
-	// "../util"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
@@ -13,6 +10,9 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/socket"
 )
 
 func TeamSocket(w http.ResponseWriter, r *http.Request) {

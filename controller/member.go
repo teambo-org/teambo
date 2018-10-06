@@ -1,13 +1,14 @@
 package controller
 
 import (
-	"../model"
-	"../socket"
 	"encoding/json"
 	"net/http"
 	"regexp"
 	"strings"
 	// "log"
+
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/socket"
 )
 
 func Member(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"../../controller"
 	"net/http"
+
+	"github.com/teambo-org/teambo/controller"
 )
 
 func HttpCache(next func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {

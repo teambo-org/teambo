@@ -2,10 +2,12 @@ package main
 
 import (
 	"flag"
-	"github.com/syndtr/goleveldb/leveldb"
-	"../util"
 	"log"
 	"strconv"
+
+	"github.com/syndtr/goleveldb/leveldb"
+
+	"github.com/teambo-org/teambo/util"
 )
 
 var db *leveldb.DB
@@ -23,7 +25,7 @@ func clear_invites() error {
 }
 
 func main() {
-	var config_path *string = flag.String("conf", "../app.conf", "Location of config file")
+	var config_path *string = flag.String("conf", "./app.conf", "Location of config file")
 	flag.Parse()
 	util.Config.Parse(*config_path)
 	path := util.Config.Get("app.data")+"/throttle.ldb"

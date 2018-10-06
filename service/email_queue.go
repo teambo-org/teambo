@@ -2,9 +2,10 @@ package service
 
 import (
 	// "log"
-	"../util"
 	"sync"
 	"time"
+
+	"github.com/teambo-org/teambo/util"
 )
 
 type emailQueue struct {

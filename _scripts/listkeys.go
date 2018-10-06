@@ -1,11 +1,13 @@
 package main
 
 import (
-	"../util"
 	"os"
 	"flag"
-	"github.com/syndtr/goleveldb/leveldb"
 	"log"
+
+	"github.com/syndtr/goleveldb/leveldb"
+
+	"github.com/teambo-org/teambo/util"
 )
 
 var db *leveldb.DB
@@ -24,7 +26,7 @@ func list_keys() error {
 }
 
 func main() {
-	var config_path *string = flag.String("conf", "../app.conf", "Location of config file")
+	var config_path *string = flag.String("conf", "./app.conf", "Location of config file")
 	flag.Parse()
 	if *db_path == "" {
 		log.Println("Database Path Required")

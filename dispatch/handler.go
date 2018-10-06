@@ -1,14 +1,15 @@
 package dispatch
 
 import (
-	"../controller"
-	"../model"
-	"../util"
-	"./middleware"
 	"fmt"
 	"net/http"
 	"time"
 	// "log"
+
+	"github.com/teambo-org/teambo/controller"
+	"github.com/teambo-org/teambo/model"
+	"github.com/teambo-org/teambo/util"
+	"github.com/teambo-org/teambo/dispatch/middleware"
 )
 
 func NewHandler() Handler {
