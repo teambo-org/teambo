@@ -29,11 +29,6 @@ func main() {
 	}
 	config := util.Config.All()
 
-	procs, err := strconv.Atoi(config["app.procs"])
-	if err != nil {
-		runtime.GOMAXPROCS(procs)
-	}
-
 	err = model.GlobalInit()
 	if err != nil {
 		log.Println(err.Error())
@@ -67,10 +62,12 @@ func main() {
 
 	h := &http.Server{}
 	if config["ssl.active"] == "true" {
+		log.Printf("Listening on port %s\n", config["port.https"])
 		h = &http.Server{Addr: ":" + config["port.https"], Handler: dh}
 		go h.ListenAndServeTLS(config["ssl.crt"], config["ssl.key"])
 		go http.ListenAndServe(":"+config["port.http"], http.HandlerFunc(dispatch.RedirectToHttps(config)))
 	} else {
+		log.Printf("Listening on port %s\n", config["port.http"])
 		h = &http.Server{Addr: ":" + config["port.http"], Handler: dh}
 		go h.ListenAndServe()
 	}

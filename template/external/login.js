@@ -8,6 +8,8 @@ function(t){
   var news = form.getAttribute("data-news");
   var email;
   var pass;
+
+  // Invite Key
   var ikey;
 
   var d = sessionStorage.getItem('ikey-data');
