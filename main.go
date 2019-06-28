@@ -11,13 +11,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/teambo-org/teambo/app"
-	"github.com/teambo-org/teambo/asset"
-	"github.com/teambo-org/teambo/dispatch"
-	"github.com/teambo-org/teambo/model"
-	"github.com/teambo-org/teambo/service"
-	"github.com/teambo-org/teambo/socket"
-	"github.com/teambo-org/teambo/util"
+	"github.com/teambo-org/teambo/internal/app"
+	"github.com/teambo-org/teambo/internal/asset"
+	"github.com/teambo-org/teambo/internal/dispatch"
+	"github.com/teambo-org/teambo/internal/model"
+	"github.com/teambo-org/teambo/internal/service"
+	"github.com/teambo-org/teambo/internal/socket"
+	"github.com/teambo-org/teambo/internal/util"
 )
 
 func main() {
